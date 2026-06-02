@@ -1,0 +1,48 @@
+"""Tests for brief assembly: movers, breadth, and markdown rendering."""
+
+from src import brief
+
+
+def _sections():
+    return {
+        "us_equities": [
+            {"symbol": "^GSPC", "name": "S&P 500", "change_pct": 1.0, "last": 5000.0,
+             "change_1w_pct": 2.0, "ytd_pct": 8.0, "level_change": 50.0},
+            {"symbol": "^VIX", "name": "VIX", "change_pct": -5.0, "last": 14.0,
+             "change_1w_pct": None, "ytd_pct": None, "level_change": -0.7},
+        ],
+        "sectors": [
+            {"symbol": "XLK", "name": "Technology", "change_pct": 2.0, "last": 1.0,
+             "change_1w_pct": 1.0, "ytd_pct": 5.0, "level_change": 0.02},
+            {"symbol": "XLE", "name": "Energy", "change_pct": -1.5, "last": 1.0,
+             "change_1w_pct": -1.0, "ytd_pct": -3.0, "level_change": -0.01},
+        ],
+        "global_indices": [
+            {"symbol": "^N225", "name": "Nikkei", "change_pct": 0.5, "last": 1.0,
+             "change_1w_pct": 0.2, "ytd_pct": 1.0, "level_change": 0.0},
+        ],
+    }
+
+
+def test_movers_rank_and_exclude_vix():
+    movers = brief._movers(_sections())
+    assert movers["leaders"][0]["name"] == "Technology"   # +2.0 is best
+    assert movers["laggards"][0]["name"] == "Energy"      # -1.5 is worst
+    names = [m["name"] for m in movers["leaders"]]
+    assert "VIX" not in names                              # VIX excluded from movers
+
+
+def test_stats_breadth_and_vix():
+    stats = brief._stats(_sections())
+    assert stats["vix"] == 14.0
+    assert stats["sector_advancers"] == 1
+    assert stats["sector_decliners"] == 1
+    assert stats["sector_count"] == 2
+
+
+def test_render_markdown_smoke():
+    payload = brief.build_brief(sections=_sections(), macro=[], news_items=[], fetch=False)
+    text = brief.render_markdown(payload)
+    assert text.startswith("# Market Brief")
+    assert "Technology" in text
+    assert "## Movers" in text

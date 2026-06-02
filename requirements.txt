@@ -1,0 +1,16 @@
+# market-story — daily global markets brief
+# Python 3.13+ (developed on 3.14)
+
+# --- Market & macro data ---
+yfinance>=1.2.0
+pandas>=2.2.0
+numpy>=2.0.0
+requests>=2.32.0
+fredapi>=0.5.2        # optional; FRED also works keyless via CSV
+
+# --- News ---
+feedparser>=6.0.11
+
+# --- Dashboard & charts ---
+streamlit>=1.40.0
+plotly>=6.0.0

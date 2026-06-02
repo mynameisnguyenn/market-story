@@ -1,0 +1,28 @@
+# --- Environments ---
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# --- Secrets ---
+.env
+*.key
+
+# --- Generated data (briefs/narratives are regenerated each run) ---
+data/
+*.parquet
+*.cache
+
+# --- Images: keep only curated portfolio outputs ---
+*.png
+!results/*.png
+
+# --- Tools / binaries ---
+bin/
+
+# --- OS / IDE ---
+.DS_Store
+.vscode/
+.idea/
+.streamlit/secrets.toml

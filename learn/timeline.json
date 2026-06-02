@@ -1,0 +1,18 @@
+[
+  {"year": 1792, "title": "Buttonwood Agreement signed", "blurb": "Twenty-four brokers agree outside 68 Wall Street to trade only with each other at a fixed 0.25% commission, founding what becomes the NYSE.", "category": "Founding"},
+  {"year": 1817, "title": "New York Stock & Exchange Board formed", "blurb": "The Buttonwood brokers adopt a formal constitution and membership rules, institutionalizing organized exchange trading.", "category": "Founding"},
+  {"year": 1896, "title": "Dow Jones Industrial Average debuts", "blurb": "Charles Dow publishes a 12-stock arithmetic average on May 26, creating the first widely tracked US equity benchmark.", "category": "Innovation"},
+  {"year": 1929, "title": "The Great Crash", "blurb": "The Dow falls 12.8% on Black Monday (Oct 28) and ~12% on Black Tuesday (Oct 29), beginning a slide that bottoms 89% below peak in 1932.", "category": "Crash"},
+  {"year": 1934, "title": "SEC created by the Securities Exchange Act", "blurb": "Signed June 6, the Act establishes the SEC to regulate secondary trading, following the 1933 Act's disclosure rules for new issues.", "category": "Reform"},
+  {"year": 1957, "title": "S&P 500 launched", "blurb": "Standard & Poor's expands its index to 500 market-cap-weighted stocks computed by computer, creating the modern US equity benchmark.", "category": "Innovation"},
+  {"year": 1971, "title": "Nasdaq goes live", "blurb": "On February 8, Nasdaq opens as the first electronic quotation system, displaying competing market-maker prices on screens.", "category": "Innovation"},
+  {"year": 1975, "title": "May Day deregulation", "blurb": "On May 1 the SEC abolishes fixed commissions, ending 183 years of cartel pricing and launching the discount-brokerage era.", "category": "Reform"},
+  {"year": 1976, "title": "First retail index fund", "blurb": "Vanguard's John Bogle launches the First Index Investment Trust on August 31, seeding the passive-investing revolution.", "category": "Innovation"},
+  {"year": 1987, "title": "Black Monday", "blurb": "On October 19 the Dow drops 22.6% in one session, its worst day ever, amplified by automated portfolio-insurance selling.", "category": "Crash"},
+  {"year": 2000, "title": "Dot-com bubble peaks", "blurb": "The Nasdaq Composite tops at 5,048.62 on March 10 before falling 78% by October 2002.", "category": "Crash"},
+  {"year": 2001, "title": "Decimalization", "blurb": "US exchanges switch to penny price increments from sixteenths, compressing spreads and accelerating electronic and high-frequency trading.", "category": "Reform"},
+  {"year": 2008, "title": "Global Financial Crisis", "blurb": "Lehman Brothers files the largest US bankruptcy on September 15; the S&P 500 ends the year down 38.5%.", "category": "Crash"},
+  {"year": 2010, "title": "Flash Crash", "blurb": "On May 6 the Dow plunges nearly 1,000 points and recovers within ~36 minutes, exposing the fragility of fragmented electronic markets.", "category": "Crash"},
+  {"year": 2020, "title": "COVID crash", "blurb": "The S&P 500 falls ~34% into its March 23 bottom in the fastest 30% drawdown on record, tripping circuit breakers four times.", "category": "Crash"},
+  {"year": 2021, "title": "Meme-stock squeeze", "blurb": "Reddit-driven retail traders drive GameStop from ~$17 to $483 in January, forcing brokerages to halt buying amid collateral strain.", "category": "Boom"}
+]

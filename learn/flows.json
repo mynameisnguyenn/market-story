@@ -1,0 +1,67 @@
+{
+  "money_flow": {
+    "title": "How Money Flows Through the Financial System",
+    "nodes": ["Households/Savers", "Commercial Banks", "Asset Managers & Funds", "Federal Reserve", "Bond Market", "Stock Market", "Corporations", "Government/Treasury", "Repo Market", "Real Economy"],
+    "links": [
+      {"source": "Households/Savers", "target": "Commercial Banks", "value": 8, "label": "Deposits"},
+      {"source": "Households/Savers", "target": "Asset Managers & Funds", "value": 7, "label": "Savings/pensions"},
+      {"source": "Federal Reserve", "target": "Commercial Banks", "value": 6, "label": "Reserves & IORB"},
+      {"source": "Commercial Banks", "target": "Corporations", "value": 7, "label": "Loans (create deposits)"},
+      {"source": "Commercial Banks", "target": "Real Economy", "value": 6, "label": "Mortgages & credit"},
+      {"source": "Commercial Banks", "target": "Repo Market", "value": 7, "label": "Secured funding"},
+      {"source": "Asset Managers & Funds", "target": "Bond Market", "value": 8, "label": "Buy debt"},
+      {"source": "Asset Managers & Funds", "target": "Stock Market", "value": 7, "label": "Buy equity"},
+      {"source": "Asset Managers & Funds", "target": "Repo Market", "value": 6, "label": "Lend cash"},
+      {"source": "Government/Treasury", "target": "Bond Market", "value": 9, "label": "Debt issuance"},
+      {"source": "Bond Market", "target": "Corporations", "value": 6, "label": "Bond proceeds"},
+      {"source": "Bond Market", "target": "Government/Treasury", "value": 9, "label": "Funds deficit"},
+      {"source": "Stock Market", "target": "Corporations", "value": 5, "label": "Equity capital"},
+      {"source": "Repo Market", "target": "Bond Market", "value": 7, "label": "Funds dealers"},
+      {"source": "Repo Market", "target": "Corporations", "value": 4, "label": "Overnight liquidity"},
+      {"source": "Federal Reserve", "target": "Bond Market", "value": 5, "label": "Buys Treasuries"},
+      {"source": "Corporations", "target": "Real Economy", "value": 8, "label": "Capex & wages"},
+      {"source": "Government/Treasury", "target": "Real Economy", "value": 7, "label": "Spending & transfers"},
+      {"source": "Real Economy", "target": "Households/Savers", "value": 9, "label": "Wages & income"},
+      {"source": "Real Economy", "target": "Government/Treasury", "value": 6, "label": "Taxes"}
+    ]
+  },
+  "fed_transmission": {
+    "title": "Monetary Policy Transmission",
+    "nodes": ["Fed funds target range", "IORB", "ON RRP", "Open market operations", "QE/QT (balance sheet)", "Forward guidance", "Short-term rates (SOFR)", "Bank lending & credit rates", "Long-term yields", "Equity & asset prices", "US dollar (FX)", "Business investment", "Housing & consumption", "Aggregate demand", "Employment", "Inflation"],
+    "links": [
+      {"source": "Fed funds target range", "target": "Short-term rates (SOFR)", "value": 10, "label": "anchors overnight"},
+      {"source": "IORB", "target": "Short-term rates (SOFR)", "value": 9, "label": "rate ceiling/anchor"},
+      {"source": "ON RRP", "target": "Short-term rates (SOFR)", "value": 7, "label": "rate floor"},
+      {"source": "Open market operations", "target": "Short-term rates (SOFR)", "value": 6, "label": "manages reserves"},
+      {"source": "QE/QT (balance sheet)", "target": "Long-term yields", "value": 7, "label": "duration/supply"},
+      {"source": "Forward guidance", "target": "Long-term yields", "value": 8, "label": "expected path"},
+      {"source": "Short-term rates (SOFR)", "target": "Bank lending & credit rates", "value": 9, "label": "funding cost"},
+      {"source": "Short-term rates (SOFR)", "target": "Long-term yields", "value": 7, "label": "curve repricing"},
+      {"source": "Long-term yields", "target": "Equity & asset prices", "value": 8, "label": "discount rate"},
+      {"source": "Bank lending & credit rates", "target": "Business investment", "value": 8, "label": "cost of capital"},
+      {"source": "Bank lending & credit rates", "target": "Housing & consumption", "value": 9, "label": "mortgage/credit"},
+      {"source": "Long-term yields", "target": "US dollar (FX)", "value": 7, "label": "rate differential"},
+      {"source": "Equity & asset prices", "target": "Housing & consumption", "value": 6, "label": "wealth effect"},
+      {"source": "US dollar (FX)", "target": "Aggregate demand", "value": 5, "label": "net exports"},
+      {"source": "Business investment", "target": "Aggregate demand", "value": 8, "label": "capex"},
+      {"source": "Housing & consumption", "target": "Aggregate demand", "value": 9, "label": "spending"},
+      {"source": "Aggregate demand", "target": "Employment", "value": 9, "label": "hiring"},
+      {"source": "Aggregate demand", "target": "Inflation", "value": 9, "label": "demand-pull"},
+      {"source": "Employment", "target": "Inflation", "value": 6, "label": "wage pressure"},
+      {"source": "US dollar (FX)", "target": "Inflation", "value": 5, "label": "import prices"}
+    ]
+  },
+  "equity_order": {
+    "title": "How an Equity Order Flows Through the US Market",
+    "nodes": ["Retail Investor", "Buy-Side Institution", "Broker-Dealer", "Market Maker / HFT", "Exchange (NYSE/Nasdaq/Cboe)", "Clearing (NSCC)", "Settlement/Custody (DTC)"],
+    "links": [
+      {"source": "Retail Investor", "target": "Broker-Dealer", "value": 30, "label": "order"},
+      {"source": "Buy-Side Institution", "target": "Broker-Dealer", "value": 70, "label": "order"},
+      {"source": "Broker-Dealer", "target": "Market Maker / HFT", "value": 45, "label": "PFOF / wholesale"},
+      {"source": "Broker-Dealer", "target": "Exchange (NYSE/Nasdaq/Cboe)", "value": 55, "label": "routed to venue"},
+      {"source": "Market Maker / HFT", "target": "Exchange (NYSE/Nasdaq/Cboe)", "value": 45, "label": "hedge/print"},
+      {"source": "Exchange (NYSE/Nasdaq/Cboe)", "target": "Clearing (NSCC)", "value": 100, "label": "matched trade"},
+      {"source": "Clearing (NSCC)", "target": "Settlement/Custody (DTC)", "value": 100, "label": "net & settle (T+1)"}
+    ]
+  }
+}
