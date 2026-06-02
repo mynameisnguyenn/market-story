@@ -7,8 +7,10 @@ secondaryBackgroundColor = "#161B26"
 textColor = "#E6E6E6"
 font = "sans serif"
 
+# headless=true is required for hosting (Streamlit Cloud); the local launcher
+# (Launch Market Story.bat) passes --server.headless false to auto-open the browser.
 [server]
-headless = false
+headless = true
 runOnSave = true
 
 [browser]
