@@ -47,8 +47,14 @@ def _embed_history(history) -> dict:
     for sym, frame in history.items():
         try:
             close = frame["Close"].dropna()
-            if not close.empty:
-                series[sym] = close
+            if close.empty:
+                continue
+            # Normalize the index: some symbols come back tz-aware, others tz-naive
+            # (prod yfinance), which can't be joined; collapse all to tz-naive dates.
+            idx = pd.DatetimeIndex(close.index)
+            if idx.tz is not None:
+                idx = idx.tz_localize(None)
+            series[sym] = pd.Series(close.values, index=idx.normalize())
         except Exception:
             continue
     if not series:

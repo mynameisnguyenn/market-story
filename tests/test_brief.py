@@ -58,6 +58,17 @@ def test_history_embed_and_reconstruct_roundtrip():
     assert len(closes["^GSPC"]) == 3 and float(closes["^GSPC"].iloc[-1]) == 102.25  # rebuilt
 
 
+def test_embed_history_handles_mixed_timezones():
+    # Prod yfinance returns some tz-aware and some tz-naive indices; they must merge.
+    import pandas as pd
+    naive = pd.to_datetime(["2026-06-01", "2026-06-02"])
+    aware = pd.to_datetime(["2026-06-01", "2026-06-02"]).tz_localize("America/New_York")
+    hist = {"^GSPC": pd.DataFrame({"Close": [100.0, 101.0]}, index=naive),
+            "CL=F": pd.DataFrame({"Close": [90.0, 91.0]}, index=aware)}
+    b = brief.build_brief(history=hist, sections={}, macro=[], news_items=[], fetch=False)
+    assert set(b["history"]["series"]) == {"^GSPC", "CL=F"}     # both aligned, no tz crash
+
+
 def test_movers_no_overlap_when_pool_small():
     sections = {"us_equities": [
         {"symbol": "A", "name": "A", "change_pct": -2.0, "last": 1.0},
