@@ -62,6 +62,18 @@ def test_stock_bond_corr_needs_both_series():
     assert analytics.stock_bond_corr({"^GSPC": None, "TLT": None}) is None
 
 
+def test_stock_bond_corr_aligns_by_date_not_row():
+    # different lengths with a mid-series gap in TLT: must align by DATE, not position.
+    idx = pd.date_range("2025-01-01", periods=70, freq="D")
+    np.random.seed(42)
+    step = np.random.randn(70)
+    spx = pd.Series(100 + np.cumsum(step), index=idx)
+    tlt = pd.Series(100 - np.cumsum(step), index=idx)        # anti-correlated on matching dates
+    tlt_gapped = tlt.drop(tlt.index[30:35])                  # 65 rows -> positions diverge after the gap
+    sb = analytics.stock_bond_corr({"^GSPC": spx, "TLT": tlt_gapped}, window=30)
+    assert sb is not None and sb["corr"] < -0.8              # date-aligned anti-correlation survives the gap
+
+
 def test_analytics_degrade_empty():
     assert analytics.compute_extremes({}) == []
     assert analytics.compute_extremes(None) == []

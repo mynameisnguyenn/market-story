@@ -45,12 +45,22 @@ def _row_for(brief: dict) -> dict:
 
 
 def load_timeline() -> list[dict]:
-    """All timeline rows, oldest first. [] if none/unreadable."""
+    """All timeline rows, oldest first. Tolerates a single corrupt line (never
+    discards the whole committed history over one torn/merge-mangled line). [] if none."""
+    rows = []
     try:
         with open(TIMELINE_PATH, encoding="utf-8") as f:
-            return [json.loads(line) for line in f if line.strip()]
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rows.append(json.loads(line))
+                except Exception:
+                    continue   # skip the bad line, keep the rest of the record
     except Exception:
         return []
+    return rows
 
 
 def append_today(brief: dict) -> None:

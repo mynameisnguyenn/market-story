@@ -97,8 +97,11 @@ def stock_bond_corr(closes, window: int = 30) -> dict | None:
     if spx is None or tlt is None:
         return None
     import pandas as pd
-    rets = pd.concat([pd.Series(list(spx)).pct_change(),
-                      pd.Series(list(tlt)).pct_change()], axis=1).dropna()
+    # Align by DATE: the inputs are Series carrying a DatetimeIndex, and upstream each
+    # symbol is dropna'd independently (lengths/dates differ) — so an inner join on the
+    # index is required. list()-ing them would align by row number and silently mismatch.
+    rets = pd.concat([pd.Series(spx).pct_change(), pd.Series(tlt).pct_change()],
+                     axis=1, join="inner").dropna()
     if len(rets) < window:
         return None
     cur = rets.iloc[-window:]

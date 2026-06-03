@@ -47,3 +47,12 @@ def test_rows_sorted_by_date(tmp_path, monkeypatch):
 def test_load_empty_when_missing(tmp_path, monkeypatch):
     monkeypatch.setattr(timeline, "TIMELINE_PATH", tmp_path / "none.jsonl")
     assert timeline.load_timeline() == []
+
+
+def test_load_tolerates_one_corrupt_line(tmp_path, monkeypatch):
+    path = tmp_path / "tl.jsonl"
+    path.write_text('{"date": "2026-06-01", "spx": 1}\nGARBAGE NOT JSON\n'
+                    '{"date": "2026-06-02", "spx": 2}\n', encoding="utf-8")
+    monkeypatch.setattr(timeline, "TIMELINE_PATH", path)
+    rows = timeline.load_timeline()
+    assert [r["date"] for r in rows] == ["2026-06-01", "2026-06-02"]   # bad line skipped, rest kept

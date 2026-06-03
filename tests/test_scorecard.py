@@ -56,6 +56,17 @@ def test_grade_and_summary():
     assert result["summary"] == {"total": 3, "resolved": 3, "triggered": 1}
 
 
+def test_parse_watch_tolerates_language_tag():
+    txt = '```watch json\n[{"claim": "x", "metric": "macro:DGS10", "trigger": ">4"}]\n```'
+    items = scorecard.parse_watch(txt)
+    assert len(items) == 1 and items[0]["metric"] == "macro:DGS10"
+
+
+def test_evaluate_rejects_non_finite():
+    assert scorecard._evaluate(float("nan"), ">2.85") is None   # not a false 'watching'
+    assert scorecard._evaluate(float("inf"), ">2.85") is None
+
+
 def test_score_prior_handles_missing_narrative():
     res = scorecard.score_prior("", BRIEF)
     assert res["graded"] == [] and res["summary"]["total"] == 0

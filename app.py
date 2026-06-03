@@ -553,12 +553,12 @@ def macro_tab(brief: dict, closes: dict) -> None:
     if brief.get("extremes"):
         st.markdown("**Cross-asset extremes** — where key markets sit in their ~1y range")
         st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
-        vol = brief.get("vol")
-        if vol:
-            tag = "rich — complacency / cheap-looking hedges" if vol["premium"] > 3 \
-                else "compressed — realized catching up" if vol["premium"] < 0 else "normal"
-            st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
-                       f"= {vol['premium']:+.1f} pts ({tag}).")
+    vol = brief.get("vol")
+    if vol:
+        tag = "rich — complacency / cheap-looking hedges" if vol["premium"] > 3 \
+            else "compressed — realized catching up" if vol["premium"] < 0 else "normal"
+        st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
+                   f"= {vol['premium']:+.1f} pts ({tag}).")
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
@@ -668,7 +668,9 @@ def _watch_scorecard(brief: dict) -> None:
     icon = {"triggered": "🟠", "watching": "⚪", "unresolved": "·"}
     with st.expander(f"📋 Last session's watch — {s['triggered']}/{s['resolved']} triggered  ({prior.name})"):
         for g in graded:
-            cur = "n/a" if g.get("current") is None else f"{g['current']:g}"
+            v = g.get("current")
+            cur = (f"{v:g}" if isinstance(v, (int, float)) and not isinstance(v, bool)
+                   else "n/a" if v is None else str(v))
             st.markdown(f"{icon.get(g['status'], '·')} **{g['status']}** — {g['claim']}  "
                         f"`{g.get('metric')} {g.get('trigger')}` (now {cur})")
 

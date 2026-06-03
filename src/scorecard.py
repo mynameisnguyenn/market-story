@@ -8,9 +8,11 @@ Pure logic, no I/O; degrades to empty rather than raising.
 from __future__ import annotations
 
 import json
+import math
 import re
 
-_WATCH_RE = re.compile(r"```watch\s*(.+?)```", re.DOTALL)
+# Allow an optional language tag/label on the fence line (```watch  or  ```watch json).
+_WATCH_RE = re.compile(r"```watch[^\n]*\n(.+?)```", re.DOTALL)
 _TRIGGER_RE = re.compile(r"^\s*(>=|<=|>|<|==)\s*(-?\d+(?:\.\d+)?)\s*$")
 
 
@@ -59,6 +61,8 @@ def _evaluate(value, trigger: str):
     try:
         v = float(value)
     except (TypeError, ValueError):
+        return None
+    if not math.isfinite(v):                     # NaN/inf -> unresolved, not a false 'watching'
         return None
     return {">": v > num, "<": v < num, ">=": v >= num, "<=": v <= num, "==": v == num}[op]
 

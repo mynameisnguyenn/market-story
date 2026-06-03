@@ -73,9 +73,11 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
     # two narratives so the Story tab's watch-scorecard grades the prior's watch block
     ndir = tmp_path / "narratives"
     ndir.mkdir()
-    (ndir / "narrative_2026-06-01.md").write_text(
-        '# Prior\n```watch\n[{"claim":"VIX elevated","metric":"macro:VIXCLS",'
-        '"trigger":">10","horizon":"next session"}]\n```\n', encoding="utf-8")
+    (ndir / "narrative_2026-06-01.md").write_text(   # ```watch json tag + a string-valued metric
+        '# Prior\n```watch json\n[{"claim":"VIX elevated","metric":"macro:VIXCLS",'
+        '"trigger":">10","horizon":"next session"},'
+        '{"claim":"string metric","metric":"market:^GSPC:name","trigger":">0","horizon":"x"}]\n```\n',
+        encoding="utf-8")
     (ndir / "narrative_2026-06-02.md").write_text("# Latest\nbody\n", encoding="utf-8")
     monkeypatch.setattr(config, "NARRATIVES_DIR", ndir)
     from streamlit.testing.v1 import AppTest
