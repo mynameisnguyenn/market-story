@@ -22,7 +22,7 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, config, edgar_data, formatting, history,
-                 macro_data, market_data, news, regime)
+                 macro_data, market_data, news, regime, signals)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -288,6 +288,19 @@ def render_line(closes: dict, symbol: str, name: str, key: str | None = None) ->
 
 # --- Tabs --------------------------------------------------------------------
 
+def signals_strip(brief: dict) -> None:
+    """Lead the Overview with the day's derived read — data turned into signal."""
+    sigs = signals.derive_signals(brief)
+    if not sigs:
+        return
+    st.markdown("**⚡ Today's signal**")
+    dot = {"up": "green", "down": "red", "warn": "orange", "neutral": "gray"}
+    cols = st.columns(2)
+    for i, s in enumerate(sigs):
+        cols[i % 2].markdown(f":{dot[s['tone']]}[●]  {s['text']}")
+    st.divider()
+
+
 def deltas_panel(brief: dict) -> None:
     """Headline level changes since the prior saved session (day-over-day)."""
     key_syms = ["^GSPC", "^IXIC", "^TNX", "DX-Y.NYB", "GC=F", "^VIX"]
@@ -313,6 +326,7 @@ def deltas_panel(brief: dict) -> None:
 
 
 def overview_tab(brief: dict, closes: dict) -> None:
+    signals_strip(brief)
     deltas_panel(brief)
     movers = brief["movers"]
     left, right = st.columns(2)
