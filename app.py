@@ -201,11 +201,41 @@ def overview_tab(brief: dict, closes: dict) -> None:
     render_line(closes, "^GSPC", "S&P 500", key="ov_sp500")
 
 
+def watchlist_editor() -> None:
+    """Edit the custom watchlist inline; saves to disk and triggers a refetch."""
+    with st.expander("✏️ Edit watchlist"):
+        current = pd.DataFrame(config.get_watchlist(), columns=["Symbol", "Name"])
+        edited = st.data_editor(
+            current, num_rows="dynamic", use_container_width=True, hide_index=True,
+            key="watchlist_editor",
+            column_config={
+                "Symbol": st.column_config.TextColumn("Symbol", required=True, help="Yahoo Finance ticker, e.g. NVDA"),
+                "Name": st.column_config.TextColumn("Name"),
+            },
+        )
+        save = st.button("Save & refresh", key="save_watchlist")
+        st.caption("Add or remove rows, then Save & refresh to re-fetch. Stored locally in data/watchlist.json.")
+        if save:
+            items = []
+            for _, row in edited.iterrows():
+                sym = str(row["Symbol"]).strip().upper() if pd.notna(row["Symbol"]) else ""
+                if not sym:
+                    continue
+                name = str(row["Name"]).strip() if pd.notna(row["Name"]) else ""
+                items.append((sym, name or sym))
+            if items:
+                config.save_watchlist(items)
+                st.session_state.nonce = st.session_state.get("nonce", 0) + 1
+                st.rerun()
+            else:
+                st.warning("Add at least one ticker before saving.")
+
+
 def equities_tab(brief: dict, closes: dict) -> None:
     st.subheader("Sector map (1-day % change)")
     render_treemap(brief["markets"].get("sectors", []))
     st.divider()
-    names = {sym: name for sym, name in config.US_EQUITIES + config.SECTORS + config.WATCHLIST}
+    names = {sym: name for sym, name in config.US_EQUITIES + config.SECTORS + config.get_watchlist()}
     choice = st.selectbox("Chart an index, sector, or watchlist name", list(names), format_func=lambda s: names.get(s, s))
     render_line(closes, choice, names.get(choice, str(choice)), key="eq_pick")
     st.divider()
@@ -218,6 +248,7 @@ def equities_tab(brief: dict, closes: dict) -> None:
         render_table(brief["markets"].get("sectors", []), "equity", "% changes")
     st.markdown("**Watchlist (growth)**")
     render_table(brief["markets"].get("watchlist", []), "equity", "% changes")
+    watchlist_editor()
 
 
 def macro_tab(brief: dict, closes: dict) -> None:

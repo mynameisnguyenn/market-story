@@ -6,6 +6,7 @@ editing this file only. Symbols are validated against live sources before use.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 # --- Paths -------------------------------------------------------------------
@@ -14,6 +15,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 BRIEFS_DIR = DATA_DIR / "briefs"
 NARRATIVES_DIR = DATA_DIR / "narratives"
 RESULTS_DIR = PROJECT_ROOT / "results"
+WATCHLIST_FILE = DATA_DIR / "watchlist.json"   # user's custom watchlist (gitignored)
 
 for _d in (BRIEFS_DIR, NARRATIVES_DIR, RESULTS_DIR):
     _d.mkdir(parents=True, exist_ok=True)
@@ -130,19 +132,47 @@ MARKET_GROUPS = {
 STOOQ_FALLBACK: dict[str, str] = {}
 
 
+def get_watchlist() -> list[tuple[str, str]]:
+    """The user's custom watchlist from WATCHLIST_FILE, or the default WATCHLIST."""
+    if WATCHLIST_FILE.exists():
+        try:
+            raw = json.loads(WATCHLIST_FILE.read_text(encoding="utf-8"))
+            items = [(d["symbol"].upper(), d.get("name") or d["symbol"].upper())
+                     for d in raw if isinstance(d, dict) and d.get("symbol")]
+            if items:
+                return items
+        except (json.JSONDecodeError, OSError, AttributeError, TypeError):
+            pass
+    return WATCHLIST
+
+
+def save_watchlist(items: list[tuple[str, str]]) -> None:
+    """Persist the custom watchlist as JSON."""
+    WATCHLIST_FILE.parent.mkdir(parents=True, exist_ok=True)
+    payload = [{"symbol": s, "name": n} for s, n in items]
+    WATCHLIST_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def group_items(key: str) -> list[tuple[str, str]]:
+    """Instruments for a market group, resolving the watchlist dynamically."""
+    if key == "watchlist":
+        return get_watchlist()
+    return MARKET_GROUPS[key]["items"]
+
+
 def all_symbols() -> list[str]:
     """Unique list of every instrument symbol across all groups."""
     seen: dict[str, None] = {}
-    for group in MARKET_GROUPS.values():
-        for symbol, _name in group["items"]:
+    for key in MARKET_GROUPS:
+        for symbol, _name in group_items(key):
             seen.setdefault(symbol, None)
     return list(seen)
 
 
 def display_name(symbol: str) -> str:
     """Friendly name for a symbol, falling back to the symbol itself."""
-    for group in MARKET_GROUPS.values():
-        for sym, name in group["items"]:
+    for key in MARKET_GROUPS:
+        for sym, name in group_items(key):
             if sym == symbol:
                 return name
     return symbol

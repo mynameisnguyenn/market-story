@@ -132,9 +132,9 @@ def _empty_snapshot(symbol: str, name: str) -> dict:
 def build_market_sections(history: dict[str, pd.DataFrame]) -> dict[str, list[dict]]:
     """Assemble per-group snapshot lists keyed by group name (see config.MARKET_GROUPS)."""
     sections: dict[str, list[dict]] = {}
-    for key, group in config.MARKET_GROUPS.items():
+    for key in config.MARKET_GROUPS:
         rows = []
-        for symbol, name in group["items"]:
+        for symbol, name in config.group_items(key):
             frame = history.get(symbol)
             rows.append(_empty_snapshot(symbol, name) if frame is None
                         else compute_snapshot(symbol, name, frame))
