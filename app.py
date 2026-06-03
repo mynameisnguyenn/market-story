@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import calendar_data, config, formatting, history, macro_data, market_data, news
+from src import calendar_data, config, formatting, history, macro_data, market_data, news, regime
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -302,7 +302,22 @@ def equities_tab(brief: dict, closes: dict) -> None:
     watchlist_editor()
 
 
+def regime_panel(brief: dict) -> None:
+    """A quick risk-on/off read derived from the macro (FRED) series."""
+    signals = regime.assess(brief.get("macro", []), vix=brief.get("stats", {}).get("vix"))
+    if not signals:
+        return
+    st.markdown(f"**Risk regime — {regime.overall(signals)}**")
+    tone_color = {"on": "green", "off": "red", "neutral": "gray"}
+    cols = st.columns(len(signals))
+    for col, s in zip(cols, signals):
+        col.caption(s["label"])
+        col.markdown(f":{tone_color[s['tone']]}[{s['reading']}]")
+    st.divider()
+
+
 def macro_tab(brief: dict, closes: dict) -> None:
+    regime_panel(brief)
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**Global Indices**")
