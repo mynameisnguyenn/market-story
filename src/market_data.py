@@ -46,9 +46,11 @@ def _download_batch(symbols: list[str], period: str):
     """Batched download with backoff; returns a DataFrame or None."""
     for attempt in range(_DOWNLOAD_RETRIES):
         try:
+            # No multi_level_index kwarg: it isn't accepted across all yfinance
+            # versions (prod pins >=1.2.0, dev has 0.2.x). _extract collapses a
+            # single-symbol MultiIndex defensively instead — version-agnostic.
             raw = yf.download(symbols, period=period, interval="1d", group_by="ticker",
-                              auto_adjust=True, progress=False, threads=True,
-                              multi_level_index=False)
+                              auto_adjust=True, progress=False, threads=True)
             if raw is not None and not raw.empty:
                 return raw
         except Exception:
