@@ -1,264 +1,264 @@
 {
   "date": "2026-06-03",
-  "generated_at_utc": "2026-06-03T16:28:47+00:00",
-  "session_label": "as of 2026-06-03 16:28 UTC",
+  "generated_at_utc": "2026-06-03T17:26:45+00:00",
+  "session_label": "as of 2026-06-03 17:26 UTC",
   "markets": {
     "us_equities": [
       {
         "symbol": "^GSPC",
         "name": "S&P 500",
-        "last": 7559.83984375,
-        "change_pct": -0.6562600077293146,
-        "change_1w_pct": 0.524974618056695,
-        "ytd_pct": 10.435174110729672,
-        "level_change": -49.93994140625
+        "last": 7561.7099609375,
+        "change_pct": -0.631684826314105,
+        "change_1w_pct": 0.5498420076696764,
+        "ytd_pct": 10.46249303830984,
+        "level_change": -48.06982421875
       },
       {
         "symbol": "^IXIC",
         "name": "Nasdaq Composite",
-        "last": 26814.125,
-        "change_pct": -1.0326139337317741,
-        "change_1w_pct": 0.5225714704532924,
-        "ytd_pct": 15.369315319398936,
-        "level_change": -279.775390625
+        "last": 26826.685546875,
+        "change_pct": -0.9862546178196707,
+        "change_1w_pct": 0.5696592822297397,
+        "ytd_pct": 15.423357794885483,
+        "level_change": -267.21484375
       },
       {
         "symbol": "^DJI",
         "name": "Dow Jones",
-        "last": 50893.078125,
-        "change_pct": -0.8082806627953243,
-        "change_1w_pct": 0.4912635126004483,
-        "ytd_pct": 5.887630908530284,
-        "level_change": -414.7109375
+        "last": 50866.44921875,
+        "change_pct": -0.860180981901959,
+        "change_1w_pct": 0.43868322990565645,
+        "ytd_pct": 5.8322270716946845,
+        "level_change": -441.33984375
       },
       {
         "symbol": "^RUT",
         "name": "Russell 2000",
-        "last": 2898.4697265625,
-        "change_pct": -1.1422473301542446,
-        "change_1w_pct": -0.7352964538513751,
-        "ytd_pct": 16.783841041961555,
-        "level_change": -33.490234375
+        "last": 2891.279541015625,
+        "change_pct": -1.3874821097102363,
+        "change_1w_pct": -0.9815407496642559,
+        "ytd_pct": 16.49413731372413,
+        "level_change": -40.680419921875
       },
       {
         "symbol": "^VIX",
         "name": "VIX",
-        "last": 16.25,
-        "change_pct": 3.0437509721188416,
-        "change_1w_pct": -0.2455550231996284,
-        "ytd_pct": 8.695653560672278,
-        "level_change": 0.4799995422363281
+        "last": 16.239999771118164,
+        "change_pct": 2.9803379816841336,
+        "change_1w_pct": -0.3069437789995466,
+        "ytd_pct": 8.628762396729673,
+        "level_change": 0.4699993133544922
       }
     ],
     "sectors": [
       {
         "symbol": "XLK",
         "name": "Technology",
-        "last": 195.69000244140625,
-        "change_pct": -1.271380953081136,
-        "change_1w_pct": 6.105302940297541,
-        "ytd_pct": 36.093156885110965,
-        "level_change": -2.5200042724609375
+        "last": 195.69500732421875,
+        "change_pct": -1.2688559126477705,
+        "change_1w_pct": 6.108016643605696,
+        "ytd_pct": 36.096637544793595,
+        "level_change": -2.5149993896484375
       },
       {
         "symbol": "XLF",
         "name": "Financials",
-        "last": 50.79499816894531,
-        "change_pct": -1.292267639639344,
-        "change_1w_pct": -1.2154804011204057,
-        "ytd_pct": -6.780897300451039,
-        "level_change": -0.6650009155273438
+        "last": 50.93000030517578,
+        "change_pct": -1.0299238024215063,
+        "change_1w_pct": -0.9529324800043648,
+        "ytd_pct": -6.533141055632019,
+        "level_change": -0.529998779296875
       },
       {
         "symbol": "XLE",
         "name": "Energy",
-        "last": 59.35499954223633,
-        "change_pct": 2.4068331259470055,
-        "change_1w_pct": 4.149846980375016,
-        "ytd_pct": 33.62292375109463,
-        "level_change": 1.3950004577636719
+        "last": 59.125,
+        "change_pct": 2.0100085126458334,
+        "change_1w_pct": 3.7462682201321984,
+        "ytd_pct": 33.10513735513716,
+        "level_change": 1.1650009155273438
       },
       {
         "symbol": "XLV",
         "name": "Health Care",
-        "last": 147.86000061035156,
-        "change_pct": 0.9972723871146671,
-        "change_1w_pct": -0.6250371111939046,
-        "ytd_pct": -4.0905382900355285,
-        "level_change": 1.4600067138671875
+        "last": 147.875,
+        "change_pct": 1.0075178722743328,
+        "change_1w_pct": -0.6149561982795593,
+        "ytd_pct": -4.080808928604307,
+        "level_change": 1.475006103515625
       },
       {
         "symbol": "XLI",
         "name": "Industrials",
-        "last": 174.94000244140625,
-        "change_pct": 0.4305643202756615,
-        "change_1w_pct": 0.3671826611835405,
-        "ytd_pct": 13.094099813375326,
-        "level_change": 0.75
+        "last": 174.6649932861328,
+        "change_pct": 0.27268548026246897,
+        "change_1w_pct": 0.20940345839617347,
+        "ytd_pct": 12.916313644277121,
+        "level_change": 0.4749908447265625
       },
       {
         "symbol": "XLY",
         "name": "Cons. Discretionary",
-        "last": 116.5999984741211,
-        "change_pct": -0.8419065350804278,
-        "change_1w_pct": -4.072401853851815,
-        "ytd_pct": -2.157083930593795,
-        "level_change": -0.9899978637695312
+        "last": 116.20999908447266,
+        "change_pct": -1.1735668818736888,
+        "change_1w_pct": -4.393256958629033,
+        "ytd_pct": -2.484345320369552,
+        "level_change": -1.3799972534179688
       },
       {
         "symbol": "XLP",
         "name": "Cons. Staples",
-        "last": 82.58499908447266,
-        "change_pct": 0.9226411298104642,
-        "change_1w_pct": -2.3587168401426273,
-        "ytd_pct": 6.912778709933076,
-        "level_change": 0.7549972534179688
+        "last": 82.53500366210938,
+        "change_pct": 0.8615444400334127,
+        "change_1w_pct": -2.4178270568379956,
+        "ytd_pct": 6.8480557022816635,
+        "level_change": 0.7050018310546875
       },
       {
         "symbol": "XLU",
         "name": "Utilities",
-        "last": 44.23500061035156,
-        "change_pct": 0.7630958378786801,
-        "change_1w_pct": -2.0048710490333077,
-        "ytd_pct": 4.343561682787089,
-        "level_change": 0.33499908447265625
+        "last": 44.14500045776367,
+        "change_pct": 0.5580841079022347,
+        "change_1w_pct": -2.2042510973381613,
+        "ytd_pct": 4.131265167732523,
+        "level_change": 0.24499893188476562
       },
       {
         "symbol": "XLB",
         "name": "Materials",
-        "last": 51.82500076293945,
-        "change_pct": 0.5920036926743144,
-        "change_1w_pct": 1.2602588001517478,
-        "ytd_pct": 14.786048797204643,
-        "level_change": 0.30500030517578125
+        "last": 51.66999816894531,
+        "change_pct": 0.2911446231538939,
+        "change_1w_pct": 0.957401056756102,
+        "ytd_pct": 14.442736977504133,
+        "level_change": 0.14999771118164062
       },
       {
         "symbol": "XLRE",
         "name": "Real Estate",
-        "last": 43.82500076293945,
-        "change_pct": 0.7702898862809837,
-        "change_1w_pct": -1.8037201118305424,
-        "ytd_pct": 9.342175405108023,
-        "level_change": 0.33499908447265625
+        "last": 43.79499816894531,
+        "change_pct": 0.7013025493386671,
+        "change_1w_pct": -1.8709452816179084,
+        "ytd_pct": 9.267319755638415,
+        "level_change": 0.3049964904785156
       },
       {
         "symbol": "XLC",
         "name": "Comm. Services",
-        "last": 111.94499969482422,
-        "change_pct": -1.4308356118398868,
-        "change_1w_pct": -3.7115107191809993,
-        "ytd_pct": -4.602250584725775,
-        "level_change": -1.625
+        "last": 112.23500061035156,
+        "change_pct": -1.1754856811305392,
+        "change_1w_pct": -3.4620690279727584,
+        "ytd_pct": -4.355116413971416,
+        "level_change": -1.3349990844726562
       }
     ],
     "watchlist": [
       {
         "symbol": "NVDA",
         "name": "NVIDIA",
-        "last": 215.77000427246094,
-        "change_pct": -3.1639901355445033,
-        "change_1w_pct": 1.4910621250884715,
-        "ytd_pct": 15.700629440680714,
-        "level_change": -7.0500030517578125
+        "last": 215.82000732421875,
+        "change_pct": -3.1415491292999143,
+        "change_1w_pct": 1.5145819041676223,
+        "ytd_pct": 15.727442178539452,
+        "level_change": -7.0
       },
       {
         "symbol": "MSFT",
         "name": "Microsoft",
-        "last": 425.5350036621094,
-        "change_pct": -3.574583395743236,
-        "change_1w_pct": 3.117500621747471,
-        "ytd_pct": -11.618621308320886,
-        "level_change": -15.774993896484375
+        "last": 425.3450012207031,
+        "change_pct": -3.6176375849656384,
+        "change_1w_pct": 3.0714584003056933,
+        "ytd_pct": -11.658083814534837,
+        "level_change": -15.964996337890625
       },
       {
         "symbol": "META",
         "name": "Meta",
-        "last": 613.02001953125,
-        "change_pct": 2.575174359168142,
-        "change_1w_pct": -3.500927162498435,
-        "ytd_pct": -7.051330399624711,
-        "level_change": 15.3900146484375
+        "last": 617.3099975585938,
+        "change_pct": 3.293006126698783,
+        "change_1w_pct": -2.8256165870812144,
+        "ytd_pct": -6.400865916325538,
+        "level_change": 19.67999267578125
       },
       {
         "symbol": "AMZN",
         "name": "Amazon",
-        "last": 249.33999633789062,
-        "change_pct": -2.798999291785631,
-        "change_1w_pct": -8.28030504330891,
-        "ytd_pct": 8.023563134047551,
-        "level_change": -7.17999267578125
+        "last": 248.2449951171875,
+        "change_pct": -3.2258670867334804,
+        "change_1w_pct": -8.683101142671944,
+        "ytd_pct": 7.549166987285005,
+        "level_change": -8.274993896484375
       },
       {
         "symbol": "GOOGL",
         "name": "Alphabet",
-        "last": 358.9800109863281,
-        "change_pct": -0.7931449685720016,
-        "change_1w_pct": -7.6768707704568335,
-        "ytd_pct": 14.770836542943133,
-        "level_change": -2.8699951171875
+        "last": 362.1000061035156,
+        "change_pct": 0.06908940052041679,
+        "change_1w_pct": -6.874464776852318,
+        "ytd_pct": 15.768341804101382,
+        "level_change": 0.25
       },
       {
         "symbol": "NFLX",
         "name": "Netflix",
-        "last": 81.20999908447266,
-        "change_pct": -2.544105004197861,
-        "change_1w_pct": -7.029192326165312,
-        "ytd_pct": -13.385241857741248,
-        "level_change": -2.1200027465820312
+        "last": 81.5250015258789,
+        "change_pct": -2.1660869620947376,
+        "change_1w_pct": -6.668571322262751,
+        "ytd_pct": -13.049275097684488,
+        "level_change": -1.8050003051757812
       },
       {
         "symbol": "MELI",
         "name": "MercadoLibre",
-        "last": 1645.5,
-        "change_pct": -1.6337557774936284,
-        "change_1w_pct": -2.9873210015815,
-        "ytd_pct": -18.307468150972884,
-        "level_change": -27.3299560546875
+        "last": 1645.06005859375,
+        "change_pct": -1.6600550080076215,
+        "change_1w_pct": -3.013258342464298,
+        "ytd_pct": -18.329309492414257,
+        "level_change": -27.7698974609375
       },
       {
         "symbol": "V",
         "name": "Visa",
-        "last": 311.510009765625,
-        "change_pct": -1.8309584723592454,
-        "change_1w_pct": -4.914372670497336,
-        "ytd_pct": -10.809641851373863,
-        "level_change": -5.80999755859375
+        "last": 313.25,
+        "change_pct": -1.2826191952215127,
+        "change_1w_pct": -4.383256308916417,
+        "ytd_pct": -10.311454482384407,
+        "level_change": -4.07000732421875
       },
       {
         "symbol": "MA",
         "name": "Mastercard",
-        "last": 467.8999938964844,
-        "change_pct": -2.0473955219503903,
-        "change_1w_pct": -5.482388126206306,
-        "ytd_pct": -17.774647848046087,
-        "level_change": -9.779998779296875
+        "last": 471.2300109863281,
+        "change_pct": -1.350272523101248,
+        "change_1w_pct": -4.809711770282732,
+        "ytd_pct": -17.18945479086258,
+        "level_change": -6.449981689453125
       },
       {
         "symbol": "CRM",
         "name": "Salesforce",
-        "last": 192.0500030517578,
-        "change_pct": -4.376614940454715,
-        "change_1w_pct": 8.191092893286033,
-        "ytd_pct": -27.32236660135825,
-        "level_change": -8.789993286132812
+        "last": 191.98500061035156,
+        "change_pct": -4.408980227544679,
+        "change_1w_pct": 8.154473861446832,
+        "ytd_pct": -27.3469655262813,
+        "level_change": -8.854995727539062
       },
       {
         "symbol": "TSM",
         "name": "TSMC",
-        "last": 437.2349853515625,
-        "change_pct": -2.116684286231363,
-        "change_1w_pct": 3.431262032092519,
-        "ytd_pct": 44.28476937504229,
-        "level_change": -9.45501708984375
+        "last": 439.5198974609375,
+        "change_pct": -1.6051635230876382,
+        "change_1w_pct": 3.971775373940134,
+        "ytd_pct": 45.03877586534713,
+        "level_change": -7.17010498046875
       },
       {
         "symbol": "ASML",
         "name": "ASML",
-        "last": 1717.6300048828125,
-        "change_pct": 0.7189061494413451,
-        "change_1w_pct": 7.494978323117074,
-        "ytd_pct": 61.110069166783454,
-        "level_change": 12.260009765625
+        "last": 1723.3900146484375,
+        "change_pct": 1.056663338914432,
+        "change_1w_pct": 7.855458824235839,
+        "ytd_pct": 61.65034592551679,
+        "level_change": 18.02001953125
       }
     ],
     "global_indices": [
@@ -339,40 +339,40 @@
       {
         "symbol": "^FVX",
         "name": "5Y Yield",
-        "last": 4.2230000495910645,
-        "change_pct": 1.1012689325012204,
-        "change_1w_pct": 1.1012689325012204,
-        "ytd_pct": 13.460509983890411,
-        "level_change": 0.046000003814697266
+        "last": 4.213000297546387,
+        "change_pct": 0.8618685988864616,
+        "change_1w_pct": 0.8618685988864616,
+        "ytd_pct": 13.191843880793531,
+        "level_change": 0.03600025177001953
       },
       {
         "symbol": "^TNX",
         "name": "10Y Yield",
-        "last": 4.5,
-        "change_pct": 1.0101027399459506,
-        "change_1w_pct": 0.424013694090819,
-        "ytd_pct": 8.095120935430078,
-        "level_change": 0.04500007629394531
+        "last": 4.491000175476074,
+        "change_pct": 0.808086473323022,
+        "change_1w_pct": 0.22316958270522935,
+        "ytd_pct": 7.878934908694224,
+        "level_change": 0.03600025177001953
       },
       {
         "symbol": "^TYX",
         "name": "30Y Yield",
-        "last": 5.001999855041504,
-        "change_pct": 0.7046476214686681,
-        "change_1w_pct": -0.17961087767247585,
-        "ytd_pct": 3.347101184841783,
-        "level_change": 0.034999847412109375
+        "last": 4.99399995803833,
+        "change_pct": 0.5435866794335276,
+        "change_1w_pct": -0.3392575899750616,
+        "ytd_pct": 3.181814061887933,
+        "level_change": 0.026999950408935547
       }
     ],
     "fx": [
       {
         "symbol": "DX-Y.NYB",
         "name": "US Dollar Index",
-        "last": 99.53099822998047,
-        "change_pct": 0.31344185189594587,
-        "change_1w_pct": 0.323555234825168,
-        "ytd_pct": 1.2728932297739526,
-        "level_change": 0.31099700927734375
+        "last": 99.50900268554688,
+        "change_pct": 0.2912733937594947,
+        "change_1w_pct": 0.3013845417130012,
+        "ytd_pct": 1.2505127406543082,
+        "level_change": 0.28900146484375
       },
       {
         "symbol": "EURUSD=X",
@@ -386,20 +386,20 @@
       {
         "symbol": "USDJPY=X",
         "name": "USD/JPY",
-        "last": 160.00799560546875,
-        "change_pct": 0.23302639433258054,
-        "change_1w_pct": 0.48039751061430547,
-        "ytd_pct": 2.2984031696622775,
-        "level_change": 0.3719940185546875
+        "last": 160.02000427246094,
+        "change_pct": 0.24054892488509783,
+        "change_1w_pct": 0.48793860647255993,
+        "ytd_pct": 2.3060807076056067,
+        "level_change": 0.384002685546875
       },
       {
         "symbol": "GBPUSD=X",
         "name": "GBP/USD",
-        "last": 1.3421016931533813,
-        "change_pct": -0.2896360202595538,
-        "change_1w_pct": -0.2549980079111225,
-        "ytd_pct": -0.34291089114519835,
-        "level_change": -0.0038985013961791992
+        "last": 1.341813564300537,
+        "change_pct": -0.3110423212401181,
+        "change_1w_pct": -0.2764117451469317,
+        "ytd_pct": -0.3643057548199935,
+        "level_change": -0.0041866302490234375
       },
       {
         "symbol": "USDCNY=X",
@@ -415,56 +415,56 @@
       {
         "symbol": "CL=F",
         "name": "WTI Crude",
-        "last": 96.29000091552734,
-        "change_pct": 2.6983774761660806,
-        "change_1w_pct": 8.58141698710324,
-        "ytd_pct": 67.6941901534303,
-        "level_change": 2.529998779296875
+        "last": 96.19000244140625,
+        "change_pct": 2.5917238159242517,
+        "change_1w_pct": 8.468653710403906,
+        "ytd_pct": 67.52003745870734,
+        "level_change": 2.4300003051757812
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "last": 98.16000366210938,
-        "change_pct": 2.2500038146972656,
-        "change_1w_pct": 4.104361765834641,
-        "ytd_pct": 61.31471836249243,
-        "level_change": 2.160003662109375
+        "last": 98.06999969482422,
+        "change_pct": 2.1562496821085686,
+        "change_1w_pct": 4.008907352417257,
+        "ytd_pct": 61.16680715535667,
+        "level_change": 2.0699996948242188
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
-        "last": 4465.39990234375,
-        "change_pct": -0.5279498072425226,
-        "change_1w_pct": 0.4024711038504769,
-        "ytd_pct": 3.2319169948985316,
-        "level_change": -23.7001953125
+        "last": 4471.10009765625,
+        "change_pct": -0.4009712327287529,
+        "change_1w_pct": 0.5306373840640699,
+        "ytd_pct": 3.3636951339731214,
+        "level_change": -18.0
       },
       {
         "symbol": "SI=F",
         "name": "Silver",
-        "last": 73.55000305175781,
-        "change_pct": -2.338295902924503,
-        "change_1w_pct": -1.4061796879474397,
-        "ytd_pct": 4.870676469909951,
-        "level_change": -1.7609939575195312
+        "last": 73.71499633789062,
+        "change_pct": -2.1192133085027542,
+        "change_1w_pct": -1.1850060954157526,
+        "ytd_pct": 5.105930811334858,
+        "level_change": -1.5960006713867188
       },
       {
         "symbol": "HG=F",
         "name": "Copper",
-        "last": 6.506499767303467,
-        "change_pct": -2.1505395621029266,
-        "change_1w_pct": 3.195875407627713,
-        "ytd_pct": 15.568377176659954,
-        "level_change": -0.14300012588500977
+        "last": 6.501999855041504,
+        "change_pct": -2.218212504944417,
+        "change_1w_pct": 3.124504870205369,
+        "ytd_pct": 15.488449784644075,
+        "level_change": -0.14750003814697266
       },
       {
         "symbol": "NG=F",
         "name": "Nat Gas",
-        "last": 3.2139999866485596,
-        "change_pct": 1.484052116026957,
-        "change_1w_pct": 5.723685097991615,
-        "ytd_pct": -12.805211832572727,
-        "level_change": 0.04699993133544922
+        "last": 3.239000082015991,
+        "change_pct": 2.273445703990129,
+        "change_1w_pct": 6.546056666450206,
+        "ytd_pct": -12.126967268545275,
+        "level_change": 0.07200002670288086
       }
     ],
     "credit": [
@@ -480,29 +480,29 @@
       {
         "symbol": "LQD",
         "name": "IG Credit (LQD)",
-        "last": 108.49500274658203,
-        "change_pct": -0.39019044207481146,
-        "change_1w_pct": -0.02177343618288141,
-        "ytd_pct": 0.34321155556051863,
-        "level_change": -0.42499542236328125
+        "last": 108.53500366210938,
+        "change_pct": -0.35346539965853685,
+        "change_1w_pct": 0.015087437535821202,
+        "ytd_pct": 0.38021407822288467,
+        "level_change": -0.3849945068359375
       },
       {
         "symbol": "TLT",
         "name": "20+Y Treasuries (TLT)",
-        "last": 85.1500015258789,
-        "change_pct": -0.5837711513045685,
-        "change_1w_pct": 0.21678894474257415,
-        "ytd_pct": -0.45840335392463016,
-        "level_change": -0.5
+        "last": 85.18190002441406,
+        "change_pct": -0.5465283048750491,
+        "change_1w_pct": 0.25433169328121785,
+        "ytd_pct": -0.4211135427924839,
+        "level_change": -0.46810150146484375
       },
       {
         "symbol": "AGG",
         "name": "US Agg Bonds (AGG)",
-        "last": 98.41999816894531,
-        "change_pct": -0.2937908197924055,
-        "change_1w_pct": -0.05064833667437485,
-        "ytd_pct": 0.17315058587610288,
-        "level_change": -0.29000091552734375
+        "last": 98.46499633789062,
+        "change_pct": -0.24820458804013512,
+        "change_1w_pct": -0.004950938830494689,
+        "ytd_pct": 0.21894252353020782,
+        "level_change": -0.24500274658203125
       }
     ]
   },
@@ -614,10 +614,10 @@
     {
       "id": "PCEPILFE",
       "name": "Core PCE Price Index",
-      "latest": 129.63,
-      "date": "2026-04-01",
-      "prev": 129.321,
-      "change": 0.3089999999999975
+      "latest": null,
+      "date": null,
+      "prev": null,
+      "change": null
     },
     {
       "id": "UNRATE",
@@ -713,7 +713,7 @@
       {
         "name": "Meta",
         "symbol": "META",
-        "change_pct": 2.575174359168142,
+        "change_pct": 3.293006126698783,
         "group": "watchlist"
       },
       {
@@ -725,19 +725,19 @@
       {
         "name": "Energy",
         "symbol": "XLE",
-        "change_pct": 2.4068331259470055,
+        "change_pct": 2.0100085126458334,
         "group": "sectors"
+      },
+      {
+        "name": "ASML",
+        "symbol": "ASML",
+        "change_pct": 1.056663338914432,
+        "group": "watchlist"
       },
       {
         "name": "Health Care",
         "symbol": "XLV",
-        "change_pct": 0.9972723871146671,
-        "group": "sectors"
-      },
-      {
-        "name": "Cons. Staples",
-        "symbol": "XLP",
-        "change_pct": 0.9226411298104642,
+        "change_pct": 1.0075178722743328,
         "group": "sectors"
       }
     ],
@@ -745,91 +745,322 @@
       {
         "name": "Salesforce",
         "symbol": "CRM",
-        "change_pct": -4.376614940454715,
+        "change_pct": -4.408980227544679,
         "group": "watchlist"
       },
       {
         "name": "Microsoft",
         "symbol": "MSFT",
-        "change_pct": -3.574583395743236,
-        "group": "watchlist"
-      },
-      {
-        "name": "NVIDIA",
-        "symbol": "NVDA",
-        "change_pct": -3.1639901355445033,
+        "change_pct": -3.6176375849656384,
         "group": "watchlist"
       },
       {
         "name": "Amazon",
         "symbol": "AMZN",
-        "change_pct": -2.798999291785631,
+        "change_pct": -3.2258670867334804,
+        "group": "watchlist"
+      },
+      {
+        "name": "NVIDIA",
+        "symbol": "NVDA",
+        "change_pct": -3.1415491292999143,
         "group": "watchlist"
       },
       {
         "name": "Netflix",
         "symbol": "NFLX",
-        "change_pct": -2.544105004197861,
+        "change_pct": -2.1660869620947376,
         "group": "watchlist"
       }
     ]
   },
   "news": [
     {
-      "title": "Canada backs off streaming spending rule",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/canada-backs-off-streaming-spending-rule-93CH-4724886",
-      "summary": "",
-      "published": "2026-06-03T16:28:26+00:00"
-    },
-    {
-      "title": "European stocks slip and oil rises amid Middle East tensions",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/european-stocks-slip-and-oil-rises-amid-middle-east-tensions-4723412",
-      "summary": "",
-      "published": "2026-06-03T16:25:52+00:00"
-    },
-    {
-      "title": "Toro Q2 2026 Earnings Preview",
+      "title": "OKLO, OTTR draw highest short interest in utilities sector; BIP and FRVO see lowest short interest",
       "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600364-toro-q2-2026-earnings-preview?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "link": "https://seekingalpha.com/news/4600226-oklo-ottr-draw-highest-short-interest-in-utilities-sector-bip-and-frvo-see-lowest-short?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-03T16:24:49+00:00"
+      "published": "2026-06-03T17:19:45+00:00"
     },
     {
-      "title": "Stocks fall as oil prices, yields perk up",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600290-stocks-open-lower-as-oil-prices-yields-perk-up?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:23:32+00:00"
+      "title": "Oil prices look to end at highest levels in over a week: \u2018Oil tanks are getting emptier each week Hormuz stays closed\u2019",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/oil-prices-rally-for-a-third-straight-day-as-peace-deal-hopes-teeter-6a0b1635?mod=mw_rss_topstories",
+      "summary": "Oil futures were on track to settle Wednesday at their highest levels in more than a week, after the EIA reported a sixth straight weekly drop in U.S. commercial crude supplies and another big draw from  the nation\u2019s emergency oil reserve.",
+      "published": "2026-06-03T17:18:00+00:00"
     },
     {
-      "title": "FTSE 100 today: Stocks decline on Gulf tensions and UK services slump",
+      "title": "Lilly cuts Germany investment plan in half over healthcare reforms",
       "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/ftse-100-today-stocks-fall-as-gulf-escalation-and-tariff-fears-bite-4723407",
+      "link": "https://www.investing.com/news/stock-market-news/lilly-cuts-germany-investment-plan-in-half-over-healthcare-reforms-93CH-4724937",
       "summary": "",
-      "published": "2026-06-03T16:21:52+00:00"
+      "published": "2026-06-03T17:17:00+00:00"
     },
     {
-      "title": "Strict Verizon policy leaves customers waiting longer in stores",
+      "title": "C.H. Robinson says it made a breakthrough with its AI global supply chain tech",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600366-ch-robinson-says-it-made-a-breakthrough-with-its-ai-global-supply-chain-tech?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:15:12+00:00"
+    },
+    {
+      "title": "BASF's coatings unit sale to Carlyle approved by European Commission",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600385-basfs-coatings-unit-sale-to-carlyle-approved-by-european-commission?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:14:29+00:00"
+    },
+    {
+      "title": "Macy\u2019s projects $21.5B-$21.75B in FY2026 net sales while raising adjusted EPS view to $2-$2.20",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600388-macy-s-projects-21_5b-21_75b-in-fy2026-net-sales-while-raising-adjusted-eps-view-to-2-2_20?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:13:31+00:00"
+    },
+    {
+      "title": "Most and least shorted utilities stocks with market caps up to $2B as of end-May",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600198-most-and-least-shorted-utilities-stocks-with-market-caps-up-to-2b-as-of-end-may?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:13:17+00:00"
+    },
+    {
+      "title": "Air Canada sees \u2019friction\u2019 in delayed deliveries of A321XLR jets",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/air-canada-sees-friction-in-delayed-deliveries-of-a321xlr-jets-4724934",
+      "summary": "",
+      "published": "2026-06-03T17:12:38+00:00"
+    },
+    {
+      "title": "Meta Platforms launches Business Agent across messaging apps",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600374-meta-platforms-launches-business-agent-across-messaging-apps?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:10:12+00:00"
+    },
+    {
+      "title": "Bill Ackman to sell Universal Music stake after rejected bid",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/bill-ackman-to-sell-universal-music-stake-after-rejected-bid-93CH-4724930",
+      "summary": "",
+      "published": "2026-06-03T17:09:55+00:00"
+    },
+    {
+      "title": "JPMorgan launches $1.85 billion debt sale for Belden\u2019s Ruckus deal - Bloomberg",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/jpmorgan-launches-185-billion-debt-sale-for-beldens-ruckus-deal--bloomberg-93CH-4724928",
+      "summary": "",
+      "published": "2026-06-03T17:09:00+00:00"
+    },
+    {
+      "title": "Trump Administration Turns to a New Rationale to Justify Old Tariffs",
+      "source": "NYT Economy",
+      "link": "https://www.nytimes.com/2026/06/03/business/economy/trump-tariffs-forced-labor.html",
+      "summary": "The administration has settled on a more legally and politically durable way to impose tariffs, but some say the focus on forced labor is merely a pretext for protectionism.",
+      "published": "2026-06-03T17:08:47+00:00"
+    },
+    {
+      "title": "Lila Sciences in talks for $2B funding at $8.5B valuation - Bloomberg",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/lila-sciences-in-talks-for-2b-funding-at-85b-valuation--bloomberg-93CH-4724927",
+      "summary": "",
+      "published": "2026-06-03T17:08:26+00:00"
+    },
+    {
+      "title": "Space stocks tumble as investors take profits ahead of SpaceX IPO",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600386-space-stocks-tumble-as-investors-take-profits-ahead-of-spacex-ipo?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T17:08:14+00:00"
+    },
+    {
+      "title": "Anthropic Said to Pick Morgan Stanley, Goldman Sachs to Lead IPO",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/anthropic-said-to-pick-morgan-stanley-goldman-sachs-to-lead-ipo-432SI-4724924",
+      "summary": "",
+      "published": "2026-06-03T17:06:10+00:00"
+    },
+    {
+      "title": "Tesla rolls out unsupervised robotaxis in Austin",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/tesla-rolls-out-unsupervised-robotaxis-in-austin-4724919",
+      "summary": "",
+      "published": "2026-06-03T17:01:22+00:00"
+    },
+    {
+      "title": "Wolfe Research sees Bitcoin falling below $40k by late October",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/wolfe-research-sees-bitcoin-falling-below-40k-by-late-october-93CH-4724914",
+      "summary": "",
+      "published": "2026-06-03T16:59:25+00:00"
+    },
+    {
+      "title": "Why is Warner Music stock sliding today?",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/why-is-warner-music-stock-sliding-today-93CH-4724912",
+      "summary": "",
+      "published": "2026-06-03T16:56:59+00:00"
+    },
+    {
+      "title": "Buy, Hold, or Sell: Is Oracle Stock a Buy at $245?",
       "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/sectors/technology/articles/strict-verizon-policy-leaves-customers-161700203.html",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/buy-hold-sell-oracle-stock-165655141.html",
       "summary": "",
-      "published": "2026-06-03T16:17:00+00:00"
+      "published": "2026-06-03T16:56:55+00:00"
     },
     {
-      "title": "LiveOne expands collaboration with AT&T's Connected Car platform",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600355-liveone-expands-collaboration-with-atts-connected-car-platform?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:16:14+00:00"
-    },
-    {
-      "title": "Medigap Plan G or Plan N at 65: Why the Plan Letter Choice Could Cost a Retiree $36,000 Over a 20-Year Retirement",
+      "title": "Broadcom stock hovers at all-time highs ahead of earnings",
       "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/sectors/healthcare/articles/medigap-plan-g-plan-n-161613479.html",
+      "link": "https://finance.yahoo.com/markets/article/broadcom-stock-hovers-at-all-time-highs-ahead-of-earnings-165602217.html",
       "summary": "",
-      "published": "2026-06-03T16:16:13+00:00"
+      "published": "2026-06-03T16:56:02+00:00"
+    },
+    {
+      "title": "Analysis-US stock options watchers warn Wall Street\u2019s rally \u2019ripe for volatility spasms\u2019",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/analysisus-stock-options-watchers-warn-wall-streets-rally-ripe-for-volatility-spasms-4724898",
+      "summary": "",
+      "published": "2026-06-03T16:55:13+00:00"
+    },
+    {
+      "title": "Google upsizes historic equity raise to $85bn to back AI spending spree",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/85299cdd-d9b3-4b40-8d10-73fc9ddb4573",
+      "summary": "Tech giant\u2019s first stock offering in more than two decades gets strong demand as investors shrug off huge investment plans",
+      "published": "2026-06-03T16:53:34+00:00"
+    },
+    {
+      "title": "Stock Of The Day, A Dow Jones Member And AI Play, Reaches Buy Point",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/research/ibd-stock-of-the-day/caterpillar-cat-stock-of-the-day-ai-data-centers/?src=A00220&yptr=yahoo",
+      "summary": "",
+      "published": "2026-06-03T16:52:29+00:00"
+    },
+    {
+      "title": "CRISPR Therapeutics Stock Is Absurdly Cheap -- Here's Why Analysts See 437% Upside Potential",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/crispr-therapeutics-stock-absurdly-cheap-165000642.html",
+      "summary": "",
+      "published": "2026-06-03T16:50:00+00:00"
+    },
+    {
+      "title": "Why Intuitive Machines Stock Crashed Today",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/why-intuitive-machines-stock-crashed-today",
+      "summary": "Key PointsIntuitive Machines will sell probably 15 million new shares to raise $500 million in new cash.",
+      "published": "2026-06-03T16:47:18+00:00"
+    },
+    {
+      "title": "Mega-Cap Growth Leadership or Small-Cap Growth Potential? VUG vs. VBK",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/mega-cap-growth-leadership-or-small-cap-growth-potential-vug-vs-vbk",
+      "summary": "Key PointsVanguard Growth ETF carries a lower expense ratio and a higher trailing-12-month dividend yield than Vanguard Small-Cap Growth ETF",
+      "published": "2026-06-03T16:46:08+00:00"
+    },
+    {
+      "title": "Tom Steyer spent $216 million of his own money to run for governor of California \u2014 here\u2019s where that ranks",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/tom-steyer-spent-216-million-of-his-own-money-to-run-for-governor-of-california-heres-where-that-ranks-8e326893?mod=mw_rss_topstories",
+      "summary": "The latest big-spending and self-funding politician is Tom Steyer, a Democratic candidate for California governor who looks on track to be eliminated from the race.",
+      "published": "2026-06-03T16:44:00+00:00"
+    },
+    {
+      "title": "Marvell\u2019s stock is on a run not seen in a quarter-century as the tech company grows in stature",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/marvells-stock-is-on-a-run-not-seen-in-a-quarter-century-as-the-tech-company-grows-in-stature-7884b9c3?mod=mw_rss_topstories",
+      "summary": "Marvell now ranks No. 22 in the Nasdaq-100 with a $269 billion market capitalization that\u2019s higher than those of PepsiCo and T-Mobile.",
+      "published": "2026-06-03T16:43:00+00:00"
+    },
+    {
+      "title": "AkzoNobel Slammed the Door on a Buyout and Got Crushed",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/akzonobel-slammed-door-buyout-got-164145813.html",
+      "summary": "",
+      "published": "2026-06-03T16:41:45+00:00"
+    },
+    {
+      "title": "Why SanDisk Stock Is Soaring to a New All-Time High Today",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/why-sandisk-stock-soaring-new-all-time-high-today",
+      "summary": "Key PointsMorgan Stanley raised its price target on SanDisk stock this morning.",
+      "published": "2026-06-03T16:41:02+00:00"
+    },
+    {
+      "title": "I\u2019m 55, married and want a $1.5 million long-term care policy. Can I expect any nasty surprises?",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/im-55-married-and-want-a-1-5-million-long-term-care-policy-do-i-get-a-traditional-or-hybrid-f4338fc5?mod=mw_rss_topstories",
+      "summary": "\u201cI\u2019m not looking for a \u2018don\u2019t do it\u2019 opinion.\u201d",
+      "published": "2026-06-03T16:41:00+00:00"
+    },
+    {
+      "title": "Gold Stock Finds Key Support at Bullish Trendline",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/gold-stock-finds-key-support-163724638.html",
+      "summary": "",
+      "published": "2026-06-03T16:37:24+00:00"
+    },
+    {
+      "title": "Stock Market Today: Dow Drops 400 Points, Small Caps Crater On U.S.-Iran Unease; Macy's Wobbles (Live Coverage)",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-sp500-nasdaq-trump-us-iran-palo-alto-panw-stock/?src=A00220&yptr=yahoo",
+      "summary": "",
+      "published": "2026-06-03T16:37:02+00:00"
+    },
+    {
+      "title": "DraftKings and FanDuel are likely to lose money on the NBA Finals \u2014 whether the Knicks or Spurs win",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/draftkings-and-fanduel-are-likely-to-lose-money-on-the-nba-finals-whether-the-knicks-or-spurs-win-fa1468d0?mod=mw_rss_topstories",
+      "summary": "San Antonio \u201cis the biggest remaining liability on the futures book,\u201d say sports-betting experts \u2014 but the Knicks \u201care a loser for the book as well.\u201d",
+      "published": "2026-06-03T16:35:00+00:00"
+    },
+    {
+      "title": "America's Greatest Opportunities: Catching The Sea Containers Wave",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/how-to-invest/stock-market-sea-containers-americas-greatest-opportunities/?src=A00220&yptr=yahoo",
+      "summary": "",
+      "published": "2026-06-03T16:32:59+00:00"
+    },
+    {
+      "title": "Another redemption wave is spooking the $2 trillion private-credit market",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/another-redemption-wave-is-spooking-the-2-trillion-private-credit-market-34a64347?mod=mw_rss_topstories",
+      "summary": "Private-credit woes are back in focus after a pair of l funds limited redemptions in the second quarter",
+      "published": "2026-06-03T16:32:00+00:00"
+    },
+    {
+      "title": "Amid the Artificial Intelligence (AI) Bonanza, Investors Might be Overlooking a Big Opportunity to Buy Netflix Stock",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/amid-artificial-intelligence-ai-bonanza-investors-might-be-overlooking-big-opportunity-buy",
+      "summary": "Key PointsNetflix operates the world's largest streaming platform for movies and television shows, and it has a positive long-term growth trajectory.",
+      "published": "2026-06-03T16:31:00+00:00"
+    },
+    {
+      "title": "Prediction: This Artificial Intelligence (AI) Chip Stock Will Soar After Micron's Earnings",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/prediction-artificial-intelligence-ai-chip-stock-will-soar-after-microns-earnings",
+      "summary": "Key PointsMemory and storage stocks have been rallying as big tech pours billions into DRAM and NAND chips.",
+      "published": "2026-06-03T16:30:00+00:00"
+    },
+    {
+      "title": "1 Sector Warren Buffett and Greg Abel Are Largely Ignoring -- and Why Investors Shouldn't",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/1-sector-warren-buffett-and-greg-abel-are-largely-ignoring-and-why-investors-shouldnt",
+      "summary": "Key PointsBuffett, as CEO of Berkshire Hathaway, delivered six decades of market-beating returns.",
+      "published": "2026-06-03T16:25:00+00:00"
+    },
+    {
+      "title": "Should You Buy Bitcoin While It's Below $70,000?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/should-you-buy-bitcoin-while-its-below-70000",
+      "summary": "Key PointsBitcoin has been doing poorly this year, even though the overall markets remain strong.",
+      "published": "2026-06-03T16:20:00+00:00"
+    },
+    {
+      "title": "Why Cognyte Software Stock Is Plummeting Today",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/why-cognyte-software-stock-plummeting-today",
+      "summary": "Key PointsCognyte beat Wall Street's sales target for fiscal Q1, but earnings came in below expectations.",
+      "published": "2026-06-03T16:16:01+00:00"
     },
     {
       "title": "Bessent says US inflation jump will be \u2018short-term blip\u2019",
@@ -839,74 +1070,18 @@
       "published": "2026-06-03T16:14:39+00:00"
     },
     {
-      "title": "Moomoo sees retail investors maturing as AI tools reshape platform strategy",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/moomoo-sees-retail-investors-maturing-as-ai-tools-reshape-platform-strategy-4724881",
-      "summary": "",
-      "published": "2026-06-03T16:14:33+00:00"
+      "title": "Why Did Red Cat Stock Drop Today?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/why-did-red-cat-stock-drop-today",
+      "summary": "Key PointsSafe Pro and Red Cat have won an Army contract for landmine-detecting drone aircraft.",
+      "published": "2026-06-03T16:13:25+00:00"
     },
     {
-      "title": "Microsoft's new AI models presented at Build should improve margins: Wells Fargo",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600339-microsofts-new-ai-models-presented-at-build-should-improve-margins-wells-fargo?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:13:04+00:00"
-    },
-    {
-      "title": "Danone CEO says no interest in purchasing Reckitt's Mead Johnson unit",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600353-danone-ceo-says-no-interest-in-purchase-reckitts-mead-johnson-unit?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:10:53+00:00"
-    },
-    {
-      "title": "Why is Qualcomm stock rallying today?",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/why-is-qualcomm-stock-rallying-today-93CH-4724876",
-      "summary": "",
-      "published": "2026-06-03T16:09:33+00:00"
-    },
-    {
-      "title": "What's dragging SoFi Technologies stock lower despite positive AI update",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600337-whats-dragging-sofi-technologies-stock-lower-despite-positive-ai-update?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:09:06+00:00"
-    },
-    {
-      "title": "U.K. stocks lower at close of trade; Investing.com United Kingdom 100 down 0.48%",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/uk-stocks-lower-at-close-of-trade-investingcom-united-kingdom-100-down-048-4724874",
-      "summary": "",
-      "published": "2026-06-03T16:08:36+00:00"
-    },
-    {
-      "title": "Spain stocks lower at close of trade; IBEX 35 down 0.53%",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/spain-stocks-lower-at-close-of-trade-ibex-35-down-053-4724873",
-      "summary": "",
-      "published": "2026-06-03T16:08:13+00:00"
-    },
-    {
-      "title": "Portugal stocks higher at close of trade; PSI up 0.46%",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/portugal-stocks-higher-at-close-of-trade-psi-up-046-4724872",
-      "summary": "",
-      "published": "2026-06-03T16:07:51+00:00"
-    },
-    {
-      "title": "Netherlands stocks lower at close of trade; AEX down 0.49%",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/netherlands-stocks-lower-at-close-of-trade-aex-down-049-4724871",
-      "summary": "",
-      "published": "2026-06-03T16:07:25+00:00"
-    },
-    {
-      "title": "Italy stocks lower at close of trade; Investing.com Italy 40 down 1.01%",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/italy-stocks-lower-at-close-of-trade-investingcom-italy-40-down-101-4724870",
-      "summary": "",
-      "published": "2026-06-03T16:07:01+00:00"
+      "title": "Should You Invest in a Gold ETF Before the Next Federal Reserve Meeting on June 16?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/should-you-invest-gold-etf-next-federal-reserve-meeting-june-16",
+      "summary": "Key PointsGold usually rises when the Fed cuts its benchmark interest rate.",
+      "published": "2026-06-03T16:09:12+00:00"
     },
     {
       "title": "Do ask a friend. Don\u2019t pay attention to ads. Here\u2019s advice on how to pick a doctor \u2014 from a doctor.",
@@ -914,13 +1089,6 @@
       "link": "https://www.marketwatch.com/story/do-ask-a-friend-dont-pay-attention-to-ads-heres-advice-on-how-to-pick-a-doctor-from-a-doctor-93bbdaf2?mod=mw_rss_topstories",
       "summary": "A cardiologist outlines the best approach to finding a doctor \u2014 and the questions to ask yourself when you do.",
       "published": "2026-06-03T16:07:00+00:00"
-    },
-    {
-      "title": "YieldMax Short N100 Option Income Strategy ETF announces weekly distribution of $0.0410",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600360-yieldmax-short-n100-option-income-strategy-etf-announces-weekly-distribution-of-00410?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T16:04:39+00:00"
     },
     {
       "title": "Why This Dividend ETF With a Low Yield Is Worth Holding for Long-Term Investors",
@@ -944,39 +1112,11 @@
       "published": "2026-06-03T16:00:00+00:00"
     },
     {
-      "title": "Memory chips are all the rage in markets, with Micron and SK Hynix becoming trillion-dollar companies",
-      "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/markets/stocks/articles/memory-chips-rage-markets-micron-160000501.html",
-      "summary": "",
-      "published": "2026-06-03T16:00:00+00:00"
-    },
-    {
       "title": "Partners Group limits withdrawals at private equity fund for wealthy individuals",
       "source": "FT International",
       "link": "https://www.ft.com/content/c41346b0-05be-4d57-9d14-e90a018f5e25",
       "summary": "Swiss private capital firm caps redemptions from its $8.6bn flagship vehicle",
       "published": "2026-06-03T15:59:37+00:00"
-    },
-    {
-      "title": "USA Rare Earth Hits Speed Bump As It Unlocks $1.6 Billion In U.S. Funding",
-      "source": "Yahoo Finance",
-      "link": "https://www.investors.com/news/usar-unlocks-chips-funding-rare-earth-stocks-hit-speed-bump/?src=A00220&yptr=yahoo",
-      "summary": "",
-      "published": "2026-06-03T15:57:33+00:00"
-    },
-    {
-      "title": "It It Too Soon to Call a Bottom on Nu Holdings Stock?",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/it-it-too-soon-call-bottom-nu-holdings-stock",
-      "summary": "Key PointsBofA and Susquehanna downgraded Nu this week following a change in CFO.",
-      "published": "2026-06-03T15:53:00+00:00"
-    },
-    {
-      "title": "An Infleqtion Director Sold 50,000 Company Shares. Here's What That Means for Investors.",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/infleqtion-director-sold-50000-company-shares-heres-what-means-investors",
-      "summary": "Key PointsDirector Kristina Johnson sold 50,000 shares on May 28, 2026, at a weighted average price of around $17.07 per share.",
-      "published": "2026-06-03T15:50:00+00:00"
     },
     {
       "title": "New Trump tariffs, this time focused on forced labor, could take effect as existing ones roll off",
@@ -986,46 +1126,11 @@
       "published": "2026-06-03T15:49:00+00:00"
     },
     {
-      "title": "Canadian Market Retreats From Record High; Energy, Tech Stocks Lose Ground",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/canadian-market-retreats-record-high-energy-tech-stocks-lose-ground",
-      "summary": "(RTTNews) - The Canadian market is down firmly in negative territory on Wednesday, weighed down by concerns about tensions in the Middle East, and largely contrasting reports about peace talks between the U.S. and Iran.",
-      "published": "2026-06-03T15:45:35+00:00"
-    },
-    {
-      "title": "Not Nvidia. Not Micron. This Underrated Artificial Intelligence (AI) Infrastructure Stock Will Be the Biggest Winner of 2026",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/not-nvidia-not-micron-underrated-artificial-intelligence-ai-infrastructure-stock-will-be",
-      "summary": "Key PointsDell Technologies has stepped on the gas, driven by the terrific demand for its AI servers.",
-      "published": "2026-06-03T15:43:00+00:00"
-    },
-    {
-      "title": "SpaceX's Projected $1.75 Trillion IPO Overvalues the Company By More Than 50%, According to This Wall Street Analyst",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/spacexs-projected-175-trillion-ipo-overvalues-company-more-50-according-wall-street",
-      "summary": "Key PointsSpaceX operates some great businesses, notably its low-Earth-orbit satellite internet business Starlink.",
-      "published": "2026-06-03T15:39:05+00:00"
-    },
-    {
       "title": "Bitcoin set to slump to new lows for 2026 after recent sell-off, traders forecast",
       "source": "CNBC Finance",
       "link": "https://www.cnbc.com/2026/06/03/bitcoin-to-slump-to-new-lows-after-recent-sell-off-traders-predict.html",
       "summary": "The cryptocurrency is likely to break below its lows hit in early February, traders on prediction market Kalshi believe.",
       "published": "2026-06-03T15:36:20+00:00"
-    },
-    {
-      "title": "Alphabet to raise $84.75 billion in upsized equity offering to fund AI ambitions",
-      "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/sectors/technology/articles/alphabet-raise-84-75-billion-153603843.html",
-      "summary": "",
-      "published": "2026-06-03T15:36:03+00:00"
-    },
-    {
-      "title": "Is UiPath Stock a Buy as Revenue Accelerates?",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/uipath-stock-buy-revenue-accelerates",
-      "summary": "Key PointsUiPath is seeing some momentum from artificial intelligence.",
-      "published": "2026-06-03T15:35:00+00:00"
     },
     {
       "title": "Morgan Stanley will soon open its trillion-dollar wealth management funnel to AI agents",
@@ -1035,34 +1140,6 @@
       "published": "2026-06-03T15:32:54+00:00"
     },
     {
-      "title": "Stocks fall, oil prices nears $100 as Iran war escalates",
-      "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/news/oil-jumps-mideast-missiles-while-021606836.html",
-      "summary": "",
-      "published": "2026-06-03T15:31:47+00:00"
-    },
-    {
-      "title": "Palantir: How To Make Money When The Stock Is Choppy",
-      "source": "Yahoo Finance",
-      "link": "https://www.investors.com/research/options/palantir-pltr-stock-calendar-spread-options/?src=A00220&yptr=yahoo",
-      "summary": "",
-      "published": "2026-06-03T15:29:50+00:00"
-    },
-    {
-      "title": "Director Sells 20,000 Shares of Financial Services Provider, According to Latest SEC Filing",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/director-sells-20000-shares-financial-services-provider-according-latest-sec-filing",
-      "summary": "Key PointsRhodes R Bobbitt sold 20,000 shares directly for a transaction value of approximately $758,000 at an average price around $37.88 per share (May 26&ndash;27, 2026).",
-      "published": "2026-06-03T15:29:41+00:00"
-    },
-    {
-      "title": "U.S. Stocks Giving Back Ground Amid Ongoing Middle East Conflict",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/us-stocks-giving-back-ground-amid-ongoing-middle-east-conflict",
-      "summary": "(RTTNews) - After trending higher over the past several sessions, stocks are giving back some ground during trading on Wednesday. The major averages have all moved to the downside, although selling pressure has remained somewhat subdued.",
-      "published": "2026-06-03T15:28:02+00:00"
-    },
-    {
       "title": "Looking to buy into the SpaceX IPO? This scary chart might make you think twice.",
       "source": "MarketWatch Top Stories",
       "link": "https://www.marketwatch.com/story/looking-to-buy-into-the-spacex-ipo-this-scary-chart-might-make-you-think-twice-c112155e?mod=mw_rss_topstories",
@@ -1070,74 +1147,11 @@
       "published": "2026-06-03T15:28:00+00:00"
     },
     {
-      "title": "Stock Market Today: Dow Slumps Amid U.S.-Iran Strikes; IBM Dives (Live Coverage)",
-      "source": "Yahoo Finance",
-      "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-sp500-nasdaq-trump-us-iran-palo-alto-panw-stock/?src=A00220&yptr=yahoo",
-      "summary": "",
-      "published": "2026-06-03T15:27:51+00:00"
-    },
-    {
-      "title": "Energy ETFs: MLPX Delivers More Income, Lower Fees",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/energy-etfs-mlpx-delivers-more-income-lower-fees",
-      "summary": "Key PointsGlobal X - MLP &amp; Energy Infrastructure ETF offers a significantly higher dividend yield and lower expense ratio than the VanEck Uranium and Nuclear ETF",
-      "published": "2026-06-03T15:27:39+00:00"
-    },
-    {
-      "title": "You\u2019re over 40 and laid off. Is it age discrimination? What you can do.",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/youre-over-40-and-laid-off-is-it-age-discrimination-what-you-can-do-03d02ea2?mod=mw_rss_topstories",
-      "summary": "Age discrimination is notoriously hard to prove. Here is what to watch out for.",
-      "published": "2026-06-03T15:18:00+00:00"
-    },
-    {
-      "title": "Marvell\u2019s stock is on a run not seen in a quarter-century as the tech company grows in stature",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/marvells-stock-is-on-a-run-not-seen-in-a-quarter-century-as-the-tech-company-grows-in-stature-7884b9c3?mod=mw_rss_topstories",
-      "summary": "Marvell now ranks No. 22 in the S&amp;P 500 with a $269 billion market capitalization that\u2019s higher than those of PepsiCo and T-Mobile.",
-      "published": "2026-06-03T15:15:00+00:00"
-    },
-    {
       "title": "US announces new tariffs over forced labour concerns",
       "source": "BBC Business",
       "link": "https://www.bbc.com/news/articles/cq6pe7nvldmo?at_medium=RSS&at_campaign=rss",
       "summary": "It comes after the US Supreme Court struck down many of US President Donald Trump's previous duties in February.",
       "published": "2026-06-03T15:12:28+00:00"
-    },
-    {
-      "title": "A leaner, more focused Honeywell Aerospace projects strong growth after spinoff",
-      "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/sectors/technology/articles/leaner-more-focused-honeywell-aerospace-150259820.html",
-      "summary": "",
-      "published": "2026-06-03T15:02:59+00:00"
-    },
-    {
-      "title": "I am 71. Would it be foolish to sell $10,000 in stock to visit my grandchildren in Thailand?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/i-am-71-and-comfortable-should-i-sell-10-000-in-stock-to-visit-my-grandkids-in-thailand-or-dip-into-my-50-000-savings-16230c6a?mod=mw_rss_topstories",
-      "summary": "\u201cI am comfortable living on my Social Security and pension income.\u201d",
-      "published": "2026-06-03T15:00:00+00:00"
-    },
-    {
-      "title": "The Iran war hasn\u2019t slowed the economy, but higher inflation leads companies to freeze hiring",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/iran-conflict-hasnt-slowed-the-economy-but-rising-inflation-coaxes-business-to-freeze-hiring-e897111d?mod=mw_rss_topstories",
-      "summary": "The largest part of the economy grew faster in May, even as businesses were coping with the worst inflation in several years \u2014 at a cost to job seekers. Many companies have adopted temporary hiring freezes to offset their own rising costs.",
-      "published": "2026-06-03T14:58:00+00:00"
-    },
-    {
-      "title": "Bill Ackman sees investors repeating a mistake of 2000: Flocking to the \u2018new new\u2019 and ignoring quality names",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/bill-ackman-sees-investors-repeating-a-mistake-of-2000-flocking-to-the-new-new-and-ignoring-quality-names-b33e5f88?mod=mw_rss_topstories",
-      "summary": "Billionaire hedge-fund manager Bill Ackman says investors are ignoring Microsoft and other Big Tech names for the sake of the \u201cnew new thing,\u201d like chip stocks.",
-      "published": "2026-06-03T14:41:00+00:00"
-    },
-    {
-      "title": "The hottest stock market in the world has doubled this year. And Goldman Sachs sees another 40% gain from here.",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/the-hottest-stock-market-in-the-world-has-doubled-this-year-now-goldman-sachs-sees-another-40-gain-from-here-bb6c49c7?mod=mw_rss_topstories",
-      "summary": "Earnings are the principal driver behind the breathtaking rallies  achieved by Korean and Taiwanese benchmark indices in 2026, and Goldman Sachs thinks the market is still underestimating the longevity of the chip cycle.",
-      "published": "2026-06-03T14:40:00+00:00"
     },
     {
       "title": "Fed Chair Warsh makes first hires at central bank, including 'Project 2025' author",
@@ -1166,13 +1180,6 @@
       "link": "https://www.marketwatch.com/bulletins/redirect/go?g=559b514e-1846-48b1-a433-f8c4b998b177&mod=mw_rss_bulletins",
       "summary": "",
       "published": "2026-06-03T14:16:48+00:00"
-    },
-    {
-      "title": "Google parent Alphabet upsizes record-breaking equity raise to $85bn",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/85299cdd-d9b3-4b40-8d10-73fc9ddb4573",
-      "summary": "Tech giant launches first stock offering in more than two decades in effort to fund AI spending",
-      "published": "2026-06-03T14:10:11+00:00"
     },
     {
       "title": "Traders say Karen Bass and Spencer Pratt will advance to runoff in high-profile LA mayoral race",
@@ -1238,6 +1245,13 @@
       "published": "2026-06-03T12:22:30+00:00"
     },
     {
+      "title": "Bitcoin and ethereum prices today, June 3, 2026: BTC opens below $67,000; ETH opens below $2,000",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/personal-finance/investing/article/bitcoin-and-ethereum-prices-today-june-3-2026-btc-opens-below-67000-eth-opens-below-2000-114333961.html",
+      "summary": "",
+      "published": "2026-06-03T11:43:33+00:00"
+    },
+    {
       "title": "Economic calendar: employment and manufacturing data, plus beige book",
       "source": "MarketWatch Bulletins",
       "link": "https://www.marketwatch.com/bulletins/redirect/go?g=79ee1430-f7ed-4b3a-b514-33c8bfcefb85&mod=mw_rss_bulletins",
@@ -1250,24 +1264,10 @@
       "link": "https://www.cnbc.com/2026/06/03/stocks-making-the-biggest-moves-premarket-bx-mrvl-panw.html",
       "summary": "These are the stocks posting the largest moves premarket.",
       "published": "2026-06-03T11:36:50+00:00"
-    },
-    {
-      "title": "Ukraine strikes St Petersburg as Putin\u2019s forum gets under way",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/10463041-88a8-48f9-b337-34ffb01d5e9d",
-      "summary": "Kyiv hits oil terminal after deadly Russian strikes on Ukrainian cities",
-      "published": "2026-06-03T10:29:25+00:00"
-    },
-    {
-      "title": "U.S. proposes fresh tariffs on 60 economies over forced labor trade practices",
-      "source": "CNBC Economy",
-      "link": "https://www.cnbc.com/2026/06/03/us-tariffs-60-economies-dection-301-forced-labor-trade-practices-.html",
-      "summary": "USTR has proposed a 10% duty rate for economies that have adopted a full or partial prohibition on forced labor trade, and 12.5% for all other economies.",
-      "published": "2026-06-03T10:05:32+00:00"
     }
   ],
   "stats": {
-    "vix": 16.25,
+    "vix": 16.239999771118164,
     "sector_advancers": 7,
     "sector_decliners": 4,
     "sector_count": 11
@@ -1798,7 +1798,7 @@
         7580.06,
         7599.96,
         7609.78,
-        7559.84
+        7561.71
       ],
       "^IXIC": [
         19398.96,
@@ -2061,7 +2061,7 @@
         26972.62,
         27086.81,
         27093.9,
-        26814.12
+        26826.69
       ],
       "^DJI": [
         42519.64,
@@ -2324,7 +2324,7 @@
         51032.46,
         51078.88,
         51307.79,
-        50893.08
+        50866.45
       ],
       "^RUT": [
         2102.98,
@@ -2587,7 +2587,7 @@
         2919.34,
         2905.76,
         2931.96,
-        2898.47
+        2891.28
       ],
       "^VIX": [
         17.69,
@@ -2850,7 +2850,7 @@
         15.32,
         16.05,
         15.77,
-        16.25
+        16.24
       ],
       "XLK": [
         117.55,
@@ -3113,7 +3113,7 @@
         191.02,
         195.76,
         198.21,
-        195.69
+        195.7
       ],
       "XLF": [
         50.3,
@@ -3376,7 +3376,7 @@
         51.58,
         51.43,
         51.46,
-        50.79
+        50.93
       ],
       "XLE": [
         40.49,
@@ -3639,7 +3639,7 @@
         56.29,
         57.3,
         57.96,
-        59.35
+        59.12
       ],
       "XLV": [
         130.7,
@@ -3902,7 +3902,7 @@
         149.47,
         147.84,
         146.4,
-        147.86
+        147.88
       ],
       "XLI": [
         141.83,
@@ -4165,7 +4165,7 @@
         173.13,
         172.4,
         174.19,
-        174.94
+        174.66
       ],
       "XLY": [
         106.88,
@@ -4428,7 +4428,7 @@
         120.87,
         118.19,
         117.59,
-        116.6
+        116.21
       ],
       "XLP": [
         80.57,
@@ -4691,7 +4691,7 @@
         82.91,
         82.03,
         81.83,
-        82.58
+        82.54
       ],
       "XLU": [
         40.06,
@@ -4954,7 +4954,7 @@
         44.42,
         43.1,
         43.9,
-        44.24
+        44.15
       ],
       "XLB": [
         43.03,
@@ -5217,7 +5217,7 @@
         51.15,
         50.92,
         51.52,
-        51.83
+        51.67
       ],
       "XLRE": [
         40.24,
@@ -5480,7 +5480,7 @@
         43.99,
         43.27,
         43.49,
-        43.83
+        43.79
       ],
       "XLC": [
         100.37,
@@ -5743,7 +5743,7 @@
         115.69,
         115.61,
         113.57,
-        111.94
+        112.24
       ],
       "NVDA": [
         141.19,
@@ -6006,7 +6006,7 @@
         211.14,
         224.36,
         222.82,
-        215.77
+        215.82
       ],
       "MSFT": [
         459.3,
@@ -6177,7 +6177,7 @@
         442.14,
         449.14,
         463.88,
-        468.19,
+        468.2,
         478.45,
         479.49,
         431.58,
@@ -6269,7 +6269,7 @@
         450.24,
         460.52,
         441.31,
-        425.54
+        425.35
       ],
       "META": [
         664.78,
@@ -6319,7 +6319,7 @@
         774.55,
         761.67,
         770.18,
-        760.05,
+        760.04,
         767.5,
         764.08,
         788.15,
@@ -6532,7 +6532,7 @@
         632.51,
         600.47,
         597.63,
-        613.02
+        617.31
       ],
       "AMZN": [
         205.71,
@@ -6795,7 +6795,7 @@
         270.64,
         261.26,
         256.52,
-        249.34
+        248.24
       ],
       "GOOGL": [
         165.61,
@@ -7058,7 +7058,7 @@
         380.34,
         376.37,
         361.85,
-        358.98
+        362.1
       ],
       "NFLX": [
         121.79,
@@ -7321,7 +7321,7 @@
         86.02,
         85.85,
         83.33,
-        81.21
+        81.53
       ],
       "MELI": [
         2602.26,
@@ -7584,7 +7584,7 @@
         1695.65,
         1730.98,
         1672.83,
-        1645.5
+        1645.06
       ],
       "V": [
         362.99,
@@ -7847,7 +7847,7 @@
         326.36,
         322.77,
         317.32,
-        311.51
+        313.25
       ],
       "MA": [
         578.55,
@@ -8110,7 +8110,7 @@
         493.98,
         495.25,
         477.68,
-        467.9
+        471.23
       ],
       "CRM": [
         262.51,
@@ -8373,7 +8373,7 @@
         191.1,
         209.6,
         200.84,
-        192.05
+        191.99
       ],
       "TSM": [
         195.19,
@@ -8636,7 +8636,7 @@
         418.45,
         435.63,
         446.69,
-        437.23
+        439.52
       ],
       "ASML": [
         741.44,
@@ -8899,7 +8899,7 @@
         1612.76,
         1628.57,
         1705.37,
-        1717.63
+        1723.39
       ],
       "^STOXX50E": [
         5375.7,
@@ -11266,7 +11266,7 @@
         4.15,
         4.19,
         4.18,
-        4.22
+        4.21
       ],
       "^TNX": [
         4.46,
@@ -11529,7 +11529,7 @@
         4.45,
         4.47,
         4.45,
-        4.5
+        4.49
       ],
       "^TYX": [
         4.98,
@@ -11792,7 +11792,7 @@
         4.99,
         4.99,
         4.97,
-        5.0
+        4.99
       ],
       "DX-Y.NYB": [
         99.25,
@@ -12055,7 +12055,7 @@
         98.91,
         99.2,
         99.22,
-        99.53
+        99.51
       ],
       "EURUSD=X": [
         1.15,
@@ -12581,7 +12581,7 @@
         159.27,
         159.35,
         159.64,
-        160.01
+        160.02
       ],
       "GBPUSD=X": [
         1.36,
@@ -13370,7 +13370,7 @@
         87.36,
         92.16,
         93.76,
-        96.29
+        96.19
       ],
       "BZ=F": [
         65.63,
@@ -13633,7 +13633,7 @@
         92.05,
         94.98,
         96.0,
-        98.16
+        98.07
       ],
       "GC=F": [
         3350.2,
@@ -13896,7 +13896,7 @@
         4560.5,
         4475.2,
         4489.1,
-        4465.4
+        4471.1
       ],
       "SI=F": [
         34.5,
@@ -14159,7 +14159,7 @@
         75.62,
         75.01,
         75.31,
-        73.55
+        73.71
       ],
       "HG=F": [
         4.81,
@@ -14422,7 +14422,7 @@
         6.36,
         6.52,
         6.65,
-        6.51
+        6.5
       ],
       "NG=F": [
         3.72,
@@ -14685,7 +14685,7 @@
         3.29,
         3.18,
         3.17,
-        3.21
+        3.24
       ],
       "HYG": [
         74.81,
@@ -15211,7 +15211,7 @@
         108.95,
         108.93,
         108.92,
-        108.5
+        108.54
       ],
       "TLT": [
         81.3,
@@ -15474,7 +15474,7 @@
         85.42,
         85.47,
         85.65,
-        85.15
+        85.18
       ],
       "AGG": [
         93.69,
@@ -15502,7 +15502,7 @@
         94.97,
         null,
         94.63,
-        94.59,
+        94.6,
         94.99,
         94.96,
         94.57,
@@ -15737,7 +15737,7 @@
         98.73,
         98.68,
         98.71,
-        98.42
+        98.46
       ]
     }
   }
