@@ -35,16 +35,16 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    using this structure:
    ```
    # Market Story — {date}
-   ## Since last time   (follow up on the prior narrative; what played out)
-   ## TL;DR            (3–5 punchy bullets: the day in one glance)
-   ## What moved & why
-   ### Equities & sectors
-   ### Rates & the dollar
-   ### Commodities & credit
-   ## Macro & data      (FRED + BLS prints, EIA energy draws/builds, central-bank / econ events)
-   ## Risk lens         (positioning, correlations, tail risks, what to watch next)
+   ## Since last time   (grade last session's `watch` items: hit / miss / pending)
+   ## Today in one line (ONE falsifiable thesis + its flip condition — the spine)
+   ## TL;DR             (≤3 bullets; each states a consequence for risk, not just a move)
+   ## What moved & why  (importance-ranked; demote quiet asset classes to a single line)
+   ## Macro & data      (FRED + pct_1y extremes, BLS, EIA draws/builds, CFTC positioning, events)
+   ## Risk lens         (positioning, correlations breaking, tail risks — the sharpest section)
+   ## What to watch     (3–5 numeric triggers + a machine-readable ```watch block to grade)
    ## Sources           (headlines + feeds the read leans on)
    ```
+   See `.claude/commands/narrate.md` for the full spec (thesis-first, the `watch` block format).
 4. The dashboard auto-displays this file in the "Today's Story" tab — no extra step.
 5. Ground every claim in the brief's numbers/headlines; prefer day-over-day deltas over
    levels. Don't invent prints. If you pull in outside knowledge or live web context, say
@@ -89,7 +89,12 @@ streamlit run app.py     # open the dashboard
   feeds and tickers fail constantly; degrade gracefully, never crash the dashboard.
 - No network calls in tests — synthetic data only, `np.random.seed(42)`.
 - No hardcoded paths — use `pathlib.Path` rooted at the project dir (see `src/config.py`).
-- Secrets via `.env` only; never commit keys. FRED key is optional.
+- Secrets via `.env` only; never commit keys (FRED + EIA keys live in `.env` and as GitHub
+  repo secrets; bridged to Streamlit Cloud via `_load_cloud_secrets`).
+- **Scope discipline:** the value is the daily *read*, not data breadth. The credible-source
+  stack (FRED/BLS/EIA/CFTC/SEC/yfinance/RSS) is deliberately complete — don't add more
+  instruments/feeds/options/intraday/crypto/backtester without a clear reason. Sharpen the
+  narrative, the analytics, and the design instead.
 
 ## Layout
 
