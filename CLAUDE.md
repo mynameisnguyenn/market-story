@@ -22,25 +22,30 @@ Two layers, deliberately split:
 
 When the user says "narrate today's brief", runs `/narrate`, or asks a market question:
 
-1. Read the newest file in `data/briefs/` (e.g. `brief_2026-06-02.json`). If none exists,
+1. Read the newest file in `data/briefs/` (e.g. `brief_2026-06-03.json`). If none exists,
    tell them to run `python run.py` first.
-2. Write the story to `data/narratives/narrative_YYYY-MM-DD.md` (same date as the brief),
+2. **Load memory (stateful narration — this is what stops the read feeling "light"):**
+   read the *previous* brief (second-newest `brief_*.json`) and diff the cross-asset
+   anchors (VIX, 2s10s/5/10/30Y yields, DXY, oil, gold/copper, HY/IG OAS); also read the
+   most recent prior `data/narratives/narrative_*.md` and follow up on its "what to watch".
+3. Write the story to `data/narratives/narrative_YYYY-MM-DD.md` (same date as the brief),
    using this structure:
    ```
    # Market Story — {date}
+   ## Since last time   (follow up on the prior narrative; what played out)
    ## TL;DR            (3–5 punchy bullets: the day in one glance)
    ## What moved & why
    ### Equities & sectors
    ### Rates & the dollar
    ### Commodities & credit
-   ## Macro & data      (FRED prints, central-bank / econ events)
+   ## Macro & data      (FRED + BLS prints, central-bank / econ events)
    ## Risk lens         (positioning, correlations, tail risks, what to watch next)
    ## Sources           (headlines + feeds the read leans on)
    ```
-3. The dashboard auto-displays this file in the "Today's Story" tab — no extra step.
-4. Ground every claim in the brief's numbers/headlines. Don't invent prints. If you pull
-   in outside knowledge or live web context, say so. Keep the **risk lens** sharp — this
-   user is a risk analyst, not a retail trader.
+4. The dashboard auto-displays this file in the "Today's Story" tab — no extra step.
+5. Ground every claim in the brief's numbers/headlines; prefer day-over-day deltas over
+   levels. Don't invent prints. If you pull in outside knowledge or live web context, say
+   so. Keep the **risk lens** sharp — this user is a risk analyst, not a retail trader.
 
 For follow-up questions ("why did the curve steepen?", "what's the read on XLE?"),
 answer from the brief first; only fetch more (WebSearch/yfinance) if the brief lacks it.
