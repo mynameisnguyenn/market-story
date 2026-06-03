@@ -62,7 +62,7 @@ def _fetch_csv(series_id: str, timeout: int = config.FRED_TIMEOUT) -> pd.Series 
     date_col, value_col = frame.columns[0], frame.columns[-1]
     values = pd.to_numeric(frame[value_col], errors="coerce")
     series = pd.Series(values.values, index=pd.to_datetime(frame[date_col], errors="coerce"))
-    return series.dropna()
+    return series[series.index.notna()].dropna()   # drop unparseable-date (NaT) rows too
 
 
 def _fetch_via_fredapi(fred, series_id: str) -> pd.Series | None:
@@ -88,7 +88,7 @@ def _load_env_key() -> str | None:
     env_path = config.PROJECT_ROOT / ".env"
     if env_path.exists():
         for line in env_path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if line.startswith("FRED_API_KEY") and "=" in line:
-                return line.split("=", 1)[1].strip() or None
+            name, sep, value = line.strip().partition("=")
+            if sep and name.strip() == "FRED_API_KEY":   # exact name, not a prefix match
+                return value.strip() or None
     return None
