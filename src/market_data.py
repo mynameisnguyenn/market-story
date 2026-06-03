@@ -49,6 +49,7 @@ def _download_stooq(sym: str):
         if "Close" not in frame.columns or "Date" not in frame.columns or frame.empty:
             return None
         frame.index = pd.to_datetime(frame["Date"], errors="coerce")
+        frame = frame[frame.index.notna()].sort_index()   # drop unparseable dates; ensure order
         return frame[["Close"]].dropna()
     except Exception:
         return None
@@ -141,6 +142,7 @@ def _pct(current, base) -> float | None:
 def compute_snapshot(symbol: str, name: str, frame: pd.DataFrame) -> dict:
     """One symbol's snapshot: last level plus 1D/1W/YTD change and level delta."""
     close = frame["Close"].dropna()
+    close = close[close.index.notna()]             # guard against NaT bars (e.g. stooq)
     if close.empty:
         return _empty_snapshot(symbol, name)
     last = float(close.iloc[-1])

@@ -28,6 +28,10 @@ BLS_SERIES = [
     ("LNS11300000", "Labor force participation"),
 ]
 
+# Series that are themselves percentages: their "YoY" is a percentage-POINT change,
+# not a percent-of-a-percent (unemployment 3.6->4.0 is +0.4 pp, not +11%).
+RATE_SERIES = {"LNS14000000", "LNS11300000"}
+
 
 def fetch_bls(series: list[tuple[str, str]] = BLS_SERIES) -> list[dict]:
     """Latest snapshot for each BLS series (one batched POST). Best-effort."""
@@ -84,7 +88,8 @@ def _snapshot(series_id: str, name: str, data: list) -> dict:
     if len(obs) >= 13:
         year_ago = _to_float(obs[12].get("value"))
         if latest is not None and year_ago:
-            yoy = (latest / year_ago - 1.0) * 100.0
+            yoy = (latest - year_ago) if series_id in RATE_SERIES \
+                else (latest / year_ago - 1.0) * 100.0
     return {
         "id": series_id,
         "name": name,

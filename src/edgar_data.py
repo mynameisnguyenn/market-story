@@ -76,6 +76,15 @@ def _ticker_cik_map() -> dict[str, str]:
     return out
 
 
+def _form_matches(form: str, forms) -> bool:
+    """Family match so amendments and prospectuses aren't silently dropped:
+    '10-K/A' -> '10-K' (keep amendments); '424B5' -> '424B' (prefix for prospectuses)."""
+    if not forms:
+        return True
+    base = str(form).split("/")[0]                 # drop the amendment suffix (/A)
+    return base in forms or (base.startswith("424B") and "424B" in forms)
+
+
 def _filings_for_cik(cik: str, forms, per_symbol: int) -> list[dict]:
     """Recent filings for one CIK (newest-first), filtered to `forms`."""
     try:
@@ -92,10 +101,12 @@ def _filings_for_cik(cik: str, forms, per_symbol: int) -> list[dict]:
     cik_int = int(cik)
     out = []
     for i, form in enumerate(forms_list):
-        if forms and form not in forms:
+        if not _form_matches(form, forms):
             continue
         accno = accns[i] if i < len(accns) else ""
         doc = docs[i] if i < len(docs) else ""
+        if not accno:                          # ragged payload -> no usable link; skip
+            continue
         out.append({
             "form": form,
             "date": dates[i] if i < len(dates) else "",

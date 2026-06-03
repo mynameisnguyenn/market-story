@@ -63,6 +63,7 @@ answer from the brief first; only fetch more (WebSearch/yfinance) if the brief l
   "macro": [{ "id": "DGS10", "name": "10Y Treasury", "latest": 4.2, "date": "...", "prev": 4.18, "change": 0.02 }],
   "bls":   [{ "id": "CUUR0000SA0", "name": "CPI-U, all items", "latest": ..., "date": "2026-04", "change": ..., "yoy_pct": ... }],
   "energy":[{ "id": "WCESTUS1", "name": "Crude oil (ex-SPR)", "latest": 433712, "date": "2026-05-29", "prev": 441686, "change": -7974, "units": "MBBL" }],
+  "positioning":[{ "name": "S&P 500 (e-mini)", "lev_net": -457780, "lev_net_chg": -56226, "asset_net": 1003607, "oi": 2093621, "date": "2026-05-26" }],
   "movers": { "leaders": [...], "laggards": [...] },
   "news": [{ "title": "...", "source": "...", "published": "...", "link": "...", "summary": "..." }],
   "stats": { "vix": 14.2, "advancers": 7, "decliners": 4 }

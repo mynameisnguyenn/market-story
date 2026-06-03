@@ -21,8 +21,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, calendar_data, config, edgar_data, eia_data, formatting,
-                 history, macro_data, market_data, news, regime, signals)
+from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data,
+                 formatting, history, macro_data, market_data, news, regime, signals)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -56,7 +56,8 @@ def _fetch_live():
         news_items = fut_news.result()
     sections = market_data.build_market_sections(history)
     brief = brief_mod.build_brief(history, sections, macro, news_items,
-                                  bls=get_bls(), energy=get_energy(), fetch=False)
+                                  bls=get_bls(), energy=get_energy(),
+                                  positioning=get_positioning(), fetch=False)
     closes = {symbol: frame["Close"] for symbol, frame in history.items()}
     return brief, closes
 
@@ -71,6 +72,12 @@ def get_bls() -> list[dict]:
 def get_energy() -> list[dict]:
     """EIA weekly inventories, cached 6h — the report only updates once a week."""
     return eia_data.fetch_eia()
+
+
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_positioning() -> list[dict]:
+    """CFTC speculative positioning, cached 6h — the COT report is weekly (Fri)."""
+    return cftc_data.fetch_cftc()
 
 
 def persist(brief: dict) -> None:
@@ -175,6 +182,26 @@ def energy_styler(energy: list[dict]):
         for m in energy
     ])
     return frame.style.format({"Latest": "{:,.0f}", "Δ wk": "{:+,.0f}"}, na_rep="n/a")
+
+
+def positioning_styler(positioning: list[dict]):
+    """CFTC leveraged-fund (spec) net positioning. Δ wk is coloured by sign (more
+    long = green); the Side column names the net direction in words."""
+    def side(net):
+        if net is None:
+            return "n/a"
+        return "net long" if net > 0 else "net short" if net < 0 else "flat"
+    frame = pd.DataFrame([
+        {"Contract": m["name"], "Lev-fund net": m.get("lev_net"), "Side": side(m.get("lev_net")),
+         "Δ wk": m.get("lev_net_chg"), "Asset-mgr net": m.get("asset_net"),
+         "As of": m.get("date") or "n/a"}
+        for m in positioning
+    ])
+    return (
+        frame.style
+        .format({"Lev-fund net": "{:+,.0f}", "Δ wk": "{:+,.0f}", "Asset-mgr net": "{:+,.0f}"}, na_rep="n/a")
+        .map(_color_changes, subset=["Δ wk"])
+    )
 
 
 def sector_treemap_fig(rows: list[dict]):
@@ -487,6 +514,11 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(energy_styler(brief["energy"]), use_container_width=True, hide_index=True)
         st.caption("A crude **draw** (negative Δ) is typically bullish for oil, a build bearish; "
                    "natural gas swings between summer injections and winter withdrawals. Source: EIA.")
+    if brief.get("positioning"):
+        st.markdown("**Speculative positioning (CFTC, weekly)** — leveraged-fund net & weekly change")
+        st.dataframe(positioning_styler(brief["positioning"]), use_container_width=True, hide_index=True)
+        st.caption("Leveraged funds = hedge-fund/spec money; asset managers = real money. A large "
+                   "spec net-short with real money long is a classic squeeze setup. Source: CFTC TFF.")
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")

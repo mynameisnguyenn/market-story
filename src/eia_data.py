@@ -43,7 +43,7 @@ def fetch_eia(series: list[tuple[str, str, str]] = EIA_SERIES) -> list[dict]:
     key = _load_key()
     if not key:
         return []
-    with ThreadPoolExecutor(max_workers=min(8, len(series))) as pool:
+    with ThreadPoolExecutor(max_workers=min(8, len(series) or 1)) as pool:
         futures = {
             pool.submit(_fetch_series, route, sid, key): (sid, name)
             for route, sid, name in series

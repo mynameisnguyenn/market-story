@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
+import pandas as pd
 import yfinance as yf
 
 from . import config
@@ -33,10 +34,9 @@ def _next_earnings_date(symbol: str) -> date | None:
     today = date.today()
     upcoming = []
     for d in raw:
-        if isinstance(d, datetime):
-            d = d.date()
-        if isinstance(d, date) and d >= today:
-            upcoming.append(d)
+        ts = pd.to_datetime(d, errors="coerce")   # date/datetime/Timestamp/np.datetime64/ISO str
+        if pd.notna(ts) and ts.date() >= today:
+            upcoming.append(ts.date())
     return min(upcoming) if upcoming else None
 
 

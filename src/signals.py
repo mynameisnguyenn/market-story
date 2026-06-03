@@ -46,10 +46,14 @@ def derive_signals(brief: dict, limit: int = 6) -> list[dict]:
     movers = brief.get("movers", {})
     if movers.get("leaders"):
         m = movers["leaders"][0]
-        out.append({"text": f"Top mover: {m['name']} {m['change_pct']:+.2f}%", "tone": "up"})
+        ch = m["change_pct"]
+        out.append({"text": f"Top mover: {m['name']} {ch:+.2f}%",
+                    "tone": "up" if ch > 0 else "down" if ch < 0 else "neutral"})
     if movers.get("laggards"):
         m = movers["laggards"][0]
-        out.append({"text": f"Biggest drag: {m['name']} {m['change_pct']:+.2f}%", "tone": "down"})
+        ch = m["change_pct"]
+        out.append({"text": f"Biggest drag: {m['name']} {ch:+.2f}%",
+                    "tone": "up" if ch > 0 else "down" if ch < 0 else "neutral"})
 
     up, dn = stats.get("sector_advancers"), stats.get("sector_decliners")
     if up is not None and dn is not None and (up + dn) > 0:

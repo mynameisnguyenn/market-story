@@ -9,11 +9,12 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import bls_data, config, eia_data, formatting, history, macro_data, market_data, news
+from . import bls_data, cftc_data, config, eia_data, formatting, macro_data, market_data, news
+from . import history as history_db   # aliased so build_brief's `history` arg can't shadow it
 
 
 def build_brief(history=None, sections=None, macro=None, news_items=None,
-                bls=None, energy=None, fetch: bool = True) -> dict:
+                bls=None, energy=None, positioning=None, fetch: bool = True) -> dict:
     """Build the brief dict. With fetch=True, pull everything fresh."""
     if fetch:
         history = market_data.download_history(config.all_symbols())
@@ -22,6 +23,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         news_items = news.fetch_news()
         bls = bls_data.fetch_bls()
         energy = eia_data.fetch_eia()
+        positioning = cftc_data.fetch_cftc()
     sections = sections or {}
     return {
         "date": str(date.today()),
@@ -31,6 +33,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         "macro": macro or [],
         "bls": bls or [],
         "energy": energy or [],
+        "positioning": positioning or [],
         "movers": _movers(sections),
         "news": news_items or [],
         "stats": _stats(sections),
@@ -56,14 +59,18 @@ def _embed_history(history) -> dict:
             idx = pd.DatetimeIndex(close.index)
             if idx.tz is not None:
                 idx = idx.tz_localize(None)
-            series[sym] = pd.Series(close.values, index=idx.normalize())
+            s = pd.Series(close.values, index=idx.normalize())
+            series[sym] = s[~s.index.duplicated(keep="last")]   # collapsed dates can duplicate
         except Exception:
             continue
     if not series:
         return {}
-    frame = pd.DataFrame(series)
+    try:
+        frame = pd.DataFrame(series)   # aligns symbols onto the union of dates
+    except Exception:
+        return {}                      # one bad index must not blank the whole brief
     dates = [d.strftime("%Y-%m-%d") for d in frame.index]
-    cols = {sym: [None if pd.isna(v) else round(float(v), 2) for v in frame[sym].values]
+    cols = {sym: [None if pd.isna(v) else round(float(v), 4) for v in frame[sym].values]
             for sym in frame.columns}
     return {"d": dates, "series": cols}
 
@@ -104,6 +111,8 @@ def _movers(sections: dict, n: int = 5) -> dict:
             pool.append({"name": row["name"], "symbol": row["symbol"],
                          "change_pct": row["change_pct"], "group": key})
     ascending = sorted(pool, key=lambda x: x["change_pct"])
+    if len(ascending) <= 1:                        # degenerate feed day: show the one we have
+        return {"leaders": ascending, "laggards": []}
     # take fewer when the pool is small so an instrument can't be both a
     # leader and a laggard (feeds fail constantly -> the pool can be < 2n).
     half = n if len(ascending) >= 2 * n else len(ascending) // 2
@@ -129,7 +138,7 @@ def save_brief(brief: dict) -> tuple:
     json_path.write_text(json.dumps(brief, indent=2, default=str), encoding="utf-8")
     md_path = config.BRIEFS_DIR / f"brief_{brief['date']}.md"
     md_path.write_text(render_markdown(brief), encoding="utf-8")
-    history.save_today(brief)
+    history_db.save_today(brief)
     return json_path, md_path
 
 
@@ -169,6 +178,7 @@ def render_markdown(brief: dict) -> str:
     lines += _macro_table(brief.get("macro", []))
     lines += _bls_table(brief.get("bls", []))
     lines += _energy_table(brief.get("energy", []))
+    lines += _positioning_table(brief.get("positioning", []))
     lines += _headline_list(brief.get("news", []))
     return "\n".join(lines)
 
@@ -229,6 +239,25 @@ def _energy_table(rows: list[dict]) -> list[str]:
         out.append(
             f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
             f"{formatting.fmt_num(change)} | {flow} | {m.get('units') or ''} | "
+            f"{m.get('date') or 'n/a'} |"
+        )
+    out.append("")
+    return out
+
+
+def _positioning_table(rows: list[dict]) -> list[str]:
+    """CFTC leveraged-fund (spec) net positioning + the week-over-week change."""
+    if not rows:
+        return []
+    out = ["## Speculative positioning (CFTC, weekly)",
+           "| Contract | Lev-fund net | Side | Δ wk | Asset-mgr net | As of |",
+           "|---|---:|---|---:|---:|---|"]
+    for m in rows:
+        net = m.get("lev_net")
+        side = "n/a" if net is None else ("net long" if net > 0 else "net short" if net < 0 else "flat")
+        out.append(
+            f"| {m['name']} | {formatting.fmt_num(net)} | {side} | "
+            f"{formatting.fmt_num(m.get('lev_net_chg'))} | {formatting.fmt_num(m.get('asset_net'))} | "
             f"{m.get('date') or 'n/a'} |"
         )
     out.append("")
