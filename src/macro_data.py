@@ -50,12 +50,32 @@ def _fetch_with_retry(fred, series_id: str, attempts: int = 3) -> pd.Series | No
     return observations
 
 
+# Series that trend (indices that mostly rise): a 1y percentile is ~always ~100
+# and not a rich/cheap signal, so we skip statistical context for them.
+_TREND_SERIES = {"CPIAUCSL", "PCEPILFE", "PAYEMS", "INDPRO"}
+
+
+def _stat_context(observations: pd.Series, window: int = 252):
+    """Percentile rank (0-100) and z-score of the latest value within a trailing
+    window — turns a level into 'is this extreme vs its own recent history'."""
+    if observations is None or len(observations) < 30:
+        return None, None
+    tail = observations.iloc[-window:].astype(float)
+    latest = float(tail.iloc[-1])
+    pct = round(float((tail < latest).mean()) * 100.0, 1)
+    std = float(tail.std())
+    z = round((latest - float(tail.mean())) / std, 2) if std > 0 else None
+    return pct, z
+
+
 def _snapshot(series_id: str, name: str, observations: pd.Series | None) -> dict:
-    """Latest value, prior value, and change for one series."""
+    """Latest value, prior value, change, and statistical context for one series."""
     if observations is None or len(observations) == 0:
-        return {"id": series_id, "name": name, "latest": None, "date": None, "prev": None, "change": None}
+        return {"id": series_id, "name": name, "latest": None, "date": None,
+                "prev": None, "change": None, "pct_1y": None, "z_1y": None}
     latest = float(observations.iloc[-1])
     prev = float(observations.iloc[-2]) if len(observations) >= 2 else None
+    pct_1y, z_1y = (None, None) if series_id in _TREND_SERIES else _stat_context(observations)
     return {
         "id": series_id,
         "name": name,
@@ -63,6 +83,8 @@ def _snapshot(series_id: str, name: str, observations: pd.Series | None) -> dict
         "date": str(observations.index[-1].date()),
         "prev": prev,
         "change": (latest - prev) if prev is not None else None,
+        "pct_1y": pct_1y,
+        "z_1y": z_1y,
     }
 
 

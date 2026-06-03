@@ -27,8 +27,12 @@ def _render_all_tabs():
             "credit": rows(["HYG"]),
         },
         "macro": [
-            {"id": "T10Y2Y", "name": "2s10s", "latest": 0.40, "change": 0.0, "date": "2026-06-02"},
-            {"id": "VIXCLS", "name": "VIX", "latest": 15.0, "change": 0.0, "date": "2026-06-02"},
+            {"id": "T10Y2Y", "name": "2s10s", "latest": 0.40, "change": 0.0,
+             "pct_1y": 0.0, "z_1y": -2.1, "date": "2026-06-02"},
+            {"id": "VIXCLS", "name": "VIX", "latest": 15.0, "change": 0.0,
+             "pct_1y": 21.0, "z_1y": -0.7, "date": "2026-06-02"},
+            {"id": "CPIAUCSL", "name": "CPI", "latest": 332.0, "change": 2.1,
+             "pct_1y": None, "z_1y": None, "date": "2026-04-01"},   # trending -> blank %ile
         ],
         "bls": [{"id": "CUUR0000SA0", "name": "CPI-U", "latest": 333.0, "change": 0.3,
                  "yoy_pct": 3.8, "date": "2026-04"}],

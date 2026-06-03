@@ -19,6 +19,13 @@ def _macro(brief: dict, sid: str):
     return None
 
 
+def _macro_row(brief: dict, sid: str):
+    for m in brief.get("macro", []):
+        if m.get("id") == sid:
+            return m
+    return None
+
+
 def _bls(brief: dict, sid: str):
     for m in brief.get("bls", []):
         if m.get("id") == sid:
@@ -61,16 +68,21 @@ def derive_signals(brief: dict, limit: int = 6) -> list[dict]:
         out.append({"text": f"Sector breadth {up} up / {dn} down — {tag}",
                     "tone": "up" if up > dn else "down" if dn > up else "neutral"})
 
-    curve = _macro(brief, "T10Y2Y")
-    if curve is not None:
+    curve_row = _macro_row(brief, "T10Y2Y")
+    if curve_row and curve_row.get("latest") is not None:
+        curve, pct = curve_row["latest"], curve_row.get("pct_1y")
         state = "inverted" if curve < 0 else "flat" if curve < 0.5 else "positively sloped"
-        out.append({"text": f"2s10s curve {curve:+.2f} — {state}",
-                    "tone": "down" if curve < 0 else "neutral"})
+        extra = " — 1y flattest" if (pct is not None and pct <= 5) \
+            else " — 1y steepest" if (pct is not None and pct >= 95) else ""
+        out.append({"text": f"2s10s curve {curve:+.2f} — {state}{extra}",
+                    "tone": "down" if curve < 0 else "warn" if extra else "neutral"})
 
-    hy = _macro(brief, "BAMLH0A0HYM2")
-    if hy is not None:
+    hy_row = _macro_row(brief, "BAMLH0A0HYM2")
+    if hy_row and hy_row.get("latest") is not None:
+        hy, pct = hy_row["latest"], hy_row.get("pct_1y")
+        ctx = f" ({pct:.0f}th %ile)" if pct is not None else ""
         state = "tight — no stress" if hy < 3 else "wide — stress" if hy >= 5 else "normal"
-        out.append({"text": f"HY credit spread {hy:.2f}% — {state}",
+        out.append({"text": f"HY credit spread {hy:.2f}%{ctx} — {state}",
                     "tone": "up" if hy < 3 else "down" if hy >= 5 else "neutral"})
 
     wti = _row(brief, "CL=F")

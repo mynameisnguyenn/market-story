@@ -144,12 +144,13 @@ def section_styler(rows: list[dict], kind: str):
 
 def macro_styler(macro: list[dict]):
     frame = pd.DataFrame([
-        {"Series": m["name"], "Latest": m.get("latest"), "Δ": m.get("change"), "As of": m.get("date") or "n/a"}
+        {"Series": m["name"], "Latest": m.get("latest"), "Δ": m.get("change"),
+         "1y %ile": m.get("pct_1y"), "As of": m.get("date") or "n/a"}
         for m in macro
     ])
     return (
         frame.style
-        .format({"Latest": "{:,.2f}", "Δ": "{:+.2f}"}, na_rep="n/a")
+        .format({"Latest": "{:,.2f}", "Δ": "{:+.2f}", "1y %ile": "{:.0f}"}, na_rep="—")
         .map(_color_changes, subset=["Δ"])
     )
 

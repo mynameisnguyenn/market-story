@@ -202,11 +202,13 @@ def _market_table(group: dict, rows: list[dict]) -> list[str]:
 
 
 def _macro_table(macro: list[dict]) -> list[str]:
-    out = ["## Macro (FRED)", "| Series | Latest | Δ | As of |", "|---|---:|---:|---|"]
+    out = ["## Macro (FRED)", "| Series | Latest | Δ | 1y %ile | As of |", "|---|---:|---:|---:|---|"]
     for m in macro:
+        pct = m.get("pct_1y")
         out.append(
             f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
-            f"{formatting.fmt_num(m.get('change'))} | {m.get('date') or 'n/a'} |"
+            f"{formatting.fmt_num(m.get('change'))} | {'' if pct is None else f'{pct:.0f}'} | "
+            f"{m.get('date') or 'n/a'} |"
         )
     out.append("")
     return out

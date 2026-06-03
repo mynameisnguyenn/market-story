@@ -28,6 +28,9 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    read the *previous* brief (second-newest `brief_*.json`) and diff the cross-asset
    anchors (VIX, 2s10s/5/10/30Y yields, DXY, oil, gold/copper, HY/IG OAS); also read the
    most recent prior `data/narratives/narrative_*.md` and follow up on its "what to watch".
+   Each macro row carries `pct_1y` (1-year percentile of the level) — use it to call out
+   what's *stretched* (e.g. HY OAS at the 3rd %ile = historically tight; 2s10s at the 0th
+   = flattest of the year), not just the day's move.
 3. Write the story to `data/narratives/narrative_YYYY-MM-DD.md` (same date as the brief),
    using this structure:
    ```
@@ -60,7 +63,7 @@ answer from the brief first; only fetch more (WebSearch/yfinance) if the brief l
     "global_indices": [...], "sectors": [...], "rates": [...], "fx": [...],
     "commodities": [...], "credit": [...]
   },
-  "macro": [{ "id": "DGS10", "name": "10Y Treasury", "latest": 4.2, "date": "...", "prev": 4.18, "change": 0.02 }],
+  "macro": [{ "id": "DGS10", "name": "10Y Treasury", "latest": 4.2, "date": "...", "prev": 4.18, "change": 0.02, "pct_1y": 91, "z_1y": 1.5 }],
   "bls":   [{ "id": "CUUR0000SA0", "name": "CPI-U, all items", "latest": ..., "date": "2026-04", "change": ..., "yoy_pct": ... }],
   "energy":[{ "id": "WCESTUS1", "name": "Crude oil (ex-SPR)", "latest": 433712, "date": "2026-05-29", "prev": 441686, "change": -7974, "units": "MBBL" }],
   "positioning":[{ "name": "S&P 500 (e-mini)", "lev_net": -457780, "lev_net_chg": -56226, "asset_net": 1003607, "oi": 2093621, "date": "2026-05-26" }],
