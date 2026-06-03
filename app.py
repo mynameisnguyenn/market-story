@@ -22,7 +22,7 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data,
-                 formatting, history, macro_data, market_data, news, regime, signals)
+                 formatting, history, macro_data, market_data, news, regime, scorecard, signals)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -619,10 +619,30 @@ def calendar_tab() -> None:
     _filings_section()
 
 
+def _watch_scorecard(brief: dict) -> None:
+    """Grade the prior narrative's `watch` block against today's brief — the feedback
+    loop that makes the read accountable. Quiet (an expander); skips if no prior."""
+    prior = brief_mod.prior_narrative_path()
+    if not prior or not prior.exists():
+        return
+    result = scorecard.score_prior(prior.read_text(encoding="utf-8"), brief)
+    graded = result["graded"]
+    if not graded:
+        return
+    s = result["summary"]
+    icon = {"triggered": "🟠", "watching": "⚪", "unresolved": "·"}
+    with st.expander(f"📋 Last session's watch — {s['triggered']}/{s['resolved']} triggered  ({prior.name})"):
+        for g in graded:
+            cur = "n/a" if g.get("current") is None else f"{g['current']:g}"
+            st.markdown(f"{icon.get(g['status'], '·')} **{g['status']}** — {g['claim']}  "
+                        f"`{g.get('metric')} {g.get('trigger')}` (now {cur})")
+
+
 def narrative_tab(brief: dict) -> None:
     path = brief_mod.latest_narrative_path()
     if path and path.exists():
         st.caption(f"Source: {path.name}")
+        _watch_scorecard(brief)
         st.markdown(path.read_text(encoding="utf-8"))
     else:
         st.info(

@@ -66,6 +66,14 @@ This reconciles with Solomon's "more greed than fear": the *greed* is real-money
 - **HY OAS 2.71%** — the de-risking trigger; >2.85% changes the character of the move.
 - **Does Meta's bid generalize**, or was it idiosyncratic? One green mega-cap isn't leadership.
 
+```watch
+[
+  {"claim": "HY OAS widening flips unwind to de-risking", "metric": "macro:BAMLH0A0HYM2", "trigger": ">2.85", "horizon": "next session"},
+  {"claim": "10Y break above 4.5% keeps pressure on tech", "metric": "macro:DGS10", "trigger": ">4.5", "horizon": "next session"},
+  {"claim": "Oil bid intact — WTI holds $95", "metric": "market:CL=F:last", "trigger": ">95", "horizon": "next session"}
+]
+```
+
 ## Sources
 
 - *Stock Market Today, June 3: Markets End Winning Streak on Middle East Escalation Fears* (Nasdaq)

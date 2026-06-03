@@ -157,6 +157,12 @@ def latest_narrative_path():
     return files[-1] if files else None
 
 
+def prior_narrative_path():
+    """The narrative before the latest — the one whose `watch` block we grade today."""
+    files = sorted(config.NARRATIVES_DIR.glob("narrative_*.md"))
+    return files[-2] if len(files) >= 2 else None
+
+
 def render_markdown(brief: dict) -> str:
     """Render a facts-only Markdown brief from the brief dict."""
     stats = brief.get("stats", {})
