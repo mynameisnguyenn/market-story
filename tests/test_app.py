@@ -49,9 +49,13 @@ def test_macro_styler_handles_none_change():
     assert "10Y" in html and "CPI" in html
 
 
-def test_sector_treemap_fig_builds_and_handles_empty():
+def test_sector_treemap_fig_shows_change_value():
     fig = app.sector_treemap_fig(_equity_rows())
     assert fig is not None and len(fig.data) == 1
+    trace = fig.data[0]
+    # the +1.25% change must be displayed, not Plotly's mapped rgb() string
+    assert any("+1.25%" in str(lbl) for lbl in trace.labels)
+    assert "color" not in (trace.texttemplate or "")
     assert app.sector_treemap_fig([]) is None
 
 

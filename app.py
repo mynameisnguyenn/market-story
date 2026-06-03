@@ -101,12 +101,17 @@ def macro_styler(macro: list[dict]):
 
 
 def sector_treemap_fig(rows: list[dict]):
-    """Treemap of sector 1-day moves, or None if no data."""
+    """Treemap of sector 1-day moves, or None if no data.
+
+    The % change is baked into each tile's label. Plotly's %{color} renders
+    the mapped RGB string (e.g. "rgb(74,175,92)"), not the value, so it must
+    not be used for the displayed number.
+    """
     data = [r for r in rows if r.get("change_pct") is not None]
     if not data:
         return None
     frame = pd.DataFrame({
-        "Sector": [r["name"] for r in data],
+        "Sector": [f"{r['name']}<br>{r['change_pct']:+.2f}%" for r in data],
         "Change": [r["change_pct"] for r in data],
         "Size": [1] * len(data),
     })
@@ -115,8 +120,7 @@ def sector_treemap_fig(rows: list[dict]):
         frame, path=["Sector"], values="Size", color="Change",
         color_continuous_scale="RdYlGn", color_continuous_midpoint=0, range_color=[-span, span],
     )
-    fig.update_traces(texttemplate="%{label}<br>%{color:+.2f}%",
-                      hovertemplate="%{label}: %{color:+.2f}%<extra></extra>")
+    fig.update_traces(texttemplate="%{label}", hovertemplate="%{label}<extra></extra>")
     fig.update_layout(height=360, margin=dict(t=10, l=10, r=10, b=10))
     return fig
 
