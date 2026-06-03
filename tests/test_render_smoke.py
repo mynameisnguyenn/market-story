@@ -23,7 +23,12 @@ def _render_all_tabs():
             "global_indices": rows(["^N225"]),
             "rates": rows(["^IRX", "^FVX", "^TNX", "^TYX"]),
             "fx": rows(["DX-Y.NYB"]),
-            "commodities": rows(["GC=F"]),
+            "commodities": rows(["GC=F"]) + [
+                {"symbol": "CL=F", "name": "WTI", "last": 96.0, "change_pct": 2.5,
+                 "change_1w_pct": 1.0, "ytd_pct": 1.0, "level_change": 0.0},
+                {"symbol": "HG=F", "name": "Copper", "last": 6.5, "change_pct": -1.5,
+                 "change_1w_pct": 0.0, "ytd_pct": 0.0, "level_change": 0.0},
+            ],   # oil up / copper down -> exercises the derive_lead headline render
             "credit": rows(["HYG"]),
         },
         "macro": [

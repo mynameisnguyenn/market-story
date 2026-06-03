@@ -371,14 +371,18 @@ def render_line(closes: dict, symbol: str, name: str, key: str | None = None) ->
 
 def signals_strip(brief: dict) -> None:
     """Lead the Overview with the day's derived read — data turned into signal."""
+    lead = signals.derive_lead(brief)
     sigs = signals.derive_signals(brief)
-    if not sigs:
+    if not lead and not sigs:
         return
-    st.markdown("**⚡ Today's signal**")
     dot = {"up": "green", "down": "red", "warn": "orange", "neutral": "gray"}
-    cols = st.columns(2)
-    for i, s in enumerate(sigs):
-        cols[i % 2].markdown(f":{dot[s['tone']]}[●]  {s['text']}")
+    if lead:
+        st.markdown(f"### :{dot.get(lead['tone'], 'gray')}[●] {lead['text']}")
+    if sigs:
+        st.markdown("**⚡ Today's signal**")
+        cols = st.columns(2)
+        for i, s in enumerate(sigs):
+            cols[i % 2].markdown(f":{dot[s['tone']]}[●]  {s['text']}")
     st.divider()
 
 

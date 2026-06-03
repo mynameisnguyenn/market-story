@@ -26,6 +26,13 @@ def _macro_row(brief: dict, sid: str):
     return None
 
 
+def _ord(n) -> str:
+    """1 -> '1st', 3 -> '3rd', 21 -> '21st' (for percentile labels)."""
+    n = int(round(n))
+    suffix = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
 def _bls(brief: dict, sid: str):
     for m in brief.get("bls", []):
         if m.get("id") == sid:
@@ -80,7 +87,7 @@ def derive_signals(brief: dict, limit: int = 6) -> list[dict]:
     hy_row = _macro_row(brief, "BAMLH0A0HYM2")
     if hy_row and hy_row.get("latest") is not None:
         hy, pct = hy_row["latest"], hy_row.get("pct_1y")
-        ctx = f" ({pct:.0f}th %ile)" if pct is not None else ""
+        ctx = f" ({_ord(pct)} %ile)" if pct is not None else ""
         state = "tight — no stress" if hy < 3 else "wide — stress" if hy >= 5 else "normal"
         out.append({"text": f"HY credit spread {hy:.2f}%{ctx} — {state}",
                     "tone": "up" if hy < 3 else "down" if hy >= 5 else "neutral"})
@@ -96,3 +103,47 @@ def derive_signals(brief: dict, limit: int = 6) -> list[dict]:
         out.append({"text": f"Core CPI {y:+.1f}% YoY — {'sticky' if y >= 2.5 else 'cooling'}", "tone": "neutral"})
 
     return out[:limit]
+
+
+def derive_lead(brief: dict) -> dict | None:
+    """One synthesized 'read of the day' that classifies the cross-asset tape into a
+    thesis — and names the evidence it rules out. Returns {text, tone, thesis} or None
+    when no theme clears the (deliberately conservative) thresholds. The dashboard
+    renders this as the headline above the signal lines."""
+    def chg(sym):
+        r = _row(brief, sym)
+        return r.get("change_pct") if r else None
+
+    spx = chg("^GSPC")
+    hy = _macro_row(brief, "BAMLH0A0HYM2")
+    hy_chg = hy.get("change") if hy else None          # day-over-day OAS change (pp)
+    hy_pct = hy.get("pct_1y") if hy else None
+    tnx = _row(brief, "^TNX")
+    y_up = tnx.get("level_change", 0) > 0 if tnx and tnx.get("level_change") is not None else None
+    oil, copper = chg("CL=F"), chg("HG=F")
+    stats = brief.get("stats", {})
+    up, dn = stats.get("sector_advancers"), stats.get("sector_decliners")
+
+    # 1) Equity selloff — is credit confirming (de-risking) or calm (an unwind)?
+    if spx is not None and spx <= -0.5:
+        if hy_chg is not None and hy_chg >= 0.05:      # HY OAS widening >= ~5bp
+            return {"tone": "down", "thesis": "de-risking",
+                    "text": f"Risk-off with credit confirming — S&P {spx:+.1f}%, HY OAS widening. "
+                            "Genuine de-risking, not just an equity wobble."}
+        if hy_chg is not None and hy_chg <= 0.02:      # HY OAS ~flat -> not a solvency scare
+            pct = f", {_ord(hy_pct)} %ile" if hy_pct is not None else ""
+            dur = " (yields up — duration-led)" if y_up else ""
+            return {"tone": "warn", "thesis": "unwind-not-stress",
+                    "text": f"Duration unwind, not credit stress — S&P {spx:+.1f}% but HY OAS flat{pct}{dur}. "
+                            "Flips to genuine de-risking if credit starts widening."}
+    # 2) Broad risk-on — participation, not a narrow melt-up
+    if spx is not None and spx >= 0.5 and up is not None and dn is not None and up >= 8:
+        return {"tone": "up", "thesis": "risk-on",
+                "text": f"Broad risk-on — S&P {spx:+.1f}% with {up}/{up + dn} sectors green. "
+                        "Participation, not a narrow melt-up."}
+    # 3) Oil up / copper down — a geopolitical premium, not reflation
+    if oil is not None and copper is not None and oil >= 1.5 and copper <= -1.0:
+        return {"tone": "warn", "thesis": "geopolitical-premium",
+                "text": f"Oil's bid is a risk premium, not reflation — WTI {oil:+.1f}% while copper {copper:+.1f}%. "
+                        "Geopolitical supply scare, not synchronized growth."}
+    return None
