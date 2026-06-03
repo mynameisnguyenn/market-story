@@ -1,6 +1,7 @@
 """Tests for the dashboard's pure figure/table builders (no Streamlit runtime)."""
 
 import pandas as pd
+import pytest
 
 import app
 
@@ -83,6 +84,30 @@ def test_yield_curve_fig_builds_and_needs_two_points():
     assert list(fig.data[0].x) == [0.25, 10.0, 30.0]          # sorted by maturity
     assert app.yield_curve_fig([{"symbol": "^TNX", "last": 4.45}]) is None  # one point
     assert app.yield_curve_fig([]) is None
+
+
+def _corr_dates():
+    return pd.to_datetime(["2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26",
+                           "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01"])
+
+
+def test_compute_correlations_perfect_and_shape():
+    idx = _corr_dates()
+    a = pd.Series([100, 101, 103, 102, 104, 106, 105, 108], index=idx, dtype=float)
+    closes = {"A": a, "B": a * 3.0}              # B is a scalar multiple -> identical returns
+    corr = app.compute_correlations(closes, ["A", "B"], window=60)
+    assert corr is not None and corr.shape == (2, 2)
+    assert corr.loc["A", "A"] == pytest.approx(1.0)
+    assert corr.loc["A", "B"] == pytest.approx(1.0)
+    assert app.compute_correlations({"A": a}, ["A"], 60) is None   # need >= 2 series
+
+
+def test_correlation_fig_builds_and_handles_thin():
+    idx = _corr_dates()
+    a = pd.Series([100, 101, 103, 102, 104, 106, 105, 108], index=idx, dtype=float)
+    insts = [("A", "Alpha"), ("B", "Beta")]
+    assert app.correlation_fig({"A": a, "B": a * 2.0}, insts) is not None
+    assert app.correlation_fig({}, insts) is None                 # no data -> None
 
 
 def test_line_fig_builds_and_handles_empty():

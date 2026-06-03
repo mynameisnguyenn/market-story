@@ -169,6 +169,48 @@ def yield_curve_fig(rates_rows: list[dict]):
     return fig
 
 
+# Curated cross-asset set for the correlation matrix (all in config.all_symbols()).
+CORR_INSTRUMENTS = [
+    ("^GSPC", "S&P"), ("^IXIC", "Nasdaq"), ("^RUT", "Russell"),
+    ("^TNX", "10Y"), ("DX-Y.NYB", "Dollar"), ("GC=F", "Gold"),
+    ("CL=F", "WTI"), ("HYG", "HY Credit"), ("^VIX", "VIX"),
+]
+
+
+def compute_correlations(closes: dict, symbols: list[str], window: int = 60):
+    """Correlation of daily returns over the last `window` sessions, or None.
+
+    Returns a square DataFrame indexed/columned by the symbols that had data;
+    None if fewer than two usable series.
+    """
+    cols = {}
+    for sym in symbols:
+        series = closes.get(sym)
+        if series is not None and len(series) >= 2:
+            cols[sym] = series.pct_change()
+    if len(cols) < 2:
+        return None
+    returns = pd.DataFrame(cols).tail(window)
+    corr = returns.corr()
+    if corr.empty or bool(corr.isna().all().all()):
+        return None
+    return corr
+
+
+def correlation_fig(closes: dict, instruments: list[tuple], window: int = 60):
+    """Heatmap of cross-asset return correlations, or None if too little data."""
+    corr = compute_correlations(closes, [s for s, _ in instruments], window)
+    if corr is None:
+        return None
+    names = {s: n for s, n in instruments}
+    labels = [names.get(s, s) for s in corr.columns]
+    fig = px.imshow(corr.values, x=labels, y=labels, zmin=-1, zmax=1,
+                    color_continuous_scale="RdBu_r", aspect="auto", text_auto=".2f")
+    fig.update_layout(height=440, margin=dict(t=36, l=10, r=10, b=10),
+                      title=f"Cross-asset return correlation (last {window}d)")
+    return fig
+
+
 # --- Streamlit render wrappers -----------------------------------------------
 
 def kpi_metric(col, row: dict | None, kind: str = "equity") -> None:
@@ -343,6 +385,11 @@ def macro_tab(brief: dict, closes: dict) -> None:
         render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")
     with col4:
         render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
+    corr = correlation_fig(closes, CORR_INSTRUMENTS)
+    if corr is not None:
+        st.plotly_chart(corr, use_container_width=True, theme="streamlit", key="corr_matrix")
+        st.caption("Daily-return correlation, last 60 sessions. Watch for regime shifts "
+                   "(e.g. stock–bond decoupling, or everything → +1 in a selloff).")
 
 
 def filter_headlines(items: list[dict], query: str) -> list[dict]:
