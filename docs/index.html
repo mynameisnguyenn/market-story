@@ -19,71 +19,66 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=cabinet-grotesk@400,500&display=swap" rel="stylesheet" />
 <style>
-  :root{
-    --bg:#0B0C10; --ink:#E9EAED; --muted:#71777F; --faint:#3a3e46;
-    --rule:#1b1d23; --accent:#5AA0FF; --up:#46CF92; --down:#FF5F6D;
-  }
+  :root{ --bg:#0A0B0F; --ink:#ECEEF2; --muted:#727884; --faint:#363a44;
+    --rule:#191b21; --accent:#5AA0FF; --up:#46CF92; --down:#FF5F6D; }
   *{ margin:0; padding:0; box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
   body{ background:var(--bg); color:var(--ink); font-family:'Cabinet Grotesk',system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased; line-height:1.5; }
-  .mono{ font-family:'IBM Plex Mono',monospace; }
-  .pad{ padding:0 6vw; max-width:1500px; margin:0 auto; }
-  .rule{ border:0; border-top:1px solid var(--rule); }
+    -webkit-font-smoothing:antialiased; line-height:1.5; overflow-x:hidden; }
   a{ color:inherit; text-decoration:none; }
+  #field{ position:fixed; inset:0; z-index:0; display:block; }
+  .scrim{ position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(90deg, var(--bg) 0%, rgba(10,11,15,.78) 38%, rgba(10,11,15,.30) 70%, rgba(10,11,15,.55) 100%); }
+  .grain{ position:fixed; inset:-50%; z-index:1; pointer-events:none; opacity:.025; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+  .wrap{ position:relative; z-index:2; }
 
-  /* masthead bar */
   .top{ display:flex; justify-content:space-between; align-items:center; padding:1.4rem 6vw;
     font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--muted); border-bottom:1px solid var(--rule); }
+    color:var(--muted); }
   .top .brand{ color:var(--ink); }
   .top .mid{ display:none; } @media(min-width:880px){ .top .mid{ display:block; } }
 
-  /* hero */
-  .hero{ padding-top:11vh; padding-bottom:5vh; }
+  .hero{ min-height:90vh; display:flex; flex-direction:column; justify-content:flex-start; padding:13vh 6vw 0; max-width:1500px; margin:0 auto; }
   .kick{ font-family:'IBM Plex Mono',monospace; font-size:.74rem; letter-spacing:.3em; text-transform:uppercase;
-    color:var(--accent); margin-bottom:2.4rem; opacity:0; animation:f .8s .1s forwards; }
-  h1{ font-family:'Clash Display',sans-serif; font-weight:600; font-size:clamp(4rem,15vw,13rem);
-    line-height:.84; letter-spacing:-.04em; text-transform:uppercase; opacity:0; animation:rise .9s .2s forwards; }
-  h1 sup{ font-size:.18em; vertical-align:super; color:var(--muted); font-weight:500; }
+    color:var(--accent); margin-bottom:1.6rem; opacity:0; animation:f .8s .2s forwards; }
+  h1{ font-family:'Clash Display',sans-serif; font-weight:600; font-size:clamp(3.4rem,11.5vw,10rem);
+    line-height:.84; letter-spacing:-.035em; text-transform:uppercase; opacity:0; animation:rise .9s .35s forwards;
+    text-shadow:0 8px 60px rgba(0,0,0,.6); }
+  h1 sup{ font-size:.16em; vertical-align:super; color:var(--muted); font-weight:500; }
   .sub{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:2rem;
-    margin-top:3rem; opacity:0; animation:rise .9s .45s forwards; }
-  .tag{ max-width:40ch; color:var(--muted); font-size:1.12rem; }
+    margin-top:2.6rem; opacity:0; animation:rise .9s .6s forwards; }
+  .tag{ max-width:40ch; color:var(--muted); font-size:1.1rem; }
   .enter{ font-family:'IBM Plex Mono',monospace; font-size:.95rem; letter-spacing:.05em; white-space:nowrap;
     border-bottom:1px solid var(--faint); padding-bottom:.4rem; transition:border-color .2s,color .2s; }
   .enter:hover{ border-color:var(--accent); color:var(--accent); }
   .enter .ar{ display:inline-block; transition:transform .2s; } .enter:hover .ar{ transform:translateX(5px); }
 
-  /* masthead ticker */
-  .ticker{ display:flex; flex-wrap:wrap; gap:0; margin-top:4.5rem; border-top:1px solid var(--rule);
-    border-bottom:1px solid var(--rule); opacity:0; animation:f 1s .7s forwards; }
-  .tk{ flex:1 1 200px; padding:1.5rem 1.6rem 1.5rem 0; display:flex; flex-direction:column; gap:.5rem;
+  /* live market tape pinned to the foot of the hero */
+  .tape{ position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:0; max-width:1500px; margin:0 auto;
+    border-top:1px solid var(--rule); opacity:0; animation:f 1s 1s forwards; }
+  .tk{ flex:1 1 180px; padding:1.3rem 6vw 1.3rem 0; margin-left:6vw; display:flex; flex-direction:column; gap:.45rem;
     border-right:1px solid var(--rule); }
-  .tk:last-child{ border-right:0; }
-  .tk .k{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
-  .tk .v{ font-family:'IBM Plex Mono',monospace; font-size:1.7rem; font-variant-numeric:tabular-nums; }
-  .tk .d{ font-family:'IBM Plex Mono',monospace; font-size:.82rem; font-variant-numeric:tabular-nums; color:var(--muted); }
+  .tk:first-child{ margin-left:6vw; } .tk:last-child{ border-right:0; }
+  .tk .k{ font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .tk .v{ font-family:'IBM Plex Mono',monospace; font-size:1.45rem; font-variant-numeric:tabular-nums; }
+  .tk .d{ font-family:'IBM Plex Mono',monospace; font-size:.8rem; font-variant-numeric:tabular-nums; color:var(--muted); }
   .up{ color:var(--up); } .down{ color:var(--down); }
-  .scrollcue{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.26em; text-transform:uppercase;
-    color:var(--muted); margin-top:2.6rem; opacity:0; animation:f 1.4s 1.4s forwards; }
 
-  /* editorial section */
-  .sec{ padding:10vh 0 6vh; }
+  .sec{ position:relative; z-index:2; background:var(--bg); max-width:1500px; margin:0 auto; padding:10vh 6vw 6vh; }
   .sec h2{ font-family:'Clash Display',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:-.02em;
     font-size:clamp(2rem,5vw,3.6rem); line-height:1; margin-bottom:4rem; }
-  .row{ display:grid; grid-template-columns:5rem 1fr; gap:1.5rem; padding:2.4rem 0; border-top:1px solid var(--rule);
-    align-items:start; }
+  .row{ display:grid; grid-template-columns:4rem 1fr; gap:1.5rem; padding:2.4rem 0; border-top:1px solid var(--rule); align-items:start; }
   .row:last-child{ border-bottom:1px solid var(--rule); }
-  .row .idx{ font-family:'IBM Plex Mono',monospace; color:var(--accent); font-size:.85rem; letter-spacing:.1em; padding-top:.4rem; }
+  .row .idx{ font-family:'IBM Plex Mono',monospace; color:var(--accent); font-size:.85rem; padding-top:.4rem; }
   .row .body{ display:grid; grid-template-columns:1fr; gap:.6rem; }
-  @media(min-width:780px){ .row .body{ grid-template-columns:16rem 1fr; gap:3rem; } }
-  .row h3{ font-family:'Clash Display',sans-serif; font-weight:500; text-transform:uppercase; font-size:1.4rem; letter-spacing:-.01em; }
+  @media(min-width:780px){ .row .body{ grid-template-columns:15rem 1fr; gap:3rem; } }
+  .row h3{ font-family:'Clash Display',sans-serif; font-weight:500; text-transform:uppercase; font-size:1.35rem; }
+  .row .lab{ font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; margin-top:.4rem; }
   .row p{ color:var(--muted); max-width:52ch; }
-  .row .lab{ font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; margin-top:.5rem; }
-
-  footer{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; padding:3rem 6vw; max-width:1500px; margin:0 auto;
-    border-top:1px solid var(--rule); font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em;
-    text-transform:uppercase; color:var(--muted); }
+  footer{ position:relative; z-index:2; background:var(--bg); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+    padding:3rem 6vw; max-width:1500px; margin:0 auto; border-top:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
   footer a:hover{ color:var(--ink); }
 
   @keyframes rise{ from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:none;} }
@@ -91,48 +86,41 @@
 </style>
 </head>
 <body>
-  <div class="top">
-    <span class="brand">MARKET STORY<sup>®</sup></span>
-    <span class="mid">Daily global-markets intelligence</span>
-    <span id="clock">— UTC</span>
+  <canvas id="field"></canvas>
+  <div class="scrim"></div><div class="grain"></div>
+
+  <div class="wrap">
+    <div class="top">
+      <span class="brand">MARKET STORY<sup style="font-size:.7em">®</sup></span>
+      <span class="mid">Daily global-markets intelligence</span>
+      <span id="clock">— UTC</span>
+    </div>
+    <header class="hero">
+      <div class="kick" id="kick">№ 001 — Markets, narrated.</div>
+      <h1>Market<br>Story<sup>®</sup></h1>
+      <div class="sub">
+        <p class="tag">A daily global brief with a risk lens — gathered, synthesized by Claude, and built to be questioned and re-run.</p>
+        <a class="enter" href="https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/" target="_blank" rel="noopener">
+          Enter the brief <span class="ar">→</span></a>
+      </div>
+    </header>
   </div>
 
-  <header class="hero pad">
-    <div class="kick">№ 001 — Markets, narrated.</div>
-    <h1>Market<br>Story<sup>®</sup></h1>
+  <div class="tape" id="tape">
+    <div class="tk"><span class="k">S&amp;P 500</span><span class="v" id="sp">—</span><span class="d" id="spd">live</span></div>
+    <div class="tk"><span class="k">VIX</span><span class="v" id="vix">—</span><span class="d" id="vixd"></span></div>
+    <div class="tk"><span class="k">US 10Y</span><span class="v" id="ty">—</span><span class="d" id="tyd">yield</span></div>
+    <div class="tk"><span class="k">Sector breadth</span><span class="v" id="br">—</span><span class="d">up / down</span></div>
+  </div>
 
-    <div class="sub">
-      <p class="tag">A daily global brief with a risk lens — gathered, synthesized by Claude, and built to be questioned and re-run.</p>
-      <a class="enter" href="https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/" target="_blank" rel="noopener">
-        Enter the brief <span class="ar">→</span></a>
-    </div>
-
-    <div class="ticker" id="ticker">
-      <div class="tk"><span class="k">S&amp;P 500</span><span class="v" id="sp">—</span><span class="d" id="spd">live</span></div>
-      <div class="tk"><span class="k">VIX</span><span class="v" id="vix">—</span><span class="d" id="vixd"></span></div>
-      <div class="tk"><span class="k">US 10Y</span><span class="v" id="ty">—</span><span class="d" id="tyd">yield</span></div>
-      <div class="tk"><span class="k">Sector breadth</span><span class="v" id="br">—</span><span class="d">up / down</span></div>
-    </div>
-    <div class="scrollcue">↓ &nbsp; Scroll</div>
-  </header>
-
-  <section class="sec pad" id="inside">
+  <section class="sec" id="inside">
     <h2>A terminal that<br>tells the story.</h2>
-    <div class="row">
-      <div class="idx">01</div>
-      <div class="body"><div><h3>The live brief</h3><div class="lab">Gather</div></div>
-        <p>US equities &amp; sectors, global macro, rates, FX, commodities and credit — plus FRED &amp; BLS prints and a 70-headline feed. Charts, a sector map, a cross-asset correlation matrix.</p></div>
-    </div>
-    <div class="row">
-      <div class="idx">02</div>
-      <div class="body"><div><h3>The read</h3><div class="lab">Synthesize</div></div>
-        <p>Claude narrates the day with a risk lens — what moved &amp; why, regime, tail risks, what to watch — grounded in the numbers, and remembering yesterday.</p></div>
-    </div>
-    <div class="row">
-      <div class="idx">03</div>
-      <div class="body"><div><h3>The logbook</h3><div class="lab">Compound</div></div>
-        <p>Every day's read is versioned — a dated record of your own market thinking that compounds. The part no dashboard gives you.</p></div>
-    </div>
+    <div class="row"><div class="idx">01</div><div class="body"><div><h3>The live brief</h3><div class="lab">Gather</div></div>
+      <p>US equities &amp; sectors, global macro, rates, FX, commodities and credit — plus FRED &amp; BLS prints and a 70-headline feed. Charts, a sector map, a cross-asset correlation matrix.</p></div></div>
+    <div class="row"><div class="idx">02</div><div class="body"><div><h3>The read</h3><div class="lab">Synthesize</div></div>
+      <p>Claude narrates the day with a risk lens — what moved &amp; why, regime, tail risks, what to watch — grounded in the numbers, and remembering yesterday.</p></div></div>
+    <div class="row"><div class="idx">03</div><div class="body"><div><h3>The logbook</h3><div class="lab">Compound</div></div>
+      <p>Every day's read is versioned — a dated record of your own market thinking that compounds. The part no dashboard gives you.</p></div></div>
   </section>
 
   <footer>
@@ -145,8 +133,55 @@
   /* live UTC clock */
   function tick(){ const d=new Date(), p=n=>String(n).padStart(2,'0');
     const s=p(d.getUTCHours())+':'+p(d.getUTCMinutes())+':'+p(d.getUTCSeconds())+' UTC';
-    document.getElementById('clock').textContent=s; document.getElementById('clock2').textContent=s; }
+    clock.textContent=s; clock2.textContent=s; }
   tick(); setInterval(tick,1000);
+
+  /* ===== the market field: today's real index paths, drawn live ===== */
+  const cv=document.getElementById('field'), ctx=cv.getContext('2d');
+  let W,H,lines=[],prog=0;
+  const SET=[["^GSPC",true],["^IXIC",false],["^RUT",false],["^DJI",false],["^TNX",false],
+             ["GC=F",false],["CL=F",false],["DX-Y.NYB",false],["HYG",false]];
+  function resize(){ const d=Math.min(devicePixelRatio||1,2);
+    W=cv.width=innerWidth*d; H=cv.height=innerHeight*d; cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; }
+  resize(); addEventListener('resize',()=>{ resize(); prog=1; frame(); });
+  function buildLines(brief){
+    const hist=brief.history; if(!hist||!hist.series) return; lines=[];
+    for(const [sym,accent] of SET){ const arr=hist.series[sym]; if(!arr) continue;
+      const v=arr.filter(x=>x!=null); if(v.length<8) continue;
+      const mn=Math.min(...v), mx=Math.max(...v), rng=(mx-mn)||1;
+      lines.push({accent, y:v.map(x=>1-(x-mn)/rng)}); }
+    lines.sort((a,b)=>a.accent-b.accent);   // accent S&P line drawn last, on top
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    const dpr=Math.min(devicePixelRatio||1,2);
+    const top=H*0.50, bot=H*0.13, band=H-top-bot;   // band sits in the lower hero, below the wordmark
+    prog=Math.min(prog+0.013,1);
+    for(const ln of lines){
+      const N=ln.y.length, n=Math.max(2,Math.floor(N*prog));
+      const px=i=>(i/(N-1))*W, py=i=>top+ln.y[i]*band;
+      if(ln.accent){                                 // S&P: gradient area-fill under the line
+        ctx.beginPath(); ctx.moveTo(px(0),py(0));
+        for(let i=1;i<n;i++) ctx.lineTo(px(i),py(i));
+        ctx.lineTo(px(n-1),top+band); ctx.lineTo(px(0),top+band); ctx.closePath();
+        const g=ctx.createLinearGradient(0,top,0,top+band);
+        g.addColorStop(0,'rgba(90,160,255,0.17)'); g.addColorStop(1,'rgba(90,160,255,0)');
+        ctx.fillStyle=g; ctx.fill();
+      }
+      ctx.beginPath(); ctx.moveTo(px(0),py(0));
+      for(let i=1;i<n;i++) ctx.lineTo(px(i),py(i));
+      ctx.strokeStyle = ln.accent ? 'rgba(90,160,255,0.95)' : 'rgba(150,172,205,0.15)';
+      ctx.lineWidth = (ln.accent?2.4:1.0)*dpr; ctx.stroke();
+      if(prog>=1){
+        const x=px(n-1), y=py(n-1);
+        if(ln.accent){
+          ctx.fillStyle='rgba(90,160,255,1)'; ctx.beginPath(); ctx.arc(x,y,4*dpr,0,7); ctx.fill();
+          ctx.strokeStyle='rgba(90,160,255,0.35)'; ctx.lineWidth=1*dpr; ctx.beginPath(); ctx.arc(x,y,9*dpr,0,7); ctx.stroke();
+        } else { ctx.fillStyle='rgba(150,172,205,0.4)'; ctx.beginPath(); ctx.arc(x,y,1.6*dpr,0,7); ctx.fill(); }
+      }
+    }
+    if(prog<1) requestAnimationFrame(frame);
+  }
 
   /* live data from the committed brief */
   const $=id=>document.getElementById(id);
@@ -156,12 +191,13 @@
   async function loadBrief(){const base='https://raw.githubusercontent.com/mynameisnguyenn/market-story/main/data/briefs/';
     for(let i=0;i<6;i++){const ds=new Date(Date.now()-i*864e5).toISOString().slice(0,10);
      try{const r=await fetch(base+'brief_'+ds+'.json',{cache:'no-store'});if(r.ok)return r.json();}catch(e){}}return null;}
-  (async()=>{const b=await loadBrief();if(!b)return;
+  (async()=>{const b=await loadBrief();if(!b)return; buildLines(b); prog=0; frame();
     const sp=find(b,'^GSPC'),vix=find(b,'^VIX'),ty=find(b,'^TNX'),st=b.stats||{};
     if(sp){$('sp').textContent=fnum(sp.last);const e=$('spd');e.textContent=fpct(sp.change_pct);e.className='d '+(sp.change_pct>=0?'up':'down');}
     if(vix){$('vix').textContent=fnum(vix.last);const e=$('vixd');e.textContent=fpct(vix.change_pct);e.className='d '+(vix.change_pct<=0?'up':'down');}
     if(ty){$('ty').textContent=fnum(ty.last)+'%';}
     $('br').textContent=(st.sector_advancers??'—')+' / '+(st.sector_decliners??'—');
+    const d=b.date; if(d) $('kick').textContent='№ '+d.replaceAll('-','')+' — Markets, narrated.';
   })();
 </script>
 </body>
