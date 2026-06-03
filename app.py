@@ -18,7 +18,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import calendar_data, config, formatting, history, macro_data, market_data, news, regime
+from src import (bls_data, calendar_data, config, formatting, history,
+                 macro_data, market_data, news, regime)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -33,9 +34,15 @@ def get_data(nonce: int):
     sections = market_data.build_market_sections(history)
     macro = macro_data.fetch_macro()
     news_items = news.fetch_news()
-    brief = brief_mod.build_brief(history, sections, macro, news_items, fetch=False)
+    brief = brief_mod.build_brief(history, sections, macro, news_items, bls=get_bls(), fetch=False)
     closes = {symbol: frame["Close"] for symbol, frame in history.items()}
     return brief, closes
+
+
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_bls() -> list[dict]:
+    """BLS prints, cached 6h — monthly data, and keeps us under the keyless daily cap."""
+    return bls_data.fetch_bls()
 
 
 def persist(brief: dict) -> None:
@@ -103,6 +110,19 @@ def macro_styler(macro: list[dict]):
         frame.style
         .format({"Latest": "{:,.2f}", "Δ": "{:+.2f}"}, na_rep="n/a")
         .map(_color_changes, subset=["Δ"])
+    )
+
+
+def bls_styler(bls: list[dict]):
+    frame = pd.DataFrame([
+        {"Series": m["name"], "Latest": m.get("latest"), "MoM Δ": m.get("change"),
+         "YoY %": m.get("yoy_pct"), "As of": m.get("date") or "n/a"}
+        for m in bls
+    ])
+    return (
+        frame.style
+        .format({"Latest": "{:,.2f}", "MoM Δ": "{:+.2f}", "YoY %": "{:+.2f}"}, na_rep="n/a")
+        .map(_color_changes, subset=["MoM Δ", "YoY %"])
     )
 
 
@@ -377,6 +397,9 @@ def macro_tab(brief: dict, closes: dict) -> None:
     st.markdown("**Macro (FRED)**")
     if brief.get("macro"):
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)
+    if brief.get("bls"):
+        st.markdown("**Labor & Inflation (BLS)** — release-day prints, YoY %")
+        st.dataframe(bls_styler(brief["bls"]), use_container_width=True, hide_index=True)
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")

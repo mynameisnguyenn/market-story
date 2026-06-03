@@ -9,16 +9,18 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import config, formatting, history, macro_data, market_data, news
+from . import bls_data, config, formatting, history, macro_data, market_data, news
 
 
-def build_brief(history=None, sections=None, macro=None, news_items=None, fetch: bool = True) -> dict:
+def build_brief(history=None, sections=None, macro=None, news_items=None,
+                bls=None, fetch: bool = True) -> dict:
     """Build the brief dict. With fetch=True, pull everything fresh."""
     if fetch:
         history = market_data.download_history(config.all_symbols())
         sections = market_data.build_market_sections(history)
         macro = macro_data.fetch_macro()
         news_items = news.fetch_news()
+        bls = bls_data.fetch_bls()
     sections = sections or {}
     return {
         "date": str(date.today()),
@@ -26,6 +28,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None, fetch:
         "session_label": _session_label(),
         "markets": sections,
         "macro": macro or [],
+        "bls": bls or [],
         "movers": _movers(sections),
         "news": news_items or [],
         "stats": _stats(sections),
@@ -109,6 +112,7 @@ def render_markdown(brief: dict) -> str:
     for key, group in config.MARKET_GROUPS.items():
         lines += _market_table(group, brief["markets"].get(key, []))
     lines += _macro_table(brief.get("macro", []))
+    lines += _bls_table(brief.get("bls", []))
     lines += _headline_list(brief.get("news", []))
     return "\n".join(lines)
 
@@ -137,6 +141,21 @@ def _macro_table(macro: list[dict]) -> list[str]:
         out.append(
             f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
             f"{formatting.fmt_num(m.get('change'))} | {m.get('date') or 'n/a'} |"
+        )
+    out.append("")
+    return out
+
+
+def _bls_table(rows: list[dict]) -> list[str]:
+    if not rows:
+        return []
+    out = ["## Labor & Inflation (BLS)", "| Series | Latest | MoM Δ | YoY % | As of |",
+           "|---|---:|---:|---:|---|"]
+    for m in rows:
+        out.append(
+            f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
+            f"{formatting.fmt_num(m.get('change'))} | {formatting.fmt_pct(m.get('yoy_pct'))} | "
+            f"{m.get('date') or 'n/a'} |"
         )
     out.append("")
     return out
