@@ -171,12 +171,12 @@ def render_treemap(rows: list[dict]) -> None:
         st.plotly_chart(fig, use_container_width=True, theme="streamlit")
 
 
-def render_line(closes: dict, symbol: str, name: str) -> None:
+def render_line(closes: dict, symbol: str, name: str, key: str | None = None) -> None:
     fig = line_fig(closes.get(symbol), name)
     if fig is None:
         st.info(f"No price history for {name}.")
     else:
-        st.plotly_chart(fig, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig, use_container_width=True, theme="streamlit", key=key)
 
 
 # --- Tabs --------------------------------------------------------------------
@@ -194,7 +194,7 @@ def overview_tab(brief: dict, closes: dict) -> None:
             st.markdown(f"**{m['name']}**  :red[{formatting.fmt_pct(m['change_pct'])}]")
     st.divider()
     st.subheader("S&P 500")
-    render_line(closes, "^GSPC", "S&P 500")
+    render_line(closes, "^GSPC", "S&P 500", key="ov_sp500")
 
 
 def equities_tab(brief: dict, closes: dict) -> None:
@@ -203,7 +203,7 @@ def equities_tab(brief: dict, closes: dict) -> None:
     st.divider()
     names = {sym: name for sym, name in config.US_EQUITIES + config.SECTORS + config.WATCHLIST}
     choice = st.selectbox("Chart an index, sector, or watchlist name", list(names), format_func=lambda s: names.get(s, s))
-    render_line(closes, choice, names.get(choice, str(choice)))
+    render_line(closes, choice, names.get(choice, str(choice)), key="eq_pick")
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
@@ -236,9 +236,9 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)
     col3, col4 = st.columns(2)
     with col3:
-        render_line(closes, "^TNX", "US 10Y Yield")
+        render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")
     with col4:
-        render_line(closes, "DX-Y.NYB", "US Dollar Index")
+        render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
 
 
 def headlines_tab(brief: dict) -> None:
