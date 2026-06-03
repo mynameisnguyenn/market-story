@@ -345,9 +345,23 @@ def macro_tab(brief: dict, closes: dict) -> None:
         render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
 
 
+def filter_headlines(items: list[dict], query: str) -> list[dict]:
+    """Case-insensitive filter on title + source; empty query returns all."""
+    q = query.strip().lower()
+    if not q:
+        return items
+    return [it for it in items
+            if q in it.get("title", "").lower() or q in it.get("source", "").lower()]
+
+
 def headlines_tab(brief: dict) -> None:
-    items = brief.get("news", [])
-    st.caption(f"{len(items)} headlines across {len(config.FEEDS)} feeds")
+    all_items = brief.get("news", [])
+    query = st.text_input("Filter headlines", placeholder="e.g. Fed, oil, NVDA…", key="news_filter")
+    items = filter_headlines(all_items, query)
+    if query.strip():
+        st.caption(f"{len(items)} of {len(all_items)} headlines matching “{query.strip()}”")
+    else:
+        st.caption(f"{len(items)} headlines across {len(config.FEEDS)} feeds")
     with st.container(height=560):
         for item in items:
             link = item.get("link")

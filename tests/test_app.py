@@ -59,6 +59,19 @@ def test_sector_treemap_fig_shows_change_value():
     assert app.sector_treemap_fig([]) is None
 
 
+def test_filter_headlines():
+    items = [
+        {"title": "Fed holds rates", "source": "CNBC"},
+        {"title": "Oil rallies", "source": "Reuters"},
+        {"title": "NVDA earnings beat", "source": "Yahoo"},
+    ]
+    assert len(app.filter_headlines(items, "")) == 3                       # empty -> all
+    assert [i["title"] for i in app.filter_headlines(items, "fed")] == ["Fed holds rates"]
+    assert len(app.filter_headlines(items, "oil")) == 1
+    assert app.filter_headlines(items, "cnbc") == [items[0]]               # matches source too
+    assert app.filter_headlines(items, "zzz") == []
+
+
 def test_yield_curve_fig_builds_and_needs_two_points():
     rates = [
         {"symbol": "^IRX", "name": "13W", "last": 4.20},
