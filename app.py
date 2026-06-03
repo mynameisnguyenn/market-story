@@ -593,31 +593,39 @@ def _load_cloud_secrets() -> None:
 
 _POLISH_CSS = """
 <style>
-.block-container { padding-top: 2.2rem; padding-bottom: 2.6rem; max-width: 1400px; }
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
-/* Editorial typography — confident hierarchy (borrowed principle, not the gimmicks) */
-h1 { font-size: 2.45rem; font-weight: 800; letter-spacing: -.02em; }
-h2 { font-size: 1.35rem; font-weight: 700; letter-spacing: -.01em; }
-h3 { font-size: 1.02rem; letter-spacing: .01em; opacity: .92; }
+.block-container { padding-top: 2rem; padding-bottom: 2.6rem; max-width: 1400px; }
 
-/* Metric cards with tabular figures + a subtle hover lift */
-[data-testid="stMetric"] {
-    background: #151A24; border: 1px solid #232B3A; border-radius: 12px;
-    padding: 14px 16px 12px; transition: border-color .15s ease;
+/* Display font for headings — a designed, modern identity (legible, no gimmicks) */
+h1, h2, h3 { font-family: 'Space Grotesk', sans-serif !important; }
+h1 { font-size: 2.6rem; font-weight: 700; letter-spacing: -.025em; }
+h2 { font-size: 1.45rem; font-weight: 600; letter-spacing: -.01em; }
+h3 { font-size: 1.05rem; font-weight: 600; color: #C7D2E0; }
+
+/* Hero KPI numbers in mono for a terminal feel; tables keep aligned tabular figures */
+[data-testid="stMetricValue"], [data-testid="stMetricDelta"] {
+    font-family: 'IBM Plex Mono', monospace !important; font-variant-numeric: tabular-nums;
 }
-[data-testid="stMetric"]:hover { border-color: #314058; }
-[data-testid="stMetricValue"] { font-size: 1.6rem; font-weight: 650; font-variant-numeric: tabular-nums; }
-[data-testid="stMetricLabel"] { opacity: .6; font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; }
-[data-testid="stMetricDelta"] { font-variant-numeric: tabular-nums; }
+[data-testid="stDataFrame"], [data-testid="stTable"] { font-size: .84rem; font-variant-numeric: tabular-nums; }
 
-/* Tabular figures in tables so columns line up (the finance-terminal touch) */
-[data-testid="stDataFrame"], [data-testid="stTable"] { font-size: .86rem; font-variant-numeric: tabular-nums; }
+/* KPI cards: accent bar + hover */
+[data-testid="stMetric"] {
+    background: #141923; border: 1px solid #232B3A; border-left: 3px solid #4C9AFF;
+    border-radius: 10px; padding: 13px 16px 11px; transition: border-color .15s ease;
+}
+[data-testid="stMetric"]:hover { border-left-color: #6FB0FF; border-color: #2E3A4D; }
+[data-testid="stMetricValue"] { font-size: 1.5rem; font-weight: 600; }
+[data-testid="stMetricLabel"] {
+    font-family: 'Space Grotesk', sans-serif !important;
+    opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: .09em;
+}
 
-/* Tabs: heavier weight, accented active tab */
+/* Tabs: heavier, accent active */
 [data-testid="stTabs"] button[role="tab"] { font-size: .95rem; font-weight: 600; }
 [data-testid="stTabs"] button[aria-selected="true"] { color: #4C9AFF; }
 
-hr { margin: .9rem 0; border-color: #1c2330; }
+hr { margin: .85rem 0; border-color: #1c2330; }
 </style>
 """
 
