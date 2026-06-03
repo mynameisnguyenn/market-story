@@ -65,6 +65,33 @@ def test_download_history_caps_fallback_under_throttle(monkeypatch):
     assert len(calls) < 8            # stopped early — did NOT try every symbol
 
 
+def test_stooq_symbol_mapping():
+    assert market_data._stooq_symbol("^GSPC") == "^spx"
+    assert market_data._stooq_symbol("NVDA") == "nvda.us"
+    assert market_data._stooq_symbol("CL=F") is None         # futures not mapped
+
+
+def test_stooq_fallback_parses(monkeypatch):
+    csv = "Date,Open,High,Low,Close,Volume\n2026-06-02,100,101,99,100.5,1000\n2026-06-03,100.5,103,100,102.0,1200\n"
+
+    class _R:
+        text = csv
+        def raise_for_status(self): pass
+    monkeypatch.setattr(market_data.requests, "get", lambda *a, **k: _R())
+    frame = market_data._download_stooq("^GSPC")
+    assert frame is not None and frame["Close"].iloc[-1] == 102.0
+
+
+def test_download_history_falls_back_to_stooq(monkeypatch):
+    monkeypatch.setattr(market_data, "_download_batch", lambda s, p: None)   # batch fails
+    monkeypatch.setattr(market_data, "_download_single", lambda s, p: None)  # yfinance single fails
+    frame = pd.DataFrame({"Close": [100.0, 102.0]},
+                         index=pd.to_datetime(["2026-06-02", "2026-06-03"]))
+    monkeypatch.setattr(market_data, "_download_stooq", lambda s: frame if s == "^GSPC" else None)
+    out = market_data.download_history(["^GSPC", "CL=F"])
+    assert "^GSPC" in out and "CL=F" not in out              # Stooq rescued the index
+
+
 def test_extract_handles_single_symbol_multiindex():
     dates = pd.to_datetime(["2026-06-01", "2026-06-02"])
     cols = pd.MultiIndex.from_tuples([("^GSPC", "Open"), ("^GSPC", "Close")])

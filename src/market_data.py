@@ -8,9 +8,11 @@ resolves, futures (CL=F ...) are roll-spliced continuations, and 000001.SS
 
 from __future__ import annotations
 
+import io
 import time
 
 import pandas as pd
+import requests
 import yfinance as yf
 
 from . import config
@@ -18,6 +20,38 @@ from . import config
 _DOWNLOAD_RETRIES = 3
 _SINGLE_RETRIES = 1            # one attempt under throttle; the budget bounds the rest
 _FALLBACK_BUDGET_S = 20        # cap total wall-clock on the per-symbol fallback
+
+# Keyless Stooq EOD fallback for when Yahoo throttles. Indices need a hand map;
+# plain US tickers map to "<ticker>.us". Futures/FX aren't reliably covered.
+_STOOQ_INDEX = {"^GSPC": "^spx", "^IXIC": "^ndq", "^DJI": "^dji", "^RUT": "^rut", "^VIX": "^vix"}
+
+
+def _stooq_symbol(sym: str):
+    if sym in _STOOQ_INDEX:
+        return _STOOQ_INDEX[sym]
+    if sym.isalpha():                       # plain US ticker (NVDA, MSFT, XLK...)
+        return sym.lower() + ".us"
+    return None
+
+
+def _download_stooq(sym: str):
+    """Keyless Stooq EOD fallback; returns a Close DataFrame or None. Best-effort."""
+    stooq = _stooq_symbol(sym)
+    if not stooq:
+        return None
+    try:
+        resp = requests.get(f"https://stooq.com/q/d/l/?s={stooq}&i=d", timeout=8)
+        resp.raise_for_status()
+        text = resp.text
+        if not text or text[:1] == "<" or "Exceeded" in text:   # HTML page or hit-limit msg
+            return None
+        frame = pd.read_csv(io.StringIO(text))
+        if "Close" not in frame.columns or "Date" not in frame.columns or frame.empty:
+            return None
+        frame.index = pd.to_datetime(frame["Date"], errors="coerce")
+        return frame[["Close"]].dropna()
+    except Exception:
+        return None
 
 
 def download_history(symbols: list[str], period: str = config.HISTORY_PERIOD) -> dict[str, pd.DataFrame]:
@@ -44,6 +78,8 @@ def download_history(symbols: list[str], period: str = config.HISTORY_PERIOD) ->
         if time.monotonic() > deadline:
             break
         frame = _download_single(symbol, period)
+        if frame is None or frame.empty:
+            frame = _download_stooq(symbol)        # yfinance failed -> keyless Stooq
         if frame is not None and not frame.empty:
             out[symbol] = frame
     return out
