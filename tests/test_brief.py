@@ -46,3 +46,16 @@ def test_render_markdown_smoke():
     assert text.startswith("# Market Brief")
     assert "Technology" in text
     assert "## Movers" in text
+
+
+def test_movers_no_overlap_when_pool_small():
+    sections = {"us_equities": [
+        {"symbol": "A", "name": "A", "change_pct": -2.0, "last": 1.0},
+        {"symbol": "B", "name": "B", "change_pct": 0.5, "last": 1.0},
+        {"symbol": "C", "name": "C", "change_pct": 3.0, "last": 1.0},
+    ]}
+    movers = brief._movers(sections)
+    lead = {m["symbol"] for m in movers["leaders"]}
+    lag = {m["symbol"] for m in movers["laggards"]}
+    assert lead.isdisjoint(lag)             # no instrument in both lists
+    assert "C" in lead and "A" in lag       # best is a leader, worst a laggard

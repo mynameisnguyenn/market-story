@@ -46,7 +46,10 @@ def _movers(sections: dict, n: int = 5) -> dict:
             pool.append({"name": row["name"], "symbol": row["symbol"],
                          "change_pct": row["change_pct"], "group": key})
     ascending = sorted(pool, key=lambda x: x["change_pct"])
-    return {"leaders": ascending[::-1][:n], "laggards": ascending[:n]}
+    # take fewer when the pool is small so an instrument can't be both a
+    # leader and a laggard (feeds fail constantly -> the pool can be < 2n).
+    half = n if len(ascending) >= 2 * n else len(ascending) // 2
+    return {"leaders": ascending[::-1][:half], "laggards": ascending[:half]}
 
 
 def _stats(sections: dict) -> dict:
