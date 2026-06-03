@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import config, formatting, macro_data, market_data, news
+from . import config, formatting, history, macro_data, market_data, news
 
 
 def build_brief(history=None, sections=None, macro=None, news_items=None, fetch: bool = True) -> dict:
@@ -68,6 +68,7 @@ def save_brief(brief: dict) -> tuple:
     json_path.write_text(json.dumps(brief, indent=2, default=str), encoding="utf-8")
     md_path = config.BRIEFS_DIR / f"brief_{brief['date']}.md"
     md_path.write_text(render_markdown(brief), encoding="utf-8")
+    history.save_today(brief)
     return json_path, md_path
 
 

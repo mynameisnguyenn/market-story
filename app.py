@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import calendar_data, config, formatting, macro_data, market_data, news
+from src import calendar_data, config, formatting, history, macro_data, market_data, news
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -191,7 +191,32 @@ def render_line(closes: dict, symbol: str, name: str, key: str | None = None) ->
 
 # --- Tabs --------------------------------------------------------------------
 
+def deltas_panel(brief: dict) -> None:
+    """Headline level changes since the prior saved session (day-over-day)."""
+    key_syms = ["^GSPC", "^IXIC", "^TNX", "DX-Y.NYB", "GC=F", "^VIX"]
+    result = history.deltas(brief, key_syms)
+    if result is None:
+        st.caption("📈 Day-over-day deltas appear here once you've run this on a prior day "
+                   "— snapshots are saved automatically on every refresh.")
+        return
+    prior_date, rows = result
+    if not rows:
+        return
+    st.markdown(f"**Since last session ({prior_date})**")
+    cols = st.columns(len(rows))
+    for col, r in zip(cols, rows):
+        if r["symbol"] == "^TNX":
+            delta = formatting.fmt_bps(r["change"]) if r["change"] is not None else None
+            col.metric(r["name"], f"{r['last']:.2f}%", delta)
+        else:
+            delta = formatting.fmt_pct(r["change_pct"]) if r["change_pct"] is not None else None
+            color = "inverse" if r["symbol"] == "^VIX" else "normal"
+            col.metric(r["name"], formatting.fmt_num(r["last"]), delta, delta_color=color)
+    st.divider()
+
+
 def overview_tab(brief: dict, closes: dict) -> None:
+    deltas_panel(brief)
     movers = brief["movers"]
     left, right = st.columns(2)
     with left:
