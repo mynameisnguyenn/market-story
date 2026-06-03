@@ -132,25 +132,42 @@ MARKET_GROUPS = {
 STOOQ_FALLBACK: dict[str, str] = {}
 
 
+_watchlist_cache: tuple[tuple[str, float], list[tuple[str, str]]] | None = None
+
+
 def get_watchlist() -> list[tuple[str, str]]:
-    """The user's custom watchlist from WATCHLIST_FILE, or the default WATCHLIST."""
-    if WATCHLIST_FILE.exists():
-        try:
-            raw = json.loads(WATCHLIST_FILE.read_text(encoding="utf-8"))
-            items = [(d["symbol"].upper(), d.get("name") or d["symbol"].upper())
-                     for d in raw if isinstance(d, dict) and d.get("symbol")]
-            if items:
-                return items
-        except (json.JSONDecodeError, OSError, AttributeError, TypeError):
-            pass
+    """The user's custom watchlist from WATCHLIST_FILE, or the default WATCHLIST.
+
+    Cached by (path, mtime) so per-symbol loops don't re-read/parse the file.
+    """
+    global _watchlist_cache
+    if not WATCHLIST_FILE.exists():
+        return WATCHLIST
+    try:
+        key = (str(WATCHLIST_FILE), WATCHLIST_FILE.stat().st_mtime)
+    except OSError:
+        return WATCHLIST
+    if _watchlist_cache is not None and _watchlist_cache[0] == key:
+        return _watchlist_cache[1]
+    try:
+        raw = json.loads(WATCHLIST_FILE.read_text(encoding="utf-8"))
+        items = [(d["symbol"].upper(), d.get("name") or d["symbol"].upper())
+                 for d in raw if isinstance(d, dict) and d.get("symbol")]
+        if items:
+            _watchlist_cache = (key, items)
+            return items
+    except (json.JSONDecodeError, OSError, AttributeError, TypeError):
+        pass
     return WATCHLIST
 
 
 def save_watchlist(items: list[tuple[str, str]]) -> None:
-    """Persist the custom watchlist as JSON."""
+    """Persist the custom watchlist as JSON (invalidates the read cache)."""
+    global _watchlist_cache
     WATCHLIST_FILE.parent.mkdir(parents=True, exist_ok=True)
     payload = [{"symbol": s, "name": n} for s, n in items]
     WATCHLIST_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    _watchlist_cache = None
 
 
 def group_items(key: str) -> list[tuple[str, str]]:

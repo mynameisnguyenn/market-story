@@ -28,3 +28,11 @@ def test_group_items_uses_custom_watchlist(tmp_path, monkeypatch):
     assert config.group_items("watchlist") == [("TSM", "TSMC")]
     assert config.group_items("sectors") == config.MARKET_GROUPS["sectors"]["items"]
     assert "TSM" in config.all_symbols()
+
+
+def test_get_watchlist_reflects_save_after_cache(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "WATCHLIST_FILE", tmp_path / "wl.json")
+    config.save_watchlist([("AAA", "Alpha")])
+    assert config.get_watchlist() == [("AAA", "Alpha")]   # populates the cache
+    config.save_watchlist([("BBB", "Beta")])              # must invalidate it
+    assert config.get_watchlist() == [("BBB", "Beta")]
