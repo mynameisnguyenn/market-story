@@ -41,6 +41,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         "history": _embed_history(history),   # compact price series for instant chart reload
         "extremes": analytics.compute_extremes(closes),   # cross-asset 1y percentile/z
         "vol": analytics.compute_vol_premium(closes),     # VIX vs realized (vol risk premium)
+        "stock_bond": analytics.stock_bond_corr(closes),  # hedge efficacy (corr regime)
     }
 
 

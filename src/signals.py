@@ -92,6 +92,13 @@ def derive_signals(brief: dict, limit: int = 6) -> list[dict]:
         out.append({"text": f"HY credit spread {hy:.2f}%{ctx} — {state}",
                     "tone": "up" if hy < 3 else "down" if hy >= 5 else "neutral"})
 
+    sb = brief.get("stock_bond")
+    if sb and sb.get("corr") is not None:
+        c = sb["corr"]
+        flip = " — flipped" if sb.get("flipped") else ""
+        out.append({"text": f"Stock-bond corr {c:+.2f} ({sb.get('window', 30)}d) — {sb.get('state', '')}{flip}",
+                    "tone": "down" if c > 0.1 else "up" if c < -0.1 else "neutral"})
+
     wti = _row(brief, "CL=F")
     if wti and wti.get("change_pct") is not None and abs(wti["change_pct"]) >= 2 and wti.get("last"):
         ch = wti["change_pct"]

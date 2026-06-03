@@ -48,6 +48,8 @@ def _render_all_tabs():
         "extremes": [{"symbol": "HG=F", "name": "Copper", "last": 6.48, "pct": 97.0, "z": 1.9, "n": 252},
                      {"symbol": "^VIX", "name": "VIX", "last": 16.0, "pct": 25.0, "z": -0.6, "n": 252}],
         "vol": {"vix": 16.0, "realized_20d": 10.0, "premium": 6.0},
+        "stock_bond": {"corr": -0.30, "prior": -0.10, "state": "bonds hedging (normal)",
+                       "flipped": False, "window": 30},
         "movers": {"leaders": [{"name": "XLK", "change_pct": 2.0}],
                    "laggards": [{"name": "XLE", "change_pct": -1.0}]},
         "news": [{"title": "Test headline", "source": "Test", "link": "x",

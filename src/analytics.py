@@ -88,6 +88,35 @@ def compute_extremes(closes, window: int = 252) -> list[dict]:
     return out
 
 
+def stock_bond_corr(closes, window: int = 30) -> dict | None:
+    """Rolling correlation of S&P vs long-Treasury daily returns — hedge efficacy.
+    Negative = bonds cushion equities (the textbook hedge); positive = both fall
+    together (the hedge is broken — a key risk-regime tell). Flags a recent sign flip."""
+    closes = closes or {}
+    spx, tlt = closes.get("^GSPC"), closes.get("TLT")
+    if spx is None or tlt is None:
+        return None
+    import pandas as pd
+    rets = pd.concat([pd.Series(list(spx)).pct_change(),
+                      pd.Series(list(tlt)).pct_change()], axis=1).dropna()
+    if len(rets) < window:
+        return None
+    cur = rets.iloc[-window:]
+    corr = cur.iloc[:, 0].corr(cur.iloc[:, 1])
+    if corr is None or (isinstance(corr, float) and math.isnan(corr)):
+        return None
+    corr = round(float(corr), 2)
+    prior = None
+    if len(rets) >= 2 * window:
+        p = rets.iloc[-2 * window:-window]
+        pv = p.iloc[:, 0].corr(p.iloc[:, 1])
+        prior = round(float(pv), 2) if pv is not None and not math.isnan(pv) else None
+    state = ("bonds hedging (normal)" if corr < -0.1
+             else "stock-bond decoupled — hedge broken" if corr > 0.1 else "uncorrelated")
+    flipped = prior is not None and (prior < 0) != (corr < 0)
+    return {"corr": corr, "prior": prior, "state": state, "flipped": flipped, "window": window}
+
+
 def compute_vol_premium(closes) -> dict | None:
     """VIX vs 20d realized vol of the S&P — the vol risk premium (implied minus
     realized). Positive & high = options rich / hedges expensive / complacency."""

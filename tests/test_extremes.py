@@ -44,6 +44,24 @@ def test_compute_vol_premium():
     assert vp["premium"] == round(16.0 - vp["realized_20d"], 1)
 
 
+def test_stock_bond_corr_detects_hedge():
+    idx = pd.date_range("2025-01-01", periods=80, freq="D")
+    spx, tlt = [100.0], [100.0]                       # mirror moves -> negative return corr
+    for i in range(79):
+        d = 1.0 if i % 2 == 0 else -1.0
+        spx.append(spx[-1] + d)
+        tlt.append(tlt[-1] - d)
+    sb = analytics.stock_bond_corr({"^GSPC": pd.Series(spx, index=idx),
+                                    "TLT": pd.Series(tlt, index=idx)}, window=30)
+    assert sb is not None and sb["corr"] < 0 and "hedg" in sb["state"]
+    assert isinstance(sb["flipped"], bool) and sb["window"] == 30
+
+
+def test_stock_bond_corr_needs_both_series():
+    assert analytics.stock_bond_corr({}) is None
+    assert analytics.stock_bond_corr({"^GSPC": None, "TLT": None}) is None
+
+
 def test_analytics_degrade_empty():
     assert analytics.compute_extremes({}) == []
     assert analytics.compute_extremes(None) == []
