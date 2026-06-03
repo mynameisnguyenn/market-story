@@ -32,15 +32,39 @@ as a public website, see `DEPLOY.md`.
   credit and Treasury ETFs.
 - **Macro prints (FRED)** — 18 risk-relevant series: the curve (2s10s, 10s3m), EFFR/SOFR,
   HY & IG credit spreads, breakevens, NFCI financial conditions, CPI/core-PCE, payrolls,
-  claims, unemployment, industrial production.
+  claims, unemployment, industrial production — each with a **1-year percentile + z-score**.
+- **Energy inventories (EIA)** — weekly crude / gasoline / distillate / SPR stocks +
+  natural-gas storage, with the week-over-week **draw/build**.
+- **Positioning (CFTC)** — leveraged-fund (spec) **net positioning** + weekly change for
+  S&P / Nasdaq / VIX / Treasury futures, against asset-manager (real-money) net.
+- **Labor & inflation (BLS)** — CPI, core CPI, payrolls, unemployment, earnings, participation.
+- **Filings (SEC EDGAR)** — recent material filings for your watchlist names.
 - **News** — 12 RSS feeds, de-duplicated and noise-filtered, newest first.
+
+## The read — analytics that turn data into signal
+
+The dashboard doesn't just tabulate; it interprets:
+
+- **Statistical context** — every macro anchor (and cross-asset market: VIX, yields, credit,
+  FX, oil/copper/gold) shows its **1-year percentile + z-score** — is HY OAS *historically*
+  tight, is the curve at its flattest of the year?
+- **Vol risk premium** — VIX vs 20-day realized volatility (a wide premium = complacency).
+- **Hedge regime** — rolling **stock-bond return correlation** (positive = your Treasury hedge
+  is broken), with a sign-flip flag.
+- **"Today's read"** — a synthesized one-line **thesis** classifying the tape (e.g. *duration
+  unwind vs credit de-risking*, *geopolitical premium vs reflation*) plus the evidence it rules out.
+- **Thesis scorecard** — each narrative emits a machine-readable `watch` block; the next session
+  **grades it** (hit / watching) — a running track record of the calls.
+- **Metrics timeline** — `data/timeline.jsonl`, an append-only daily record (committed) that
+  builds long-horizon context as it accrues.
 
 ## Methodology
 
 1. **Market data** via `yfinance` — one batched daily-history pull; per-symbol snapshots
    compute 1-day, 1-week, and YTD change with zero-division/NaN guards.
-2. **Macro** via FRED's keyless `fredgraph.csv` endpoint (no API key needed; set
-   `FRED_API_KEY` in `.env` only if you want the `fredapi` fallback / metadata).
+2. **Macro** via FRED — the **keyed API** when `FRED_API_KEY` is set (reliable under the
+   concurrent burst), else the keyless `fredgraph.csv` endpoint; retried, with a 1-year
+   percentile + z-score per series. BLS/EIA/CFTC are separate best-effort fetchers.
 3. **News** via `feedparser` over a curated, **liveness-validated** feed list.
 4. **Brief** assembled into `data/briefs/brief_<date>.json` (the contract Claude reads)
    plus a human-readable `.md` facts sheet.
@@ -68,14 +92,25 @@ Two real gotchas are handled in code:
 run.py              entry point: gather -> brief
 app.py              streamlit dashboard (pure builders + st wrappers)
 src/config.py       instruments, feeds, FRED series, paths
-src/market_data.py  yfinance fetch + snapshot math
-src/macro_data.py   FRED (keyless CSV, optional fredapi)
+src/market_data.py  yfinance (+ stooq fallback) + snapshot math
+src/macro_data.py   FRED (keyed-first, keyless fallback) + 1y percentile/z
+src/bls_data.py     BLS labor & inflation prints
+src/eia_data.py     EIA weekly energy inventories
+src/cftc_data.py    CFTC speculative positioning (COT)
+src/edgar_data.py   SEC EDGAR watchlist filings
+src/analytics.py    cross-asset extremes, vol premium, stock-bond corr
+src/signals.py      signal lines + the "today's read" thesis (derive_lead)
+src/regime.py       risk-on/off regime panel
+src/scorecard.py    grade a narrative's watch block vs the next brief
+src/timeline.py     append-only daily metrics timeline (committed)
+src/history.py      local SQLite day-over-day snapshots
 src/news.py         RSS aggregation, de-dupe, noise filter
 src/brief.py        assemble + persist brief (json + md)
 src/formatting.py   pct/bps/color helpers
 .claude/commands/narrate.md   the /narrate project command
-data/briefs/        brief_*.json / .md   (gitignored)
-data/narratives/    narrative_*.md       (gitignored; written by Claude)
+data/briefs/        brief_*.json / .md     (committed by the daily Action)
+data/narratives/    narrative_*.md         (committed logbook; written by Claude)
+data/timeline.jsonl append-only daily metrics record (committed)
 tests/              pytest, synthetic data only
 ```
 
@@ -95,9 +130,11 @@ Built/tested on **Python 3.14** (3.13+ fine). Note: if `streamlit` isn't on PATH
 python -m pytest tests/ -v
 ```
 
-53 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
-FRED snapshotting, news cleaning/de-dupe, the dashboard's figure/table builders, the custom
-watchlist store, earnings-calendar parsing, day-over-day snapshots, and the risk-regime read.
+127 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
+FRED/BLS/EIA/CFTC snapshotting, the analytics (1y percentiles, vol premium, stock-bond
+correlation), the "today's read" classifier, the thesis scorecard + metrics timeline, news
+cleaning/de-dupe, an offline render-smoke of every tab, and a regression suite carried over
+from two whole-codebase adversarial bug audits.
 
 ## Daily workflow
 
@@ -108,14 +145,20 @@ watchlist store, earnings-calendar parsing, day-over-day snapshots, and the risk
 
 ## Recently added
 
-- **Editable watchlist** — add/remove tickers in the Equities tab, persisted to `data/watchlist.json`.
-- **Earnings calendar** — a Calendar tab of upcoming earnings for your names + indices (yfinance).
-- **Day-over-day deltas** — a "Since last session" panel backed by a local SQLite snapshot store.
-- **Risk-regime read** and a **Treasury yield-curve** chart on the Macro tab; **keyword filter** on Headlines.
-- **Scheduled pre-market run** — `.github/workflows/daily-brief.yml` builds the brief each weekday.
+- **More credible sources** — direct **BLS**, **EIA** energy inventories, **CFTC** positioning,
+  and **SEC EDGAR** filings (all keyless or free-key, best-effort, never crash the dashboard).
+- **An analytics layer** — 1-year percentiles/z-scores, cross-asset extremes, the vol risk
+  premium, and a stock-bond correlation (hedge) regime.
+- **A synthesized "today's read"** thesis + a **thesis scorecard** that grades each call against
+  the next session, and a committed **metrics timeline** for long-horizon context.
+- **Reliability** — keyed-first FRED with retry (no more dropped series); editable watchlist;
+  earnings + filings calendar; a public splash page; a daily GitHub Action that commits the
+  brief + timeline.
 
 ## Ideas to extend
 
-- Cross-asset correlation matrix and rolling-beta views.
-- Trend charts off the SQLite history once a few sessions have accumulated.
-- An economic-calendar feed (CPI / NFP / FOMC dates) alongside earnings.
+The data and analytics layers are deliberately complete — the value now is *using* it daily
+(read the narrative, argue with the thesis, watch the scorecard). If anything:
+
+- True multi-year percentiles + trend charts once `timeline.jsonl` accumulates a few months.
+- A forward economic-calendar feed (CPI / NFP / FOMC dates) alongside earnings.
