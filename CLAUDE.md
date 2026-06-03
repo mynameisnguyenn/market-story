@@ -67,6 +67,8 @@ answer from the brief first; only fetch more (WebSearch/yfinance) if the brief l
   "bls":   [{ "id": "CUUR0000SA0", "name": "CPI-U, all items", "latest": ..., "date": "2026-04", "change": ..., "yoy_pct": ... }],
   "energy":[{ "id": "WCESTUS1", "name": "Crude oil (ex-SPR)", "latest": 433712, "date": "2026-05-29", "prev": 441686, "change": -7974, "units": "MBBL" }],
   "positioning":[{ "name": "S&P 500 (e-mini)", "lev_net": -457780, "lev_net_chg": -56226, "asset_net": 1003607, "oi": 2093621, "date": "2026-05-26" }],
+  "extremes":[{ "symbol": "HG=F", "name": "Copper", "last": 6.48, "pct": 97.6, "z": 1.91, "n": 252 }],   // cross-asset 1y percentile/z, most stretched first
+  "vol": { "vix": 16.1, "realized_20d": 9.9, "premium": 6.2 },   // VIX vs 20d realized = vol risk premium
   "movers": { "leaders": [...], "laggards": [...] },
   "news": [{ "title": "...", "source": "...", "published": "...", "link": "...", "summary": "..." }],
   "stats": { "vix": 14.2, "advancers": 7, "decliners": 4 }

@@ -205,6 +205,19 @@ def positioning_styler(positioning: list[dict]):
     )
 
 
+def extremes_styler(extremes: list[dict]):
+    """Where key markets sit in their ~1y range (percentile + z), most stretched first."""
+    frame = pd.DataFrame([
+        {"Anchor": e["name"], "Last": e.get("last"), "1y %ile": e.get("pct"), "z": e.get("z")}
+        for e in extremes
+    ])
+    return (
+        frame.style
+        .format({"Last": "{:,.2f}", "1y %ile": "{:.0f}", "z": "{:+.2f}"}, na_rep="—")
+        .map(_color_changes, subset=["z"])
+    )
+
+
 def sector_treemap_fig(rows: list[dict]):
     """Treemap of sector 1-day moves, or None if no data.
 
@@ -524,6 +537,15 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(positioning_styler(brief["positioning"]), use_container_width=True, hide_index=True)
         st.caption("Leveraged funds = hedge-fund/spec money; asset managers = real money. A large "
                    "spec net-short with real money long is a classic squeeze setup. Source: CFTC TFF.")
+    if brief.get("extremes"):
+        st.markdown("**Cross-asset extremes** — where key markets sit in their ~1y range")
+        st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
+        vol = brief.get("vol")
+        if vol:
+            tag = "rich — complacency / cheap-looking hedges" if vol["premium"] > 3 \
+                else "compressed — realized catching up" if vol["premium"] < 0 else "normal"
+            st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
+                       f"= {vol['premium']:+.1f} pts ({tag}).")
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")

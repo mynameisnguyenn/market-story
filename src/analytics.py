@@ -1,0 +1,105 @@
+"""Cross-asset statistical context from the embedded price history.
+
+Extends the macro 1-year-percentile idea to the market instruments that get no FRED
+stat-context: VIX, the 10Y, credit ETFs, the dollar, gold/oil/copper. Same math as
+macro_data._stat_context — percentile of the latest level within a trailing window plus
+a z-score — run over the ~250 trading days of closes already embedded in each brief.
+Pure; degrades to [] / None rather than raising. Window is ~1y (label n).
+"""
+from __future__ import annotations
+
+import math
+
+# (symbol, label): risk anchors worth a "where is this vs its own range" read.
+EXTREME_ANCHORS = [
+    ("^VIX", "VIX"),
+    ("^TNX", "10Y yield"),
+    ("DX-Y.NYB", "Dollar (DXY)"),
+    ("CL=F", "WTI crude"),
+    ("HG=F", "Copper"),
+    ("GC=F", "Gold"),
+    ("HYG", "HY credit (HYG)"),
+    ("TLT", "Long Treasuries (TLT)"),
+]
+
+
+def _clean(values) -> list:
+    out = []
+    for v in values:
+        try:
+            f = float(v)
+        except (TypeError, ValueError):
+            continue
+        if not math.isnan(f):
+            out.append(f)
+    return out
+
+
+def _pct_z(values, window: int = 252):
+    """Percentile (0-100) and z-score of the last value within a trailing window."""
+    vals = _clean(values)
+    if len(vals) < 30:
+        return None, None
+    tail = vals[-window:]
+    latest = tail[-1]
+    pct = round(sum(1 for v in tail if v < latest) / len(tail) * 100.0, 1)
+    mean = sum(tail) / len(tail)
+    std = math.sqrt(sum((v - mean) ** 2 for v in tail) / len(tail))
+    z = round((latest - mean) / std, 2) if std > 0 else None
+    return pct, z
+
+
+def realized_vol(values, window: int = 20):
+    """Annualized realized volatility (%) from the last `window` daily log returns."""
+    vals = _clean(values)
+    if len(vals) < window + 1:
+        return None
+    rets = [math.log(vals[i] / vals[i - 1]) for i in range(1, len(vals))
+            if vals[i] > 0 and vals[i - 1] > 0]
+    tail = rets[-window:]
+    if len(tail) < window:
+        return None
+    mean = sum(tail) / len(tail)
+    sd = math.sqrt(sum((r - mean) ** 2 for r in tail) / len(tail))
+    return round(sd * math.sqrt(252) * 100.0, 1)
+
+
+def compute_extremes(closes, window: int = 252) -> list[dict]:
+    """{symbol,name,last,pct,z,n} for each anchor present in `closes`.
+
+    `closes` is {symbol: pandas Series of closes} (e.g. from closes_from_brief).
+    Only returns anchors with enough history; sorted by |z| (most stretched first).
+    """
+    out = []
+    closes = closes or {}
+    for sym, name in EXTREME_ANCHORS:
+        series = closes.get(sym)
+        if series is None:
+            continue
+        values = _clean(list(series))
+        if len(values) < 30:
+            continue
+        pct, z = _pct_z(values, window)
+        if pct is None:
+            continue
+        out.append({"symbol": sym, "name": name, "last": values[-1],
+                    "pct": pct, "z": z, "n": min(len(values), window)})
+    out.sort(key=lambda r: abs(r["z"]) if r["z"] is not None else 0, reverse=True)
+    return out
+
+
+def compute_vol_premium(closes) -> dict | None:
+    """VIX vs 20d realized vol of the S&P — the vol risk premium (implied minus
+    realized). Positive & high = options rich / hedges expensive / complacency."""
+    closes = closes or {}
+    spx = closes.get("^GSPC")
+    vix = closes.get("^VIX")
+    if spx is None or vix is None:
+        return None
+    rv = realized_vol(list(spx), 20)
+    vix_vals = _clean(list(vix))
+    if rv is None or not vix_vals:
+        return None
+    vix_last = vix_vals[-1]
+    return {"vix": round(vix_last, 1), "realized_20d": rv,
+            "premium": round(vix_last - rv, 1)}

@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import bls_data, cftc_data, config, eia_data, formatting, macro_data, market_data, news
+from . import analytics, bls_data, cftc_data, config, eia_data, formatting, macro_data, market_data, news
 from . import history as history_db   # aliased so build_brief's `history` arg can't shadow it
 
 
@@ -25,6 +25,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         energy = eia_data.fetch_eia()
         positioning = cftc_data.fetch_cftc()
     sections = sections or {}
+    closes = _history_closes(history)
     return {
         "date": str(date.today()),
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -38,7 +39,22 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         "news": news_items or [],
         "stats": _stats(sections),
         "history": _embed_history(history),   # compact price series for instant chart reload
+        "extremes": analytics.compute_extremes(closes),   # cross-asset 1y percentile/z
+        "vol": analytics.compute_vol_premium(closes),     # VIX vs realized (vol risk premium)
     }
+
+
+def _history_closes(history) -> dict:
+    """{symbol: Close Series} from the raw history frames, for the analytics layer."""
+    if not history:
+        return {}
+    out = {}
+    for sym, frame in history.items():
+        try:
+            out[sym] = frame["Close"].dropna()
+        except Exception:
+            continue
+    return out
 
 
 def _embed_history(history) -> dict:
