@@ -47,7 +47,8 @@ def _download_batch(symbols: list[str], period: str):
     for attempt in range(_DOWNLOAD_RETRIES):
         try:
             raw = yf.download(symbols, period=period, interval="1d", group_by="ticker",
-                              auto_adjust=True, progress=False, threads=True)
+                              auto_adjust=True, progress=False, threads=True,
+                              multi_level_index=False)
             if raw is not None and not raw.empty:
                 return raw
         except Exception:
@@ -75,6 +76,9 @@ def _extract(raw: pd.DataFrame, symbol: str, symbols: list[str]) -> pd.DataFrame
         frame = raw.copy() if len(symbols) == 1 else raw[symbol].copy()
     except (KeyError, AttributeError):
         return None
+    if isinstance(frame.columns, pd.MultiIndex):
+        # a single-symbol download can come back as a (ticker, field) column index
+        frame.columns = frame.columns.get_level_values(-1)
     if "Close" not in frame.columns:
         return None
     return frame.dropna(subset=["Close"])

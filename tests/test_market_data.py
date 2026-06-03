@@ -46,3 +46,12 @@ def test_watchlist_group_wired_in():
     from src import config
     assert "watchlist" in config.MARKET_GROUPS
     assert "NVDA" in config.all_symbols()
+
+
+def test_extract_handles_single_symbol_multiindex():
+    dates = pd.to_datetime(["2026-06-01", "2026-06-02"])
+    cols = pd.MultiIndex.from_tuples([("^GSPC", "Open"), ("^GSPC", "Close")])
+    raw = pd.DataFrame([[100.0, 101.0], [102.0, 103.0]], index=dates, columns=cols)
+    frame = market_data._extract(raw, "^GSPC", ["^GSPC"])
+    assert frame is not None and "Close" in frame.columns
+    assert frame["Close"].iloc[-1] == 103.0
