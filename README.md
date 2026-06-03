@@ -95,8 +95,9 @@ Built/tested on **Python 3.14** (3.13+ fine). Note: if `streamlit` isn't on PATH
 python -m pytest tests/ -v
 ```
 
-28 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
-FRED snapshotting, news cleaning/de-dupe, and the dashboard's figure/table builders.
+53 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
+FRED snapshotting, news cleaning/de-dupe, the dashboard's figure/table builders, the custom
+watchlist store, earnings-calendar parsing, day-over-day snapshots, and the risk-regime read.
 
 ## Daily workflow
 
@@ -105,9 +106,16 @@ FRED snapshotting, news cleaning/de-dupe, and the dashboard's figure/table build
 3. In `claude`: *"narrate today's brief"* — get the story + risk lens, then ask anything
    ("why did the curve steepen?", "what's the read on energy?"). Re-run any day.
 
+## Recently added
+
+- **Editable watchlist** — add/remove tickers in the Equities tab, persisted to `data/watchlist.json`.
+- **Earnings calendar** — a Calendar tab of upcoming earnings for your names + indices (yfinance).
+- **Day-over-day deltas** — a "Since last session" panel backed by a local SQLite snapshot store.
+- **Risk-regime read** and a **Treasury yield-curve** chart on the Macro tab; **keyword filter** on Headlines.
+- **Scheduled pre-market run** — `.github/workflows/daily-brief.yml` builds the brief each weekday.
+
 ## Ideas to extend
 
-- Add an earnings calendar / economic-calendar feed.
-- A custom watchlist group (Lone Pine-style growth names) in `config.py`.
-- Persist briefs to a small SQLite store for day-over-day deltas and trend charts.
-- A scheduled pre-market run (`/schedule`) that has the brief waiting each morning.
+- Cross-asset correlation matrix and rolling-beta views.
+- Trend charts off the SQLite history once a few sessions have accumulated.
+- An economic-calendar feed (CPI / NFP / FOMC dates) alongside earnings.

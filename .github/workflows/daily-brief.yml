@@ -10,6 +10,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"   # opt into Node 24 (silences the Node-20 deprecation)
+
 jobs:
   build-brief:
     runs-on: ubuntu-latest
