@@ -1,13 +1,16 @@
 """Fetch macro series from FRED.
 
-Primary path is the keyless fredgraph CSV endpoint (no API key, no dependency).
-If FRED_API_KEY is set and a CSV pull fails, fall back to the fredapi library.
+With FRED_API_KEY set, the keyed fredapi endpoint is the primary path: it allows
+120 req/min and doesn't throttle under the concurrent burst that makes the keyless
+fredgraph CSV CDN randomly drop series. Without a key, the keyless CSV is the only
+path (and fredapi an unused dependency).
 """
 
 from __future__ import annotations
 
 import io
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
@@ -23,14 +26,28 @@ def fetch_macro(series: list[tuple[str, str]] = config.FRED_SERIES) -> list[dict
 
     def _fetch_one(item: tuple[str, str]) -> dict:
         series_id, name = item
-        observations = _fetch_csv(series_id)
-        if observations is None and fred is not None:
-            observations = _fetch_via_fredapi(fred, series_id)
-        return _snapshot(series_id, name, observations)
+        return _snapshot(series_id, name, _fetch_with_retry(fred, series_id))
 
-    # FRED series are independent network pulls — fetch them concurrently.
-    with ThreadPoolExecutor(max_workers=min(12, len(series) or 1)) as pool:
+    # Moderate concurrency: fast, but not a burst big enough to trip FRED's limit
+    # (which was randomly dropping a couple of series each run).
+    with ThreadPoolExecutor(max_workers=min(6, len(series) or 1)) as pool:
         return list(pool.map(_fetch_one, series))
+
+
+def _fetch_with_retry(fred, series_id: str, attempts: int = 3) -> pd.Series | None:
+    """Keyed API first (reliable under load), keyless CSV fallback; both retried
+    on a transient empty/throttled response before giving up. An empty result
+    (not just None) counts as a miss and triggers the retry."""
+    observations = None
+    for attempt in range(attempts):
+        observations = _fetch_via_fredapi(fred, series_id) if fred is not None else None
+        if observations is None or len(observations) == 0:
+            observations = _fetch_csv(series_id)
+        if observations is not None and len(observations) > 0:
+            return observations
+        if attempt + 1 < attempts:
+            time.sleep(0.5 * (attempt + 1))
+    return observations
 
 
 def _snapshot(series_id: str, name: str, observations: pd.Series | None) -> dict:
