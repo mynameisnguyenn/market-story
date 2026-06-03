@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, calendar_data, config, formatting, history,
+from src import (bls_data, calendar_data, config, edgar_data, formatting, history,
                  macro_data, market_data, news, regime)
 
 LINE_COLOR = "#4C9AFF"
@@ -57,6 +57,12 @@ def persist(brief: dict) -> None:
 def get_earnings(symbols: tuple) -> list[dict]:
     """Cached upcoming-earnings lookup for a set of symbols."""
     return calendar_data.fetch_earnings(list(symbols))
+
+
+@st.cache_data(ttl=21600, show_spinner="Fetching recent SEC filings...")
+def get_filings(symbols: tuple) -> list[dict]:
+    """Cached recent-EDGAR-filings lookup for the watchlist (6h)."""
+    return edgar_data.recent_filings(list(symbols))
 
 
 def row_for(brief: dict, symbol: str) -> dict | None:
@@ -443,7 +449,7 @@ def headlines_tab(brief: dict) -> None:
             st.caption(meta)
 
 
-def calendar_tab() -> None:
+def _earnings_section() -> None:
     """Upcoming earnings for the watchlist + indices (button-triggered, cached)."""
     st.subheader("Upcoming earnings — watchlist + US indices")
     symbols = tuple(dict.fromkeys(s for s, _ in config.get_watchlist() + config.US_EQUITIES))
@@ -453,16 +459,46 @@ def calendar_tab() -> None:
     if rows is None:
         st.caption("Click to pull next earnings dates via yfinance (cached 1h). "
                    "Kept off the main load so the dashboard stays fast.")
-        return
-    if not rows:
+    elif not rows:
         st.info("No upcoming earnings in the next 60 days, or the source is throttling — try again shortly.")
-        return
-    frame = pd.DataFrame([
-        {"Date": r["date"], "In (days)": r["days"], "Ticker": r["symbol"], "Company": r["name"]}
-        for r in rows
-    ])
-    st.dataframe(frame, use_container_width=True, hide_index=True)
-    st.caption(f"{len(rows)} names · earliest first · via yfinance")
+    else:
+        frame = pd.DataFrame([
+            {"Date": r["date"], "In (days)": r["days"], "Ticker": r["symbol"], "Company": r["name"]}
+            for r in rows
+        ])
+        st.dataframe(frame, use_container_width=True, hide_index=True)
+        st.caption(f"{len(rows)} names · earliest first · via yfinance")
+
+
+def _filings_section() -> None:
+    """Recent SEC EDGAR filings for the watchlist (button-triggered, cached)."""
+    st.subheader("Recent SEC filings — watchlist")
+    wl = tuple(s for s, _ in config.get_watchlist())
+    if st.button("Load / refresh SEC filings", key="load_filings"):
+        st.session_state["filings_rows"] = get_filings(wl)
+    rows = st.session_state.get("filings_rows")
+    if rows is None:
+        st.caption("Click to pull recent 8-K / 10-Q / 10-K filings for your watchlist "
+                   "via SEC EDGAR (keyless, cached 6h).")
+    elif not rows:
+        st.info("No recent filings found, or SEC is rate-limiting — try again shortly.")
+    else:
+        frame = pd.DataFrame([
+            {"Date": r["date"], "Ticker": r["symbol"], "Form": r["form"],
+             "Description": r["desc"], "Filing": r["link"]}
+            for r in rows
+        ])
+        st.dataframe(
+            frame, use_container_width=True, hide_index=True,
+            column_config={"Filing": st.column_config.LinkColumn("Filing", display_text="open")},
+        )
+        st.caption(f"{len(rows)} filings · newest first · via SEC EDGAR")
+
+
+def calendar_tab() -> None:
+    _earnings_section()
+    st.divider()
+    _filings_section()
 
 
 def narrative_tab(brief: dict) -> None:
