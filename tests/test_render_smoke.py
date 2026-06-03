@@ -1,0 +1,55 @@
+"""Render smoke test: every tab must render with synthetic data and no exception.
+
+This catches render-time bugs (duplicate element ids, None handling in panels)
+that the pure-builder tests miss — the class that produced the two bugs the
+screenshot loop had to catch by eye. Offline: no network, no real history DB.
+"""
+
+
+def _render_all_tabs():
+    import pandas as pd
+    import app
+
+    def rows(syms):
+        return [{"symbol": s, "name": s, "last": 100.0, "change_pct": 1.0,
+                 "change_1w_pct": 2.0, "ytd_pct": 3.0, "level_change": 0.5} for s in syms]
+
+    brief = {
+        "date": "2026-06-02", "session_label": "test", "generated_at_utc": "2026-06-02T00:00:00",
+        "markets": {
+            "us_equities": rows(["^GSPC", "^IXIC", "^VIX"]),
+            "sectors": rows(["XLK", "XLE"]),
+            "watchlist": rows(["NVDA", "MSFT"]),
+            "global_indices": rows(["^N225"]),
+            "rates": rows(["^IRX", "^FVX", "^TNX", "^TYX"]),
+            "fx": rows(["DX-Y.NYB"]),
+            "commodities": rows(["GC=F"]),
+            "credit": rows(["HYG"]),
+        },
+        "macro": [
+            {"id": "T10Y2Y", "name": "2s10s", "latest": 0.40, "change": 0.0, "date": "2026-06-02"},
+            {"id": "VIXCLS", "name": "VIX", "latest": 15.0, "change": 0.0, "date": "2026-06-02"},
+        ],
+        "movers": {"leaders": [{"name": "XLK", "change_pct": 2.0}],
+                   "laggards": [{"name": "XLE", "change_pct": -1.0}]},
+        "news": [{"title": "Test headline", "source": "Test", "link": "x",
+                  "published": "2026-06-02T00:00:00", "summary": ""}],
+        "stats": {"vix": 15.0, "sector_advancers": 1, "sector_decliners": 1, "sector_count": 2},
+    }
+    idx = pd.to_datetime(["2026-05-29", "2026-05-30", "2026-06-02"])
+    closes = {s: pd.Series([100.0, 101.0, 102.0], index=idx) for s in ["^GSPC", "^TNX", "DX-Y.NYB"]}
+
+    app.overview_tab(brief, closes)
+    app.equities_tab(brief, closes)
+    app.macro_tab(brief, closes)
+    app.headlines_tab(brief)
+    app.calendar_tab()
+    app.narrative_tab(brief)
+
+
+def test_all_tabs_render_without_error(monkeypatch, tmp_path):
+    from src import history
+    monkeypatch.setattr(history, "DB_PATH", tmp_path / "h.db")   # don't touch the real history DB
+    from streamlit.testing.v1 import AppTest
+    at = AppTest.from_function(_render_all_tabs).run()
+    assert not at.exception, at.exception
