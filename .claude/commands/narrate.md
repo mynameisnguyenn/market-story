@@ -9,6 +9,7 @@ You are the synthesis brain for the **market-story** project. Tell the story of 
    - Read the *previous* brief (second-newest `brief_*.json`) and compute day-over-day moves in the cross-asset anchors: VIX, key yields (2s10s, 5/10/30Y), the dollar (DXY), oil, gold/copper, credit spreads (HY/IG OAS). These **deltas are the spine** — a risk analyst reads *change*, not levels.
    - Each macro row carries `pct_1y` (1-year percentile of the level). Call out what's **stretched** (e.g. HY OAS at the 3rd %ile = historically tight; 2s10s at the 0th = flattest of the year), not just the day's move.
    - Read the most recent prior narrative in `data/narratives/narrative_*.md` (if any). Find its `watch` block (the fenced ```watch block) and **explicitly grade each item against today's brief** in "Since last time": did it hit, miss, or is it still pending?
+   - `data/timeline.jsonl` is an append-only record of daily key metrics + the derived thesis. Once it has a few weeks of history, read it (or `src/timeline.lookback(weeks)`) for "where were we N weeks ago" context — a longer lookback than the day-over-day delta.
 3. Write `data/narratives/narrative_<today's date>.md` using exactly this structure:
    - `# Market Story — {date}`
    - `## Since last time` — grade last session's watch items (hit / miss / pending) and what played out. If there is no prior narrative, say so and anchor off the previous brief's data + headlines.

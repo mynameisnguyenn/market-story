@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import analytics, bls_data, cftc_data, config, eia_data, formatting, macro_data, market_data, news
+from . import analytics, bls_data, cftc_data, config, eia_data, formatting, macro_data, market_data, news, timeline
 from . import history as history_db   # aliased so build_brief's `history` arg can't shadow it
 
 
@@ -155,6 +155,7 @@ def save_brief(brief: dict) -> tuple:
     md_path = config.BRIEFS_DIR / f"brief_{brief['date']}.md"
     md_path.write_text(render_markdown(brief), encoding="utf-8")
     history_db.save_today(brief)
+    timeline.append_today(brief)      # append-only metrics timeline (committed, grows over time)
     return json_path, md_path
 
 
