@@ -21,8 +21,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, calendar_data, config, edgar_data, formatting, history,
-                 macro_data, market_data, news, regime, signals)
+from src import (bls_data, calendar_data, config, edgar_data, eia_data, formatting,
+                 history, macro_data, market_data, news, regime, signals)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -55,7 +55,8 @@ def _fetch_live():
         macro = fut_macro.result()
         news_items = fut_news.result()
     sections = market_data.build_market_sections(history)
-    brief = brief_mod.build_brief(history, sections, macro, news_items, bls=get_bls(), fetch=False)
+    brief = brief_mod.build_brief(history, sections, macro, news_items,
+                                  bls=get_bls(), energy=get_energy(), fetch=False)
     closes = {symbol: frame["Close"] for symbol, frame in history.items()}
     return brief, closes
 
@@ -64,6 +65,12 @@ def _fetch_live():
 def get_bls() -> list[dict]:
     """BLS prints, cached 6h — monthly data, and keeps us under the keyless daily cap."""
     return bls_data.fetch_bls()
+
+
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_energy() -> list[dict]:
+    """EIA weekly inventories, cached 6h — the report only updates once a week."""
+    return eia_data.fetch_eia()
 
 
 def persist(brief: dict) -> None:
@@ -151,6 +158,23 @@ def bls_styler(bls: list[dict]):
         .format({"Latest": "{:,.2f}", "MoM Δ": "{:+.2f}", "YoY %": "{:+.2f}"}, na_rep="n/a")
         .map(_color_changes, subset=["MoM Δ", "YoY %"])
     )
+
+
+def energy_styler(energy: list[dict]):
+    """EIA weekly inventories. No red/green on Δ: a draw (negative) is bullish for
+    the commodity, so price-semantic colouring would mislead; the Flow column says
+    draw/build in words instead."""
+    def flow(change):
+        if change is None:
+            return "n/a"
+        return "draw" if change < 0 else "build" if change > 0 else "flat"
+    frame = pd.DataFrame([
+        {"Series": m["name"], "Latest": m.get("latest"), "Δ wk": m.get("change"),
+         "Flow": flow(m.get("change")), "Units": m.get("units") or "",
+         "As of": m.get("date") or "n/a"}
+        for m in energy
+    ])
+    return frame.style.format({"Latest": "{:,.0f}", "Δ wk": "{:+,.0f}"}, na_rep="n/a")
 
 
 def sector_treemap_fig(rows: list[dict]):
@@ -458,6 +482,11 @@ def macro_tab(brief: dict, closes: dict) -> None:
     if brief.get("bls"):
         st.markdown("**Labor & Inflation (BLS)** — release-day prints, YoY %")
         st.dataframe(bls_styler(brief["bls"]), use_container_width=True, hide_index=True)
+    if brief.get("energy"):
+        st.markdown("**Energy inventories (EIA, weekly)** — Δ is the week-over-week draw/build")
+        st.dataframe(energy_styler(brief["energy"]), use_container_width=True, hide_index=True)
+        st.caption("A crude **draw** (negative Δ) is typically bullish for oil, a build bearish; "
+                   "natural gas swings between summer injections and winter withdrawals. Source: EIA.")
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
@@ -630,9 +659,9 @@ def learn_page() -> None:
 
 def _load_cloud_secrets() -> None:
     """Bridge Streamlit Cloud secrets into os.environ so plain modules (edgar,
-    macro, bls) that read os.environ/.env pick them up on the hosted site."""
+    macro, bls, eia) that read os.environ/.env pick them up on the hosted site."""
     try:
-        for key in ("SEC_USER_AGENT", "FRED_API_KEY", "BLS_API_KEY"):
+        for key in ("SEC_USER_AGENT", "FRED_API_KEY", "BLS_API_KEY", "EIA_API_KEY"):
             value = st.secrets.get(key)
             if value and not os.environ.get(key):
                 os.environ[key] = str(value)

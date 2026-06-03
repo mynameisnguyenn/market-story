@@ -9,11 +9,11 @@ from __future__ import annotations
 import json
 from datetime import date, datetime, timezone
 
-from . import bls_data, config, formatting, history, macro_data, market_data, news
+from . import bls_data, config, eia_data, formatting, history, macro_data, market_data, news
 
 
 def build_brief(history=None, sections=None, macro=None, news_items=None,
-                bls=None, fetch: bool = True) -> dict:
+                bls=None, energy=None, fetch: bool = True) -> dict:
     """Build the brief dict. With fetch=True, pull everything fresh."""
     if fetch:
         history = market_data.download_history(config.all_symbols())
@@ -21,6 +21,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         macro = macro_data.fetch_macro()
         news_items = news.fetch_news()
         bls = bls_data.fetch_bls()
+        energy = eia_data.fetch_eia()
     sections = sections or {}
     return {
         "date": str(date.today()),
@@ -29,6 +30,7 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         "markets": sections,
         "macro": macro or [],
         "bls": bls or [],
+        "energy": energy or [],
         "movers": _movers(sections),
         "news": news_items or [],
         "stats": _stats(sections),
@@ -166,6 +168,7 @@ def render_markdown(brief: dict) -> str:
         lines += _market_table(group, brief["markets"].get(key, []))
     lines += _macro_table(brief.get("macro", []))
     lines += _bls_table(brief.get("bls", []))
+    lines += _energy_table(brief.get("energy", []))
     lines += _headline_list(brief.get("news", []))
     return "\n".join(lines)
 
@@ -208,6 +211,24 @@ def _bls_table(rows: list[dict]) -> list[str]:
         out.append(
             f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
             f"{formatting.fmt_num(m.get('change'))} | {formatting.fmt_pct(m.get('yoy_pct'))} | "
+            f"{m.get('date') or 'n/a'} |"
+        )
+    out.append("")
+    return out
+
+
+def _energy_table(rows: list[dict]) -> list[str]:
+    """EIA weekly inventories: a negative weekly change is a draw, positive a build."""
+    if not rows:
+        return []
+    out = ["## Energy inventories (EIA, weekly)", "| Series | Latest | Δ wk | Draw/Build | Units | As of |",
+           "|---|---:|---:|---|---|---|"]
+    for m in rows:
+        change = m.get("change")
+        flow = "n/a" if change is None else ("draw" if change < 0 else "build" if change > 0 else "flat")
+        out.append(
+            f"| {m['name']} | {formatting.fmt_num(m.get('latest'))} | "
+            f"{formatting.fmt_num(change)} | {flow} | {m.get('units') or ''} | "
             f"{m.get('date') or 'n/a'} |"
         )
     out.append("")

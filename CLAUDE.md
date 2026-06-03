@@ -38,7 +38,7 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    ### Equities & sectors
    ### Rates & the dollar
    ### Commodities & credit
-   ## Macro & data      (FRED + BLS prints, central-bank / econ events)
+   ## Macro & data      (FRED + BLS prints, EIA energy draws/builds, central-bank / econ events)
    ## Risk lens         (positioning, correlations, tail risks, what to watch next)
    ## Sources           (headlines + feeds the read leans on)
    ```
@@ -61,6 +61,8 @@ answer from the brief first; only fetch more (WebSearch/yfinance) if the brief l
     "commodities": [...], "credit": [...]
   },
   "macro": [{ "id": "DGS10", "name": "10Y Treasury", "latest": 4.2, "date": "...", "prev": 4.18, "change": 0.02 }],
+  "bls":   [{ "id": "CUUR0000SA0", "name": "CPI-U, all items", "latest": ..., "date": "2026-04", "change": ..., "yoy_pct": ... }],
+  "energy":[{ "id": "WCESTUS1", "name": "Crude oil (ex-SPR)", "latest": 433712, "date": "2026-05-29", "prev": 441686, "change": -7974, "units": "MBBL" }],
   "movers": { "leaders": [...], "laggards": [...] },
   "news": [{ "title": "...", "source": "...", "published": "...", "link": "...", "summary": "..." }],
   "stats": { "vix": 14.2, "advancers": 7, "decliners": 4 }
