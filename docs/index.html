@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Market Story — Daily Global-Markets Intelligence</title>
+<meta name="description" content="Markets, narrated. A daily global-markets brief with a risk lens — gathered, synthesized, and re-run." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#070b12; --bg2:#0d1320; --ink:#E6ECF5; --muted:#8A97AC;
+    --accent:#4C9AFF; --up:#26A69A; --down:#EF5350; --card:#111826; --line:#1c2533;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background:var(--bg); color:var(--ink); overflow-x:hidden;
+    font-family:'Space Grotesk', system-ui, sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  #bg { position:fixed; inset:0; z-index:0; display:block; }
+  .vignette { position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 30%, transparent 40%, rgba(5,8,14,.85) 100%); }
+  .wrap { position:relative; z-index:2; }
+
+  /* HERO */
+  .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding:0 8vw; max-width:1300px; margin:0 auto; }
+  .eyebrow { font-size:.78rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--accent); font-weight:600; opacity:0; animation:rise .9s .1s forwards; }
+  h1 { font-size:clamp(3rem, 9vw, 7rem); font-weight:700; letter-spacing:-.03em;
+    line-height:.95; margin:.4rem 0 1.2rem; opacity:0; animation:rise 1s .25s forwards; }
+  h1 .b { color:var(--accent); }
+  .tag { font-size:clamp(1rem,1.6vw,1.35rem); color:var(--muted); max-width:42ch;
+    line-height:1.5; opacity:0; animation:rise 1s .45s forwards; }
+
+  .stats { display:flex; gap:2.2rem; flex-wrap:wrap; margin:2.4rem 0 2.6rem;
+    font-family:'IBM Plex Mono', monospace; opacity:0; animation:rise 1s .65s forwards; }
+  .stat { display:flex; flex-direction:column; gap:.3rem; }
+  .stat .k { font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-family:'Space Grotesk',sans-serif; }
+  .stat .v { font-size:1.5rem; font-variant-numeric:tabular-nums; }
+  .stat .d { font-size:.82rem; font-variant-numeric:tabular-nums; }
+  .up { color:var(--up); } .down { color:var(--down); }
+
+  .cta { display:flex; gap:1rem; align-items:center; opacity:0; animation:rise 1s .85s forwards; }
+  .btn { display:inline-flex; align-items:center; gap:.6rem; padding:.95rem 1.7rem;
+    background:var(--accent); color:#07101f; font-weight:600; border-radius:10px;
+    text-decoration:none; font-size:1.02rem; transition:transform .15s ease, box-shadow .2s ease; }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 12px 30px rgba(76,154,255,.35); }
+  .btn .ar { transition:transform .2s ease; } .btn:hover .ar { transform:translateX(4px); }
+  .ghost { color:var(--muted); text-decoration:none; font-size:.95rem; border-bottom:1px solid var(--line); padding-bottom:2px; }
+  .ghost:hover { color:var(--ink); }
+
+  .scrollcue { position:absolute; bottom:2.4rem; left:8vw; color:var(--muted);
+    font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; opacity:0; animation:fade 1.4s 1.4s forwards; }
+  .scrollcue::before { content:''; display:block; width:1px; height:34px; background:linear-gradient(var(--accent),transparent);
+    margin:0 auto .6rem; animation:drop 1.8s ease-in-out infinite; }
+
+  /* SECTION */
+  .section { max-width:1200px; margin:0 auto; padding:8rem 8vw; }
+  .section h2 { font-size:clamp(1.8rem,4vw,3rem); font-weight:700; letter-spacing:-.02em; margin-bottom:.8rem; }
+  .section .lead { color:var(--muted); max-width:54ch; line-height:1.6; margin-bottom:3rem; font-size:1.1rem; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.2rem; }
+  .c { background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:12px; padding:1.6rem; }
+  .c h3 { font-size:1.15rem; margin-bottom:.5rem; }
+  .c p { color:var(--muted); line-height:1.55; font-size:.95rem; }
+  .c .n { font-family:'IBM Plex Mono',monospace; color:var(--accent); font-size:.8rem; letter-spacing:.1em; }
+
+  footer { border-top:1px solid var(--line); padding:2.5rem 8vw; max-width:1200px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; color:var(--muted); font-size:.85rem; }
+  footer a { color:var(--muted); text-decoration:none; } footer a:hover { color:var(--ink); }
+
+  @keyframes rise { from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:none;} }
+  @keyframes fade { to{opacity:1;} }
+  @keyframes drop { 0%,100%{transform:translateY(0);opacity:.4;} 50%{transform:translateY(8px);opacity:1;} }
+  @media (max-width:600px){ .stats{gap:1.4rem;} .scrollcue{display:none;} }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="vignette"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Daily global-markets intelligence</div>
+    <h1>Market<br><span class="b">Story</span></h1>
+    <p class="tag">Markets, narrated. A daily global brief with a risk lens — gathered, synthesized by Claude, and built to be questioned and re-run.</p>
+
+    <div class="stats" id="stats">
+      <div class="stat"><span class="k">S&amp;P 500</span><span class="v" id="sp">—</span><span class="d" id="spd">live</span></div>
+      <div class="stat"><span class="k">VIX</span><span class="v" id="vix">—</span><span class="d" id="vixd"></span></div>
+      <div class="stat"><span class="k">10Y Yield</span><span class="v" id="ty">—</span><span class="d" id="tyd"></span></div>
+      <div class="stat"><span class="k">Breadth</span><span class="v" id="br">—</span><span class="d" id="brd">sectors</span></div>
+    </div>
+
+    <div class="cta">
+      <a class="btn" href="https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/" target="_blank" rel="noopener">
+        Enter the brief <span class="ar">→</span></a>
+      <a class="ghost" href="#inside">What's inside</a>
+    </div>
+
+    <div class="scrollcue">Scroll</div>
+  </header>
+
+  <section class="section" id="inside">
+    <h2>A terminal that tells the story.</h2>
+    <p class="lead">Not another wall of tickers. Free market data, macro, and news are gathered every day,
+      assembled into a structured brief, and turned into a written read with a risk lens — then logged,
+      day over day, so the narrative builds a through-line.</p>
+    <div class="cards">
+      <div class="c"><div class="n">01 · GATHER</div><h3>The live brief</h3>
+        <p>US equities &amp; sectors, global macro, rates, FX, commodities, credit — plus FRED, BLS prints and a 70-headline feed. Charts, a sector map, a cross-asset correlation matrix.</p></div>
+      <div class="c"><div class="n">02 · SYNTHESIZE</div><h3>The read</h3>
+        <p>Claude narrates the day with a risk lens — what moved &amp; why, regime, tail risks, what to watch — grounded in the numbers, remembering yesterday.</p></div>
+      <div class="c"><div class="n">03 · COMPOUND</div><h3>The logbook</h3>
+        <p>Every day's read is versioned. A dated record of your own market thinking that compounds — the part no dashboard gives you.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Market Story — built with Python, Streamlit &amp; Claude.</span>
+    <a href="https://github.com/mynameisnguyenn/market-story" target="_blank" rel="noopener">github.com/mynameisnguyenn/market-story →</a>
+  </footer>
+</div>
+
+<script>
+/* ---------- market-data particle network: drifting nodes (capital flows) ---------- */
+const canvas = document.getElementById('bg'), ctx = canvas.getContext('2d');
+let W, H, ps, mouse = { x:-1e9, y:-1e9 }, speed = 1, redBias = 0.10;
+const rand = (a,b) => a + Math.random()*(b-a);
+
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+function build(){
+  const n = Math.min(120, Math.floor(W*H/15000));
+  ps = [];
+  for(let i=0;i<n;i++){
+    const r = Math.random();
+    let c = '76,154,255';                          // blue (neutral data)
+    if(r < redBias) c = '239,83,80';               // red (down flow)
+    else if(r < redBias + 0.12) c = '38,166,154';  // green (up flow)
+    ps.push({ x:Math.random()*W, y:Math.random()*H, vx:rand(-.25,.25), vy:rand(-.25,.25), r:rand(.8,2.3), c });
+  }
+}
+function frame(){
+  ctx.clearRect(0,0,W,H);
+  for(let i=0;i<ps.length;i++){
+    const p = ps[i];
+    p.x += p.vx*speed; p.y += p.vy*speed;
+    const dx = mouse.x-p.x, dy = mouse.y-p.y;
+    if(dx*dx+dy*dy < 26000){ p.x += dx*0.0016; p.y += dy*0.0016; }
+    if(p.x<0)p.x+=W; if(p.x>W)p.x-=W; if(p.y<0)p.y+=H; if(p.y>H)p.y-=H;
+    for(let j=i+1;j<ps.length;j++){
+      const q = ps[j], a = p.x-q.x, b = p.y-q.y, dist = Math.hypot(a,b);
+      if(dist < 125){
+        ctx.strokeStyle = 'rgba(76,154,255,'+(0.13*(1-dist/125))+')';
+        ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+      }
+    }
+  }
+  for(const p of ps){ ctx.fillStyle = 'rgba('+p.c+',.8)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+  requestAnimationFrame(frame);
+}
+addEventListener('resize', () => { resize(); build(); });
+addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+resize(); build(); frame();
+
+/* ---------- pull today's real numbers from the committed brief ---------- */
+const fnum = (v,d=2) => (v==null||isNaN(v)) ? '—' : Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fpct = v => (v==null||isNaN(v)) ? '' : (v>=0?'+':'')+Number(v).toFixed(2)+'%';
+function find(brief, sym){
+  for(const rows of Object.values(brief.markets||{})) for(const r of rows) if(r.symbol===sym) return r;
+  return null;
+}
+async function loadBrief(){
+  const base = 'https://raw.githubusercontent.com/mynameisnguyenn/market-story/main/data/briefs/';
+  for(let i=0;i<6;i++){
+    const ds = new Date(Date.now()-i*864e5).toISOString().slice(0,10);
+    try { const r = await fetch(base+'brief_'+ds+'.json',{cache:'no-store'}); if(r.ok) return r.json(); } catch(e){}
+  }
+  return null;
+}
+(async () => {
+  const brief = await loadBrief(); if(!brief) return;
+  const sp = find(brief,'^GSPC'), vix = find(brief,'^VIX'), ty = find(brief,'^TNX');
+  const st = brief.stats||{};
+  if(sp){ document.getElementById('sp').textContent = fnum(sp.last); const e=document.getElementById('spd');
+    e.textContent = fpct(sp.change_pct); e.className = 'd '+(sp.change_pct>=0?'up':'down'); }
+  if(vix){ document.getElementById('vix').textContent = fnum(vix.last); const e=document.getElementById('vixd');
+    e.textContent = fpct(vix.change_pct); e.className = 'd '+(vix.change_pct<=0?'up':'down'); }
+  if(ty){ document.getElementById('ty').textContent = fnum(ty.last)+'%'; }
+  document.getElementById('br').textContent = (st.sector_advancers??'—')+' / '+(st.sector_decliners??'—');
+  // tint the animation by risk mood: more red + faster when VIX is elevated
+  if(vix && vix.last){ if(vix.last>22){ redBias=0.22; speed=1.4; } else if(vix.last<15){ redBias=0.06; speed=.85; } build(); }
+})();
+</script>
+</body>
+</html>
