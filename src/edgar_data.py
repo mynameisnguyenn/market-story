@@ -32,8 +32,18 @@ def _resolve_ua() -> str:
     return _DEFAULT_UA
 
 
-# SEC mandates a UA identifying the caller; a contact URL is acceptable.
-SEC_USER_AGENT = _resolve_ua()
+_ua_cache: str | None = None
+
+
+def _user_agent() -> str:
+    """Resolved UA, cached after first use (resolved lazily so env set at
+    startup — e.g. bridged from Streamlit Cloud secrets — is honored)."""
+    global _ua_cache
+    if _ua_cache is None:
+        _ua_cache = _resolve_ua()
+    return _ua_cache
+
+
 TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik}.json"
 EDGAR_TIMEOUT = 12
@@ -43,7 +53,7 @@ _cik_cache: dict[str, str] | None = None
 
 
 def _headers() -> dict:
-    return {"User-Agent": SEC_USER_AGENT, "Accept-Encoding": "gzip, deflate"}
+    return {"User-Agent": _user_agent(), "Accept-Encoding": "gzip, deflate"}
 
 
 def _ticker_cik_map() -> dict[str, str]:

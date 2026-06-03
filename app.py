@@ -12,6 +12,8 @@ tested; the st.* wrappers below just render what the builders return.
 
 from __future__ import annotations
 
+import os
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -570,8 +572,42 @@ def learn_page() -> None:
     learn.render()
 
 
+def _load_cloud_secrets() -> None:
+    """Bridge Streamlit Cloud secrets into os.environ so plain modules (edgar,
+    macro, bls) that read os.environ/.env pick them up on the hosted site."""
+    try:
+        for key in ("SEC_USER_AGENT", "FRED_API_KEY", "BLS_API_KEY"):
+            value = st.secrets.get(key)
+            if value and not os.environ.get(key):
+                os.environ[key] = str(value)
+    except Exception:
+        pass
+
+
+_POLISH_CSS = """
+<style>
+.block-container { padding-top: 2.4rem; padding-bottom: 2.5rem; max-width: 1400px; }
+[data-testid="stMetric"] {
+    background: #161B26; border: 1px solid #232B3A; border-radius: 10px;
+    padding: 12px 16px 10px;
+}
+[data-testid="stMetricValue"] { font-size: 1.55rem; font-weight: 600; }
+[data-testid="stMetricLabel"] {
+    opacity: .65; font-size: .74rem; text-transform: uppercase; letter-spacing: .05em;
+}
+h1 { font-size: 2.1rem; letter-spacing: -.01em; }
+h3 { font-size: 1.02rem; letter-spacing: .01em; opacity: .92; }
+[data-testid="stDataFrame"] { font-size: .86rem; }
+hr { margin: .9rem 0; border-color: #1d2430; }
+[data-testid="stTabs"] button[role="tab"] { font-size: .95rem; }
+</style>
+"""
+
+
 def main() -> None:
     st.set_page_config(page_title="Market Story", layout="wide", initial_sidebar_state="expanded")
+    _load_cloud_secrets()
+    st.markdown(_POLISH_CSS, unsafe_allow_html=True)
     st.sidebar.title("Market Story")
     pages = st.navigation([
         st.Page(daily_brief_page, title="Daily Brief", icon=":material/show_chart:", default=True),
