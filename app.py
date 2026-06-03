@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import config, formatting, macro_data, market_data, news
+from src import calendar_data, config, formatting, macro_data, market_data, news
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -44,6 +44,12 @@ def persist(brief: dict) -> None:
     if st.session_state.get("_saved_stamp") != stamp:
         brief_mod.save_brief(brief)
         st.session_state["_saved_stamp"] = stamp
+
+
+@st.cache_data(ttl=3600, show_spinner="Fetching upcoming earnings dates...")
+def get_earnings(symbols: tuple) -> list[dict]:
+    """Cached upcoming-earnings lookup for a set of symbols."""
+    return calendar_data.fetch_earnings(list(symbols))
 
 
 def row_for(brief: dict, symbol: str) -> dict | None:
@@ -290,6 +296,28 @@ def headlines_tab(brief: dict) -> None:
             st.caption(meta)
 
 
+def calendar_tab() -> None:
+    """Upcoming earnings for the watchlist + indices (button-triggered, cached)."""
+    st.subheader("Upcoming earnings — watchlist + US indices")
+    symbols = tuple(dict.fromkeys(s for s, _ in config.get_watchlist() + config.US_EQUITIES))
+    if st.button("Load / refresh earnings dates", key="load_earnings"):
+        st.session_state["earnings_rows"] = get_earnings(symbols)
+    rows = st.session_state.get("earnings_rows")
+    if rows is None:
+        st.caption("Click to pull next earnings dates via yfinance (cached 1h). "
+                   "Kept off the main load so the dashboard stays fast.")
+        return
+    if not rows:
+        st.info("No upcoming earnings in the next 60 days, or the source is throttling — try again shortly.")
+        return
+    frame = pd.DataFrame([
+        {"Date": r["date"], "In (days)": r["days"], "Ticker": r["symbol"], "Company": r["name"]}
+        for r in rows
+    ])
+    st.dataframe(frame, use_container_width=True, hide_index=True)
+    st.caption(f"{len(rows)} names · earliest first · via yfinance")
+
+
 def narrative_tab(brief: dict) -> None:
     path = brief_mod.latest_narrative_path()
     if path and path.exists():
@@ -337,8 +365,8 @@ def daily_brief_page() -> None:
     )
     st.divider()
 
-    overview, equities, macro, headlines, story = st.tabs(
-        ["Overview", "Equities & Sectors", "Global & Macro", "Headlines", "Story"]
+    overview, equities, macro, headlines, calendar, story = st.tabs(
+        ["Overview", "Equities & Sectors", "Global & Macro", "Headlines", "Calendar", "Story"]
     )
     with overview:
         overview_tab(brief, closes)
@@ -348,6 +376,8 @@ def daily_brief_page() -> None:
         macro_tab(brief, closes)
     with headlines:
         headlines_tab(brief)
+    with calendar:
+        calendar_tab()
     with story:
         narrative_tab(brief)
 
