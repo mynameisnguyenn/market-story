@@ -6,8 +6,8 @@ default one). Filing/technical-alert noise is dropped per config.
 
 from __future__ import annotations
 
+import calendar
 import re
-import time
 from datetime import datetime, timezone
 
 import feedparser
@@ -82,11 +82,15 @@ def _is_noise(entry) -> bool:
 
 
 def _entry_time(entry) -> datetime | None:
-    """UTC datetime from the entry's published/updated struct, if present."""
+    """UTC datetime from the entry's published/updated struct, if present.
+
+    feedparser normalizes *_parsed to a UTC struct_time, so we use
+    calendar.timegm (interprets the struct as UTC), not time.mktime (local time).
+    """
     for attr in ("published_parsed", "updated_parsed"):
         parsed = entry.get(attr)
         if parsed:
-            return datetime.fromtimestamp(time.mktime(parsed), tz=timezone.utc)
+            return datetime.fromtimestamp(calendar.timegm(parsed), tz=timezone.utc)
     return None
 
 

@@ -30,3 +30,12 @@ def test_normalize_dedupes_by_title():
 
 def test_normalize_skips_empty_title():
     assert news._normalize({"title": "   ", "link": "a"}, "CNBC", set()) is None
+
+
+def test_entry_time_interprets_struct_as_utc():
+    import time as _time
+    from datetime import timezone
+    struct = _time.struct_time((2026, 6, 2, 12, 0, 0, 0, 0, 0))   # 2026-06-02 12:00 UTC
+    dt = news._entry_time({"published_parsed": struct})
+    assert dt is not None and dt.tzinfo == timezone.utc
+    assert dt.isoformat() == "2026-06-02T12:00:00+00:00"          # not shifted by local offset
