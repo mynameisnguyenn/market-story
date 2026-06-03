@@ -2,93 +2,76 @@
 
 ## Since last time
 
-No prior narrative exists — this is the inaugural brief. The 1-week moves in the brief serve as the lookback. Two threads carry live into today:
+The inaugural read (earlier today) flagged six things to watch as the tape and data firmed up. With the session closed and the brief now carrying **two new lenses — EIA energy inventories and CFTC positioning** — here's how they graded:
 
-- **The "breadth paradox"** (MarketWatch, 06-03): The S&P's 9-day win streak came with fewer stocks participating. Today that tension resolved in an ugly way — mega-cap platforms cracked (MSFT −4.17%, GOOGL −3.86%, CRM −4.18%) while the index barely moved. The prior-week 1w data shows this wasn't sudden: XLC −1.71%, XLP −2.15%, XLY −1.56% are all down on the week, suggesting the rotation began building before today.
-- **Iran escalation** (FT/CNBC, 06-03): The fragile ceasefire between the US and Iran is not holding. Ballistic missiles struck Kuwait and Bahrain. This is the dominant commodity driver today and a persistent geopolitical tail that keeps crude elevated.
+- **"Does the rotation hold, or do MSFT/GOOGL/CRM bounce?"** — Neither. The rotation became a **broad risk-off**: the 9-day win streak ended (S&P −0.74%, Nasdaq −0.89%, Dow −1.21%, Russell −1.31% — every US index lower; VIX +1.84% to 16.06). The mega-caps I was watching *led the tape down* — CRM −5.09%, NVDA −3.62%, MSFT −3.17%, AMZN −2.53% — with Meta (+4.24%) the lone platform bid. Broadcom plunging on guidance set the after-hours tone.
+- **"10Y through 4.5% re-opens duration pain"** — Confirmed. Yields *rose* this session (10Y +4bp to 4.49%, 5Y +4bp to 4.21%) — the opposite of yesterday's easing — and long-duration tech took the hit.
+- **"WTI $94.93 → $97–100?"** — Heading there: **WTI +2.6% to $96.20** (+67.5% YTD), the day's cleanest move, now corroborated by hard EIA data (below).
+- **"HY OAS 2.72% — widen to 2.80 = de-risking"** — Did **not** widen (2.71%, −1bp). The tell of the day: equities fell hard but **credit stayed calm**. This was a duration/positioning unwind, not a solvency scare.
+- **SpaceX IPO** still pending (now an $86B headline). **Cliffwater / private-credit contagion** — quiet today.
 
 ## TL;DR
 
-- **S&P +0.13% on day 9 of its win streak** — flat headline, violent internals: MSFT/GOOGL/CRM/MA down 3.5–4.2%, ASML +4.72%, TSMC +2.54%.
-- **Rates eased modestly** (10Y −2bp to 4.455%, 30Y −2.4bp to 4.967%) and **credit tightened** (HY OAS −2bp to 2.72%) — bond market is pricing no stress.
-- **Oil is the outlier and the risk**: WTI +3.0% to $94.93 (+65.3% YTD) — Iran ballistic missiles + API crude draw of 6.8M bbls + IEA critical-inventory warning converged.
-- **Goldman CEO: "more greed than fear."** SpaceX targets $1.75T IPO at $135/share — history's largest equity offering priced for next week.
-- **JOLTS April surged to 7.6M** job openings, highest in nearly two years — labor re-accelerating, not softening, keeps the Fed boxed.
+- **The streak broke.** S&P −0.74% (7,554), all majors red, VIX +1.84% — "Markets End Winning Streak on Middle East Escalation Fears." Mega-cap tech led down (CRM −5.1%, NVDA −3.6%, MSFT −3.2%); **Meta +4.2% the lone outlier**.
+- **Yields reversed higher** (10Y +4bp to 4.49%) — the duration headwind that hit long-multiple tech. Dollar firmer (DXY +0.30%), **yen pinned at 160** (USD/JPY 159.99).
+- **Oil is still the one bid that matters:** WTI +2.6% to $96.20 on Iran escalation **plus a verified ~8.0M-bbl crude draw** (EIA) — yet industrial metals *fell* (copper −2.5%, silver −3.1%): a geopolitical-premium-vs-growth split.
+- **New lens — positioning says fast money was already defensive.** CFTC shows **leveraged funds net short the S&P (−458k, adding 56k shorts on the week)** and net short Treasuries, while **asset managers sit heavily long (+1.0M)**. The "greed" is real-money + retail length; the specs are hedged/short.
+- **Credit didn't flinch** — HY OAS 2.71% (−1bp). Equity-down / credit-calm = unwind, not stress.
 
 ## What moved & why
 
 ### Equities & sectors
 
-The tape is a rotation, not a selloff. **7 of 11 sectors advanced**, Russell 2000 +0.90% decisively outpacing SPX +0.13% — breadth broadened, just not in the names that constitute half the S&P's weight.
+A genuine **risk-off day**, not a rotation — 6 of 11 sectors red and every US index lower. Technology (−1.00%) and Comm Services (−1.31%) led the drag; **Energy +1.29%** was the standout bid (oil), with Health +0.79% and Staples +0.40% the defensive tells. The damage concentrated in the AI-capex spenders and long-duration platforms: **Salesforce −5.09%, NVIDIA −3.62%, Microsoft −3.17%, Amazon −2.53%, TSMC −2.24%.** **Meta +4.24%** bucked everything — the one mega-cap the market rewarded. Broadcom's after-hours plunge on a Q2 revenue miss / competition worry reinforced the semicap-fatigue read.
 
-**Leaders:** ASML +4.72%, TSMC +2.54% (AI-capex semiconductor supply chain, boosted by Nvidia/Jensen Huang commentary driving optical/connectivity names per MarketWatch); XLK +1.25% (semi-driven, not mega-cap platforms); XLU +1.86%; XLB +1.18%; XLE +1.15% (Iran bid); XLI +1.04%. Japan Nikkei +2.19% led globally (yen weakness still providing export tailwind, USD/JPY 159.81); Euro Stoxx +1.21%, DAX +0.48%, CAC +0.77%.
-
-**Laggards:** Salesforce −4.18%, Microsoft −4.17%, Alphabet −3.86%, Mastercard −3.55%, MercadoLibre −3.36%, Netflix −2.94%. XLC −1.76%, XLV −0.97%, XLY −0.51%. These aren't random: MSFT, GOOGL, and CRM are AI-capex *spenders* with stretched long-duration multiples; V/MA/MELI carry a consumer-slowdown read-through. Hang Seng −0.57%, Shanghai −0.28% (Goldman cut HK to neutral, rotating to mainland AI hardware per CNBC).
-
-Critical framing: The market's only sustained conviction buyers are semis and energy. If either breaks, the index has no bench.
+Globally mixed: **Hang Seng +2.52%** and Shanghai +0.43% firmed on mainland strength, while Europe was uniformly soft (Euro Stoxx −0.89%, DAX −1.31%, CAC −0.71%) and Nikkei −0.30% gave back a little of its huge YTD (+32.6%).
 
 ### Rates & the dollar
 
-**Yields softened across the curve**: 10Y −2bp to **4.455%**, 30Y −2.4bp to **4.967%**, 5Y −0.9bp to **4.177%**. This is mildly supportive for rate-sensitive names — and yet growth/platform tech sold hard, which signals the rotation is driven by capex/multiple-expansion fatigue rather than a rates-relief bounce. SOFR at 3.65% (+2bp per FRED 06-01 print) — short-end funding still elevated.
-
-**Dollar flat** (DXY +0.003% to 99.203). EUR/USD barely moved (+0.005%). USD/JPY +0.11% to 159.81 — yen structural weakness intact, BOJ reluctant to act, sustaining Japan's equity advantage (+35.5% Nikkei YTD). USD/CNY −0.01%, yuan firming (-3.3% YTD) — quiet but notable.
-
-No FX stress signal. The 2Y yield and 2s10s spread returned null in FRED — the curve's inversion/steepening status is not available in today's brief; watch tomorrow's print.
+**Yields rose across the curve** — 5Y +4bp to 4.21%, 10Y +4bp to **4.49%**, 30Y +2bp to 4.99% — a clean reversal of yesterday's easing, and the mechanical headwind behind the long-duration selloff. FRED's slower prints (06-02) still show 2s10s at +0.41 and 10y-3m at +0.69 (positively sloped, no inversion), SOFR 3.63%, breakevens 2.39%. **Dollar firmer** (DXY +0.30% to 99.52); EUR/USD −0.26%, **USD/JPY +0.22% to 159.99 — pinned at the 160 line** the BOJ keeps eyeing. With gold also lower (−0.59%) as rate expectations firmed into Friday's payrolls, the rates-up / dollar-up / gold-down combination is a coherent "higher-for-longer" tape.
 
 ### Commodities & credit
 
-**WTI +3.0% to $94.93** (+$2.77), Brent +2.2% to $97.05. Three converging drivers made this move clean and self-reinforcing:
-1. Iran ballistic missiles struck Kuwait and Bahrain (FT/CNBC, 06-03) — active hostilities, not a threat.
-2. API crude stockpiles −6.8M barrels last week (Seeking Alpha, 06-02) — demand-side draw.
-3. IEA: global oil inventories "on track for critical levels before summer peak" (Seeking Alpha, 06-02) — supply-side structural warning.
+**WTI +2.6% to $96.20, Brent +1.9% to $97.86** — and the new EIA data makes the bid look fundamental, not just headline: **commercial crude stocks (ex-SPR) drew ~8.0M barrels** last week (to 433.7M), **and the SPR itself drew ~8.0M** (to 357.1M) — the strategic buffer is shrinking even as commercial stocks tighten. Gasoline (+3.4M) and distillate (+1.5M) *built*, so the tightness is crude-specific (Iran/supply), not demand-led. Against that, **industrial metals fell hard — copper −2.49%, silver −3.10%** — and that divergence is the tell: this is a *geopolitical risk premium in oil*, not a synchronized global-growth surge. Gold −0.59%; nat gas +2.78% on a modest +92 Bcf storage build.
 
-WTI at +65.3% YTD is the single biggest macro move in the brief. It is simultaneously a geopolitical-risk premium and a stagflation tax on the consumer.
-
-**Copper +1.82% to $6.6425** (+4.4% on the week, +18% YTD) — risk-on signal, consistent with broadening global growth. **Gold +0.47% to $4,496** — holding near highs with VIX low is unusual; suggests either structural buying (central banks, EM reserve diversification) or an unresolved Iran risk premium.
-
-**Credit is calm and tightening**: HY OAS **2.72%** (from 2.74%, −2bp per FRED 06-01), IG OAS **0.73%** (from 0.74%, −1bp). HYG +0.075%, LQD flat. At 2.72% HY OAS, the market is pricing near-zero default risk — this is the critical signal distinguishing "rotation" from "de-risking." Watch this number daily.
+**Credit stayed calm** through the equity drop: HY OAS **2.71%** (−1bp), IG OAS 0.74%, HYG/LQD each −0.28% (just the yield move). The absence of credit widening on a −0.74% S&P day is the single most important "unwind, not scare" signal.
 
 ## Macro & data
 
-- **JOLTS (April 2026):** Job openings **7.6 million**, +731K MoM, highest in nearly two years (CNBC Economy, 06-02). This is re-acceleration, not softening — keeps the Fed's easing path constrained.
-- **FRED (April 2026, latest available):** CPI index 332.41 (prev 330.29, +2.11); Unemployment **4.3%** (unchanged); Industrial Production **102.50** (prev 101.81, +0.69 — re-accelerating).
-- **SOFR 3.65%** (06-01 print), +2bp from prior — short-term funding still elevated.
-- **Fed Chair Warsh** first staff hires include a co-author of the "Project 2025" Fed chapter (CNBC, 06-03). This signals institutional direction: less Fed independence posture, potentially more politically-responsive policy framing. A wildcard for the June dot plot — does Warsh participate, abstain, or send a signal?
-- **Cliffwater private credit fund (06-02, FT):** 17% redemption requests on a $31B vehicle aimed at retail investors. Fund limiting withdrawals. Early but real signal of liquidity stress in a sector that marks to model and reprices slowly.
+- **BLS (April):** CPI **+3.81% YoY**, Core CPI **+2.75% YoY** — a 2-handle core, but sticky; Avg hourly earnings **+3.57% YoY**; **Unemployment 4.3% (+0.1pp YoY)**; participation −0.8pp (the structural drag). *(The rate-series "YoY" now reads as percentage-points after a fix today — unemployment is +0.1pp, a percentage-point change, not a percent-of-a-percent.)*
+- **FRED:** Initial jobless claims **215k (+5k)** — still low; Industrial production re-accelerating; SOFR 3.63%. The full 18-series macro panel is populating cleanly now (a reliability fix today).
+- **Energy (EIA, new lens):** the ~8M-bbl commercial crude draw + ~8M-bbl SPR draw above — the supply side behind the oil tape, surfaced for the first time.
+- Markets await **Friday payrolls**; gold "under pressure from higher rate expectations" ahead of it (Seeking Alpha).
 
 ## Risk lens
 
-**Positioning read:** The market is in full "greed mode" — Goldman CEO's words, and the data backs it. MarketWatch notes the S&P has "only risen this fast 4 times since WWII" with a historical crash follow-on once. Flows are broadening (Russell outperforming, cyclicals bid), but conviction leadership is concentrated: semis (ASML, TSMC, Marvell, Broadcom) and energy. That's a thin load-bearing wall.
+**Positioning (new lens — CFTC COT, as of 05-26):** the day's most interesting tell. **Leveraged funds are net short across the board** — S&P e-mini **−458k and adding (−56k on the week)**, Nasdaq −52k, Ultra 10Y −240k, Ultra Bond −871k — while **asset managers (real money) are heavily long** (S&P +1.0M). Two readings, and which you believe changes how you lean:
+1. **Contrarian-bullish / squeeze fuel** — specs this short is dry powder; rallies can be violent.
+2. **Smart-money-hedged** — fast money de-risked *before* today, which fits a tape that broke on the first real catalyst.
 
-**Correlations to watch:** The textbook equity-down / bond-up hedge was mostly absent today — yields fell with mixed equities, but on a real risk-off day, Treasuries at 4.45% may not provide the buffer they once did. Watch whether bonds and equities continue to decouple.
+This reconciles with Solomon's "more greed than fear": the *greed* is real-money + retail length; the *fast money was already defensive*. Note too that **VIX specs are net short (−49k)** — the short-vol/complacency trade is crowded right into live Middle East headline risk, an asymmetric setup. (Caveat: COT is a week stale — Tuesday positions, reported Friday.)
+
+**Correlations:** equities down, **credit calm, Treasuries down (yields up)** — the bond hedge didn't work today because rates were the *cause*, not the cushion. On a duration-driven down day, Treasuries won't buffer you; only energy and the defensive sleeves did.
 
 **Tail risks:**
-1. **Iran → $100+ oil / Strait of Hormuz.** WTI at $94.93 and +65% YTD already; an escalation that closes the Strait or widens the conflict pairs a crude spike with 4.3% unemployment and still-elevated CPI — the Fed cannot cut into that.
-2. **SpaceX IPO liquidity absorption.** A $75B all-primary raise at a $1.75T valuation is historic. Mega-IPOs historically create secondary market liquidity drag (Saudi Aramco, Arm precedents). Watch credit spreads and HYG/LQD behavior around pricing week.
-3. **Private credit cascade.** Cliffwater's 17% redemption request is a canary. If other semi-liquid BDC/private credit vehicles face similar pressure, mark-to-model assets hit real bids and the leveraged loan complex reprices. HY OAS widening from 2.72 to 2.80+ is the early-warning signal.
-4. **Semiconductor leadership cliff.** If ASML/TSMC/Marvell falter — China export-control escalation, guide-down, or multiple compression — the S&P loses its only remaining sustained buyers and the flat tape goes negative fast.
+1. **Iran / Strait of Hormuz → $100+ oil.** WTI $96.20, +67% YTD, with the **SPR also drawing** — the policy buffer is thinning exactly as geopolitical supply risk rises. A Hormuz event pairs an oil spike with 4.3% unemployment and 3.8% CPI; the Fed can't cut into that.
+2. **Short-vol unwind.** Specs net short VIX into live headline risk — a gap-up in vol forces mechanical covering and amplifies equity downside.
+3. **Spec-short squeeze (the other way).** If Friday payrolls print soft-but-not-scary and the Iran headline cools, −458k of S&P shorts is fuel for a melt-up. Positioning cuts both ways here.
+4. **Credit is the line.** HY OAS 2.71% is the calm anchor; widening through ~2.85% converts today's tidy unwind into genuine de-risking. Still the daily number to watch.
 
 **What to watch next (next session grades these):**
-- Does the **rotation hold** — semis/energy/cyclicals leading — or do MSFT/GOOGL/CRM bounce and re-narrow the tape?
-- **10Y at 4.455%** — through 4.5% re-opens duration pain for growth; back under 4.3% is a proper relief rally.
-- **WTI $94.93** — does Iran risk drive $97–100, or do EIA data and OPEC messaging cap it?
-- **HY OAS 2.72%** — the credit calm-signal. Widening to 2.80–2.85% flips "rotation" to "de-risking."
-- **SpaceX IPO** book coverage and pricing — and whether liquidity absorption is visible in secondary credit/equity.
-- **Cliffwater contagion** — do other semi-liquid private credit vehicles report elevated redemption requests?
+- **Friday payrolls** — soft print + cooling Iran = the squeeze (specs cover); hot print + higher yields = more duration pain.
+- **10Y 4.49%** — a decisive break above 4.5% keeps the pressure on tech; back under 4.4% relieves it.
+- **WTI vs metals** — does copper/silver weakness spread (growth worry), or does oil's bid pull the complex up (reflation)? The split resolves one way.
+- **HY OAS 2.71%** — the de-risking trigger; >2.85% changes the character of the move.
+- **Does Meta's bid generalize**, or was it idiosyncratic? One green mega-cap isn't leadership.
 
 ## Sources
-- *S&P 500 climbs for a 9th straight day — but the 'breadth paradox' is sending a rare warning* (MarketWatch, 06-03)
-- *US and Iran exchange renewed fire as tensions rise over stalled peace talks* (FT International, 06-03)
-- *U.S., Iran intensify attacks as ceasefire frays, peace talks stall* (CNBC Economy, 06-03)
-- *Job openings in April surged to 7.6 million, the highest in nearly two years* (CNBC Economy, 06-02)
-- *US crude stockpiles fell 6.8M barrels last week, API says* (Seeking Alpha, 06-02)
-- *Global oil inventories on track for critical levels before summer peak, IEA says* (Seeking Alpha, 06-02)
-- *Goldman Sachs CEO David Solomon says markets are in 'greed' mode as AI companies seek billions* (CNBC Finance, 06-02)
-- *Goldman's David Solomon sees 'more greed than fear' on Wall Street* (FT International, 06-02)
-- *Exclusive — SpaceX plans to price record-setting IPO at $135 per share* (Investing.com, 06-03)
-- *Exclusive — SpaceX targets $1.75 trillion valuation in all-primary IPO next week* (Investing.com, 06-02)
-- *Fed Chair Warsh makes first hires at central bank, including 'Project 2025' author* (CNBC Finance, 06-03)
-- *Cliffwater's flagship private credit fund redemption requests hit 17%* (FT International, 06-02)
-- *Goldman Sachs cuts Hong Kong stocks in favor of mainland China AI hardware plays* (CNBC Finance, 06-03)
-- *Wall St ends modestly higher as AI zeal overcomes Middle East jitters* (Investing.com, 06-02)
+
+- *Stock Market Today, June 3: Markets End Winning Streak on Middle East Escalation Fears* (Nasdaq)
+- *Gold under pressure from higher rate expectations, while investors await U.S. payrolls report* (Seeking Alpha)
+- *Broadcom plunges even as Q2 results, guidance top Wall Street's forecast* / *…revenue misses estimates as competition bites* (Seeking Alpha / Investing.com)
+- *SpaceX officially set to crush global records in targeting massive IPO haul of up to $86 billion* (MarketWatch)
+- *Why is CrowdStrike stock tumbling after-hours?* / *Why is Five Below stock sliding after-hours?* (Investing.com)
+- New data lenses: EIA Weekly Petroleum Status Report + Natural Gas Storage; CFTC Traders in Financial Futures (COT, as of 2026-05-26)
 - Brief data: `brief_2026-06-03.json`
