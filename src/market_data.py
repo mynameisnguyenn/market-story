@@ -16,7 +16,8 @@ import yfinance as yf
 from . import config
 
 _DOWNLOAD_RETRIES = 3
-_SINGLE_RETRIES = 2
+_SINGLE_RETRIES = 1            # one attempt under throttle; the budget bounds the rest
+_FALLBACK_BUDGET_S = 20        # cap total wall-clock on the per-symbol fallback
 
 
 def download_history(symbols: list[str], period: str = config.HISTORY_PERIOD) -> dict[str, pd.DataFrame]:
@@ -35,7 +36,13 @@ def download_history(symbols: list[str], period: str = config.HISTORY_PERIOD) ->
             frame = _extract(raw, symbol, symbols)
             if frame is not None and not frame.empty:
                 out[symbol] = frame
-    for symbol in [s for s in symbols if s not in out]:
+    # Per-symbol fallback, bounded by a wall-clock budget so a throttled feed
+    # (e.g. Yahoo rate-limiting a cloud IP) degrades to partial data in seconds
+    # instead of hanging for minutes grinding through every missing symbol.
+    deadline = time.monotonic() + _FALLBACK_BUDGET_S
+    for symbol in (s for s in symbols if s not in out):
+        if time.monotonic() > deadline:
+            break
         frame = _download_single(symbol, period)
         if frame is not None and not frame.empty:
             out[symbol] = frame
@@ -55,7 +62,8 @@ def _download_batch(symbols: list[str], period: str):
                 return raw
         except Exception:
             pass
-        time.sleep(1.5 * (attempt + 1))
+        if attempt < _DOWNLOAD_RETRIES - 1:    # no sleep after the last attempt
+            time.sleep(1.0 * (attempt + 1))
     return None
 
 
@@ -68,7 +76,8 @@ def _download_single(symbol: str, period: str):
                 return frame.dropna(subset=["Close"])
         except Exception:
             pass
-        time.sleep(1.0 * (attempt + 1))
+        if attempt < _SINGLE_RETRIES - 1:      # no sleep after the last attempt
+            time.sleep(1.0 * (attempt + 1))
     return None
 
 

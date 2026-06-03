@@ -48,6 +48,23 @@ def test_watchlist_group_wired_in():
     assert "NVDA" in config.all_symbols()
 
 
+def test_download_history_caps_fallback_under_throttle(monkeypatch):
+    # Batch fully fails (throttle); fallback must stop at the budget, not grind all.
+    monkeypatch.setattr(market_data, "_download_batch", lambda s, p: None)
+    calls = []
+    monkeypatch.setattr(market_data, "_download_single",
+                        lambda sym, p: calls.append(sym) or None)
+    clock = {"t": 0.0}
+
+    def fake_monotonic():           # advance 10s per call -> trips the 20s budget fast
+        clock["t"] += 10.0
+        return clock["t"]
+    monkeypatch.setattr(market_data.time, "monotonic", fake_monotonic)
+    out = market_data.download_history(["A", "B", "C", "D", "E", "F", "G", "H"])
+    assert out == {}                 # nothing came back (all throttled)
+    assert len(calls) < 8            # stopped early — did NOT try every symbol
+
+
 def test_extract_handles_single_symbol_multiindex():
     dates = pd.to_datetime(["2026-06-01", "2026-06-02"])
     cols = pd.MultiIndex.from_tuples([("^GSPC", "Open"), ("^GSPC", "Close")])
