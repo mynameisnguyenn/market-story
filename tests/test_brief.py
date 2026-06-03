@@ -48,6 +48,16 @@ def test_render_markdown_smoke():
     assert "## Movers" in text
 
 
+def test_history_embed_and_reconstruct_roundtrip():
+    import pandas as pd
+    idx = pd.to_datetime(["2026-05-29", "2026-06-01", "2026-06-02"])
+    hist = {"^GSPC": pd.DataFrame({"Close": [100.0, 101.5, 102.25]}, index=idx)}
+    b = brief.build_brief(history=hist, sections={}, macro=[], news_items=[], fetch=False)
+    assert b["history"]["series"]["^GSPC"] == [100.0, 101.5, 102.25]   # embedded (shared-axis)
+    closes = brief.closes_from_brief(b)
+    assert len(closes["^GSPC"]) == 3 and float(closes["^GSPC"].iloc[-1]) == 102.25  # rebuilt
+
+
 def test_movers_no_overlap_when_pool_small():
     sections = {"us_equities": [
         {"symbol": "A", "name": "A", "change_pct": -2.0, "last": 1.0},

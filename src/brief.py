@@ -32,7 +32,54 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         "movers": _movers(sections),
         "news": news_items or [],
         "stats": _stats(sections),
+        "history": _embed_history(history),   # compact price series for instant chart reload
     }
+
+
+def _embed_history(history) -> dict:
+    """Shared date axis + aligned per-symbol closes so the dashboard can rebuild
+    charts from a saved brief without a fresh download (instant load). The shared
+    axis avoids repeating ~250 dates per symbol."""
+    if not history:
+        return {}
+    import pandas as pd
+    series = {}
+    for sym, frame in history.items():
+        try:
+            close = frame["Close"].dropna()
+            if not close.empty:
+                series[sym] = close
+        except Exception:
+            continue
+    if not series:
+        return {}
+    frame = pd.DataFrame(series)
+    dates = [d.strftime("%Y-%m-%d") for d in frame.index]
+    cols = {sym: [None if pd.isna(v) else round(float(v), 2) for v in frame[sym].values]
+            for sym in frame.columns}
+    return {"d": dates, "series": cols}
+
+
+def closes_from_brief(brief: dict):
+    """Reconstruct {symbol: Close Series} from a brief's embedded history."""
+    import pandas as pd
+    h = brief.get("history") or {}
+    out = {}
+    if "d" in h and "series" in h:                      # shared-axis format
+        idx = pd.to_datetime(h["d"])
+        for sym, vals in h["series"].items():
+            try:
+                out[sym] = pd.Series(vals, index=idx).dropna()
+            except Exception:
+                continue
+    else:                                               # legacy per-symbol format
+        for sym, hh in h.items():
+            try:
+                if isinstance(hh, dict) and "c" in hh:
+                    out[sym] = pd.Series(hh["c"], index=pd.to_datetime(hh["d"]))
+            except Exception:
+                continue
+    return out
 
 
 def _session_label() -> str:

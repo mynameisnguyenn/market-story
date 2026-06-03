@@ -30,11 +30,23 @@ CHANGE_COLS = ["1D", "1W %", "YTD %"]
 
 # --- Data (cached) -----------------------------------------------------------
 
-@st.cache_data(ttl=900, show_spinner="Fetching markets, macro, and news...")
+@st.cache_data(ttl=900, show_spinner="Loading the latest brief...")
 def get_data(nonce: int):
-    """Pull everything once; return (brief_dict, {symbol: close Series})."""
-    # The three network groups are independent — fetch them concurrently so the
-    # cold load is bounded by the slowest group, not the sum of all three.
+    """Return (brief_dict, {symbol: close Series}).
+
+    Instant load: on first paint (nonce 0) serve the last saved/committed brief
+    from disk — charts rebuilt from its embedded history, no live network pull.
+    The 'Refresh data' button (nonce>0) does the live fetch.
+    """
+    if nonce == 0:
+        saved = brief_mod.load_latest_brief()
+        if saved and saved.get("markets"):
+            return saved, brief_mod.closes_from_brief(saved)
+    return _fetch_live()
+
+
+def _fetch_live():
+    """Live pull of everything (concurrent), persisted so the next load is instant."""
     with ThreadPoolExecutor(max_workers=3) as pool:
         fut_history = pool.submit(market_data.download_history, config.all_symbols())
         fut_macro = pool.submit(macro_data.fetch_macro)
