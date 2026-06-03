@@ -12,6 +12,7 @@ tested; the st.* wrappers below just render what the builders return.
 
 from __future__ import annotations
 
+import html
 import os
 from concurrent.futures import ThreadPoolExecutor
 
@@ -382,16 +383,28 @@ def render_line(closes: dict, symbol: str, name: str, key: str | None = None) ->
 
 # --- Tabs --------------------------------------------------------------------
 
+_TONE_HEX = {"up": "#36C26F", "down": "#FF5C6C", "warn": "#F5A623", "neutral": "#8A94A6"}
+
+
 def signals_strip(brief: dict) -> None:
     """Lead the Overview with the day's derived read — data turned into signal."""
     lead = signals.derive_lead(brief)
     sigs = signals.derive_signals(brief)
     if not lead and not sigs:
         return
-    dot = {"up": "green", "down": "red", "warn": "orange", "neutral": "gray"}
     if lead:
-        st.markdown(f"### :{dot.get(lead['tone'], 'gray')}[●] {lead['text']}")
+        color = _TONE_HEX.get(lead["tone"], "#4C9AFF")
+        st.markdown(
+            f"""<div style="background:#141923;border:1px solid #232B3A;border-left:4px solid {color};
+            border-radius:10px;padding:14px 18px;margin:2px 0 12px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:.66rem;text-transform:uppercase;
+            letter-spacing:.13em;color:{color};margin-bottom:5px;">● Today's read</div>
+            <div style="font-size:1.12rem;line-height:1.5;color:#E6ECF3;font-weight:500;">{html.escape(lead['text'])}</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
     if sigs:
+        dot = {"up": "green", "down": "red", "warn": "orange", "neutral": "gray"}
         st.markdown("**⚡ Today's signal**")
         cols = st.columns(2)
         for i, s in enumerate(sigs):
