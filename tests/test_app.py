@@ -110,6 +110,15 @@ def test_correlation_fig_builds_and_handles_thin():
     assert app.correlation_fig({}, insts) is None                 # no data -> None
 
 
+def test_sparkline_fig_builds_and_handles_short():
+    s = pd.Series([100.0, 101.0, 99.0, 103.0],
+                  index=pd.to_datetime(["2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03"]))
+    fig = app.sparkline_fig(s)
+    assert fig is not None and len(fig.data) == 1
+    assert app.sparkline_fig(pd.Series([1.0])) is None     # too short
+    assert app.sparkline_fig(None) is None
+
+
 def test_line_fig_builds_and_handles_empty():
     series = pd.Series([100.0, 101.0, 102.0], index=pd.to_datetime(["2026-05-29", "2026-05-30", "2026-06-02"]))
     assert app.line_fig(series, "S&P 500") is not None

@@ -196,6 +196,23 @@ def line_fig(series, name: str):
     return fig
 
 
+def sparkline_fig(series):
+    """Tiny axis-less trend line for a KPI; green if the window rose, else red."""
+    if series is None or len(series) < 2:
+        return None
+    s = series.tail(45)
+    up = float(s.iloc[-1]) >= float(s.iloc[0])
+    color = "#26A69A" if up else "#EF5350"
+    fig = go.Figure(go.Scatter(x=list(range(len(s))), y=list(s.values), mode="lines",
+                               line=dict(color=color, width=1.4)))
+    pad = (float(s.max()) - float(s.min())) * 0.12 or 1.0
+    fig.update_layout(height=42, margin=dict(t=2, l=0, r=0, b=2), showlegend=False,
+                      xaxis=dict(visible=False),
+                      yaxis=dict(visible=False, range=[float(s.min()) - pad, float(s.max()) + pad]),
+                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+    return fig
+
+
 def yield_curve_fig(rates_rows: list[dict]):
     """US Treasury yield curve (level vs maturity), or None if too few points."""
     maturities = {"^IRX": 0.25, "^FVX": 5.0, "^TNX": 10.0, "^TYX": 30.0}
@@ -577,6 +594,12 @@ def daily_brief_page() -> None:
     kpi_metric(cols[3], row_for(brief, "DX-Y.NYB"))
     kpi_metric(cols[4], row_for(brief, "GC=F"))
     kpi_metric(cols[5], row_for(brief, "^VIX"))
+    spark_cols = st.columns(6)
+    for col, sym in zip(spark_cols, ["^GSPC", "^IXIC", "^TNX", "DX-Y.NYB", "GC=F", "^VIX"]):
+        fig = sparkline_fig(closes.get(sym))
+        if fig is not None:
+            col.plotly_chart(fig, use_container_width=True, theme=None,
+                             config={"displayModeBar": False}, key="spark_" + sym)
     st.caption(
         f"Sector breadth: {stats.get('sector_advancers', 0)} up / "
         f"{stats.get('sector_decliners', 0)} down of {stats.get('sector_count', 0)}"
