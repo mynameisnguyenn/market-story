@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import io
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
 import requests
@@ -19,13 +20,17 @@ def fetch_macro(series: list[tuple[str, str]] = config.FRED_SERIES) -> list[dict
     """Return latest snapshot for each (series_id, name) in `series`."""
     key = _load_env_key()
     fred = _make_fred(key) if key else None
-    rows = []
-    for series_id, name in series:
+
+    def _fetch_one(item: tuple[str, str]) -> dict:
+        series_id, name = item
         observations = _fetch_csv(series_id)
         if observations is None and fred is not None:
             observations = _fetch_via_fredapi(fred, series_id)
-        rows.append(_snapshot(series_id, name, observations))
-    return rows
+        return _snapshot(series_id, name, observations)
+
+    # FRED series are independent network pulls — fetch them concurrently.
+    with ThreadPoolExecutor(max_workers=min(12, len(series) or 1)) as pool:
+        return list(pool.map(_fetch_one, series))
 
 
 def _snapshot(series_id: str, name: str, observations: pd.Series | None) -> dict:

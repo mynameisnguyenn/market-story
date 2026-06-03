@@ -13,6 +13,7 @@ tested; the st.* wrappers below just render what the builders return.
 from __future__ import annotations
 
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
 import plotly.express as px
@@ -32,10 +33,16 @@ CHANGE_COLS = ["1D", "1W %", "YTD %"]
 @st.cache_data(ttl=900, show_spinner="Fetching markets, macro, and news...")
 def get_data(nonce: int):
     """Pull everything once; return (brief_dict, {symbol: close Series})."""
-    history = market_data.download_history(config.all_symbols())
+    # The three network groups are independent — fetch them concurrently so the
+    # cold load is bounded by the slowest group, not the sum of all three.
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        fut_history = pool.submit(market_data.download_history, config.all_symbols())
+        fut_macro = pool.submit(macro_data.fetch_macro)
+        fut_news = pool.submit(news.fetch_news)
+        history = fut_history.result()
+        macro = fut_macro.result()
+        news_items = fut_news.result()
     sections = market_data.build_market_sections(history)
-    macro = macro_data.fetch_macro()
-    news_items = news.fetch_news()
     brief = brief_mod.build_brief(history, sections, macro, news_items, bls=get_bls(), fetch=False)
     closes = {symbol: frame["Close"] for symbol, frame in history.items()}
     return brief, closes

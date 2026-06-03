@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import calendar
 import re
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
 import feedparser
@@ -26,8 +27,11 @@ def fetch_news(
     """Return recent, de-duplicated headlines sorted newest-first."""
     items: list[dict] = []
     seen: set[str] = set()
-    for source, url in feeds:
-        parsed = _fetch_feed(url)
+    # Fetch feeds concurrently (network-bound); de-dupe/normalize stays
+    # sequential and in feed order so the dedup priority is unchanged.
+    with ThreadPoolExecutor(max_workers=min(12, len(feeds) or 1)) as pool:
+        parsed_feeds = list(pool.map(lambda f: (f[0], _fetch_feed(f[1])), feeds))
+    for source, parsed in parsed_feeds:
         if parsed is None:
             continue
         for entry in parsed.entries[:per_feed]:
