@@ -69,8 +69,17 @@ Claude. The "Story" tab handles this gracefully: with no narrative file it shows
 - **Keep narration local.** Use the hosted site for live data/charts/news on the go, and
   read the AI narrative on your PC. Lowest friction, no git per day.
 
-A future upgrade (when you want it): a tiny GitHub Action / scheduled job that runs the
-gather step and commits a fresh brief daily so the hosted site is always current.
+**Scheduled pre-market run (built in).** `.github/workflows/daily-brief.yml` runs `python run.py`
+every weekday at 12:00 UTC (and on demand from the **Actions** tab), then commits the fresh
+brief — so a current brief is waiting each morning and the hosted site stays up to date.
+
+Prefer it running on your own PC instead? Register a local task (PowerShell):
+```powershell
+$py  = "$env:USERPROFILE\anaconda3\python.exe"
+$act = New-ScheduledTaskAction -Execute $py -Argument 'run.py' -WorkingDirectory "$env:USERPROFILE\market-story"
+$trg = New-ScheduledTaskTrigger -Daily -At 7:30am
+Register-ScheduledTask -TaskName 'Market Story brief' -Action $act -Trigger $trg
+```
 
 ---
 
