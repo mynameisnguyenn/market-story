@@ -1,7 +1,7 @@
 {
   "date": "2026-06-03",
-  "generated_at_utc": "2026-06-03T20:37:37+00:00",
-  "session_label": "as of 2026-06-03 20:37 UTC",
+  "generated_at_utc": "2026-06-03T20:44:53+00:00",
+  "session_label": "as of 2026-06-03 20:44 UTC",
   "markets": {
     "us_equities": [
       {
@@ -368,38 +368,38 @@
       {
         "symbol": "DX-Y.NYB",
         "name": "US Dollar Index",
-        "last": 99.5199966430664,
-        "change_pct": 0.3023537781419394,
-        "change_1w_pct": 0.3124660431957027,
-        "ytd_pct": 1.2616991037557312,
-        "level_change": 0.29999542236328125
+        "last": 99.52300262451172,
+        "change_pct": 0.305383390526881,
+        "change_1w_pct": 0.3154959610195629,
+        "ytd_pct": 1.2647576929729176,
+        "level_change": 0.30300140380859375
       },
       {
         "symbol": "EURUSD=X",
         "name": "EUR/USD",
-        "last": 1.1602274179458618,
-        "change_pct": -0.28541421483274654,
-        "change_1w_pct": -0.29701833299919933,
-        "ytd_pct": -1.2344810810827278,
-        "level_change": -0.003320932388305664
+        "last": 1.160092830657959,
+        "change_pct": -0.2969811847712278,
+        "change_1w_pct": -0.3085839568509052,
+        "ytd_pct": -1.2459379585224473,
+        "level_change": -0.003455519676208496
       },
       {
         "symbol": "USDJPY=X",
         "name": "USD/JPY",
-        "last": 160.07000732421875,
-        "change_pct": 0.27187209212853336,
-        "change_1w_pct": 0.519339078044978,
-        "ytd_pct": 2.3380493122311385,
-        "level_change": 0.4340057373046875
+        "last": 160.0780029296875,
+        "change_pct": 0.27688074017111486,
+        "change_1w_pct": 0.5243600872314014,
+        "ytd_pct": 2.343161167227703,
+        "level_change": 0.4420013427734375
       },
       {
         "symbol": "GBPUSD=X",
         "name": "GBP/USD",
-        "last": 1.3417415618896484,
-        "change_pct": -0.3163916823457291,
-        "change_1w_pct": -0.2817629645471942,
-        "ytd_pct": -0.3696522577821715,
-        "level_change": -0.004258632659912109
+        "last": 1.3417775630950928,
+        "change_pct": -0.3137170017929236,
+        "change_1w_pct": -0.27908735484706293,
+        "ytd_pct": -0.3669790063010825,
+        "level_change": -0.0042226314544677734
       },
       {
         "symbol": "USDCNY=X",
@@ -415,56 +415,56 @@
       {
         "symbol": "CL=F",
         "name": "WTI Crude",
-        "last": 96.29000091552734,
-        "change_pct": 2.6983774761660806,
-        "change_1w_pct": 8.58141698710324,
-        "ytd_pct": 67.6941901534303,
-        "level_change": 2.529998779296875
+        "last": 96.06999969482422,
+        "change_pct": 2.463734541342477,
+        "change_1w_pct": 8.333332616392797,
+        "ytd_pct": 67.31104625284044,
+        "level_change": 2.30999755859375
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "last": 97.9800033569336,
-        "change_pct": 2.0625034968058342,
-        "change_1w_pct": 3.9134610304140782,
-        "ytd_pct": 61.01890848625662,
-        "level_change": 1.9800033569335938
+        "last": 97.76000213623047,
+        "change_pct": 1.8333355585734123,
+        "change_1w_pct": 3.680137010298501,
+        "ytd_pct": 60.65736168885334,
+        "level_change": 1.7600021362304688
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
-        "last": 4467.89990234375,
-        "change_pct": -0.4722593582524137,
-        "change_1w_pct": 0.45868245854412404,
-        "ytd_pct": 3.289712443935877,
-        "level_change": -21.2001953125
+        "last": 4461.39990234375,
+        "change_pct": -0.6170545256266924,
+        "change_1w_pct": 0.31253293634063706,
+        "ytd_pct": 3.1394442764387964,
+        "level_change": -27.7001953125
       },
       {
         "symbol": "SI=F",
         "name": "Silver",
-        "last": 73.19999694824219,
-        "change_pct": -2.803043572474695,
-        "change_1w_pct": -1.8753630658713938,
-        "ytd_pct": 4.3716231004838235,
-        "level_change": -2.1110000610351562
+        "last": 73.03500366210938,
+        "change_pct": -3.022126166896444,
+        "change_1w_pct": -2.096536658403081,
+        "ytd_pct": 4.136368759058917,
+        "level_change": -2.2759933471679688
       },
       {
         "symbol": "HG=F",
         "name": "Copper",
-        "last": 6.486999988555908,
-        "change_pct": -2.443791371423698,
-        "change_1w_pct": 2.8866005578503273,
-        "ytd_pct": 15.222022321399088,
-        "level_change": -0.16249990463256836
+        "last": 6.482500076293945,
+        "change_pct": -2.5114643142651993,
+        "change_1w_pct": 2.8152300204279834,
+        "ytd_pct": 15.142094929383209,
+        "level_change": -0.16699981689453125
       },
       {
         "symbol": "NG=F",
         "name": "Nat Gas",
-        "last": 3.2360000610351562,
-        "change_pct": 2.178718172305949,
-        "change_1w_pct": 6.447371764526522,
-        "ytd_pct": -12.20835687495735,
-        "level_change": 0.0690000057220459
+        "last": 3.234999895095825,
+        "change_pct": 2.147137309601077,
+        "change_1w_pct": 6.4144715687409315,
+        "ytd_pct": -12.235491055907733,
+        "level_change": 0.06799983978271484
       }
     ],
     "credit": [
@@ -483,7 +483,7 @@
         "last": 108.62000274658203,
         "change_pct": -0.2754273112435812,
         "change_1w_pct": 0.09341415775327988,
-        "ytd_pct": 0.4588196584861537,
+        "ytd_pct": 0.45881256995299324,
         "level_change": -0.29999542236328125
       },
       {
@@ -492,7 +492,7 @@
         "last": 85.30999755859375,
         "change_pct": -0.39696901486034886,
         "change_1w_pct": 0.4050953258963874,
-        "ytd_pct": -0.27137454726685606,
+        "ytd_pct": -0.2713656525966668,
         "level_change": -0.34000396728515625
       },
       {
@@ -501,7 +501,7 @@
         "last": 98.5,
         "change_pct": -0.21274347727725518,
         "change_1w_pct": 0.030596647013481082,
-        "ytd_pct": 0.2545774871002937,
+        "ytd_pct": 0.2545697020355009,
         "level_change": -0.20999908447265625
       }
     ]
@@ -510,10 +510,10 @@
     {
       "id": "DGS10",
       "name": "10Y Treasury Yield",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null
+      "latest": 4.46,
+      "date": "2026-06-02",
+      "prev": 4.47,
+      "change": -0.009999999999999787
     },
     {
       "id": "DGS2",
@@ -638,10 +638,10 @@
     {
       "id": "ICSA",
       "name": "Initial Jobless Claims",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null
+      "latest": 215000.0,
+      "date": "2026-05-23",
+      "prev": 210000.0,
+      "change": 5000.0
     },
     {
       "id": "INDPRO",
@@ -823,6 +823,69 @@
   },
   "news": [
     {
+      "title": "Honeywell Aerospace targets $6.5B in earnings by 2030",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600461-honeywell-aerospace-targets-65b-in-earnings-by-2030?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:43:17+00:00"
+    },
+    {
+      "title": "3 things to look out for on Thursday",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600418-3-things-to-look-out-for-on-thursday?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:40:28+00:00"
+    },
+    {
+      "title": "Hasbro creates a program to license its iconic characters to AI experiences",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600453-hasbro-creates-a-program-to-license-its-iconic-characters-to-ai-experiences?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:39:14+00:00"
+    },
+    {
+      "title": "Broadcom\u2019s stock falls after earnings despite accelerating AI-chip growth",
+      "source": "MarketWatch Bulletins",
+      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=0559b008-e01e-49ff-a0f0-b59b5df68651&mod=mw_rss_bulletins",
+      "summary": "",
+      "published": "2026-06-03T20:39:05+00:00"
+    },
+    {
+      "title": "3 reasons why Palo Alto Networks\u2019 stock fell despite upbeat earnings",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/three-reasons-palo-alto-networks-stock-is-falling-in-the-face-of-upbeat-earnings-7ded9f15?mod=mw_rss_topstories",
+      "summary": "Analysts attribute the stock drop to profit-taking, the timing of AI contributions and changes to reporting conventions.",
+      "published": "2026-06-03T20:38:00+00:00"
+    },
+    {
+      "title": "Earnings Snapshot: Broadcom sees semiconductor revenue soaring over 200% in Q3",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600457-earnings-snapshot-broadcom-sees-semiconductor-revenue-soaring-over-200-in-q3?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:37:53+00:00"
+    },
+    {
+      "title": "Broadcom\u2019s stock falls despite accelerating AI chip growth",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/broadcoms-stock-falls-despite-accelerating-ai-chip-growth-7731ee89?mod=mw_rss_topstories",
+      "summary": "Latest revenue figures lack meaningful upside after the stock\u2019s sharp recent rally.",
+      "published": "2026-06-03T20:36:00+00:00"
+    },
+    {
+      "title": "Myers declares $0.135 dividend",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600458-myers-declares-0_135-dividend?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:35:57+00:00"
+    },
+    {
+      "title": "IDT Corporation Non-GAAP EPS of $0.94 beats by $0.05, revenue of $315.7M beats by $7.7M",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600456-idt-corporation-non-gaap-eps-of-0_94-beats-by-0_05-revenue-of-315_7m-beats-by-7_7m?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-03T20:35:07+00:00"
+    },
+    {
       "title": "Marvell\u2019s stock is on a run not seen in a quarter-century as the tech company grows in stature",
       "source": "MarketWatch Top Stories",
       "link": "https://www.marketwatch.com/story/marvells-stock-is-on-a-run-not-seen-in-a-quarter-century-as-the-tech-company-grows-in-stature-7884b9c3?mod=mw_rss_topstories",
@@ -830,53 +893,11 @@
       "published": "2026-06-03T20:35:00+00:00"
     },
     {
-      "title": "Disney's Super Bowl ad price meets resistance on Madison Avenue",
+      "title": "Broadcom slides even as Q2 results, guidance top Wall Street's forecast",
       "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600454-disneys-super-bowl-ad-price-meets-resistance-on-madison-avenue?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "link": "https://seekingalpha.com/news/4600327-broadcom-slides-even-as-q2-results-guidance-top-wall-streets-forecast?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-03T20:32:40+00:00"
-    },
-    {
-      "title": "CrowdStrike increases full-year guidance, announces upcoming stock split",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4599882-crowdstrike-increases-full-year-guidance-announces-upcoming-stock-split?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:31:28+00:00"
-    },
-    {
-      "title": "HUB Security to implement 1-for-20 reverse stock split",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600450-hub-security-to-implement-1-for-20-reverse-stock-split?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:28:54+00:00"
-    },
-    {
-      "title": "BrightSpring announces 15M-share secondary offering and potential $60M buyback",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600452-brightspring-announces-15m-share-secondary-offering-and-potential-60m-buyback?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:28:36+00:00"
-    },
-    {
-      "title": "SA analyst warns economic downturn likely inevitable",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600441-sa-analyst-warns-economic-downturn-likely-inevitable?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:28:26+00:00"
-    },
-    {
-      "title": "Earnings Snapshot: C3.ai Q4 revenue plunges 53% yet beats estimates, FY27 above street",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600410-earnings-snapshot-c3ai-q4-revenue-plunges-53-yet-beats-estimates-fy27-above-street?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:28:07+00:00"
-    },
-    {
-      "title": "Earnings Snapshot: CrowdStrike raises FY27 ARR guidance after solid results",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600451-earnings-snapshot-crowdstrike-raises-fy27-arr-guidance-after-solid-results?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-03T20:27:59+00:00"
+      "published": "2026-06-03T20:33:59+00:00"
     },
     {
       "title": "AT&T\u2019s stock sees its worst day in 8 months as the SpaceX threat comes into focus",
@@ -1173,13 +1194,6 @@
       "published": "2026-06-03T18:46:00+00:00"
     },
     {
-      "title": "\u2018No one seems to wear their bling\u2019: Is it safe to show off your expensive jewelry?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/no-one-seems-to-wear-their-bling-is-it-safe-to-show-off-your-expensive-jewelry-a807bc55?mod=mw_rss_topstories",
-      "summary": "\u201cI\u2019ve been to many shows, operas, big parties and fundraisers.\u201d",
-      "published": "2026-06-03T18:25:00+00:00"
-    },
-    {
       "title": "Trump\u2019s Iran war drains US oil stocks to lowest level since 2004",
       "source": "FT International",
       "link": "https://www.ft.com/content/d0be73c8-b8d8-4ffd-874e-e97a6ecffef7",
@@ -1192,13 +1206,6 @@
       "link": "https://www.marketwatch.com/bulletins/redirect/go?g=14b60578-4bd4-4361-93a6-34553d21f878&mod=mw_rss_bulletins",
       "summary": "",
       "published": "2026-06-03T18:01:02+00:00"
-    },
-    {
-      "title": "I want to give my brother and his kids $5,000 each. My financial adviser is reluctant. Who\u2019s right?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/i-want-to-give-my-brother-and-his-kids-5-000-each-my-financial-adviser-is-reluctant-whos-right-47cbb74e?mod=mw_rss_topstories",
-      "summary": "\u201cIn the past I\u2019ve loaned my brother over $12,000, which I\u2019m sure I\u2019ll never get back.\u201d",
-      "published": "2026-06-03T18:00:00+00:00"
     },
     {
       "title": "Europe\u2019s tightrope walk on tech sovereignty",
@@ -1290,13 +1297,6 @@
       "link": "https://www.bbc.com/news/articles/cn8p3zjx7pzo?at_medium=RSS&at_campaign=rss",
       "summary": "The government's contribution is going towards upgrading local infrastructure and transport links.",
       "published": "2026-06-03T13:30:00+00:00"
-    },
-    {
-      "title": "ADP: Businesses created the most new jobs in 16 months as hiring rebounds",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=5202586e-263a-4cfc-ba21-99ec2fc298bb&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T12:30:38+00:00"
     },
     {
       "title": "Stocks making the biggest moves premarket: Blackstone, Marvell Technology, Palo Alto Networks & more",
@@ -7703,7 +7703,7 @@
         348.73,
         348.85,
         341.13,
-        340.21,
+        340.22,
         341.89,
         336.06,
         341.4,
@@ -12628,7 +12628,7 @@
         159.27,
         159.35,
         159.64,
-        160.07
+        160.08
       ],
       "GBPUSD=X": [
         1.36,
@@ -13417,7 +13417,7 @@
         87.36,
         92.16,
         93.76,
-        96.29
+        96.07
       ],
       "BZ=F": [
         65.63,
@@ -13680,7 +13680,7 @@
         92.05,
         94.98,
         96.0,
-        97.98
+        97.76
       ],
       "GC=F": [
         3350.2,
@@ -13943,7 +13943,7 @@
         4560.5,
         4475.2,
         4489.1,
-        4467.9
+        4461.4
       ],
       "SI=F": [
         34.5,
@@ -14206,7 +14206,7 @@
         75.62,
         75.01,
         75.31,
-        73.2
+        73.04
       ],
       "HG=F": [
         4.81,
@@ -14469,7 +14469,7 @@
         6.36,
         6.52,
         6.65,
-        6.49
+        6.48
       ],
       "NG=F": [
         3.72,
@@ -14732,7 +14732,7 @@
         3.29,
         3.18,
         3.17,
-        3.24
+        3.23
       ],
       "HYG": [
         null,
@@ -15549,7 +15549,7 @@
         94.97,
         null,
         94.63,
-        94.6,
+        94.59,
         94.99,
         94.96,
         94.57,
