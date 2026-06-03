@@ -149,6 +149,26 @@ def line_fig(series, name: str):
     return fig
 
 
+def yield_curve_fig(rates_rows: list[dict]):
+    """US Treasury yield curve (level vs maturity), or None if too few points."""
+    maturities = {"^IRX": 0.25, "^FVX": 5.0, "^TNX": 10.0, "^TYX": 30.0}
+    labels = {"^IRX": "13W", "^FVX": "5Y", "^TNX": "10Y", "^TYX": "30Y"}
+    points = [(maturities[r["symbol"]], r["last"], labels[r["symbol"]])
+              for r in rates_rows if r.get("symbol") in maturities and r.get("last") is not None]
+    if len(points) < 2:
+        return None
+    points.sort()
+    fig = go.Figure(go.Scatter(
+        x=[p[0] for p in points], y=[p[1] for p in points],
+        mode="lines+markers+text", text=[p[2] for p in points],
+        textposition="top center", line=dict(color=LINE_COLOR),
+    ))
+    fig.update_layout(height=300, margin=dict(t=36, l=10, r=10, b=10),
+                      title="US Treasury yield curve",
+                      xaxis=dict(title="Maturity (years)"), yaxis=dict(title="Yield (%)"))
+    return fig
+
+
 # --- Streamlit render wrappers -----------------------------------------------
 
 def kpi_metric(col, row: dict | None, kind: str = "equity") -> None:
@@ -300,6 +320,9 @@ def macro_tab(brief: dict, closes: dict) -> None:
     st.markdown("**Macro (FRED)**")
     if brief.get("macro"):
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)
+    curve = yield_curve_fig(brief["markets"].get("rates", []))
+    if curve is not None:
+        st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
     col3, col4 = st.columns(2)
     with col3:
         render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")

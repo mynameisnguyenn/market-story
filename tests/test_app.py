@@ -59,6 +59,19 @@ def test_sector_treemap_fig_shows_change_value():
     assert app.sector_treemap_fig([]) is None
 
 
+def test_yield_curve_fig_builds_and_needs_two_points():
+    rates = [
+        {"symbol": "^IRX", "name": "13W", "last": 4.20},
+        {"symbol": "^TNX", "name": "10Y", "last": 4.45},
+        {"symbol": "^TYX", "name": "30Y", "last": 4.70},
+    ]
+    fig = app.yield_curve_fig(rates)
+    assert fig is not None and len(fig.data) == 1
+    assert list(fig.data[0].x) == [0.25, 10.0, 30.0]          # sorted by maturity
+    assert app.yield_curve_fig([{"symbol": "^TNX", "last": 4.45}]) is None  # one point
+    assert app.yield_curve_fig([]) is None
+
+
 def test_line_fig_builds_and_handles_empty():
     series = pd.Series([100.0, 101.0, 102.0], index=pd.to_datetime(["2026-05-29", "2026-05-30", "2026-06-02"]))
     assert app.line_fig(series, "S&P 500") is not None
