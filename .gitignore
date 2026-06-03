@@ -16,9 +16,10 @@ data/*.db
 *.parquet
 *.cache
 
-# --- Images: keep only curated portfolio outputs ---
+# --- Images: keep only curated portfolio outputs + the landing social card ---
 *.png
 !results/*.png
+!docs/*.png
 
 # --- Tools / binaries ---
 bin/
