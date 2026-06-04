@@ -22,7 +22,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data,
+from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
                  formatting, history, macro_data, market_data, news, regime, scorecard,
                  signals, timeline)
 
@@ -712,6 +712,13 @@ def _trend_fig(series):
     fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
                                line=dict(color=LINE_COLOR, width=1.4),
                                fill="tozeroy", fillcolor="rgba(76,154,255,0.07)"))
+    x0, x1 = series.index[0], series.index[-1]
+    for start, end, _name in eras.stress_bands():     # faint red over the crisis eras
+        s = pd.Timestamp(start)
+        e = pd.Timestamp(end) if end else x1
+        if e >= x0 and s <= x1:
+            fig.add_vrect(x0=max(s, x0), x1=min(e, x1), fillcolor="#FF5C6C",
+                          opacity=0.07, line_width=0, layer="below")
     fig.add_hline(y=last, line=dict(color="#FF5C6C", width=1, dash="dot"), opacity=0.45)
     fig.add_trace(go.Scatter(x=[series.index[-1]], y=[last], mode="markers",
                              marker=dict(color="#FF5C6C", size=7), showlegend=False))
@@ -728,8 +735,9 @@ def trends_tab() -> None:
         st.info("The metrics timeline is still accumulating — trend charts appear once a few "
                 "sessions exist. Seed ~3 years of real history with `python -m src.backfill`.")
         return
-    st.caption(f"{len(df)} sessions · {df.index[0].date()} → {df.index[-1].date()} — "
-               "each anchor's path, with today's percentile over the whole window.")
+    st.caption(f"{len(df)} sessions · {df.index[0].date()} → {df.index[-1].date()} — each anchor's "
+               "path, with today's percentile over the whole window. Faint red = crisis eras "
+               "(dotcom · GFC · Euro debt · COVID · the 2022 inflation shock).")
     cols = st.columns(2)
     for i, (col, title) in enumerate(TREND_METRICS):
         if col not in df.columns:
@@ -743,6 +751,38 @@ def trends_tab() -> None:
             st.markdown(f"**{title}** — {latest:,.2f}  ·  {pct}th %ile of {len(series)} sessions")
             st.plotly_chart(_trend_fig(series), use_container_width=True,
                             theme="streamlit", key=f"trend_{col}")
+    _time_machine(df)
+
+
+def _time_machine(df) -> None:
+    """Pick a historical date -> the era it falls in + each metric's level and percentile
+    AS OF that date (vs its own history up to then)."""
+    st.divider()
+    st.markdown("**🕰 Time machine** — pick a date to see where markets stood, and which era it was")
+    dmin, dmax = df.index[0].date(), df.index[-1].date()
+    picked = st.date_input("As of", value=dmax, min_value=dmin, max_value=dmax, key="timemachine")
+    upto = df[df.index <= pd.Timestamp(picked)]
+    if upto.empty:
+        st.caption("No data on or before that date.")
+        return
+    as_of = upto.index[-1]
+    era = eras.era_for(as_of.date().isoformat())
+    if era:
+        st.markdown(f"**{as_of.date()} — {era['name']}**  ·  _{era['regime']}_. {era['blurb']}  \n"
+                    f"Fed: {era['fed']}")
+    snap = []
+    for col, label in TREND_METRICS:
+        if col not in upto.columns:
+            continue
+        series = upto[col].dropna()
+        if len(series) < 5:
+            continue
+        val = float(series.iloc[-1])
+        pct = round(float((series < val).mean()) * 100)
+        snap.append({"Metric": label, "As-of value": round(val, 2),
+                     "%ile (history to date)": pct})
+    if snap:
+        st.dataframe(pd.DataFrame(snap), use_container_width=True, hide_index=True)
 
 
 def narrative_tab(brief: dict) -> None:
