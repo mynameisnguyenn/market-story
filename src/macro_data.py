@@ -16,7 +16,9 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import requests
 
-from . import config
+from . import config, series_archive
+
+ARCHIVE_PATH = config.DATA_DIR / "history" / "macro.jsonl"   # committed full FRED history
 
 
 def fetch_macro(series: list[tuple[str, str]] = config.FRED_SERIES) -> list[dict]:
@@ -124,6 +126,60 @@ def _make_fred(key: str):
         return None
 
 
+# --- committed history archive (data/history/macro.jsonl) -------------------
+
+def _series_rows(series_id: str, observations: pd.Series | None) -> list[dict]:
+    """A FRED series -> long-format archive rows [{date 'YYYY-MM-DD', series, value}]."""
+    if observations is None or len(observations) == 0:
+        return []
+    out = []
+    for ts, value in observations.items():
+        try:
+            fv = float(value)
+        except (TypeError, ValueError):
+            continue
+        if fv != fv:                                  # NaN
+            continue
+        out.append({"date": str(pd.Timestamp(ts).date()), "series": series_id, "value": fv})
+    return out
+
+
+def _rebuild_fred_archive(series: list[tuple[str, str]]) -> int:
+    """Fetch each series' FULL history (the fetchers already return it) and merge into the
+    archive. Idempotent by (series, date) — so daily and one-time runs converge. Best-effort."""
+    key = _load_env_key()
+    fred = _make_fred(key) if key else None
+
+    def _rows(item: tuple[str, str]) -> list[dict]:
+        series_id, _name = item
+        return _series_rows(series_id, _fetch_with_retry(fred, series_id))
+
+    rows: list[dict] = []
+    with ThreadPoolExecutor(max_workers=min(6, len(series) or 1)) as pool:
+        for chunk in pool.map(_rows, series):
+            rows.extend(chunk)
+    return series_archive.merge(ARCHIVE_PATH, rows)
+
+
+def backfill_fred_archive(series: list[tuple[str, str]] = config.FRED_SERIES) -> int:
+    """One-time: pull each FRED series' full history into the archive (yields to 1962,
+    Fed Funds to 1954, CPI to 1947, credit spreads to 1996)."""
+    return _rebuild_fred_archive(series)
+
+
+def update_fred_archive(series: list[tuple[str, str]] = config.FRED_SERIES) -> int:
+    """Daily (Action): refresh the archive. FRED returns the whole series, so this is a
+    full-refresh merge (mid-file inserts keep the daily git diff small)."""
+    return _rebuild_fred_archive(series)
+
+
+def load_fred_history(series_id: str | None = None) -> list[dict]:
+    """Archived FRED history — all rows, or just one series_id (oldest-first)."""
+    if series_id is None:
+        return series_archive.load(ARCHIVE_PATH)
+    return series_archive.history_for(ARCHIVE_PATH, series_id)
+
+
 def _load_env_key() -> str | None:
     """FRED_API_KEY from the environment, or a gitignored .env file."""
     key = os.environ.get("FRED_API_KEY")
@@ -136,3 +192,8 @@ def _load_env_key() -> str | None:
             if sep and name.strip() == "FRED_API_KEY":   # exact name, not a prefix match
                 return value.strip() or None
     return None
+
+
+if __name__ == "__main__":
+    n = backfill_fred_archive()
+    print(f"macro archive: {n} observations in {ARCHIVE_PATH}")

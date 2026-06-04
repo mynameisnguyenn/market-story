@@ -12,11 +12,12 @@ from datetime import date
 
 import requests
 
-from . import config
+from . import config, series_archive
 
 BLS_V1 = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
 BLS_V2 = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
 BLS_TIMEOUT = 15
+ARCHIVE_PATH = config.DATA_DIR / "history" / "labor.jsonl"   # committed full monthly history
 
 # (series_id, display_name). Curated risk-analyst labor/inflation set.
 BLS_SERIES = [
@@ -41,11 +42,14 @@ def fetch_bls(series: list[tuple[str, str]] = BLS_SERIES) -> list[dict]:
     return [_snapshot(sid, name, by_id.get(sid, [])) for sid, name in series]
 
 
-def _request(series_ids: list[str], key: str | None, timeout: int = BLS_TIMEOUT):
-    """Single batched POST to BLS (v2 with key, else keyless v1). None on failure."""
+def _request(series_ids: list[str], key: str | None, start_year: int | None = None,
+             end_year: int | None = None, timeout: int = BLS_TIMEOUT):
+    """Single batched POST to BLS (v2 with key, else keyless v1). None on failure.
+    Defaults to the trailing ~3 years (snapshot path); pass a range to backfill."""
     endpoint = BLS_V2 if key else BLS_V1
-    year = date.today().year
-    body = {"seriesid": series_ids, "startyear": str(year - 2), "endyear": str(year)}
+    end_year = end_year or date.today().year
+    start_year = start_year or (end_year - 2)
+    body = {"seriesid": series_ids, "startyear": str(start_year), "endyear": str(end_year)}
     if key:
         body["registrationkey"] = key
     try:
@@ -101,6 +105,56 @@ def _snapshot(series_id: str, name: str, data: list) -> dict:
     }
 
 
+# --- committed history archive (data/history/labor.jsonl) -------------------
+
+def _obs_rows(series_id: str, data: list) -> list[dict]:
+    """BLS observations -> long-format archive rows [{date 'YYYY-MM', series, value}]."""
+    out = []
+    for d in data:
+        period = str(d.get("period", ""))
+        if not period.startswith("M") or period == "M13":      # drop annual-average rows
+            continue
+        v = _to_float(d.get("value"))
+        if v is None:
+            continue
+        out.append({"date": f"{d.get('year', '?')}-{period[1:]}", "series": series_id, "value": v})
+    return out
+
+
+def backfill_bls_archive(series: list[tuple[str, str]] = BLS_SERIES, start_year: int = 1947) -> int:
+    """One-time: pull each series' full monthly history into the archive, in 10-year chunks
+    (the keyless BLS cap — a wider span is silently halved, leaving gaps). CPI and
+    unemployment go back to the 1940s. ~8 requests, well under the 25/day keyless limit."""
+    key = _load_key()
+    rows: list[dict] = []
+    end = date.today().year
+    lo = start_year
+    while lo <= end:
+        hi = min(lo + 9, end)                                   # 10-year inclusive span (keyless cap)
+        payload = _request([sid for sid, _ in series], key, start_year=lo, end_year=hi)
+        by_id = _parse(payload) if payload else {}
+        for sid, _name in series:
+            rows.extend(_obs_rows(sid, by_id.get(sid, [])))
+        lo = hi + 1
+    return series_archive.merge(ARCHIVE_PATH, rows)
+
+
+def update_bls_archive(series: list[tuple[str, str]] = BLS_SERIES) -> int:
+    """Daily (Action): merge the trailing few years into the archive. Idempotent."""
+    key = _load_key()
+    payload = _request([sid for sid, _ in series], key)
+    by_id = _parse(payload) if payload else {}
+    rows = [r for sid, _name in series for r in _obs_rows(sid, by_id.get(sid, []))]
+    return series_archive.merge(ARCHIVE_PATH, rows) if rows else len(series_archive.load(ARCHIVE_PATH))
+
+
+def load_bls_history(series_id: str | None = None) -> list[dict]:
+    """Archived monthly history — all rows, or just one series_id (oldest-first)."""
+    if series_id is None:
+        return series_archive.load(ARCHIVE_PATH)
+    return series_archive.history_for(ARCHIVE_PATH, series_id)
+
+
 def _load_key() -> str | None:
     """BLS_API_KEY from the environment or the gitignored .env (optional)."""
     key = os.environ.get("BLS_API_KEY")
@@ -113,3 +167,8 @@ def _load_key() -> str | None:
             if sep and name.strip() == "BLS_API_KEY":
                 return value.strip() or None
     return None
+
+
+if __name__ == "__main__":
+    n = backfill_bls_archive()
+    print(f"labor archive: {n} monthly observations in {ARCHIVE_PATH}")

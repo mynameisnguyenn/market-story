@@ -37,7 +37,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f data/briefs/brief_*.json data/briefs/brief_*.md data/timeline.jsonl
-          git add data/history/energy.jsonl   # committed energy archive (refreshed by run.py)
+          git add data/history/energy.jsonl data/history/labor.jsonl data/history/macro.jsonl
           if git diff --cached --quiet; then
             echo "No brief changes to commit."
           else

@@ -111,5 +111,27 @@ src/brief.py        assemble + save brief (json + md)
 src/formatting.py   pct/color helpers
 data/briefs/        brief_*.json / .md   (gitignored)
 data/narratives/    narrative_*.md       (gitignored; written by Claude)
+data/timeline.jsonl committed cross-asset metrics timeline (1998→, Trends tab)
+data/history/       committed full-history archives, long-format JSONL (see below)
 tests/              pytest, synthetic data
 ```
+
+## History archives (data/history/*.jsonl)
+
+So every macro panel spans its **whole record** on disk (chartable without a live key,
+and the panel can never blank). Long-format rows `{date, series, value, …}`, LF-only,
+merged idempotently by (series, date). `src/series_archive.py` is the generic helper.
+
+- `energy.jsonl` — EIA weekly inventories (crude/SPR/distillate to 1982, gasoline to
+  1990, natgas L48 to 2010). `eia_data.fetch_eia()` reads the **latest two obs per series
+  from here**, so the panel needs no live EIA key. ~9.6k rows.
+- `labor.jsonl` — BLS monthly CPI/core-CPI/payrolls/unemployment/AHE/participation, back
+  to 1947–48. ~4.9k rows. (`bls_data.backfill_bls_archive`, 10-yr chunks = keyless cap.)
+- `macro.jsonl` — full FRED history for all `config.FRED_SERIES` (10Y yield to 1962,
+  payrolls to 1939, IP to 1919; the two ICE-BofA OAS spreads are FRED-licensing-limited
+  to a ~3-yr trailing window). ~93k rows.
+
+`build_brief(fetch=True)` (i.e. `run.py` / the daily Action) refreshes all three via
+`update_*_archive()` and the Action commits them. The dashboard's "📈 …history" expanders
+(Macro tab) chart any series from these. The `/finance` tutor can read them for deep,
+data-grounded history (e.g. CPI through Volcker, unemployment through the GFC).

@@ -46,3 +46,29 @@ def test_fetch_bls_best_effort_on_failure(monkeypatch):
     monkeypatch.setattr(bls_data.requests, "post", _boom)
     rows = bls_data.fetch_bls([("CUUR0000SA0", "CPI")])
     assert rows[0]["latest"] is None        # degrades, does not raise
+
+
+def test_obs_rows_drops_annual_and_bad_values():
+    data = [{"year": "2026", "period": "M04", "value": "300.0"},
+            {"year": "2026", "period": "M13", "value": "299"},      # annual avg -> dropped
+            {"year": "2026", "period": "M03", "value": "n/a"}]      # unparseable -> dropped
+    rows = bls_data._obs_rows("CUUR0000SA0", data)
+    assert rows == [{"date": "2026-04", "series": "CUUR0000SA0", "value": 300.0}]
+
+
+def test_backfill_bls_archive_chunks_and_merges(tmp_path, monkeypatch):
+    monkeypatch.setattr(bls_data, "ARCHIVE_PATH", tmp_path / "labor.jsonl")
+    monkeypatch.setattr(bls_data, "_load_key", lambda: None)
+    calls = []
+
+    def _fake_request(ids, key, start_year=None, end_year=None, timeout=15):
+        calls.append((start_year, end_year))
+        return {"status": "REQUEST_SUCCEEDED", "Results": {"series": [   # one obs at the chunk start
+            {"seriesID": "CUUR0000SA0",
+             "data": [{"year": str(start_year), "period": "M01", "value": "100"}]}]}}
+
+    monkeypatch.setattr(bls_data, "_request", _fake_request)
+    n = bls_data.backfill_bls_archive([("CUUR0000SA0", "CPI")], start_year=2000)
+    assert all(hi - lo <= 9 for lo, hi in calls)                 # never exceeds the 10y keyless cap
+    assert n == len(calls) and n >= 2                            # one row merged per chunk
+    assert bls_data.load_bls_history("CUUR0000SA0")[0]["date"] == "2000-01"

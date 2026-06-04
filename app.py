@@ -82,6 +82,24 @@ def get_positioning() -> list[dict]:
     return cftc_data.fetch_cftc()
 
 
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_energy_history() -> list[dict]:
+    """Full committed EIA weekly history — cached so the Macro tab doesn't re-read the archive."""
+    return eia_data.load_history()
+
+
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_fred_history() -> list[dict]:
+    """Full committed FRED history (data/history/macro.jsonl), cached per render."""
+    return macro_data.load_fred_history()
+
+
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_bls_history() -> list[dict]:
+    """Full committed BLS history (data/history/labor.jsonl), cached per render."""
+    return bls_data.load_bls_history()
+
+
 def persist(brief: dict) -> None:
     """Save the brief to disk once per refresh so Claude can read it."""
     stamp = brief.get("generated_at_utc")
@@ -557,6 +575,7 @@ def macro_tab(brief: dict, closes: dict) -> None:
     if brief.get("bls"):
         st.markdown("**Labor & Inflation (BLS)** — release-day prints, YoY %")
         st.dataframe(bls_styler(brief["bls"]), use_container_width=True, hide_index=True)
+    _macro_history_section()
     if brief.get("energy"):
         st.markdown("**Energy inventories (EIA, weekly)** — Δ is the week-over-week draw/build")
         st.dataframe(energy_styler(brief["energy"]), use_container_width=True, hide_index=True)
@@ -790,7 +809,7 @@ def _level_fig(series, height: int = 260):
 
 def _energy_history_section() -> None:
     """Full weekly inventory history from the committed archive (petroleum back to 1982)."""
-    hist = eia_data.load_history()
+    hist = get_energy_history()
     if not hist:
         return
     names = {sid: name for _route, sid, name in eia_data.EIA_SERIES}
@@ -816,6 +835,35 @@ def _energy_history_section() -> None:
         st.caption("Inventory *levels* (not the weekly draw/build). Faint red = crisis eras. "
                    "The SPR drawdown since 2022 and the gasoline/distillate seasonal saw-tooth are "
                    "visible here. Source: EIA, committed archive `data/history/energy.jsonl`.")
+
+
+def _macro_history_section() -> None:
+    """Deep history for any FRED or BLS series, straight from the committed archives —
+    the same data the daily panels show, but back to inception (CPI/jobs to the 1940s,
+    Treasury yields to the 1960s). The finance-history learning system reads from here too."""
+    fred_rows, bls_rows = get_fred_history(), get_bls_history()
+    fred_have = {r["series"] for r in fred_rows}
+    bls_have = {r["series"] for r in bls_rows}
+    options = {sid: f"{name}  ·  FRED {sid}" for sid, name in config.FRED_SERIES if sid in fred_have}
+    options.update({sid: f"{name}  ·  BLS {sid}" for sid, name in bls_data.BLS_SERIES if sid in bls_have})
+    if not options:
+        return
+    with st.expander("📈 Macro & labor history — full record (yields to the 1960s, CPI/jobs to the 1940s)"):
+        sid = st.selectbox("Series", list(options), format_func=lambda s: options[s], key="macro_hist_sel")
+        source = bls_rows if sid in bls_have else fred_rows
+        rows = [r for r in source if r.get("series") == sid]
+        if len(rows) < 5:
+            st.caption("Not enough history for this series yet.")
+            return
+        s = pd.Series([r["value"] for r in rows],
+                      index=pd.to_datetime([r["date"] for r in rows])).sort_index()
+        latest = float(s.iloc[-1])
+        pct = round(float((s < latest).mean()) * 100)
+        st.caption(f"{options[sid]} · {len(s):,} obs · {s.index[0].date()} → {s.index[-1].date()} · "
+                   f"latest {latest:,.2f} · {pct}ᵗʰ %ile of the whole record")
+        st.plotly_chart(_level_fig(s), use_container_width=True, theme="streamlit", key=f"mh_{sid}")
+        st.caption("Faint red = crisis eras (dotcom · GFC · Euro debt · COVID · 2022 inflation shock). "
+                   "Source: committed archives `data/history/macro.jsonl` + `labor.jsonl`.")
 
 
 def trends_tab() -> None:
