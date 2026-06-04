@@ -1052,7 +1052,8 @@ hr { margin: .85rem 0; border-color: #1c2330; }
 
 
 def main() -> None:
-    st.set_page_config(page_title="Market Story", layout="wide", initial_sidebar_state="expanded")
+    st.set_page_config(page_title="Market Story", page_icon="📈", layout="wide",
+                       initial_sidebar_state="expanded")
     _load_cloud_secrets()
     st.markdown(_POLISH_CSS, unsafe_allow_html=True)
     st.sidebar.title("Market Story")

@@ -15,3 +15,8 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+# Hide the developer toolbar so the hosted app reads like an app, not a dev tool —
+# cleaner on a phone home-screen / installed-PWA view. (In-app "Refresh data" still works.)
+[client]
+toolbarMode = "minimal"

@@ -1,15 +1,24 @@
-# Deploying market-story as a public website
+# Running market-story on your laptop AND your phone
 
-You have two ways to use this dashboard:
+Two complementary ways to use this dashboard — use both:
 
-| Mode | How | AI narrative |
+| Mode | How | Good for |
 |---|---|---|
-| **Local (now)** | Double-click **Market Story** on your Desktop | ✅ Full — Claude writes it locally |
-| **Hosted (anywhere/phone)** | Streamlit Community Cloud (below) | ⚠️ See "Narration on a hosted site" |
+| **Local (the workshop)** | Double-click **Market Story** on your Desktop (or `Launch Market Story.vbs`) | Refreshing data, running `/narrate` on demand, working **offline** |
+| **Hosted (the read, on every device)** | Streamlit Community Cloud → **install as an app** on laptop + iPhone (below) | The morning read, anywhere — laptop, phone, tablet |
 
-The **live data, charts, sector map, headlines, and the Learn page all work hosted** —
-they're fetched/bundled at runtime. The only nuance is the AI narrative, which is
-written locally by Claude.
+The **live data, charts, sector map, headlines, history archives, and the Learn page all
+work hosted** — fetched at runtime or read from the committed `data/history/*.jsonl`
+archives. The narrative is written by Claude (locally on demand, or by the scheduled
+weekday routine that commits it — see "Narration on a hosted site"), so a hosted device
+always shows the latest committed story.
+
+> **One app, every device.** Once it's hosted (Option A), you don't package anything
+> per-device. You *install the web app* on each: on a laptop, Edge/Chrome shows an
+> **Install** icon in the address bar → its own window + Start-menu/Desktop icon, no
+> browser chrome. On an **iPhone**, Safari → **Share → Add to Home Screen** → a tappable
+> full-screen icon. Both run the same hosted URL. (A native `.exe`/pywebview wrapper would
+> be laptop-only and can't reach the phone — this is the better path.)
 
 ---
 
@@ -17,31 +26,37 @@ written locally by Claude.
 
 Gives you a URL like `https://market-story.streamlit.app`.
 
-1. **Put the project on GitHub.** From the project folder:
-   ```bash
-   cd "C:\Users\nguye\Python Projects\market-story"
-   git init
-   git add .
-   git commit -m "Initial market-story dashboard"
-   ```
-   Create a repo on github.com (private is fine — Streamlit Cloud can read private repos)
-   and push:
-   ```bash
-   git remote add origin https://github.com/<you>/market-story.git
-   git branch -M main
-   git push -u origin main
-   ```
-   > `.gitignore` already excludes `data/`, `.env`, and caches, so nothing sensitive ships.
-   > **I have NOT run any of this** — publishing is your call. Tell me and I'll do it with you.
+1. **The project is already on GitHub** at `https://github.com/mynameisnguyenn/market-story`
+   (repo: `C:\Users\Nguyen\market-story-git`), and the daily Action commits a fresh brief +
+   narrative + history archives each weekday — so a hosted app stays current with no manual
+   push. `.gitignore` excludes `.env` and live `data/briefs/`, so no secrets ship.
 
-2. **Deploy.** Go to <https://share.streamlit.io> → *New app* → pick your repo, branch
-   `main`, main file `app.py`. Under *Advanced settings* set **Python 3.13**.
+2. **Deploy (once).** Go to <https://share.streamlit.io> → *New app* → pick
+   `mynameisnguyenn/market-story`, branch `main`, main file `app.py`. Under *Advanced
+   settings* set **Python 3.12**. You get a URL like `https://<name>.streamlit.app` — that
+   single URL is what you open (and install) on the laptop and the iPhone.
 
-3. **(Optional) FRED key.** In the app's *Settings → Secrets*, add:
+3. **(Optional) Secrets for full live refresh.** In *Settings → Secrets*, add any of:
    ```toml
    FRED_API_KEY = "your_key"
+   EIA_API_KEY  = "your_key"
+   SEC_USER_AGENT = "you you@email.com"
    ```
-   Not required — the keyless CSV path works without it.
+   None are strictly required: macro falls back to the keyless FRED CSV, and **energy now
+   reads the committed `data/history/energy.jsonl` archive** (today's fix — the panel can't
+   blank without a live key). `app.py`'s `_load_cloud_secrets` bridges these into the env.
+
+## Install it as an app (do this on each device)
+
+Once you have the `.streamlit.app` URL:
+
+- **Laptop (Edge or Chrome).** Open the URL → click the **Install** icon at the right of
+  the address bar (or ⋮ menu → *Apps → Install this site as an app*). You get a standalone
+  window with its own taskbar/Start icon and no browser chrome.
+- **iPhone (Safari).** Open the URL → tap **Share** (the square-with-arrow) → **Add to Home
+  Screen** → *Add*. A tappable Market Story icon lands on your home screen and opens
+  full-screen. (Needs internet — a hosted page has no offline mode; that's what the local
+  app is for.)
 
 Tested versions (for reproducibility if a dependency breaks): `streamlit 1.58`,
 `yfinance 1.2`, `pandas 3.0`, `plotly 6.5`, `feedparser 6.0`, `fredapi 0.5`.
