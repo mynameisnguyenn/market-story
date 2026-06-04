@@ -65,7 +65,19 @@ def parse_infotable(xml: str) -> dict:
         agg["shares"] += _num(field("sshPrnamt"))
         if issuer and not agg.get("issuer"):
             agg["issuer"] = issuer
-    return out
+    return _normalize_units(out)
+
+
+def _normalize_units(holdings: dict) -> dict:
+    """Most filers report `value` in dollars (post-2023), but some still use THOUSANDS. Detect
+    via the implied price (value/shares) — a sub-dollar median means thousands — and scale x1000
+    so every fund is comparable in real dollars."""
+    prices = sorted(h["value"] / h["shares"] for h in holdings.values()
+                    if h["shares"] > 0 and h["value"] > 0)
+    if len(prices) >= 5 and prices[len(prices) // 2] < 1.0:   # median implied price < $1 -> thousands
+        for h in holdings.values():
+            h["value"] *= 1000.0
+    return holdings
 
 
 def diff_holdings(latest: dict, prior: dict, limit: int = 12) -> list[dict]:

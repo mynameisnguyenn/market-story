@@ -26,6 +26,15 @@ def test_parse_infotable_namespaced_and_empty():
     assert thirteenf.parse_infotable("") == {}
 
 
+def test_normalize_units_scales_thousands_only():
+    # implied price ~0.009 (value/shares) -> filed in thousands -> scaled x1000
+    thousands = {f"C{i}": {"issuer": f"X{i}", "value": 14000.0, "shares": 1_500_000.0} for i in range(6)}
+    assert thirteenf._normalize_units(thousands)["C0"]["value"] == 14000.0 * 1000
+    # implied price ~42 -> already dollars -> untouched
+    dollars = {f"C{i}": {"issuer": f"Y{i}", "value": 500_000_000.0, "shares": 12_000_000.0} for i in range(6)}
+    assert thirteenf._normalize_units(dollars)["C0"]["value"] == 500_000_000.0
+
+
 def test_diff_holdings_classifies_moves():
     latest = {"A": {"issuer": "A", "value": 200}, "B": {"issuer": "B", "value": 100},
               "C": {"issuer": "C", "value": 50}}
