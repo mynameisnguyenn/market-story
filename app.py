@@ -24,7 +24,7 @@ import streamlit as st
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
                  formatting, history, macro_data, market_data, news, regime, scorecard,
-                 signals, timeline)
+                 signals, thirteenf, timeline)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -106,6 +106,12 @@ def get_filings(symbols: tuple) -> list[dict]:
 def get_econ() -> list[dict]:
     """Upcoming key economic releases (FRED schedule), cached 6h."""
     return calendar_data.fetch_econ_releases()
+
+
+@st.cache_data(ttl=86400, show_spinner="Pulling the 13F filing...")
+def get_13f(name: str, cik: str) -> dict | None:
+    """A manager's latest 13F holdings + Q/Q flow, cached 24h (filings are quarterly)."""
+    return thirteenf.fetch_fund(name, cik)
 
 
 def row_for(brief: dict, symbol: str) -> dict | None:
@@ -672,8 +678,33 @@ def _econ_section() -> None:
     st.dataframe(frame, use_container_width=True, hide_index=True)
 
 
+def _13f_section() -> None:
+    st.markdown("**Smart money (13F)** — what prominent managers hold, and last quarter's flow")
+    st.caption("Quarterly SEC 13F-HR filings: **long US equities only**, ~45-day lag — positioning, not real-time.")
+    names = [n for n, _ in thirteenf.FUNDS]
+    choice = st.selectbox("Manager", names, key="f13_fund", label_visibility="collapsed")
+    data = get_13f(choice, dict(thirteenf.FUNDS)[choice])
+    if not data:
+        st.caption("No 13F available for that manager right now.")
+        return
+    st.caption(f"As of {data['date']} · {data['positions']} positions · ${data['total_value'] / 1e9:,.1f}B reported")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("_Top holdings_")
+        st.dataframe(pd.DataFrame([
+            {"Holding": h["issuer"], "$B": round(h["value"] / 1e9, 2), "%": round(h["pct"], 1)}
+            for h in data["top"]]), use_container_width=True, hide_index=True)
+    with c2:
+        st.markdown("_Last quarter's moves (vs prior 13F)_")
+        st.dataframe(pd.DataFrame([
+            {"Move": c["action"], "Holding": c["issuer"], "Δ $B": round(c["delta"] / 1e9, 2)}
+            for c in data["changes"]]), use_container_width=True, hide_index=True)
+
+
 def calendar_tab() -> None:
     _econ_section()
+    st.divider()
+    _13f_section()
     st.divider()
     _earnings_section()
     st.divider()

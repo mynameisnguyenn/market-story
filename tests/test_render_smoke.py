@@ -79,9 +79,13 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
         "hy_oas": 2.7, "vix": 15 + d * 0.1, "spx_spec_net": -450000 - d * 1000,
         "vol_premium": 6.0}) for d in range(1, 12)), encoding="utf-8")
     monkeypatch.setattr(timeline, "TIMELINE_PATH", tl)
-    from src import calendar_data
+    from src import calendar_data, thirteenf
     monkeypatch.setattr(calendar_data, "fetch_econ_releases",   # no network in the smoke
                         lambda *a, **k: [{"name": "Jobs report (payrolls)", "date": "2026-06-05", "days": 1}])
+    monkeypatch.setattr(thirteenf, "fetch_fund", lambda name, cik: {
+        "name": name, "date": "2026-05-15", "positions": 10, "total_value": 1e11,
+        "top": [{"issuer": "APPLE INC", "value": 5e10, "pct": 50.0}],
+        "changes": [{"issuer": "APPLE INC", "action": "added", "delta": 1e10}]})
     # two narratives so the Story tab's watch-scorecard grades the prior's watch block
     ndir = tmp_path / "narratives"
     ndir.mkdir()
