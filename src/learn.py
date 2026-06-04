@@ -13,7 +13,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from . import config
+from . import config, eras
 
 LEARN_DIR = config.PROJECT_ROOT / "learn"
 NODE_COLOR = "#4C9AFF"
@@ -112,17 +112,36 @@ def render() -> None:
     intro = load_text("00_intro.md")
     if intro:
         st.markdown(intro)
-    tabs = st.tabs(["What is a market", "History", "Players", "The Fed", "How money moves"])
+    tabs = st.tabs(["What is a market", "History", "Eras", "Players", "The Fed", "How money moves"])
     with tabs[0]:
         _section("01_what_is_a_market.md")
     with tabs[1]:
         _history()
     with tabs[2]:
-        _players()
+        _eras()
     with tabs[3]:
-        _the_fed()
+        _players()
     with tabs[4]:
+        _the_fed()
+    with tabs[5]:
         _money_flows()
+
+
+def _eras() -> None:
+    st.markdown("### Market eras  ·  1998 → today")
+    st.caption("The regimes behind the daily brief — open one to read the full history. These same "
+               "eras shade the **Trends** tab, and the `/finance` tutor teaches them against the data.")
+    kdir = config.PROJECT_ROOT / "knowledge" / "eras"
+    for e in eras.ERAS:
+        end = (e["end"] or "now")[:4]
+        with st.expander(f"{e['start'][:4]}–{end}  ·  {e['name']}  —  {e['regime']}"):
+            st.markdown(f"_{e['blurb']}_  \n**Fed:** {e['fed']}")
+            path = kdir / f"{e['key']}.md"
+            if path.exists():
+                body = path.read_text(encoding="utf-8")
+                if body.startswith("---"):                 # strip YAML frontmatter for display
+                    body = body.split("---", 2)[-1]
+                st.markdown(body)
 
 
 def _section(filename: str) -> None:
