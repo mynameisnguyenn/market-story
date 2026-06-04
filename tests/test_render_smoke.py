@@ -62,14 +62,23 @@ def _render_all_tabs():
     app.overview_tab(brief, closes)
     app.equities_tab(brief, closes)
     app.macro_tab(brief, closes)
+    app.trends_tab()
     app.headlines_tab(brief)
     app.calendar_tab()
     app.narrative_tab(brief)
 
 
 def test_all_tabs_render_without_error(monkeypatch, tmp_path):
-    from src import config, history
+    import json
+    from src import config, history, timeline
     monkeypatch.setattr(history, "DB_PATH", tmp_path / "h.db")   # don't touch the real history DB
+    # a small synthetic timeline so the Trends tab renders (don't read the real file)
+    tl = tmp_path / "tl.jsonl"
+    tl.write_text("\n".join(json.dumps({
+        "date": f"2026-05-{d:02d}", "ust10": 4.4 + d * 0.01, "curve_2s10s": 0.4,
+        "hy_oas": 2.7, "vix": 15 + d * 0.1, "spx_spec_net": -450000 - d * 1000,
+        "vol_premium": 6.0}) for d in range(1, 12)), encoding="utf-8")
+    monkeypatch.setattr(timeline, "TIMELINE_PATH", tl)
     # two narratives so the Story tab's watch-scorecard grades the prior's watch block
     ndir = tmp_path / "narratives"
     ndir.mkdir()

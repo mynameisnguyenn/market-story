@@ -80,6 +80,19 @@ def append_today(brief: dict) -> None:
         pass
 
 
+def load_df():
+    """Timeline as a DataFrame indexed by date (for trend charts). Empty if none."""
+    import pandas as pd
+    rows = load_timeline()
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df = df.dropna(subset=["date"]).set_index("date").sort_index()
+    return df
+
+
 def lookback(weeks: int) -> dict | None:
     """The timeline row ~`weeks` ago (≈5 trading rows/week), for a 'where were we then'
     read. None until enough history has accrued."""

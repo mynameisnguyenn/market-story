@@ -23,7 +23,8 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data,
-                 formatting, history, macro_data, market_data, news, regime, scorecard, signals)
+                 formatting, history, macro_data, market_data, news, regime, scorecard,
+                 signals, timeline)
 
 LINE_COLOR = "#4C9AFF"
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -675,6 +676,51 @@ def _watch_scorecard(brief: dict) -> None:
                         f"`{g.get('metric')} {g.get('trigger')}` (now {cur})")
 
 
+TREND_METRICS = [
+    ("ust10", "10Y Treasury yield (%)"),
+    ("curve_2s10s", "2s10s curve (pp)"),
+    ("hy_oas", "HY credit spread (%)"),
+    ("vix", "VIX"),
+    ("spx_spec_net", "S&P lev-fund net (contracts)"),
+    ("vol_premium", "Vol risk premium (VIX − realized)"),
+]
+
+
+def _trend_fig(series):
+    fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
+                               line=dict(color=LINE_COLOR, width=1.4)))
+    fig.add_trace(go.Scatter(x=[series.index[-1]], y=[series.iloc[-1]], mode="markers",
+                             marker=dict(color="#FF5C6C", size=7), showlegend=False))
+    fig.update_layout(height=230, margin=dict(l=8, r=8, t=8, b=8), showlegend=False,
+                      xaxis=dict(showgrid=False),
+                      yaxis=dict(showgrid=True, gridcolor="#1c2330"))
+    return fig
+
+
+def trends_tab() -> None:
+    """Where the cross-asset anchors have been — the committed metrics timeline as charts."""
+    df = timeline.load_df()
+    if df.empty or len(df) < 5:
+        st.info("The metrics timeline is still accumulating — trend charts appear once a few "
+                "sessions exist. Seed ~3 years of real history with `python -m src.backfill`.")
+        return
+    st.caption(f"{len(df)} sessions · {df.index[0].date()} → {df.index[-1].date()} — "
+               "each anchor's path, with today's percentile over the whole window.")
+    cols = st.columns(2)
+    for i, (col, title) in enumerate(TREND_METRICS):
+        if col not in df.columns:
+            continue
+        series = df[col].dropna()
+        if series.empty:
+            continue
+        with cols[i % 2]:
+            latest = float(series.iloc[-1])
+            pct = round(float((series < latest).mean()) * 100)
+            st.markdown(f"**{title}** — {latest:,.2f}  ·  {pct}th %ile of {len(series)} sessions")
+            st.plotly_chart(_trend_fig(series), use_container_width=True,
+                            theme="streamlit", key=f"trend_{col}")
+
+
 def narrative_tab(brief: dict) -> None:
     path = brief_mod.latest_narrative_path()
     if path and path.exists():
@@ -729,8 +775,8 @@ def daily_brief_page() -> None:
     )
     st.divider()
 
-    overview, equities, macro, headlines, calendar, story = st.tabs(
-        ["Overview", "Equities & Sectors", "Global & Macro", "Headlines", "Calendar", "Story"]
+    overview, equities, macro, trends, headlines, calendar, story = st.tabs(
+        ["Overview", "Equities & Sectors", "Global & Macro", "Trends", "Headlines", "Calendar", "Story"]
     )
     with overview:
         overview_tab(brief, closes)
@@ -738,6 +784,8 @@ def daily_brief_page() -> None:
         equities_tab(brief, closes)
     with macro:
         macro_tab(brief, closes)
+    with trends:
+        trends_tab()
     with headlines:
         headlines_tab(brief)
     with calendar:
