@@ -416,6 +416,10 @@ def signals_strip(brief: dict) -> None:
         cols = st.columns(2)
         for i, s in enumerate(sigs):
             cols[i % 2].markdown(f":{dot[s['tone']]}[●]  {s['text']}")
+    era = eras.era_for(brief.get("date", ""))
+    if era:
+        st.caption(f"📅 We're in the **{era['name']}** era ({era['regime']}). "
+                   f"Fed: {era['fed']}. See the **Trends** tab's time machine, or run `/finance` to dig in.")
     st.divider()
 
 
