@@ -90,6 +90,7 @@ Two real gotchas are handled in code:
 
 ```
 run.py              entry point: gather -> brief
+bootstrap.py        one-command local setup (deps + .env)  [see SETUP.md]
 app.py              streamlit dashboard (pure builders + st wrappers)
 src/config.py       instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback) + snapshot math
@@ -98,7 +99,10 @@ src/bls_data.py     BLS labor & inflation prints
 src/eia_data.py     EIA weekly energy inventories
 src/cftc_data.py    CFTC speculative positioning (COT)
 src/edgar_data.py   SEC EDGAR watchlist filings
+src/calendar_data.py  earnings + forward econ-release calendar (FRED schedule)
 src/analytics.py    cross-asset extremes, vol premium, stock-bond corr
+src/backfill.py     seed the timeline with ~3y of REAL history (yfinance+FRED+CFTC)
+src/timeline.py     append-only daily metrics timeline -> the Trends tab
 src/signals.py      signal lines + the "today's read" thesis (derive_lead)
 src/regime.py       risk-on/off regime panel
 src/scorecard.py    grade a narrative's watch block vs the next brief
@@ -130,11 +134,11 @@ Built/tested on **Python 3.14** (3.13+ fine). Note: if `streamlit` isn't on PATH
 python -m pytest tests/ -v
 ```
 
-127 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
-FRED/BLS/EIA/CFTC snapshotting, the analytics (1y percentiles, vol premium, stock-bond
-correlation), the "today's read" classifier, the thesis scorecard + metrics timeline, news
-cleaning/de-dupe, an offline render-smoke of every tab, and a regression suite carried over
-from two whole-codebase adversarial bug audits.
+134 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
+FRED/BLS/EIA/CFTC snapshotting, the analytics (percentiles, vol premium, stock-bond
+correlation), the "today's read" classifier, the thesis scorecard, the metrics timeline +
+backfill assembly, the econ calendar, news cleaning/de-dupe, an offline render-smoke of every
+tab, and regression suites carried over from three rounds of adversarial bug audits.
 
 ## Daily workflow
 
@@ -151,9 +155,14 @@ from two whole-codebase adversarial bug audits.
   premium, and a stock-bond correlation (hedge) regime.
 - **A synthesized "today's read"** thesis + a **thesis scorecard** that grades each call against
   the next session, and a committed **metrics timeline** for long-horizon context.
-- **Reliability** — keyed-first FRED with retry (no more dropped series); editable watchlist;
-  earnings + filings calendar; a public splash page; a daily GitHub Action that commits the
-  brief + timeline.
+- **A 3-year history + Trends tab** — `python -m src.backfill` seeds `data/timeline.jsonl`
+  with real daily metrics (yfinance + FRED + CFTC); the **Trends** tab charts each anchor's
+  path with its percentile over the whole window.
+- **A forward econ calendar** — upcoming CPI / jobs / PCE / GDP dates (the FRED schedule),
+  on the Calendar tab next to earnings + filings.
+- **Reliability + portability** — keyed-first FRED with retry; a public splash page; a daily
+  GitHub Action that commits the brief + timeline; `bootstrap.py` + `SETUP.md` for one-command
+  multi-machine setup.
 
 ## Ideas to extend
 
