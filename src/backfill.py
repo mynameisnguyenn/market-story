@@ -153,11 +153,22 @@ def _fetch_spec_net(limit: int = 320) -> pd.Series:
     return pd.Series(vals, index=pd.DatetimeIndex(dates)).sort_index()
 
 
+def _merge_rows(fresh: list[dict], existing: list[dict]) -> list[dict]:
+    """Fresh backfilled (derived) rows win by date — so a re-run REFRESHES stale derived data —
+    EXCEPT a real, in-the-moment row (written live by the daily Action, no `backfilled` flag) is
+    always preserved over a backfilled one for the same date. Oldest-first."""
+    by_date = {r["date"]: r for r in fresh if r.get("date")}
+    for r in existing:
+        if not r.get("backfilled") and r.get("date"):
+            by_date[r["date"]] = r                # a live row beats a derived one
+    return sorted(by_date.values(), key=lambda r: r.get("date", ""))
+
+
 def backfill(start: str = "1998-01-01") -> int:
-    """Fetch all available real history back to `start`, assemble rows, and MERGE into the
-    timeline without overwriting any existing (real, in-the-moment) row. Each series goes
-    back only as far as it genuinely exists (S&P/yields decades, spreads/positioning less).
-    Returns rows added. Atomic write — never leaves the committed history torn."""
+    """Fetch all available real history back to `start`, assemble rows, and merge them in:
+    refresh the derived (backfilled) rows, preserve the live daily rows. Each series goes back
+    only as far as it genuinely exists (S&P/yields decades, spreads/positioning less). Atomic
+    write — never leaves the committed history torn. Returns the row count after merge (0 if no change)."""
     try:
         start_ts = pd.Timestamp(start)
         if pd.isna(start_ts):
@@ -171,22 +182,23 @@ def backfill(start: str = "1998-01-01") -> int:
     if prices.empty:
         return 0
     rows = assemble_rows(prices, _fetch_fred(start="1990-01-01"), _fetch_spec_net(limit=1300))
+    if not rows:
+        return 0
     existing = timeline.load_timeline()
-    have = {r.get("date") for r in existing}
-    added = [r for r in rows if r.get("date") not in have]
-    if not added:
-        return 0                                  # nothing new -> never rewrite the committed file
-    merged = sorted(existing + added, key=lambda r: r.get("date", ""))
+    out = _merge_rows(rows, existing)
+    if out == existing:
+        return 0                                  # nothing changed -> don't rewrite the committed file
     try:
-        timeline.atomic_write(merged)             # temp file + os.replace
+        timeline.atomic_write(out)                # temp file + os.replace
     except Exception:
         return 0                                  # leave the existing committed history untouched
-    return len(added)
+    return len(out)
 
 
 if __name__ == "__main__":
     import sys
     start = sys.argv[1] if len(sys.argv) > 1 else "1998-01-01"
     n = backfill(start=start)
-    print(f"backfilled {n} historical rows (from {start}) into {timeline.TIMELINE_PATH}")
+    print(f"backfill from {start}: {'no change' if n == 0 else f'rebuilt -> {n} rows'} "
+          f"in {timeline.TIMELINE_PATH}")
     print(f"timeline now has {len(timeline.load_timeline())} rows")

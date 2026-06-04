@@ -47,5 +47,18 @@ def test_assemble_rows_rejects_inf_and_stays_valid_json():
     assert all(r["spx_chg"] != float("inf") for r in rows)
 
 
+def test_merge_refreshes_backfilled_but_preserves_live_rows():
+    fresh = [{"date": "2024-01-01", "spx_spec_net": -345000, "backfilled": True},
+             {"date": "2024-01-02", "spx_spec_net": -340000, "backfilled": True},
+             {"date": "2026-06-04", "spx_spec_net": -100, "backfilled": True}]
+    existing = [{"date": "2024-01-01", "spx_spec_net": -511954, "backfilled": True},  # stale derived
+                {"date": "2026-06-04", "spx_spec_net": -457780, "thesis": "x"}]        # live (no flag)
+    out = backfill._merge_rows(fresh, existing)
+    by = {r["date"]: r for r in out}
+    assert by["2024-01-01"]["spx_spec_net"] == -345000      # stale derived row REFRESHED
+    assert by["2026-06-04"]["spx_spec_net"] == -457780      # live row PRESERVED (not the fresh -100)
+    assert [r["date"] for r in out] == ["2024-01-01", "2024-01-02", "2026-06-04"]
+
+
 def test_assemble_rows_empty():
     assert backfill.assemble_rows(pd.DataFrame(), pd.DataFrame(), pd.Series(dtype=float)) == []
