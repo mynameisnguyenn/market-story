@@ -562,6 +562,7 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(energy_styler(brief["energy"]), use_container_width=True, hide_index=True)
         st.caption("A crude **draw** (negative Δ) is typically bullish for oil, a build bearish; "
                    "natural gas swings between summer injections and winter withdrawals. Source: EIA.")
+        _energy_history_section()
     if brief.get("positioning"):
         st.markdown("**Speculative positioning (CFTC, weekly)** — leveraged-fund net & weekly change")
         st.dataframe(positioning_styler(brief["positioning"]), use_container_width=True, hide_index=True)
@@ -763,6 +764,58 @@ def _trend_fig(series):
                       xaxis=dict(showgrid=False),
                       yaxis=dict(showgrid=True, gridcolor="#1c2330", zeroline=False))
     return fig
+
+
+def _level_fig(series, height: int = 260):
+    """Like _trend_fig but autoranged (not zero-anchored) — for level series where the
+    interesting signal is the swing, not the distance from zero (e.g. inventory stocks)."""
+    fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
+                               line=dict(color=LINE_COLOR, width=1.4)))
+    x0, x1 = series.index[0], series.index[-1]
+    if getattr(x0, "tzinfo", None) is not None:
+        x0, x1 = x0.tz_localize(None), x1.tz_localize(None)
+    for start, end, _name in eras.stress_bands():
+        s = pd.Timestamp(start)
+        e = pd.Timestamp(end) if end else x1
+        if e >= x0 and s <= x1:
+            fig.add_vrect(x0=max(s, x0), x1=min(e, x1), fillcolor="#FF5C6C",
+                          opacity=0.07, line_width=0, layer="below")
+    fig.add_trace(go.Scatter(x=[series.index[-1]], y=[float(series.iloc[-1])], mode="markers",
+                             marker=dict(color="#FF5C6C", size=7), showlegend=False))
+    fig.update_layout(height=height, margin=dict(l=8, r=8, t=8, b=8), showlegend=False,
+                      xaxis=dict(showgrid=False),
+                      yaxis=dict(showgrid=True, gridcolor="#1c2330", zeroline=False))
+    return fig
+
+
+def _energy_history_section() -> None:
+    """Full weekly inventory history from the committed archive (petroleum back to 1982)."""
+    hist = eia_data.load_history()
+    if not hist:
+        return
+    names = {sid: name for _route, sid, name in eia_data.EIA_SERIES}
+    with st.expander("📈 Inventory history — full weekly record (petroleum back to 1982)"):
+        sid = st.selectbox("Series", list(names), format_func=lambda s: names.get(s, s),
+                           key="energy_hist_sel")
+        rows = [r for r in hist if r.get("series") == sid]
+        if len(rows) < 5:
+            st.caption("Not enough history for this series yet.")
+            return
+        idx = pd.to_datetime([r["date"] for r in rows])
+        s = pd.Series([r["value"] for r in rows], index=idx).sort_index()
+        units = rows[-1].get("units") or ""
+        latest = float(s.iloc[-1])
+        pct = round(float((s < latest).mean()) * 100)
+        prior_yr = s[s.index <= s.index[-1] - pd.Timedelta(days=365)]
+        line = (f"{names[sid]} · {len(s):,} weeks · {s.index[0].date()} → {s.index[-1].date()} · "
+                f"latest {latest:,.0f} {units} · {pct}ᵗʰ %ile of the whole record")
+        if len(prior_yr):
+            line += f" · {latest - float(prior_yr.iloc[-1]):+,.0f} {units} YoY"
+        st.caption(line)
+        st.plotly_chart(_level_fig(s), use_container_width=True, theme="streamlit", key=f"enh_{sid}")
+        st.caption("Inventory *levels* (not the weekly draw/build). Faint red = crisis eras. "
+                   "The SPR drawdown since 2022 and the gasoline/distillate seasonal saw-tooth are "
+                   "visible here. Source: EIA, committed archive `data/history/energy.jsonl`.")
 
 
 def trends_tab() -> None:

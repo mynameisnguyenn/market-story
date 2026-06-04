@@ -22,7 +22,8 @@ def build_brief(history=None, sections=None, macro=None, news_items=None,
         macro = macro_data.fetch_macro()
         news_items = news.fetch_news()
         bls = bls_data.fetch_bls()
-        energy = eia_data.fetch_eia()
+        eia_data.update_archive()       # refresh the committed energy archive (the key lives here)
+        energy = eia_data.fetch_eia()   # read it back (so the panel never needs a live key)
         positioning = cftc_data.fetch_cftc()
     sections = sections or {}
     closes = _history_closes(history)
