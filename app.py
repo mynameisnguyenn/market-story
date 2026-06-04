@@ -687,13 +687,16 @@ TREND_METRICS = [
 
 
 def _trend_fig(series):
+    last = float(series.iloc[-1])
     fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
-                               line=dict(color=LINE_COLOR, width=1.4)))
-    fig.add_trace(go.Scatter(x=[series.index[-1]], y=[series.iloc[-1]], mode="markers",
+                               line=dict(color=LINE_COLOR, width=1.4),
+                               fill="tozeroy", fillcolor="rgba(76,154,255,0.07)"))
+    fig.add_hline(y=last, line=dict(color="#FF5C6C", width=1, dash="dot"), opacity=0.45)
+    fig.add_trace(go.Scatter(x=[series.index[-1]], y=[last], mode="markers",
                              marker=dict(color="#FF5C6C", size=7), showlegend=False))
     fig.update_layout(height=230, margin=dict(l=8, r=8, t=8, b=8), showlegend=False,
                       xaxis=dict(showgrid=False),
-                      yaxis=dict(showgrid=True, gridcolor="#1c2330"))
+                      yaxis=dict(showgrid=True, gridcolor="#1c2330", zeroline=False))
     return fig
 
 
