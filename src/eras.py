@@ -41,14 +41,12 @@ ERAS = [
 
 
 def era_for(date_str: str) -> dict | None:
-    """The era a YYYY-MM-DD date falls in (first match; eras can overlap). None if before 1998."""
+    """The era a YYYY-MM-DD date falls in. When eras overlap (e.g. euro-debt nested inside
+    zirp-qe) returns the most specific — the latest-starting — match. None if before 1998."""
     if not date_str:
         return None
-    for era in ERAS:
-        end = era["end"] or "9999-99-99"
-        if era["start"] <= date_str <= end:
-            return era
-    return None
+    matches = [e for e in ERAS if e["start"] <= date_str <= (e["end"] or "9999-99-99")]
+    return max(matches, key=lambda e: e["start"]) if matches else None
 
 
 def bands():

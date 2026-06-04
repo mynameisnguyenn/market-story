@@ -6,6 +6,8 @@ def test_era_for_known_dates():
     assert eras.era_for("2008-10-15")["key"] == "gfc"
     assert eras.era_for("2020-03-20")["key"] == "covid"
     assert eras.era_for("2000-03-10")["key"] == "dotcom"
+    assert eras.era_for("2011-06-01")["key"] == "euro-debt"           # nested era wins over zirp-qe
+    assert eras.era_for("2014-01-02")["key"] == "zirp-qe"             # outside euro-debt -> zirp-qe
     assert eras.era_for("2026-06-04")["key"] == "higher-for-longer"   # end=None -> ongoing
     assert eras.era_for("1990-01-01") is None                         # before the index starts
     assert eras.era_for("") is None

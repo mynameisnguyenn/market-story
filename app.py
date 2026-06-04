@@ -713,6 +713,8 @@ def _trend_fig(series):
                                line=dict(color=LINE_COLOR, width=1.4),
                                fill="tozeroy", fillcolor="rgba(76,154,255,0.07)"))
     x0, x1 = series.index[0], series.index[-1]
+    if getattr(x0, "tzinfo", None) is not None:        # band math compares against tz-naive era dates
+        x0, x1 = x0.tz_localize(None), x1.tz_localize(None)
     for start, end, _name in eras.stress_bands():     # faint red over the crisis eras
         s = pd.Timestamp(start)
         e = pd.Timestamp(end) if end else x1

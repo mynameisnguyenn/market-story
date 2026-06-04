@@ -58,6 +58,18 @@ def test_load_df_without_date_column_is_not_datetime_indexed(tmp_path, monkeypat
     assert not isinstance(df.index, pd.DatetimeIndex)            # trends_tab guards on exactly this
 
 
+def test_append_heals_missing_trailing_newline(tmp_path, monkeypatch):
+    p = tmp_path / "tl.jsonl"
+    p.write_text('{"date": "2026-06-01", "spx": 1}', encoding="utf-8")   # NO trailing newline
+    _patch(tmp_path, monkeypatch)
+    monkeypatch.setattr(timeline, "TIMELINE_PATH", p)
+    timeline.append_today({"date": "2026-06-02",
+                           "markets": {"us_equities": [{"symbol": "^GSPC", "last": 2}]},
+                           "macro": [], "positioning": []})
+    rows = timeline.load_timeline()
+    assert [r["date"] for r in rows] == ["2026-06-01", "2026-06-02"]   # two valid lines, not fused
+
+
 def test_load_tolerates_one_corrupt_line(tmp_path, monkeypatch):
     path = tmp_path / "tl.jsonl"
     path.write_text('{"date": "2026-06-01", "spx": 1}\nGARBAGE NOT JSON\n'

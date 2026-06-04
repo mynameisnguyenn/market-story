@@ -1,0 +1,4 @@
+# Keep the committed metrics timeline LF on every platform so the Windows dev box and the
+# Linux daily Action never churn the whole file with line-ending flips.
+data/timeline.jsonl text eol=lf
+*.jsonl text eol=lf

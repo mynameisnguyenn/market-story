@@ -40,11 +40,19 @@ def assemble_rows(prices: pd.DataFrame, fred: pd.DataFrame, spec_net: pd.Series)
     log_ret = (spx / spx.shift(1)).apply(lambda x: math.log(x) if x and x > 0 else float("nan"))
     realized = log_ret.rolling(20).std(ddof=0) * math.sqrt(252) * 100.0   # population std (matches analytics)
     chg_pct = spx.pct_change(fill_method=None) * 100.0
-    # as-of fill: each trading day gets the most recent prior value (daily FRED, weekly CFTC)
-    fred = (fred.sort_index().reindex(prices.index, method="ffill")
-            if fred is not None and not fred.empty else pd.DataFrame(index=prices.index))
-    spec = (spec_net.sort_index().reindex(prices.index, method="ffill")
-            if spec_net is not None and len(spec_net) else pd.Series(index=prices.index, dtype=float))
+    # as-of fill: each trading day gets the most recent prior value (daily FRED, weekly CFTC).
+    # De-dup the SOURCE index first — a revised/re-filed report repeats a date, and reindex FROM a
+    # duplicate-labeled index raises.
+    if fred is not None and not fred.empty:
+        fred = fred.sort_index()
+        fred = fred[~fred.index.duplicated(keep="last")].reindex(prices.index, method="ffill")
+    else:
+        fred = pd.DataFrame(index=prices.index)
+    if spec_net is not None and len(spec_net):
+        spec_net = spec_net.sort_index()
+        spec = spec_net[~spec_net.index.duplicated(keep="last")].reindex(prices.index, method="ffill")
+    else:
+        spec = pd.Series(index=prices.index, dtype=float)
 
     def fin(value, nd):
         """Round, but reject NaN/inf -> None (so the committed JSON stays finite/valid)."""
@@ -150,10 +158,16 @@ def backfill(start: str = "1998-01-01") -> int:
     timeline without overwriting any existing (real, in-the-moment) row. Each series goes
     back only as far as it genuinely exists (S&P/yields decades, spreads/positioning less).
     Returns rows added. Atomic write — never leaves the committed history torn."""
+    try:
+        start_ts = pd.Timestamp(start)
+        if pd.isna(start_ts):
+            return 0
+    except Exception:
+        return 0
     prices = _fetch_prices("max")
     if prices.empty:
         return 0
-    prices = prices[prices.index >= pd.Timestamp(start)]
+    prices = prices[prices.index >= start_ts]
     if prices.empty:
         return 0
     rows = assemble_rows(prices, _fetch_fred(start="1990-01-01"), _fetch_spec_net(limit=1300))

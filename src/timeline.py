@@ -18,16 +18,22 @@ TIMELINE_PATH = config.DATA_DIR / "timeline.jsonl"
 
 
 def atomic_write(rows: list[dict]) -> None:
-    """Write the whole timeline atomically (temp file + os.replace) so a torn write
-    can never destroy the committed history."""
+    """Write the whole timeline atomically (temp file + os.replace). Uses LF endings on
+    every platform so the Windows box and the Linux Action never churn the file."""
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     payload = "".join(json.dumps(r) + "\n" for r in rows)
     tmp = TIMELINE_PATH.with_suffix(".jsonl.tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:   # force LF, no platform translation
         f.write(payload)
         f.flush()
         os.fsync(f.fileno())
     os.replace(tmp, TIMELINE_PATH)
+    try:                                                        # best-effort: persist the rename (POSIX)
+        dfd = os.open(str(TIMELINE_PATH.parent), os.O_RDONLY)
+        os.fsync(dfd)
+        os.close(dfd)
+    except (OSError, AttributeError):
+        pass                                                    # Windows etc. — replace already persists
 
 
 def _row_for(brief: dict) -> dict:
@@ -92,8 +98,17 @@ def append_today(brief: dict) -> None:
             atomic_write(kept)
         else:
             config.DATA_DIR.mkdir(parents=True, exist_ok=True)
-            with open(TIMELINE_PATH, "a", encoding="utf-8") as f:   # new day -> 1-line append
-                f.write(json.dumps(row) + "\n")
+            sep = ""
+            try:                                                # heal a missing trailing newline so
+                if TIMELINE_PATH.exists() and TIMELINE_PATH.stat().st_size > 0:
+                    with open(TIMELINE_PATH, "rb") as rf:       # two days can't fuse onto one line
+                        rf.seek(-1, os.SEEK_END)
+                        if rf.read(1) != b"\n":
+                            sep = "\n"
+            except Exception:
+                sep = "\n"
+            with open(TIMELINE_PATH, "a", encoding="utf-8", newline="\n") as f:   # new day -> 1-line append, LF
+                f.write(sep + json.dumps(row) + "\n")
     except Exception:
         pass
 
