@@ -49,6 +49,15 @@ def test_load_empty_when_missing(tmp_path, monkeypatch):
     assert timeline.load_timeline() == []
 
 
+def test_load_df_without_date_column_is_not_datetime_indexed(tmp_path, monkeypatch):
+    import pandas as pd
+    p = tmp_path / "tl.jsonl"
+    p.write_text('{"spx": 1}\n{"spx": 2}\n', encoding="utf-8")   # valid JSON, no 'date'
+    monkeypatch.setattr(timeline, "TIMELINE_PATH", p)
+    df = timeline.load_df()
+    assert not isinstance(df.index, pd.DatetimeIndex)            # trends_tab guards on exactly this
+
+
 def test_load_tolerates_one_corrupt_line(tmp_path, monkeypatch):
     path = tmp_path / "tl.jsonl"
     path.write_text('{"date": "2026-06-01", "spx": 1}\nGARBAGE NOT JSON\n'

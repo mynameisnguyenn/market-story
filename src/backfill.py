@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 
 import pandas as pd
 
@@ -33,9 +34,12 @@ def assemble_rows(prices: pd.DataFrame, fred: pd.DataFrame, spec_net: pd.Series)
     """
     if prices is None or prices.empty or "spx" not in prices:
         return []
+    prices = prices[prices["spx"].notna()]       # anchor to the S&P trading calendar
+    if prices.empty:
+        return []
     spx = prices["spx"].astype(float)
     log_ret = (spx / spx.shift(1)).apply(lambda x: math.log(x) if x and x > 0 else float("nan"))
-    realized = log_ret.rolling(20).std() * math.sqrt(252) * 100.0     # annualized %, per day
+    realized = log_ret.rolling(20).std(ddof=0) * math.sqrt(252) * 100.0   # population std (matches analytics)
     chg_pct = spx.pct_change(fill_method=None) * 100.0
     # as-of fill: each trading day gets the most recent prior value (daily FRED, weekly CFTC)
     fred = (fred.sort_index().reindex(prices.index, method="ffill")
@@ -43,30 +47,35 @@ def assemble_rows(prices: pd.DataFrame, fred: pd.DataFrame, spec_net: pd.Series)
     spec = (spec_net.sort_index().reindex(prices.index, method="ffill")
             if spec_net is not None and len(spec_net) else pd.Series(index=prices.index, dtype=float))
 
+    def fin(value, nd):
+        """Round, but reject NaN/inf -> None (so the committed JSON stays finite/valid)."""
+        try:
+            fv = float(value)
+        except (TypeError, ValueError):
+            return None
+        return round(fv, nd) if math.isfinite(fv) else None
+
     rows = []
     for day in prices.index:
-        def num(series, key):
-            v = series.get(key) if hasattr(series, "get") else None
-            return None if v is None or (isinstance(v, float) and math.isnan(v)) else round(float(v), 4)
-        vix = num(prices.loc[day], "vix")
-        rv = realized.get(day)
-        rv = None if rv is None or (isinstance(rv, float) and math.isnan(rv)) else round(float(rv), 1)
+        prow = prices.loc[day]
+        frow = fred.loc[day] if day in fred.index else None
+        vix = fin(prow.get("vix"), 4)
+        rv = fin(realized.get(day), 1)
         prem = round(vix - rv, 1) if (vix is not None and rv is not None) else None
-        spec_v = spec.get(day)
         rows.append({
             "date": day.date().isoformat(),
-            "spx": num(prices.loc[day], "spx"),
-            "spx_chg": None if math.isnan(chg_pct.get(day, float("nan"))) else round(float(chg_pct[day]), 4),
+            "spx": fin(prow.get("spx"), 4),
+            "spx_chg": fin(chg_pct.get(day), 4),
             "vix": vix,
-            "ust10": num(fred.loc[day], "ust10") if day in fred.index else None,
-            "curve_2s10s": num(fred.loc[day], "curve_2s10s") if day in fred.index else None,
-            "hy_oas": num(fred.loc[day], "hy_oas") if day in fred.index else None,
-            "ig_oas": num(fred.loc[day], "ig_oas") if day in fred.index else None,
-            "dxy": num(prices.loc[day], "dxy"),
-            "wti": num(prices.loc[day], "wti"),
-            "copper": num(prices.loc[day], "copper"),
-            "gold": num(prices.loc[day], "gold"),
-            "spx_spec_net": None if spec_v is None or (isinstance(spec_v, float) and math.isnan(spec_v)) else round(float(spec_v), 0),
+            "ust10": fin(frow.get("ust10"), 4) if frow is not None else None,
+            "curve_2s10s": fin(frow.get("curve_2s10s"), 4) if frow is not None else None,
+            "hy_oas": fin(frow.get("hy_oas"), 4) if frow is not None else None,
+            "ig_oas": fin(frow.get("ig_oas"), 4) if frow is not None else None,
+            "dxy": fin(prow.get("dxy"), 4),
+            "wti": fin(prow.get("wti"), 4),
+            "copper": fin(prow.get("copper"), 4),
+            "gold": fin(prow.get("gold"), 4),
+            "spx_spec_net": fin(spec.get(day), 0),
             "vol_premium": prem,
             "thesis": None,          # historical rows carry no in-the-moment read (not hindsight-fabricated)
             "backfilled": True,
@@ -149,12 +158,20 @@ def backfill(years: int = 3) -> int:
     existing = timeline.load_timeline()
     have = {r.get("date") for r in existing}
     added = [r for r in rows if r.get("date") not in have]
-    merged = existing + added
-    merged.sort(key=lambda r: r.get("date", ""))
-    config.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    with open(timeline.TIMELINE_PATH, "w", encoding="utf-8") as f:
-        for r in merged:
-            f.write(json.dumps(r) + "\n")
+    if not added:
+        return 0                                  # nothing new -> never rewrite the committed file
+    merged = sorted(existing + added, key=lambda r: r.get("date", ""))
+    try:
+        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+        payload = "".join(json.dumps(r) + "\n" for r in merged)   # serialize fully BEFORE truncating
+        tmp = timeline.TIMELINE_PATH.with_suffix(".jsonl.tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            f.write(payload)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, timeline.TIMELINE_PATH)   # atomic swap — never leaves a torn file
+    except Exception:
+        return 0                                  # leave the existing committed history untouched
     return len(added)
 
 

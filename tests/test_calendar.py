@@ -1,7 +1,24 @@
-"""Tests for earnings-calendar parsing (yfinance mocked, no network)."""
+"""Tests for earnings + econ-release calendars (network mocked, no calls)."""
 from datetime import date, timedelta
 
-from src import calendar_data
+from src import calendar_data, macro_data
+
+
+def test_fetch_econ_releases_filters_window_and_sorts(monkeypatch):
+    monkeypatch.setattr(macro_data, "_load_env_key", lambda: "key")
+    soon = (date.today() + timedelta(days=2)).isoformat()
+    far = (date.today() + timedelta(days=400)).isoformat()
+    schedule = {50: soon, 10: far}     # jobs soon; CPI far; PCE/GDP -> None (skipped)
+    monkeypatch.setattr(calendar_data, "_next_release_date",
+                        lambda rid, key, today, **k: schedule.get(rid))
+    rows = calendar_data.fetch_econ_releases(within_days=45)
+    assert [r["name"] for r in rows] == ["Jobs report (payrolls)"]   # far CPI excluded
+    assert rows[0]["days"] == 2
+
+
+def test_fetch_econ_releases_no_key(monkeypatch):
+    monkeypatch.setattr(macro_data, "_load_env_key", lambda: None)
+    assert calendar_data.fetch_econ_releases() == []
 
 
 class _FakeTicker:

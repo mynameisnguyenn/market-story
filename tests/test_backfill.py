@@ -28,5 +28,24 @@ def test_assemble_rows_builds_real_metric_rows():
     assert rows[0]["spx_spec_net"] is None     # before the first weekly report -> no positioning
 
 
+def test_assemble_rows_anchors_to_spx_calendar():
+    idx = pd.date_range("2024-01-01", periods=5, freq="D")
+    prices = pd.DataFrame({"spx": [100.0, 101.0, np.nan, 103.0, 104.0]}, index=idx)  # gap day
+    rows = backfill.assemble_rows(prices, pd.DataFrame(), pd.Series(dtype=float))
+    dates = [r["date"] for r in rows]
+    assert "2024-01-03" not in dates and len(rows) == 4          # spx-less day dropped, no junk row
+    r103 = next(r for r in rows if r["spx"] == 103.0)            # real 101->103 move measured across gap
+    assert round(r103["spx_chg"], 2) == round((103 / 101 - 1) * 100, 2)
+
+
+def test_assemble_rows_rejects_inf_and_stays_valid_json():
+    import json
+    idx = pd.date_range("2024-01-01", periods=3, freq="D")
+    prices = pd.DataFrame({"spx": [0.0, 100.0, 101.0]}, index=idx)   # zero prior -> pct_change inf
+    rows = backfill.assemble_rows(prices, pd.DataFrame(), pd.Series(dtype=float))
+    json.dumps(rows, allow_nan=False)                            # must be RFC-valid (no Infinity/NaN)
+    assert all(r["spx_chg"] != float("inf") for r in rows)
+
+
 def test_assemble_rows_empty():
     assert backfill.assemble_rows(pd.DataFrame(), pd.DataFrame(), pd.Series(dtype=float)) == []

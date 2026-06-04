@@ -102,6 +102,12 @@ def get_filings(symbols: tuple) -> list[dict]:
     return edgar_data.recent_filings(list(symbols))
 
 
+@st.cache_data(ttl=21600, show_spinner=False)
+def get_econ() -> list[dict]:
+    """Upcoming key economic releases (FRED schedule), cached 6h."""
+    return calendar_data.fetch_econ_releases()
+
+
 def row_for(brief: dict, symbol: str) -> dict | None:
     for rows in brief["markets"].values():
         for row in rows:
@@ -649,7 +655,22 @@ def _filings_section() -> None:
         st.caption(f"{len(rows)} filings · newest first · via SEC EDGAR")
 
 
+def _econ_section() -> None:
+    rows = get_econ()
+    if not rows:
+        return
+    st.markdown("**Economic releases** — the data the market trades around")
+    frame = pd.DataFrame([
+        {"Release": r["name"], "Date": r["date"],
+         "In": ("tomorrow ⚠️" if r["days"] == 1 else "today ⚠️" if r["days"] == 0 else f"{r['days']} days")}
+        for r in rows
+    ])
+    st.dataframe(frame, use_container_width=True, hide_index=True)
+
+
 def calendar_tab() -> None:
+    _econ_section()
+    st.divider()
     _earnings_section()
     st.divider()
     _filings_section()
@@ -703,7 +724,7 @@ def _trend_fig(series):
 def trends_tab() -> None:
     """Where the cross-asset anchors have been — the committed metrics timeline as charts."""
     df = timeline.load_df()
-    if df.empty or len(df) < 5:
+    if df.empty or len(df) < 5 or not isinstance(df.index, pd.DatetimeIndex):
         st.info("The metrics timeline is still accumulating — trend charts appear once a few "
                 "sessions exist. Seed ~3 years of real history with `python -m src.backfill`.")
         return
@@ -714,7 +735,7 @@ def trends_tab() -> None:
         if col not in df.columns:
             continue
         series = df[col].dropna()
-        if series.empty:
+        if len(series) < 5:                        # skip a thinly-populated metric (no n=1 charts)
             continue
         with cols[i % 2]:
             latest = float(series.iloc[-1])

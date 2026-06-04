@@ -6,12 +6,20 @@ for a symbol is skipped rather than raised, so the dashboard never crashes on it
 """
 from __future__ import annotations
 
+import json
+import urllib.parse
+import urllib.request
 from datetime import date, datetime
 
 import pandas as pd
 import yfinance as yf
 
-from . import config
+from . import config, macro_data
+
+# Key economic releases by FRED release_id — the data a risk analyst trades around.
+ECON_RELEASES = [(50, "Jobs report (payrolls)"), (10, "CPI"),
+                 (21, "PCE / personal income"), (53, "GDP")]
+_RELEASE_DATES_URL = "https://api.stlouisfed.org/fred/release/dates"
 
 
 def _next_earnings_date(symbol: str) -> date | None:
@@ -56,5 +64,42 @@ def fetch_earnings(symbols: list[str], within_days: int = 60) -> list[dict]:
                 "date": next_date.isoformat(),
                 "days": days,
             })
+    rows.sort(key=lambda r: r["date"])
+    return rows
+
+
+def _next_release_date(release_id: int, key: str, today: str, timeout: int = 12) -> str | None:
+    """First scheduled date on/after `today` for a FRED release. None on any failure."""
+    url = _RELEASE_DATES_URL + "?" + urllib.parse.urlencode({
+        "release_id": release_id, "api_key": key, "file_type": "json",
+        "realtime_start": today, "include_release_dates_with_no_data": "true",
+        "sort_order": "asc", "limit": 1})
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as resp:
+            payload = json.loads(resp.read())
+        dates = payload.get("release_dates", [])
+        return dates[0].get("date") if dates else None
+    except Exception:
+        return None
+
+
+def fetch_econ_releases(within_days: int = 45) -> list[dict]:
+    """Upcoming key US economic releases (the FRED publication schedule). Best-effort;
+    [] without a FRED key. Each: {name, date, days}."""
+    key = macro_data._load_env_key()
+    if not key:
+        return []
+    today = date.today()
+    rows = []
+    for release_id, name in ECON_RELEASES:
+        d = _next_release_date(release_id, key, today.isoformat())
+        if not d:
+            continue
+        try:
+            days = (date.fromisoformat(d) - today).days
+        except ValueError:
+            continue
+        if 0 <= days <= within_days:
+            rows.append({"name": name, "date": d, "days": days})
     rows.sort(key=lambda r: r["date"])
     return rows
