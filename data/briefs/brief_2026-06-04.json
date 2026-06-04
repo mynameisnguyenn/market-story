@@ -1,7 +1,7 @@
 {
   "date": "2026-06-04",
-  "generated_at_utc": "2026-06-04T04:22:48+00:00",
-  "session_label": "as of 2026-06-04 04:22 UTC",
+  "generated_at_utc": "2026-06-04T12:26:04+00:00",
+  "session_label": "as of 2026-06-04 12:26 UTC",
   "markets": {
     "us_equities": [
       {
@@ -43,11 +43,11 @@
       {
         "symbol": "^VIX",
         "name": "VIX",
-        "last": 16.059999465942383,
-        "change_pct": 1.838928343441748,
-        "change_1w_pct": -1.4119179659819903,
-        "ytd_pct": 7.424746962132622,
-        "level_change": 0.28999900817871094
+        "last": 16.510000228881836,
+        "change_pct": 2.8019973717542612,
+        "change_1w_pct": 4.891997896826972,
+        "ytd_pct": 10.434785548625246,
+        "level_change": 0.4500007629394531
       }
     ],
     "sectors": [
@@ -265,65 +265,65 @@
       {
         "symbol": "^STOXX50E",
         "name": "Euro Stoxx 50",
-        "last": 6053.56982421875,
-        "change_pct": -0.8886968830215558,
-        "change_1w_pct": -0.2795503321706194,
-        "ytd_pct": 4.439955692434605,
-        "level_change": -54.2802734375
+        "last": 6081.41015625,
+        "change_pct": 0.4598994120769584,
+        "change_1w_pct": 0.4343487329311335,
+        "ytd_pct": 4.920274434637539,
+        "level_change": 27.84033203125
       },
       {
         "symbol": "^FTSE",
         "name": "FTSE 100",
-        "last": 10332.2998046875,
-        "change_pct": -0.39716773810671846,
-        "change_1w_pct": -1.643980916825316,
-        "ytd_pct": 4.03668564647679,
-        "level_change": -41.2001953125
+        "last": 10303.3603515625,
+        "change_pct": -0.28008723780809097,
+        "change_1w_pct": -1.1762866721417575,
+        "ytd_pct": 3.7452921673424955,
+        "level_change": -28.939453125
       },
       {
         "symbol": "^GDAXI",
         "name": "DAX",
-        "last": 24795.939453125,
-        "change_pct": -1.3064330872249785,
-        "change_1w_pct": -1.516658787805536,
-        "ytd_pct": 1.247546672047184,
-        "level_change": -328.23046875
+        "last": 24940.400390625,
+        "change_pct": 0.5825991702112843,
+        "change_1w_pct": -0.6051653772579213,
+        "ytd_pct": 1.8374140388178084,
+        "level_change": 144.4609375
       },
       {
         "symbol": "^FCHI",
         "name": "CAC 40",
-        "last": 8150.419921875,
-        "change_pct": -0.7146946006403865,
-        "change_1w_pct": -0.7001766473972992,
-        "ytd_pct": 0.011288077489424175,
-        "level_change": -58.669921875
+        "last": 8238.5302734375,
+        "change_pct": 1.0810529077896813,
+        "change_1w_pct": 0.6064347771955525,
+        "ytd_pct": 1.0924630153690496,
+        "level_change": 88.1103515625
       },
       {
         "symbol": "^N225",
         "name": "Nikkei 225",
-        "last": 67255.28125,
-        "change_pct": -1.6766312910793002,
-        "change_1w_pct": 3.9604831440069876,
-        "ytd_pct": 33.603447281803156,
-        "level_change": -1146.8515625
+        "last": 67470.6875,
+        "change_pct": -1.3617196923569996,
+        "change_1w_pct": 4.29344937961007,
+        "ytd_pct": 34.03135445921974,
+        "level_change": -931.4453125
       },
       {
         "symbol": "^HSI",
         "name": "Hang Seng",
-        "last": 25276.01953125,
-        "change_pct": -1.3934711773757824,
-        "change_1w_pct": 1.0791715853765371,
-        "ytd_pct": -1.3831918649292008,
-        "level_change": -357.19140625
+        "last": 25253.400390625,
+        "change_pct": -1.4817127194914015,
+        "change_1w_pct": 0.9887173113749981,
+        "ytd_pct": -1.4714426058513586,
+        "level_change": -379.810546875
       },
       {
         "symbol": "000001.SS",
         "name": "Shanghai Composite",
-        "last": 4066.555419921875,
-        "change_pct": -0.42651350511521136,
-        "change_1w_pct": -0.782719147124844,
-        "ytd_pct": 2.4620627152348806,
-        "level_change": -17.418701171875
+        "last": 4057.781005859375,
+        "change_pct": -0.6413633989277079,
+        "change_1w_pct": -0.9968004553725041,
+        "ytd_pct": 2.240980135231929,
+        "level_change": -26.193115234375
       }
     ],
     "rates": [
@@ -339,11 +339,11 @@
       {
         "symbol": "^FVX",
         "name": "5Y Yield",
-        "last": 4.2139997482299805,
-        "change_pct": 0.8857960748893445,
-        "change_1w_pct": 0.8857960748893445,
-        "ytd_pct": 13.218696398655872,
-        "level_change": 0.03699970245361328
+        "last": 4.214000225067139,
+        "change_pct": 0.8858074906698876,
+        "change_1w_pct": 0.8858074906698876,
+        "ytd_pct": 13.218709209971635,
+        "level_change": 0.037000179290771484
       },
       {
         "symbol": "^TNX",
@@ -357,114 +357,114 @@
       {
         "symbol": "^TYX",
         "name": "30Y Yield",
-        "last": 4.990000247955322,
-        "change_pct": 0.4630610084678688,
-        "change_1w_pct": -0.4190761882223004,
-        "ytd_pct": 3.09917542641458,
-        "level_change": 0.023000240325927734
+        "last": 4.989999771118164,
+        "change_pct": 0.4630514083640236,
+        "change_1w_pct": -0.41908570403039747,
+        "ytd_pct": 3.099165574407481,
+        "level_change": 0.02299976348876953
       }
     ],
     "fx": [
       {
         "symbol": "DX-Y.NYB",
         "name": "US Dollar Index",
-        "last": 99.48100280761719,
-        "change_pct": -0.04922734078228741,
-        "change_1w_pct": 0.46556875396850383,
-        "ytd_pct": 1.222022836017067,
-        "level_change": -0.0489959716796875
+        "last": 99.23799896240234,
+        "change_pct": -0.29337870036754143,
+        "change_1w_pct": 0.22015989368466826,
+        "ytd_pct": 0.9747661731832169,
+        "level_change": -0.29199981689453125
       },
       {
         "symbol": "EURUSD=X",
         "name": "EUR/USD",
-        "last": 1.1609008312225342,
-        "change_pct": -0.11261297068790865,
-        "change_1w_pct": -0.07661754914343177,
-        "ytd_pct": -1.1771561026442834,
-        "level_change": -0.0013087987899780273
+        "last": 1.1642799377441406,
+        "change_pct": 0.17813548246077282,
+        "change_1w_pct": 0.21423567812584032,
+        "ytd_pct": -0.8895062816465793,
+        "level_change": 0.002070307731628418
       },
       {
         "symbol": "USDJPY=X",
         "name": "USD/JPY",
-        "last": 159.9810028076172,
-        "change_pct": 0.008126930444052327,
-        "change_1w_pct": 0.2588298789532484,
-        "ytd_pct": 2.2811457813245894,
-        "level_change": 0.01300048828125
+        "last": 159.83700561523438,
+        "change_pct": -0.0818893167397694,
+        "change_1w_pct": 0.16858797672243409,
+        "ytd_pct": 2.1890836141439163,
+        "level_change": -0.1309967041015625
       },
       {
         "symbol": "GBPUSD=X",
         "name": "GBP/USD",
-        "last": 1.3423900604248047,
-        "change_pct": -0.22551362562328592,
-        "change_1w_pct": 0.05504421352036104,
-        "ytd_pct": -0.3214983238182145,
-        "level_change": -0.0030341148376464844
+        "last": 1.345750093460083,
+        "change_pct": 0.024224196623223726,
+        "change_1w_pct": 0.3054842784574463,
+        "ytd_pct": -0.07200075346743828,
+        "level_change": 0.00032591819763183594
       },
       {
         "symbol": "USDCNY=X",
         "name": "USD/CNY",
-        "last": 6.776500225067139,
-        "change_pct": 0.2114747660679317,
-        "change_1w_pct": -0.033926146373841615,
-        "ytd_pct": -3.1388877434630924,
-        "level_change": 0.014300346374511719
+        "last": 6.7729997634887695,
+        "change_pct": 0.15970963576767971,
+        "change_1w_pct": -0.08556451264595255,
+        "ytd_pct": -3.1889222141531226,
+        "level_change": 0.010799884796142578
       }
     ],
     "commodities": [
       {
         "symbol": "CL=F",
         "name": "WTI Crude",
-        "last": 95.19000244140625,
-        "change_pct": -0.864397240863779,
-        "change_1w_pct": 7.075366487700574,
-        "ytd_pct": 65.77848393747989,
-        "level_change": -0.8299942016601562
+        "last": 92.44000244140625,
+        "change_pct": -3.7283840104348376,
+        "change_1w_pct": 3.982003211211249,
+        "ytd_pct": 60.98921175410441,
+        "level_change": -3.5799942016601562
       },
       {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "last": 96.94000244140625,
-        "change_pct": -0.8894746333740766,
-        "change_1w_pct": 3.4468075856259217,
-        "ytd_pct": 59.30978615000932,
-        "level_change": -0.8699951171875
+        "last": 94.36000061035156,
+        "change_pct": -3.527243670745872,
+        "change_1w_pct": 0.6936309169024435,
+        "ytd_pct": 55.069848769974804,
+        "level_change": -3.4499969482421875
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
-        "last": 4492.7998046875,
-        "change_pct": 1.2644444498249197,
-        "change_1w_pct": -0.14446692334723066,
-        "ytd_pct": 3.8653528587130337,
-        "level_change": 56.099609375
+        "last": 4519.7001953125,
+        "change_pct": 1.8707597165950496,
+        "change_1w_pct": 0.4534125644116038,
+        "ytd_pct": 4.48724092089372,
+        "level_change": 83.0
       },
       {
         "symbol": "SI=F",
         "name": "Silver",
-        "last": 73.82499694824219,
-        "change_pct": 0.4749837134497614,
-        "change_1w_pct": -2.4059749826045307,
-        "ytd_pct": 5.262774291158423,
-        "level_change": 0.3489990234375
+        "last": 74.31999969482422,
+        "change_pct": 1.1486768385007506,
+        "change_1w_pct": -1.751598925298703,
+        "ytd_pct": 5.968569950364455,
+        "level_change": 0.8440017700195312
       },
       {
         "symbol": "HG=F",
         "name": "Copper",
-        "last": 6.473499774932861,
-        "change_pct": -0.11572553191144808,
-        "change_1w_pct": 1.211692739132797,
-        "ytd_pct": 14.982231675775125,
-        "level_change": -0.007500171661376953
+        "last": 6.519000053405762,
+        "change_pct": 0.5863309230775826,
+        "change_1w_pct": 1.9230792169969924,
+        "ytd_pct": 15.790407120677742,
+        "level_change": 0.03800010681152344
       },
       {
         "symbol": "NG=F",
         "name": "Nat Gas",
-        "last": 3.2320001125335693,
-        "change_pct": 0.5600537013001006,
-        "change_1w_pct": -1.613393361106008,
-        "ytd_pct": -12.316874194100269,
-        "level_change": 0.018000125885009766
+        "last": 3.2890000343322754,
+        "change_pct": 2.3335422524977334,
+        "change_1w_pct": 0.12176403035240035,
+        "ytd_pct": -10.770484608709907,
+        "level_change": 0.07500004768371582
       }
     ],
     "credit": [
@@ -492,7 +492,7 @@
         "last": 85.30999755859375,
         "change_pct": -0.39696901486034886,
         "change_1w_pct": 0.4050953258963874,
-        "ytd_pct": -0.2713656525966668,
+        "ytd_pct": -0.27137454726685606,
         "level_change": -0.34000396728515625
       },
       {
@@ -560,12 +560,12 @@
     {
       "id": "SOFR",
       "name": "SOFR (secured funding)",
-      "latest": 3.63,
-      "date": "2026-06-02",
-      "prev": 3.65,
+      "latest": 3.61,
+      "date": "2026-06-03",
+      "prev": 3.63,
       "change": -0.020000000000000018,
-      "pct_1y": 9.1,
-      "z_1y": -1.05
+      "pct_1y": 5.6,
+      "z_1y": -1.1
     },
     {
       "id": "T10YIE",
@@ -748,47 +748,47 @@
     {
       "id": "WCESTUS1",
       "name": "Crude oil (ex-SPR)",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null,
-      "units": null
+      "latest": 433712.0,
+      "date": "2026-05-29",
+      "prev": 441686.0,
+      "change": -7974.0,
+      "units": "MBBL"
     },
     {
       "id": "WGTSTUS1",
       "name": "Gasoline",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null,
-      "units": null
+      "latest": 214955.0,
+      "date": "2026-05-29",
+      "prev": 211591.0,
+      "change": 3364.0,
+      "units": "MBBL"
     },
     {
       "id": "WDISTUS1",
       "name": "Distillate",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null,
-      "units": null
+      "latest": 102301.0,
+      "date": "2026-05-29",
+      "prev": 100799.0,
+      "change": 1502.0,
+      "units": "MBBL"
     },
     {
       "id": "WCSSTUS1",
       "name": "Crude in SPR",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null,
-      "units": null
+      "latest": 357119.0,
+      "date": "2026-05-29",
+      "prev": 365112.0,
+      "change": -7993.0,
+      "units": "MBBL"
     },
     {
       "id": "NW2_EPG0_SWO_R48_BCF",
       "name": "Nat gas storage (L48)",
-      "latest": null,
-      "date": null,
-      "prev": null,
-      "change": null,
-      "units": null
+      "latest": 2483.0,
+      "date": "2026-05-22",
+      "prev": 2391.0,
+      "change": 92.0,
+      "units": "BCF"
     }
   ],
   "positioning": [
@@ -854,15 +854,15 @@
         "group": "watchlist"
       },
       {
+        "name": "CAC 40",
+        "symbol": "^FCHI",
+        "change_pct": 1.0810529077896813,
+        "group": "global_indices"
+      },
+      {
         "name": "Health Care",
         "symbol": "XLV",
         "change_pct": 0.785525412034227,
-        "group": "sectors"
-      },
-      {
-        "name": "Cons. Staples",
-        "symbol": "XLP",
-        "change_pct": 0.40327731109672804,
         "group": "sectors"
       }
     ],
@@ -901,235 +901,438 @@
   },
   "news": [
     {
-      "title": "3D Systems prices $50M upsized public offering at $3.05/share",
+      "title": "Broadcom tumbles on guidance, but Wall Street sees bright outlook",
       "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600507-3d-systems-prices-50m-upsized-public-offering-at-305share?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "link": "https://seekingalpha.com/news/4600637-broadcom-tumbles-on-guidance-but-wall-street-sees-bright-outlook?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-04T04:12:53+00:00"
+      "published": "2026-06-04T12:22:45+00:00"
     },
     {
-      "title": "Meta accuses Australia of breaching FTA, invokes US \u2019trade action\u2019",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/meta-accuses-australia-of-breaching-fta-invokes-us-trade-action-4725527",
-      "summary": "",
-      "published": "2026-06-04T04:06:48+00:00"
-    },
-    {
-      "title": "Meta repeatedly pushes back new AI model release for developers, WSJ says",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/meta-repeatedly-pushes-back-new-ai-model-release-for-developers-wsj-says-4725665",
-      "summary": "",
-      "published": "2026-06-04T04:00:48+00:00"
-    },
-    {
-      "title": "Thursday\u2019s Economic Calendar",
+      "title": "AN2 rises after early-stage trial data for Chagas disease therapy",
       "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600341-thursdays-economic-calendar?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "link": "https://seekingalpha.com/news/4600650-an2-posts-trial-data-chagas-disease-therapy?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-04T04:00:00+00:00"
+      "published": "2026-06-04T12:21:35+00:00"
     },
     {
-      "title": "Broadcom\u2019s sales and AI chip forecast comes in below expectations, shares tumble",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/broadcom-forecasts-quarterly-revenue-above-estimates-4725166",
-      "summary": "",
-      "published": "2026-06-04T03:54:30+00:00"
-    },
-    {
-      "title": "Australian Market Extends Early Losses In Mid-market",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/australian-market-extends-early-losses-mid-market-1",
-      "summary": "(RTTNews) - The Australian market is extending its early losses in mid-market moves on Thursday, but reversing the gains in the previous session, following the broadly negative cues from Wall Street overnight. The benchmark S&amp;P/ASX 200 is falling well below the 8,700 level, w",
-      "published": "2026-06-04T03:27:55+00:00"
-    },
-    {
-      "title": "Veeva expects about $10M Ostro contribution in remaining FY2027 quarters while outlining Falcon usage-based pricing",
+      "title": "Zhongchao announces 1-for-31 share consolidation",
       "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600504-veeva-expects-about-10m-ostro-contribution-in-remaining-fy2027-quarters-while-outlining?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "link": "https://seekingalpha.com/news/4600651-zhongchao-announces-1-forminus-31-share-consolidation?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-04T03:22:53+00:00"
+      "published": "2026-06-04T12:20:46+00:00"
     },
     {
-      "title": "The S&P 500 Index Has Only Traded at This High a Valuation 1 Other Time in Its 69-Year Existence. History Couldn't Be Any Clearer on What Happens Next.",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/sp-500-index-has-only-traded-high-valuation-1-other-time-its-69-year-existence-history",
-      "summary": "Key PointsIn the history of the S&amp;P 500's Shiller CAPE ratio, the market has rarely traded at this level.",
-      "published": "2026-06-04T03:20:00+00:00"
-    },
-    {
-      "title": "Nvidia, Hyundai Motor discuss AI R&D center in S.Korea- report",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/nvidia-hyundai-motor-discuss-ai-rd-center-in-skorea-report-4725624",
+      "title": "CrowdStrike falls after Q1 results; analysts bullish but highlight high investor expectations for ARR",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600619-crowdstrike-falls-after-q1-results-analysts-bullish-but-highlight-high-investor-expectations-for-arr?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-04T03:18:56+00:00"
+      "published": "2026-06-04T12:19:32+00:00"
     },
     {
-      "title": "Sunshine Silver Mining raises $270 million in US IPO",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/sunshine-silver-mining-raises-270-million-in-us-ipo-4725623",
+      "title": "Most and least shorted materials stocks with market caps up to $2B in May",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600635-most-and-least-shorted-materials-stocks-with-market-caps-up-to-2b-in-may?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
       "summary": "",
-      "published": "2026-06-04T03:18:55+00:00"
+      "published": "2026-06-04T12:19:14+00:00"
     },
     {
-      "title": "Asian Markets Track Wall Street Lower",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/asian-markets-track-wall-street-lower-7",
-      "summary": "(RTTNews) - Asian stock markets are trading mostly lower on Thursday, following the broadly negative cues from Wall Street overnight, on spiking crude oil prices after new attacks in the Middle East stalled the signing of a U.S.-Iran peace agreement, delaying the reopening of the",
-      "published": "2026-06-04T03:16:47+00:00"
+      "title": "Xos to raise $6M in registered direct stock offering",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600647-xos-to-raise-6m-in-registered-direct-stock-offering?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-04T12:18:09+00:00"
     },
     {
-      "title": "Slumping Chinese oil imports \u2018shield\u2019 global market from higher prices",
+      "title": "Caleres delivers Q1 beat despite challenges for Famous Footwear",
+      "source": "Seeking Alpha",
+      "link": "https://seekingalpha.com/news/4600628-caleres-delivers-q1-beat-despite-challenges-for-famous-footwear?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "summary": "",
+      "published": "2026-06-04T12:17:57+00:00"
+    },
+    {
+      "title": "Broadcom could be headed for one of the worst 1-day destructions in shareholder value ever",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/stocks/article/broadcom-could-be-headed-for-one-of-the-worst-1-day-destructions-in-shareholder-value-ever-121457875.html",
+      "summary": "",
+      "published": "2026-06-04T12:14:57+00:00"
+    },
+    {
+      "title": "Blackstone caps withdrawals from flagship private credit fund",
       "source": "FT International",
-      "link": "https://www.ft.com/content/ef6f00c5-4f2d-4fd3-a6cc-f65081bb1248",
-      "summary": "Traders and analysts say near-decade-low shipments are a major factor in why crude still trades at less than $100 a barrel",
-      "published": "2026-06-04T03:16:36+00:00"
+      "link": "https://www.ft.com/content/4eca0255-27e7-47cc-8ebf-c9cc00c62e29",
+      "summary": "Redemption requests surged to $4.5bn in the second quarter amid mounting fears in sector",
+      "published": "2026-06-04T12:11:20+00:00"
     },
     {
-      "title": "Asia stocks fall as chip rally cools, US-Iran tensions weigh",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/asia-stocks-fall-as-chip-rally-cools-usiran-tensions-weigh-4725608",
-      "summary": "",
-      "published": "2026-06-04T02:59:16+00:00"
-    },
-    {
-      "title": "Why Intel Stock Rallied Today",
+      "title": "Prediction: This Artificial Intelligence (AI) Stock Will Split Before Year-End 2026",
       "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/why-intel-stock-rallied-today",
-      "summary": "Key PointsIntel unveiled powerful new AI equipment for data centers.",
-      "published": "2026-06-04T02:55:19+00:00"
+      "link": "https://www.nasdaq.com/articles/prediction-artificial-intelligence-ai-stock-will-split-year-end-2026",
+      "summary": "Key PointsNvidia's last stock split occurred when its shares traded well below the current price of ASML's stock.",
+      "published": "2026-06-04T12:08:00+00:00"
     },
     {
-      "title": "Treasury Wine bets on Penfolds-led luxury push to revive fortunes",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/treasury-wine-bets-on-penfoldsled-luxury-push-to-revive-fortunes-4725605",
+      "title": "Stock Market Today: Dow Rises, Nasdaq Falls With Jobless Data Due; Broadcom, CrowdStrike Plunge (Live Coverage)",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-sp500-nasdaq-broadcom-avgo-crowdstrike-crwd/?src=A00220&yptr=yahoo",
       "summary": "",
-      "published": "2026-06-04T02:54:54+00:00"
+      "published": "2026-06-04T12:06:39+00:00"
     },
     {
-      "title": "TSMC boss upbeat on outlook as AI boom shows no sign of easing",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/tsmc-boss-upbeat-on-outlook-as-ai-boom-shows-no-sign-of-easing-4725571",
+      "title": "Dow Jones Futures Rise, But Broadcom, CrowdStrike, Ciena Hit Techs; SpaceX IPO Price Target Set",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/market-trend/stock-market-today/dow-jones-futures-broadcom-crowdstrike-earnings-spacex-ipo-price-target/?src=A00220&yptr=yahoo",
       "summary": "",
-      "published": "2026-06-04T02:54:33+00:00"
+      "published": "2026-06-04T12:06:22+00:00"
     },
     {
-      "title": "Sunshine Silver Mining prices IPO at $13.50 per share",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/sunshine-silver-mining-prices-ipo-at-1350-per-share-432SI-4725604",
+      "title": "AI Power Plant Builder In Buy Area Ahead Of Earnings Report",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/news/argan-earnings-ai-power-plant-data-centers/?src=A00220&yptr=yahoo",
       "summary": "",
-      "published": "2026-06-04T02:53:07+00:00"
+      "published": "2026-06-04T12:00:56+00:00"
     },
     {
-      "title": "The SpaceX IPO Could Blow Up This Mega-Popular Investing Strategy",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/spacex-ipo-could-blow-mega-popular-investing-strategy",
-      "summary": "Key PointsSpaceX is expected to join the S&amp;P 500 and Nasdaq-100 shortly after its IPO.",
-      "published": "2026-06-04T02:50:00+00:00"
-    },
-    {
-      "title": "Advent, ADIA-backed gas engine maker Innio raises $2.43 billion\u00a0in US IPO",
-      "source": "Investing.com Markets",
-      "link": "https://www.investing.com/news/stock-market-news/advent-adiabacked-gas-engine-maker-innio-raises-243-billionin-us-ipo-4725601",
+      "title": "Dollar slips from two-month high amid Iran talks, yen trades near 160",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/currencies/articles/dollar-2-month-high-gulf-055447703.html",
       "summary": "",
-      "published": "2026-06-04T02:48:29+00:00"
+      "published": "2026-06-04T12:00:50+00:00"
     },
     {
-      "title": "Five Below expects $5.4B-$5.48B sales and $8.85 adjusted EPS, raises outlook after $1.3B Q1",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600503-five-below-expects-5_4b-5_48b-sales-and-8_85-adjusted-eps-raises-outlook-after-1_3b-q1?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "title": "This Stock Entices With A 15.9% Yield \u2014 But Is It Too Good To Be True?",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/research/the-income-investor/dynex-dx-capital-stock-real-estate-investment-trust-reit/?src=A00220&yptr=yahoo",
       "summary": "",
-      "published": "2026-06-04T02:43:27+00:00"
+      "published": "2026-06-04T12:00:17+00:00"
     },
     {
-      "title": "Indian Shares Set To Follow Global Peers Lower",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/indian-shares-set-follow-global-peers-lower-0",
-      "summary": "(RTTNews) - Indian shares are seen opening on a sluggish note Thursday as Iran jitters persist and a broader rally in global chipmaking stocks ran out of steam.",
-      "published": "2026-06-04T02:38:19+00:00"
+      "title": "AI-Fueled IPO Leader Tests Breakout And Takes On Legacy Giants AmEx, SAP",
+      "source": "Yahoo Finance",
+      "link": "https://www.investors.com/research/ibd-stock-analysis/navan-stock-ipo-sap-concur-ameec-business-travel-rival/?src=A00220&yptr=yahoo",
+      "summary": "",
+      "published": "2026-06-04T12:00:01+00:00"
     },
     {
-      "title": "Big Tech's AI Spending Is on Track to Top $700 Billion This Year. Here's Who May Cash In Next.",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/big-techs-ai-spending-track-top-700-billion-year-heres-who-may-cash-next",
-      "summary": "Key PointsThe four largest hyperscalers have guided to as much as $725 billion in capital spending this year.",
-      "published": "2026-06-04T02:31:00+00:00"
-    },
-    {
-      "title": "Only 5% of day traders make money, but the SEC is now making it easier for more people to try it anyway",
+      "title": "How \u2018no tax on overtime\u2019 could impact behavior in good ways \u2014 and bad",
       "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/about-95-of-day-traders-lose-money-but-a-new-rule-will-make-it-easier-to-do-so-anyway-b576498b?mod=mw_rss_topstories",
-      "summary": "The pattern day-trading rule is going away on June 4, but retail investors should understand the risks.",
-      "published": "2026-06-04T02:22:00+00:00"
+      "link": "https://www.marketwatch.com/story/how-no-tax-on-overtime-could-impact-behavior-in-good-ways-and-bad-1552dd41?mod=mw_rss_topstories",
+      "summary": "The One Big Beautiful Bill Act deduction that could encourage bad actors.",
+      "published": "2026-06-04T12:00:00+00:00"
+    },
+    {
+      "title": "Stocks making the biggest moves premarket: Broadcom, Micron, Petco, Coinbase and more",
+      "source": "CNBC Finance",
+      "link": "https://www.cnbc.com/2026/06/04/stocks-making-the-biggest-moves-premarket-.html",
+      "summary": "These are the stocks posting the largest moves in the premarket.",
+      "published": "2026-06-04T11:59:11+00:00"
+    },
+    {
+      "title": "Gas engine maker Innio set for Nasdaq debut after upsized $2.43 billion IPO",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/gas-engine-maker-innio-set-for-nasdaq-debut-after-upsized-243-billion-ipo-4726497",
+      "summary": "",
+      "published": "2026-06-04T11:56:06+00:00"
+    },
+    {
+      "title": "How to Avoid Running Out of Money When You Retire With $1.5 Million",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/how-avoid-running-out-money-when-you-retire-15-million",
+      "summary": "Key PointsEven if you retire with a decent chunk of savings, there's no guarantee your nest egg won't get depleted.",
+      "published": "2026-06-04T11:56:00+00:00"
+    },
+    {
+      "title": "HSBC stays aggressive on stocks, asks what could turn it bearish",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/hsbc-stays-aggressive-on-stocks-asks-what-could-turn-it-bearish-4726489",
+      "summary": "",
+      "published": "2026-06-04T11:55:07+00:00"
+    },
+    {
+      "title": "This Premier Dividend Stock Has 1 Major Issue, But Does Its Ultra-High-Yield Dividend Make It Worth It?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/premier-dividend-stock-has-1-major-issue-does-its-ultra-high-yield-dividend-make-it-worth",
+      "summary": "Key PointsU.S. adult smoking rates continue to reach all-time lows.",
+      "published": "2026-06-04T11:55:00+00:00"
+    },
+    {
+      "title": "This Chip ETF Was Ready for the Micron Boom",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/chip-etf-was-ready-micron-boom",
+      "summary": "Key PointsThe First Trust Nasdaq Semiconductor ETF is benefiting from Micron&rsquo;s ascent.",
+      "published": "2026-06-04T11:54:00+00:00"
+    },
+    {
+      "title": "SBA Communications vs. Crown Castle: Which Real Estate Stock Is a Better Buy in 2026?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/sba-communications-vs-crown-castle-which-real-estate-stock-better-buy-2026",
+      "summary": "Key PointsSBA Communications leverages a strong international presence and superior net margins to drive growth.",
+      "published": "2026-06-04T11:53:43+00:00"
+    },
+    {
+      "title": "RBC starts Sylvania Platinum at \u201coutperform,\u201d eyes 106% upside for FY26-FY28",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/rbc-starts-sylvania-platinum-at-outperform-eyes-106-upside-for-fy26fy28-4726471",
+      "summary": "",
+      "published": "2026-06-04T11:51:44+00:00"
+    },
+    {
+      "title": "Broadcom, CrowdStrike slump premarket; Orion Energy jumps",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/broadcom-crowdstrike-slump-premarket-orion-energy-jumps-4726450",
+      "summary": "",
+      "published": "2026-06-04T11:45:38+00:00"
+    },
+    {
+      "title": "Take-Two's Path to Profitability Is Coming in November",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/take-twos-path-profitability-coming-november",
+      "summary": "Key PointsWhile the world waits for GTA VI, the company's recurring revenue model is making the business more durable.",
+      "published": "2026-06-04T11:45:00+00:00"
+    },
+    {
+      "title": "Here\u2019s advice on how to pick a doctor \u2014 from a doctor",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/do-ask-a-friend-dont-pay-attention-to-ads-heres-advice-on-how-to-pick-a-doctor-from-a-doctor-93bbdaf2?mod=mw_rss_topstories",
+      "summary": "A cardiologist outlines the best approach to finding a doctor \u2014 and the questions to ask yourself when you do.",
+      "published": "2026-06-04T11:44:00+00:00"
+    },
+    {
+      "title": "Futu to halt new positions for mainland China investors from June 12",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/futu-to-halt-new-positions-for-mainland-china-investors-from-june-12-93CH-4726440",
+      "summary": "",
+      "published": "2026-06-04T11:43:01+00:00"
+    },
+    {
+      "title": "Coca-Cola CFO flags uneven demand, warns of Middle East risks into 2027",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/cocacola-cfo-flags-uneven-demand-warns-of-middle-east-risks-into-2027-4726439",
+      "summary": "",
+      "published": "2026-06-04T11:42:58+00:00"
+    },
+    {
+      "title": "Coca-Cola adjusting strategy amid uneven consumer demand, CFO says",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/cocacola-adjusting-strategy-amid-uneven-consumer-demand-cfo-says-4726438",
+      "summary": "",
+      "published": "2026-06-04T11:41:45+00:00"
+    },
+    {
+      "title": "Revolut co-founder Vlad Yatsenko to step down in July",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/revolut-cofounder-vlad-yatsenko-to-step-down-in-july-93CH-4726422",
+      "summary": "",
+      "published": "2026-06-04T11:36:48+00:00"
+    },
+    {
+      "title": "Kingdom Holding shares fall 6% after SpaceX stake disclosure",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/kingdom-holding-shares-fall-6-after-spacex-stake-disclosure-93CH-4726421",
+      "summary": "",
+      "published": "2026-06-04T11:36:45+00:00"
+    },
+    {
+      "title": "Brazil could buy another 20 Gripen jets, Sweden says",
+      "source": "Investing.com Markets",
+      "link": "https://www.investing.com/news/stock-market-news/brazil-could-buy-another-20-gripen-jets-sweden-says-4726420",
+      "summary": "",
+      "published": "2026-06-04T11:36:32+00:00"
+    },
+    {
+      "title": "Buckle Reports Higher Net Sales In May",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/buckle-reports-higher-net-sales-may",
+      "summary": "(RTTNews) - The Buckle, Inc. (BKE) reported higher net sales for May, helped by growth in comparable store sales and contributions from new stores, the U.S. apparel retailer said on Thursday.",
+      "published": "2026-06-04T11:30:02+00:00"
+    },
+    {
+      "title": "I want to give my brother and his kids $5,000 each. My financial adviser is reluctant. Who\u2019s right?",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/i-want-to-give-my-brother-and-his-kids-5-000-each-my-financial-adviser-is-reluctant-whos-right-47cbb74e?mod=mw_rss_topstories",
+      "summary": "\u201cIn the past I\u2019ve loaned my brother over $12,000, which I\u2019m sure I\u2019ll never get back.\u201d",
+      "published": "2026-06-04T11:30:00+00:00"
+    },
+    {
+      "title": "Ciena Q2 Earnings Surge; Raises FY26 Outlook",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/ciena-q2-earnings-surge-raises-fy26-outlook",
+      "summary": "(RTTNews) - Ciena Corp. (CIEN), a network technology company, on Thursday reported higher net income in the second quarter of fiscal year 2026 compared with the previous year.",
+      "published": "2026-06-04T11:27:41+00:00"
+    },
+    {
+      "title": "Economic calendar: jobless claims for the week ending May 30",
+      "source": "MarketWatch Bulletins",
+      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=a1471d76-f762-44df-90b9-8427f5b811a1&mod=mw_rss_bulletins",
+      "summary": "",
+      "published": "2026-06-04T11:20:35+00:00"
+    },
+    {
+      "title": "Will AI Productivity Gains Allow Fed Chair Kevin Warsh to Cut Interest Rates?",
+      "source": "Nasdaq Markets",
+      "link": "https://www.nasdaq.com/articles/will-ai-productivity-gains-allow-fed-chair-kevin-warsh-cut-interest-rates",
+      "summary": "Key PointsAI could eventually enable the Fed to lower rates, but not in the near term.",
+      "published": "2026-06-04T11:20:00+00:00"
+    },
+    {
+      "title": "Broadcom headed for $300bn market value wipeout as revenue forecast disappoints",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/c8d506d3-7e81-49be-bb72-24ae289b9240",
+      "summary": "Shares in chip company fall 15 per cent in pre-market trading on Thursday",
+      "published": "2026-06-04T11:15:22+00:00"
+    },
+    {
+      "title": "Analyst Report: Xcel Energy Inc",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/research/reports/ARGUS_3546_AnalystReport_1780571362000?yptr=yahoo&ncid=yahooproperties_plusresear_nm5q6ze1cei",
+      "summary": "",
+      "published": "2026-06-04T11:09:22+00:00"
+    },
+    {
+      "title": "Analyst Report: Markel Group Inc",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/research/reports/ARGUS_3727_AnalystReport_1780571362000?yptr=yahoo&ncid=yahooproperties_plusresear_nm5q6ze1cei",
+      "summary": "",
+      "published": "2026-06-04T11:09:22+00:00"
+    },
+    {
+      "title": "Tech is flashing a warning sign last seen in 2020. Strategist Larry McDonald sees a massive rotation coming.",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/tech-is-flashing-a-warning-sign-last-seen-in-2020-strategist-larry-mcdonald-sees-a-massive-rotation-coming-c8d5a2fe?mod=mw_rss_topstories",
+      "summary": "Larry McDonald warns that investors are piling into tech stocks thinking it\u2019s the \u201csafe trade,\u201d but should be thining about hard assets instead.",
+      "published": "2026-06-04T11:09:00+00:00"
+    },
+    {
+      "title": "Jefferies CEO says his firm is not in the SpaceX shorting business",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/jefferies-ceo-says-firm-is-not-in-the-spacex-shorting-business-c78e1c6d?mod=mw_rss_topstories",
+      "summary": "Some 23 firms are handling the SpaceX initial public offering, and Jefferies Financial Group is not one of them.",
+      "published": "2026-06-04T11:01:00+00:00"
+    },
+    {
+      "title": "\u2018No one seems to wear their bling\u2019: Is it safe to show off your expensive jewelry?",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/no-one-seems-to-wear-their-bling-is-it-safe-to-show-off-your-expensive-jewelry-a807bc55?mod=mw_rss_topstories",
+      "summary": "\u201cI\u2019ve been to many shows, operas, big parties and fundraisers.\u201d",
+      "published": "2026-06-04T10:34:00+00:00"
+    },
+    {
+      "title": "Quantinuum raises $1.68 billion in IPO that seeks to give quantum computing more street cred",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/quantinuum-raises-1-68-billion-in-ipo-that-seeks-to-give-quantum-computing-more-street-cred-8b7d7e16?mod=mw_rss_topstories",
+      "summary": "Quantinuum is pursuing a traditional IPO, whereas many other quantum players have gone the SPAC route.",
+      "published": "2026-06-04T10:29:00+00:00"
+    },
+    {
+      "title": "Who is Elon Musk and what is his net worth?",
+      "source": "BBC Business",
+      "link": "https://www.bbc.com/news/articles/c0r1975ded7o?at_medium=RSS&at_campaign=rss",
+      "summary": "The boss of X, Tesla and SpaceX is the world's richest person and has used his platform to make his views known on a vast array of topics.",
+      "published": "2026-06-04T10:25:06+00:00"
     },
     {
       "title": "How single-stock turbulence presents \u2018asymmetric\u2019 downside risk for a rather calm S&P 500",
       "source": "MarketWatch Top Stories",
       "link": "https://www.marketwatch.com/story/how-single-stock-turbulence-presents-asymmetric-downside-risk-for-a-rather-calm-s-p-500-9748b2d8?mod=mw_rss_topstories",
       "summary": "A \u201cdispersion trade\u201d is being fueled by rising volatility for individual stocks while index volatility is falling \u2014 suggesting the risks of a selloff are rising",
-      "published": "2026-06-04T02:16:00+00:00"
+      "published": "2026-06-04T10:23:00+00:00"
     },
     {
-      "title": "IDT signals FY 2026 adjusted EBITDA of $150M-$152M driven by growth-segment operating leverage",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600502-idt-signals-fy-2026-adjusted-ebitda-of-150m-152m-driven-by-growth-segment-operating-leverage?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-04T02:12:49+00:00"
+      "title": "\u2018It makes us feel uncomfortable\u2019: We\u2019re in our 70s and our only child is 40. Do we tell her we\u2019re leaving her everything?",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/it-makes-us-feel-uncomfortable-were-in-our-70s-and-our-only-child-is-40-do-we-tell-her-were-leaving-her-everything-28421776?mod=mw_rss_topstories",
+      "summary": "\u201cThis is a tricky subject.\u201d",
+      "published": "2026-06-04T10:11:00+00:00"
     },
     {
-      "title": "SpaceX says it\u2019s worth $1.75tn as it nears stock market debut",
+      "title": "Maxed out on TSMC, Samsung and SK Hynix, what emerging-markets funds are buying now",
+      "source": "MarketWatch Top Stories",
+      "link": "https://www.marketwatch.com/story/maxed-out-on-tsmc-samsung-and-sk-hynix-what-emerging-market-funds-are-buying-now-baf9e828?mod=mw_rss_topstories",
+      "summary": "Fund managers who\u2019ve made a killing this year with positions in the three top-performing emerging market stocks are increasingly being forced to diversify elsewhere.",
+      "published": "2026-06-04T10:05:00+00:00"
+    },
+    {
+      "title": "Trafigura warns oil at \u2018inflection point\u2019 as Iran war stokes bumper half-year profits",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/6e357d8a-d370-4501-beef-fa2445f3a557",
+      "summary": "Commodity trader\u2019s net profit more than doubles to $4.1bn for October to March period",
+      "published": "2026-06-04T10:00:06+00:00"
+    },
+    {
+      "title": "Travelers Bound for the U.K. Hit a Roadblock: Electronic Authorization System Is Down",
+      "source": "NYT Economy",
+      "link": "https://www.nytimes.com/2026/06/03/travel/uk-travelers-eta-outage.html",
+      "summary": "Some visitors from the U.S., Canada and most European countries can\u2019t get an electronic travel authorization and are being turned away from planes, trains and boats.",
+      "published": "2026-06-04T09:14:09+00:00"
+    },
+    {
+      "title": "U.S. proposes fresh tariffs on 60 economies over forced labor trade practices",
+      "source": "CNBC Economy",
+      "link": "https://www.cnbc.com/2026/06/03/us-tariffs-60-economies-dection-301-forced-labor-trade-practices-.html",
+      "summary": "USTR has proposed a 10% duty rate for economies that have adopted a full or partial prohibition on forced labor trade, and 12.5% for all other economies.",
+      "published": "2026-06-04T08:29:56+00:00"
+    },
+    {
+      "title": "Partners Group prepares to cap withdrawals at US fund for wealthy individuals",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/33a78e0c-39ea-4a72-b188-b19f753247e7",
+      "summary": "Swiss group faces increasing strains as redemption requests from investors rise",
+      "published": "2026-06-04T07:27:25+00:00"
+    },
+    {
+      "title": "SpaceX says it's worth $1.75tn as it targets largest stock market debut",
       "source": "BBC Business",
       "link": "https://www.bbc.com/news/articles/cvgz237n40jo?at_medium=RSS&at_campaign=rss",
-      "summary": "Elon Musk\u2019s space exploration company set a target price for buyers earlier than expected.",
-      "published": "2026-06-04T02:05:51+00:00"
+      "summary": "Elon Musk\u2019s space exploration company set a target share price for buyers earlier than expected.",
+      "published": "2026-06-04T07:10:10+00:00"
     },
     {
-      "title": "Why Oracle Stock Zoomed 39.9% Higher in May",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/why-oracle-stock-zoomed-399-higher-may",
-      "summary": "Key PointsOracle is rebounding alongside its key infrastructure partner, OpenAI.",
-      "published": "2026-06-04T02:01:24+00:00"
+      "title": "'I lost thousands in savings and my partner's money is in limbo'",
+      "source": "BBC Business",
+      "link": "https://www.bbc.com/news/articles/c15215lz3k0o?at_medium=RSS&at_campaign=rss",
+      "summary": "The number of people withdrawing money from a LISA is outpacing the number using one to buy a home. Why?",
+      "published": "2026-06-04T05:06:33+00:00"
     },
     {
-      "title": "Thai Bourse May Hand Back Tuesday's Gains",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/thai-bourse-may-hand-back-tuesdays-gains",
-      "summary": "(RTTNews) - Ahead of Wednesday's holiday for Queen Suthida's birthday, the Thai stock market had ended the two-day slide in which it had dipped just 2 points or 0.1 percent. The Stock Exchange of Thailand now sits just beneath the 1,590-point plateau although it's likely to turn",
-      "published": "2026-06-04T02:00:57+00:00"
+      "title": "America\u2019s \u2018other\u2019 economy tells a different growth story",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/e318cc17-a42d-40b9-b112-2a2a401a6795",
+      "summary": "Investors should pay attention to the struggles of the consumer packaged goods industry",
+      "published": "2026-06-04T04:00:32+00:00"
     },
     {
-      "title": "Transcontinental Inc. Reveals Increase In Q2 Bottom Line",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/transcontinental-inc-reveals-increase-q2-bottom-line",
-      "summary": "(RTTNews) - Transcontinental Inc. (TCL_A.TO) reported earnings for its second quarter that Increases, from last year",
-      "published": "2026-06-04T01:35:55+00:00"
+      "title": "Anthropic\u2019s relentless race to the top",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/e17665ea-c5ca-428a-839c-be5c1eacc35c",
+      "summary": "Can the AI company hold on to its ethical founding principles as it strides to market with its most powerful and unnerving tool yet?",
+      "published": "2026-06-04T04:00:23+00:00"
     },
     {
-      "title": "Canaan vs. CleanSpark: Which Technology Stock Is a Better Buy in 2026?",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/canaan-vs-cleanspark-which-technology-stock-better-buy-2026",
-      "summary": "Key PointsCanaan provides the specialized hardware infrastructure essential for global digital asset mining operations.",
-      "published": "2026-06-04T01:32:11+00:00"
+      "title": "Argentina invites AI to free itself",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/f93022fe-43f7-437d-abd8-06c457c0a43c",
+      "summary": "As we enter a new era of technology, AI must be permitted to develop without premature regulation",
+      "published": "2026-06-04T04:00:23+00:00"
     },
     {
-      "title": "Oversold Indonesia Bourse Called Lower Again On Thursday",
-      "source": "Nasdaq Markets",
-      "link": "https://www.nasdaq.com/articles/oversold-indonesia-bourse-called-lower-again-thursday",
-      "summary": "(RTTNews) - The Indonesia stock market turned emphatically lower again on Wednesday, one session after ending the two-day slide in which it had given up almost 80 points or 1.3 percent. The Jakarta Composite Index now sits just above the 5,940-point plateau and it's expected to o",
-      "published": "2026-06-04T01:30:57+00:00"
+      "title": "Global flight of the wealthy slows sharply as political and tax worries ease",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/2245f688-cbbf-42ce-ae79-ab5d7ea9a6d0",
+      "summary": "UK had deep drop in rich people shifting jurisdiction after non-dom abolition played out",
+      "published": "2026-06-04T04:00:15+00:00"
     },
     {
-      "title": "CrowdStrike signals $1.279B-$1.303B FY 2027 net new ARR as it outlines 4-for-1 stock split",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600501-crowdstrike-signals-1_279b-1_303b-fy-2027-net-new-arr-as-it-outlines-4-forminus-1-stock-split?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "title": "Trump\u2019s pledge to unleash a \u2018golden age\u2019 of US manufacturing sputters",
+      "source": "FT International",
+      "link": "https://www.ft.com/content/573913be-f4e6-444e-9e55-65fe57f5286f",
+      "summary": "Spending on new factories has fallen while industry executives point to uneven recovery",
+      "published": "2026-06-04T04:00:14+00:00"
+    },
+    {
+      "title": "Anthropic scales its most powerful AI a day after filing to IPO",
+      "source": "Yahoo Finance",
+      "link": "https://finance.yahoo.com/markets/stocks/articles/anthropic-scales-most-powerful-ai-033300925.html",
       "summary": "",
-      "published": "2026-06-04T01:12:39+00:00"
-    },
-    {
-      "title": "Broadcom outlines $29.4B Q3 revenue outlook driven by $16B AI semiconductor revenue",
-      "source": "Seeking Alpha",
-      "link": "https://seekingalpha.com/news/4600500-broadcom-outlines-29_4b-q3-revenue-outlook-driven-by-16b-ai-semiconductor-revenue?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "summary": "",
-      "published": "2026-06-04T01:04:00+00:00"
+      "published": "2026-06-04T03:33:00+00:00"
     },
     {
       "title": "Buzzy quantum-computing company Quantinuum raises $1.68 billion in IPO",
@@ -1139,39 +1342,18 @@
       "published": "2026-06-04T01:00:41+00:00"
     },
     {
-      "title": "Quantinuum raises $1.68 billion in IPO that seeks to give quantum computing more street cred",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/quantinuum-raises-1-68-billion-in-ipo-that-seeks-to-give-quantum-computing-more-street-cred-8b7d7e16?mod=mw_rss_topstories",
-      "summary": "Quantinuum is pursuing a traditional IPO, whereas many other quantum players have gone the SPAC route.",
-      "published": "2026-06-04T00:57:00+00:00"
+      "title": "You\u2019re going to pay tax on RMDs \u2014 there\u2019s no way around it. Or is there?",
+      "source": "MarketWatch Bulletins",
+      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=e0249c7a-3715-4156-9d86-4c4288f7d5f6&mod=mw_rss_bulletins",
+      "summary": "",
+      "published": "2026-06-04T00:44:09+00:00"
     },
     {
-      "title": "Broadcom loses more than $300bn in market value as revenue forecast disappoints",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/c8d506d3-7e81-49be-bb72-24ae289b9240",
-      "summary": "Shares in chip company fall as much as 15% in after-hours trading",
-      "published": "2026-06-04T00:13:58+00:00"
-    },
-    {
-      "title": "Broadcom\u2019s stock falls despite accelerating AI-chip growth",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/broadcoms-stock-falls-despite-accelerating-ai-chip-growth-7731ee89?mod=mw_rss_topstories",
-      "summary": "Latest revenue figures lack meaningful upside after the stock\u2019s sharp recent rally.",
-      "published": "2026-06-04T00:13:00+00:00"
-    },
-    {
-      "title": "CrowdStrike\u2019s stock falls as investors find more reason to pan cybersecurity earnings",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/crowdstrikes-stock-falls-as-investors-find-more-reason-to-pan-cybersecurity-earnings-d1b5f619?mod=mw_rss_topstories",
-      "summary": "Like Palo Alto Networks before it, CrowdStrike beats financial expectations but sees its stock get punished",
-      "published": "2026-06-04T00:12:00+00:00"
-    },
-    {
-      "title": "Israel and Lebanon agree to implement ceasefire",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/468ce636-1a7e-4a14-9be1-6d0f48b6b48f",
-      "summary": "Joint agreement announced by the US state department calls for Hizbollah to stop all attacks",
-      "published": "2026-06-03T23:47:08+00:00"
+      "title": "Costly fuel pushes more Indians to buy electric cars but challenges remain",
+      "source": "BBC Business",
+      "link": "https://www.bbc.com/news/articles/cx21181yq4no?at_medium=RSS&at_campaign=rss",
+      "summary": "High fuel prices are strengthening the case for EV adoption in the world's third largest auto market.",
+      "published": "2026-06-03T23:28:31+00:00"
     },
     {
       "title": "DraftKings and FanDuel are likely to lose money on the NBA Finals, whoever wins",
@@ -1181,21 +1363,14 @@
       "published": "2026-06-03T23:18:39+00:00"
     },
     {
-      "title": "'It is by the grace of God that you find a diamond'",
+      "title": "'By the grace of God': Miners dig on as lab-grown diamonds change market",
       "source": "BBC Business",
       "link": "https://www.bbc.com/news/articles/czx2jqvwp7go?at_medium=RSS&at_campaign=rss",
       "summary": "The rising popularity of lab-grown diamonds heaps pressure on those hunting for the natural gems.",
       "published": "2026-06-03T23:00:45+00:00"
     },
     {
-      "title": "Republican-led House deals blow to Trump over Iran war",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/6fbbc60c-155c-42a7-81b6-50e24e0bb706",
-      "summary": "Lawmakers vote to block president from carrying out more strikes in Middle East without congressional approval",
-      "published": "2026-06-03T22:57:18+00:00"
-    },
-    {
-      "title": "SpaceX pitches investors $1.8tn valuation in historic IPO",
+      "title": "SpaceX pitches investors $1.78tn valuation in historic IPO",
       "source": "FT International",
       "link": "https://www.ft.com/content/95286aa1-ee55-4a45-86b8-951cc0fb23a8",
       "summary": "Rocket and AI group is seeking to raise up to $86bn in biggest Wall Street debut of all time",
@@ -1209,197 +1384,21 @@
       "published": "2026-06-03T22:51:53+00:00"
     },
     {
-      "title": "Trump\u2019s pick of Pulte as spy chief threatens foreign surveillance bill",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/d293d489-741d-4de3-8c4a-6a000a0dbae5",
-      "summary": "Republican and Democratic lawmakers say choice imperils extension of expiring Foreign Intelligence Surveillance Act",
-      "published": "2026-06-03T22:44:17+00:00"
-    },
-    {
       "title": "Trump Administration Turns to a New Rationale to Justify Old Tariffs",
       "source": "NYT Economy",
       "link": "https://www.nytimes.com/2026/06/03/business/economy/trump-tariffs-forced-labor.html",
       "summary": "The administration has settled on a more legally and politically durable way to impose tariffs, but some say the focus on forced labor laws is merely a pretext for protectionism.",
       "published": "2026-06-03T22:42:08+00:00"
-    },
-    {
-      "title": "The Fed can\u2019t protect consumers from supply shocks and price gouging \u2014 but Congress can",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/the-2-types-of-inflation-the-fed-cant-control-and-how-congress-must-protect-your-wallet-7ac2079a?mod=mw_rss_topstories",
-      "summary": "As global disruptions drive up Americans\u2019 grocery and gasoline prices, lawmakers need to take a stand.",
-      "published": "2026-06-03T22:14:00+00:00"
-    },
-    {
-      "title": "I am 71. Would it be foolish to sell $10,000 in stock to visit my grandchildren in Thailand?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/i-am-71-and-comfortable-should-i-sell-10-000-in-stock-to-visit-my-grandkids-in-thailand-or-dip-into-my-50-000-savings-16230c6a?mod=mw_rss_topstories",
-      "summary": "\u201cI am comfortable living on my Social Security and pension income.\u201d",
-      "published": "2026-06-03T22:09:00+00:00"
-    },
-    {
-      "title": "High gas prices are limiting how far singles will go for love \u2014 literally",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=f6199b98-0d13-45ef-a127-661076935840&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T22:05:15+00:00"
-    },
-    {
-      "title": "You\u2019re going to pay tax on RMDs \u2014 there\u2019s no way around it. Or is there?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/youre-going-to-pay-tax-on-rmds-theres-no-way-around-it-or-is-there-26e864cf?mod=mw_rss_topstories",
-      "summary": "Here\u2019s your new playbook to protect your retirement cash.",
-      "published": "2026-06-03T21:57:00+00:00"
-    },
-    {
-      "title": "SpaceX aiming to crush global records with massive IPO haul of up to $86 billion",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=0bdd57f4-437d-4fe3-8b61-cf3b6b9b9d66&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T21:35:15+00:00"
-    },
-    {
-      "title": "SpaceX officially set to crush global records in targeting massive IPO haul of up to $86 billion",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/spacex-is-set-to-crush-global-records-by-targeting-a-massive-ipo-haul-of-up-to-86-billion-bd08f1ba?mod=mw_rss_topstories",
-      "summary": "Elon Musk will hold more than 80% of the voting power of SpaceX shares, cementing his control over the company.",
-      "published": "2026-06-03T21:32:00+00:00"
-    },
-    {
-      "title": "\u2018No one seems to wear their bling\u2019: Is it safe to show off your expensive jewelry?",
-      "source": "MarketWatch Top Stories",
-      "link": "https://www.marketwatch.com/story/no-one-seems-to-wear-their-bling-is-it-safe-to-show-off-your-expensive-jewelry-a807bc55?mod=mw_rss_topstories",
-      "summary": "\u201cI\u2019ve been to many shows, operas, big parties and fundraisers.\u201d",
-      "published": "2026-06-03T21:30:00+00:00"
-    },
-    {
-      "title": "SpaceX wins tax exemption for $55bn AI chip plant despite local backlash",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/86b2440a-60ce-4a5b-94ba-a6a4456ae574",
-      "summary": "Elon Musk\u2019s Terafab plant sparks fierce opposition and threat of legal action from residents of Texas county",
-      "published": "2026-06-03T21:14:02+00:00"
-    },
-    {
-      "title": "U.S., Iran intensify attacks as ceasefire frays, peace talks stall",
-      "source": "CNBC Economy",
-      "link": "https://www.cnbc.com/2026/06/03/us-iran-war-escalates-peace-talks-stalemate-.html",
-      "summary": "Iran's IRGC reportedly denied responsibility for the Kuwait airport attack, the latest blow to an already weakened ceasefire agreement.",
-      "published": "2026-06-03T21:05:19+00:00"
-    },
-    {
-      "title": "Broadcom\u2019s stock falls after earnings despite accelerating AI-chip growth",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=0559b008-e01e-49ff-a0f0-b59b5df68651&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T20:39:05+00:00"
-    },
-    {
-      "title": "Bitcoin set to slump to new lows for 2026 after recent sell-off, traders forecast",
-      "source": "CNBC Finance",
-      "link": "https://www.cnbc.com/2026/06/03/bitcoin-to-slump-to-new-lows-after-recent-sell-off-traders-predict.html",
-      "summary": "The cryptocurrency is likely to break below its lows hit in early February, traders on prediction market Kalshi believe.",
-      "published": "2026-06-03T20:06:54+00:00"
-    },
-    {
-      "title": "Dow closes over 600 points down, S&P 500 snaps 9-day win streak as stocks tumble",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=a30ad467-7034-4e7f-9224-960c02705b87&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T20:06:33+00:00"
-    },
-    {
-      "title": "Travelers Bound for the U.K. Hit a Roadblock: Electronic Authorization System Is Down",
-      "source": "NYT Economy",
-      "link": "https://www.nytimes.com/2026/06/03/travel/uk-travelers-eta-outage.html",
-      "summary": "Visitors from the U.S., Canada and most European countries can\u2019t get an electronic travel authorization and are being turned away from planes, trains and boats.",
-      "published": "2026-06-03T19:44:06+00:00"
-    },
-    {
-      "title": "Only 5% of day traders make money. The SEC is making it easier to try anyway.",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=d32474cb-1d5d-497e-8145-e7f8a0e8d214&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T19:37:52+00:00"
-    },
-    {
-      "title": "Trump Administration Fights Court Order to Refund Some Tariffs",
-      "source": "NYT Economy",
-      "link": "https://www.nytimes.com/2026/06/03/business/economy/trump-tariffs-refunds-court-order.html",
-      "summary": "The administration has started to repay some of the money, but has signaled it may make it harder for certain businesses to claim the full amount they are owed.",
-      "published": "2026-06-03T19:19:37+00:00"
-    },
-    {
-      "title": "S&P 500\u2019s 9-day win streak under threat in final hour as stocks fall \u2014 live",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=ba9b8a5e-7145-4aeb-b725-32dd4cc32878&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T19:03:47+00:00"
-    },
-    {
-      "title": "The odds of the Fed hiking rates by 50 basis points this year are climbing",
-      "source": "MarketWatch Bulletins",
-      "link": "https://www.marketwatch.com/bulletins/redirect/go?g=4a6d9f08-2a66-4ac6-a88f-9e609c807b92&mod=mw_rss_bulletins",
-      "summary": "",
-      "published": "2026-06-03T18:54:03+00:00"
-    },
-    {
-      "title": "Trump\u2019s Iran war drains US oil stocks to lowest level since 2004",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/d0be73c8-b8d8-4ffd-874e-e97a6ecffef7",
-      "summary": "Industry warns prices could soon jump as inventories reach \u2018critically low\u2019 threshold",
-      "published": "2026-06-03T18:08:06+00:00"
-    },
-    {
-      "title": "Europe\u2019s tightrope walk on tech sovereignty",
-      "source": "FT International",
-      "link": "https://www.ft.com/content/fe3f7f31-a1e8-4645-bedc-ed45fc42e8fa",
-      "summary": "EU should be wary of curbing access to US providers as it tries to nurture its own",
-      "published": "2026-06-03T17:21:19+00:00"
-    },
-    {
-      "title": "69-year-old furniture store chain files for Chapter 11 bankruptcy",
-      "source": "Yahoo Finance",
-      "link": "https://finance.yahoo.com/markets/stocks/articles/69-old-furniture-store-chain-170700563.html",
-      "summary": "",
-      "published": "2026-06-03T17:07:00+00:00"
-    },
-    {
-      "title": "Morgan Stanley will soon open its trillion-dollar wealth management funnel to AI agents",
-      "source": "CNBC Finance",
-      "link": "https://www.cnbc.com/2026/06/03/ai-agents-morgan-stanley-wealth-management-funnel.html",
-      "summary": "Morgan Stanley's move is one of the earliest instances of a major Wall Street bank opening its platforms to external AI tools.",
-      "published": "2026-06-03T15:32:54+00:00"
-    },
-    {
-      "title": "US announces new tariffs over forced labour concerns",
-      "source": "BBC Business",
-      "link": "https://www.bbc.com/news/articles/cq6pe7nvldmo?at_medium=RSS&at_campaign=rss",
-      "summary": "It comes after the US Supreme Court struck down many of US President Donald Trump's previous duties in February.",
-      "published": "2026-06-03T15:12:28+00:00"
-    },
-    {
-      "title": "Fed Chair Warsh makes first hires at central bank, including 'Project 2025' author",
-      "source": "CNBC Finance",
-      "link": "https://www.cnbc.com/2026/06/02/fed-chair-warsh-makes-first-hires-at-central-bank-including-project-2025-author.html",
-      "summary": "The new Fed chair has made his first hires. One wrote the Fed chapter in the conservative policy blueprint \"Project 2025.\"",
-      "published": "2026-06-03T14:38:04+00:00"
-    },
-    {
-      "title": "Private payrolls grew by 122,000 in May, stronger than expected, ADP reports",
-      "source": "CNBC Economy",
-      "link": "https://www.cnbc.com/2026/06/03/adp-jobs-report-may-2026-payrolls-increase-by-122000.html",
-      "summary": "Unlike prior months, where job growth was concentrated in healthcare and a few other sectors, gains were more broad-based.",
-      "published": "2026-06-03T14:28:44+00:00"
     }
   ],
   "stats": {
-    "vix": 16.059999465942383,
+    "vix": 16.510000228881836,
     "sector_advancers": 5,
     "sector_decliners": 6,
     "sector_count": 11
   },
   "history": {
     "d": [
-      "2025-06-03",
       "2025-06-04",
       "2025-06-05",
       "2025-06-06",
@@ -1664,7 +1663,6 @@
     ],
     "series": {
       "^GSPC": [
-        null,
         5970.8101,
         5939.2998,
         6000.3599,
@@ -1928,7 +1926,6 @@
         null
       ],
       "^IXIC": [
-        null,
         19460.4902,
         19298.4492,
         19529.9492,
@@ -2192,7 +2189,6 @@
         null
       ],
       "^DJI": [
-        null,
         42427.7383,
         42319.7383,
         42762.8711,
@@ -2456,7 +2452,6 @@
         null
       ],
       "^RUT": [
-        null,
         2098.48,
         2097.3501,
         2132.25,
@@ -2720,7 +2715,6 @@
         null
       ],
       "^VIX": [
-        17.69,
         17.61,
         18.48,
         16.77,
@@ -2981,10 +2975,9 @@
         16.05,
         15.77,
         16.06,
-        null
+        16.51
       ],
       "XLK": [
-        null,
         117.7272,
         117.3941,
         118.5028,
@@ -3045,7 +3038,7 @@
         130.6807,
         130.3868,
         130.9844,
-        131.6916,
+        131.6915,
         132.7323,
         130.6956,
         null,
@@ -3248,7 +3241,6 @@
         null
       ],
       "XLF": [
-        null,
         50.0176,
         49.8798,
         50.5002,
@@ -3256,7 +3248,7 @@
         50.2835,
         50.2244,
         50.2244,
-        49.2003,
+        49.2002,
         49.7616,
         49.476,
         49.4563,
@@ -3322,7 +3314,7 @@
         52.531,
         53.3907,
         53.1634,
-        53.0448,
+        53.0449,
         52.9263,
         53.4401,
         53.4895,
@@ -3512,7 +3504,6 @@
         null
       ],
       "XLE": [
-        null,
         39.7004,
         39.6617,
         40.4077,
@@ -3543,7 +3534,7 @@
         43.53,
         43.0514,
         42.4311,
-        42.0648,
+        42.0649,
         42.3237,
         41.9818,
         41.5472,
@@ -3567,7 +3558,7 @@
         41.7865,
         41.7865,
         41.5374,
-        41.552,
+        41.5521,
         41.8988,
         42.1869,
         43.0465,
@@ -3776,11 +3767,10 @@
         null
       ],
       "XLV": [
-        null,
         130.9545,
         130.7776,
         132.0254,
-        131.7995,
+        131.7994,
         133.3026,
         133.3714,
         134.4128,
@@ -3818,26 +3808,26 @@
         133.554,
         132.705,
         132.4681,
-        128.7563,
+        128.7564,
         129.4474,
         131.3033,
         130.7998,
         128.8353,
         127.3546,
         128.4898,
-        128.6182,
+        128.6181,
         129.5066,
         131.5797,
         132.2411,
         134.4622,
         134.1463,
         135.0051,
-        135.7356,
+        135.7357,
         135.2815,
         136.397,
         134.4523,
         135.2914,
-        135.2124,
+        135.2125,
         134.6794,
         135.6665,
         null,
@@ -3850,8 +3840,8 @@
         135.5678,
         137.9272,
         136.3378,
-        135.173,
-        135.173,
+        135.1729,
+        135.1729,
         135.4395,
         135.706,
         135.5284,
@@ -4040,7 +4030,6 @@
         null
       ],
       "XLI": [
-        null,
         141.9075,
         141.8088,
         143.0027,
@@ -4058,7 +4047,7 @@
         143.5667,
         142.2998,
         143.8438,
-        145.2788,
+        145.2789,
         146.0013,
         146.4863,
         146.6347,
@@ -4070,7 +4059,7 @@
         149.1882,
         148.6537,
         149.4554,
-        148.3371,
+        148.337,
         148.8616,
         150.2373,
         149.9008,
@@ -4085,7 +4074,7 @@
         150.4451,
         148.1985,
         149.5643,
-        149.2575,
+        149.2574,
         149.3762,
         149.1585,
         149.2773,
@@ -4096,7 +4085,7 @@
         148.8913,
         149.4752,
         149.8018,
-        149.6633,
+        149.6632,
         149.1288,
         151.5635,
         150.0492,
@@ -4106,7 +4095,7 @@
         150.4451,
         null,
         149.01,
-        148.2578,
+        148.2579,
         149.9305,
         149.3762,
         149.7127,
@@ -4131,7 +4120,7 @@
         153.4518,
         154.1673,
         153.2928,
-        154.6244,
+        154.6245,
         152.3387,
         148.9697,
         150.5201,
@@ -4179,7 +4168,7 @@
         155.0915,
         156.7512,
         155.7673,
-        156.0158,
+        156.0157,
         155.0915,
         152.5772,
         153.571,
@@ -4304,7 +4293,6 @@
         null
       ],
       "XLY": [
-        null,
         106.5925,
         103.9038,
         105.2531,
@@ -4347,7 +4335,7 @@
         111.6662,
         110.9603,
         110.0803,
-        107.4256,
+        107.4257,
         108.6884,
         108.8276,
         111.0895,
@@ -4356,7 +4344,7 @@
         111.5369,
         112.7201,
         114.2662,
-        114.137,
+        114.1369,
         113.8635,
         114.3209,
         114.2662,
@@ -4375,9 +4363,9 @@
         116.8811,
         117.3335,
         117.1695,
-        115.7675,
+        115.7676,
         118.0196,
-        118.6311,
+        118.631,
         119.6601,
         120.3959,
         120.0926,
@@ -4393,7 +4381,7 @@
         120.0903,
         119.2237,
         118.4568,
-        119.4728,
+        119.4727,
         117.3811,
         117.7297,
         117.1421,
@@ -4415,7 +4403,7 @@
         119.4877,
         120.6082,
         118.6062,
-        120.0505,
+        120.0504,
         117.2765,
         117.4608,
         119.0046,
@@ -4438,7 +4426,7 @@
         119.0196,
         118.5963,
         119.2536,
-        117.5206,
+        117.5205,
         117.5106,
         119.2337,
         119.7018,
@@ -4568,14 +4556,13 @@
         null
       ],
       "XLP": [
-        null,
         80.0075,
         79.2387,
         79.4917,
         79.3847,
         79.5598,
         79.2874,
-        79.7545,
+        79.7544,
         78.7814,
         79.0344,
         78.3629,
@@ -4832,12 +4819,11 @@
         null
       ],
       "XLU": [
-        null,
         39.36,
         39.2968,
         39.4718,
         39.219,
-        39.3113,
+        39.3114,
         39.3357,
         39.8121,
         39.5836,
@@ -4880,7 +4866,7 @@
         42.2915,
         41.9145,
         42.3698,
-        42.1887,
+        42.1886,
         42.0565,
         42.2376,
         42.3306,
@@ -5096,7 +5082,6 @@
         null
       ],
       "XLB": [
-        null,
         43.1889,
         42.9339,
         43.0467,
@@ -5132,7 +5117,7 @@
         44.4686,
         44.6953,
         45.3115,
-        45.4643,
+        45.4642,
         44.996,
         45.5283,
         44.8679,
@@ -5360,7 +5345,6 @@
         null
       ],
       "XLRE": [
-        null,
         40.3665,
         40.3569,
         40.4728,
@@ -5431,7 +5415,7 @@
         41.1315,
         40.8585,
         40.839,
-        40.8195,
+        40.8194,
         41.4825,
         41.2973,
         41.2485,
@@ -5624,7 +5608,6 @@
         null
       ],
       "XLC": [
-        null,
         101.0075,
         101.1458,
         102.4397,
@@ -5888,7 +5871,6 @@
         null
       ],
       "NVDA": [
-        null,
         141.8866,
         139.957,
         141.6866,
@@ -5928,7 +5910,7 @@
         173.7111,
         173.4712,
         176.7206,
-        175.4808,
+        175.4809,
         179.2402,
         177.8404,
         173.6911,
@@ -5942,7 +5924,7 @@
         181.5598,
         181.9897,
         180.42,
-        181.9798,
+        181.9797,
         175.6108,
         175.3708,
         174.9509,
@@ -6152,7 +6134,6 @@
         null
       ],
       "MSFT": [
-        null,
         460.1942,
         463.974,
         466.6526,
@@ -6184,17 +6165,17 @@
         499.0339,
         501.8118,
         501.6133,
-        507.6452,
+        507.6451,
         506.0082,
         506.0181,
         501.2661,
         501.8613,
         506.8316,
-        509.6392,
+        509.6393,
         508.4388,
         508.5083,
-        509.1729,
-        529.2723,
+        509.173,
+        529.2724,
         519.9568,
         531.3954,
         523.568,
@@ -6208,7 +6189,7 @@
         516.048,
         513.0023,
         505.7304,
-        501.7125,
+        501.7126,
         501.0667,
         504.0378,
         501.0865,
@@ -6416,15 +6397,14 @@
         null
       ],
       "META": [
-        null,
-        685.8104,
+        685.8105,
         682.4908,
         695.5401,
         691.9015,
         700.2155,
         691.9812,
         691.2036,
-        680.7463,
+        680.7462,
         700.4749,
         695.5964,
         694.1398,
@@ -6680,7 +6660,6 @@
         null
       ],
       "AMZN": [
-        null,
         207.23,
         207.91,
         213.57,
@@ -6944,7 +6923,6 @@
         null
       ],
       "GOOGL": [
-        null,
         167.4693,
         167.6288,
         173.0798,
@@ -6952,8 +6930,8 @@
         178.1983,
         176.9511,
         175.3048,
-        174.2772,
-        176.3724,
+        174.2771,
+        176.3725,
         175.5543,
         172.9302,
         null,
@@ -6963,16 +6941,16 @@
         170.2961,
         173.1497,
         178.1285,
-        175.8336,
+        175.8337,
         175.4445,
         178.2382,
         179.1262,
         null,
         176.3924,
-        173.9678,
+        173.9679,
         176.2228,
         177.2205,
-        179.7848,
+        179.7847,
         181.1517,
         181.5907,
         182.5585,
@@ -7001,7 +6979,7 @@
         203.0423,
         201.1167,
         198.8717,
-        199.3007,
+        199.3008,
         205.6265,
         208.0211,
         206.6741,
@@ -7032,7 +7010,7 @@
         242.7702,
         244.5677,
         245.3567,
-        245.0171,
+        245.0172,
         250.0902,
         245.4266,
         244.2881,
@@ -7042,11 +7020,11 @@
         245.117,
         250.6894,
         251.1189,
-        252.9564,
+        252.9563,
         256.2019,
         250.1202,
         251.3485,
-        252.7366,
+        252.7367,
         259.5674,
         268.9047,
         267.1071,
@@ -7067,7 +7045,7 @@
         283.8943,
         292.4128,
         289.0573,
-        299.2534,
+        299.2535,
         318.1478,
         323.0012,
         319.516,
@@ -7208,7 +7186,6 @@
         null
       ],
       "NFLX": [
-        null,
         123.966,
         125.052,
         124.147,
@@ -7472,7 +7449,6 @@
         null
       ],
       "MELI": [
-        null,
         2573.96,
         2581.74,
         2482.3899,
@@ -7736,15 +7712,14 @@
         null
       ],
       "V": [
-        null,
         365.116,
-        363.8956,
+        363.8957,
         367.3186,
         363.7865,
         367.7949,
         370.3844,
-        368.4893,
-        350.0847,
+        368.4894,
+        350.0848,
         352.6942,
         355.0356,
         337.7125,
@@ -7752,7 +7727,7 @@
         335.9167,
         341.0561,
         348.8743,
-        342.5543,
+        342.5542,
         343.3182,
         345.878,
         352.2675,
@@ -7760,7 +7735,7 @@
         351.444,
         356.0476,
         null,
-        353.8451,
+        353.845,
         351.7714,
         354.9563,
         353.091,
@@ -7770,14 +7745,14 @@
         347.1579,
         347.0686,
         346.3145,
-        348.1898,
+        348.1897,
         349.1025,
         352.5056,
         351.196,
         354.2419,
         352.6842,
         348.537,
-        348.16,
+        348.1599,
         342.7626,
         336.6906,
         339.4686,
@@ -7811,15 +7786,15 @@
         341.3977,
         337.3625,
         336.9848,
-        337.9588,
-        344.0912,
+        337.9589,
+        344.0913,
         336.1201,
         339.5292,
-        342.2625,
-        336.637,
-        336.617,
+        342.2624,
+        336.6369,
+        336.6171,
         332.8899,
-        335.3151,
+        335.315,
         338.088,
         339.3006,
         345.7113,
@@ -7828,7 +7803,7 @@
         347.1525,
         350.2734,
         349.2198,
-        344.9262,
+        344.9261,
         341.5568,
         341.2089,
         346.258,
@@ -7849,7 +7824,7 @@
         338.2272,
         337.9688,
         334.9075,
-        333.9733,
+        333.9732,
         332.8104,
         336.8556,
         337.483,
@@ -7871,7 +7846,7 @@
         325.7516,
         329.8745,
         325.4926,
-        325.1541,
+        325.154,
         324.3872,
         344.2052,
         346.3961,
@@ -7884,8 +7859,8 @@
         351.9232,
         353.676,
         null,
-        353.5366,
-        353.1481,
+        353.5365,
+        353.1482,
         352.1622,
         349.2642,
         345.0517,
@@ -7903,10 +7878,10 @@
         324.4768,
         323.9391,
         325.0146,
-        324.8353,
+        324.8354,
         327.1358,
         323.9192,
-        325.632,
+        325.6321,
         330.4322,
         320.5033,
         332.4638,
@@ -8000,101 +7975,100 @@
         null
       ],
       "MA": [
-        null,
-        580.7,
-        582.0023,
-        586.6547,
+        580.6999,
+        582.0022,
+        586.6548,
         580.8987,
         586.0781,
         587.2711,
-        585.8198,
+        585.8197,
         558.7297,
-        565.3306,
+        565.3307,
         566.1061,
         535.5665,
         null,
         529.8403,
-        539.1652,
+        539.1653,
         554.2561,
-        546.4721,
+        546.472,
         542.6049,
         547.0884,
         558.6403,
-        561.2946,
+        561.2945,
         558.2227,
-        565.8973,
+        565.8974,
         null,
-        561.8016,
+        561.8015,
         559.1373,
-        562.5518,
-        560.969,
+        562.5517,
+        560.9689,
         547.6893,
         550.5165,
         547.8685,
-        553.0052,
+        553.0051,
         553.0947,
         550.1581,
         552.1391,
         556.2305,
-        559.5455,
+        559.5454,
         560.949,
         565.6476,
         565.7074,
-        560.7698,
+        560.7699,
         556.5789,
-        563.9055,
-        557.3554,
-        567.2304,
+        563.9056,
+        557.3553,
+        567.2305,
         563.4775,
         566.5535,
-        558.6793,
-        571.7201,
-        570.9934,
+        558.6794,
+        571.72,
+        570.9933,
         571.5807,
-        575.2838,
+        575.2839,
         581.1173,
         579.0667,
-        581.4957,
+        581.4955,
         582.8594,
         589.9969,
         589.2404,
         596.2485,
         590.5245,
         588.9317,
-        587.9861,
+        587.986,
         587.8069,
         592.5951,
         null,
         589.1906,
         590.5942,
         592.9435,
-        581.5752,
-        583.9445,
+        581.5751,
+        583.9444,
         581.3562,
         576.7571,
         586.0648,
-        577.7824,
-        580.321,
-        583.7653,
+        577.7825,
+        580.3209,
+        583.7652,
         595.92,
-        583.3969,
-        581.5154,
+        583.397,
+        581.5155,
         581.844,
         567.3897,
-        566.235,
-        564.7318,
-        562.5716,
-        565.568,
-        566.235,
+        566.2349,
+        564.7319,
+        562.5717,
+        565.5681,
+        566.2349,
         571.1725,
         574.7164,
         577.8223,
-        576.1898,
+        576.1897,
         577.2151,
         573.8304,
         562.7362,
         555.6889,
-        557.4433,
+        557.4432,
         566.0953,
         561.0018,
         548.1133,
@@ -8113,17 +8087,17 @@
         550.9741,
         551.5323,
         551.5024,
-        550.1966,
+        550.1967,
         551.1835,
-        556.5562,
-        559.4269,
-        553.7851,
+        556.5561,
+        559.4268,
+        553.785,
         543.9767,
         535.1252,
         525.885,
-        528.656,
-        526.184,
-        538.6639,
+        528.6561,
+        526.1841,
+        538.6638,
         536.1219,
         544.7142,
         543.1792,
@@ -8135,22 +8109,22 @@
         540.5677,
         543.7674,
         538.7037,
-        535.823,
+        535.8229,
         537.1287,
         561.56,
         570.0925,
         567.3015,
         564.2015,
-        563.6533,
+        563.6532,
         564.3909,
         570.3915,
         573.8504,
         574.4983,
-        577.5884,
+        577.5883,
         null,
-        577.7378,
+        577.7379,
         576.0433,
-        575.5649,
+        575.5648,
         569.0459,
         561.3208,
         566.7433,
@@ -8264,7 +8238,6 @@
         null
       ],
       "CRM": [
-        null,
         261.2206,
         265.1612,
         272.4766,
@@ -8274,7 +8247,7 @@
         264.9329,
         256.4859,
         261.9253,
-        260.8136,
+        260.8137,
         257.9862,
         null,
         259.1096,
@@ -8528,7 +8501,6 @@
         null
       ],
       "TSM": [
-        null,
         199.9238,
         200.8523,
         202.6698,
@@ -8536,7 +8508,7 @@
         209.8608,
         211.4807,
         213.5725,
-        209.2798,
+        209.2799,
         213.8204,
         212.0557,
         211.6591,
@@ -8580,7 +8552,7 @@
         240.0026,
         242.1837,
         239.3582,
-        238.922,
+        238.9221,
         236.8203,
         239.3285,
         230.6936,
@@ -8792,50 +8764,49 @@
         null
       ],
       "ASML": [
-        null,
         737.0045,
         741.9458,
         747.1649,
-        764.2114,
+        764.2113,
         778.8664,
         777.9933,
         780.0968,
         755.0828,
         769.2021,
         753.9517,
-        755.7178,
+        755.7179,
         null,
         750.6476,
         773.6572,
         807.0357,
         808.9011,
-        791.8844,
-        789.761,
+        791.8845,
+        789.7611,
         795.1588,
         784.3236,
         793.3728,
-        788.3223,
+        788.3224,
         null,
-        778.9855,
+        778.9856,
         787.9254,
         793.611,
         795.8533,
         795.6946,
-        800.4572,
-        816.6206,
+        800.4573,
+        816.6205,
         748.5837,
         739.1179,
         728.8683,
-        714.0842,
+        714.0841,
         699.9945,
         711.3555,
         719.4421,
         705.7197,
-        724.314,
+        724.3139,
         714.7117,
         717.6561,
-        691.0567,
-        686.1925,
+        691.0568,
+        686.1924,
         695.6823,
         686.0035,
         687.3265,
@@ -8847,7 +8818,7 @@
         751.2386,
         738.2572,
         743.6188,
-        739.6995,
+        739.6996,
         745.5486,
         731.5328,
         750.9202,
@@ -8867,7 +8838,7 @@
         799.9312,
         809.5901,
         862.7391,
-        873.8006,
+        873.8007,
         867.683,
         922.921,
         927.2482,
@@ -8875,22 +8846,22 @@
         958.4432,
         941.9604,
         944.5566,
-        946.5163,
+        946.5162,
         957.5479,
         962.9991,
         997.9941,
         1024.7527,
-        1026.792,
+        1026.7919,
         1037.8136,
         997.0292,
         982.6154,
         975.3836,
         931.2669,
-        979.4819,
+        979.482,
         978.0098,
         1004.4998,
         1014.2283,
-        1023.8573,
+        1023.8574,
         1036.6697,
         1019.6298,
         1006.2505,
@@ -9056,7 +9027,6 @@
         null
       ],
       "^STOXX50E": [
-        5375.7002,
         5405.1499,
         5410.5498,
         5430.1699,
@@ -9317,10 +9287,9 @@
         6034.9502,
         6107.8501,
         6053.5698,
-        null
+        6081.4102
       ],
       "^FTSE": [
-        8787.0,
         8801.2998,
         8811.0,
         8837.9004,
@@ -9581,10 +9550,9 @@
         10339.0,
         10373.5,
         10332.2998,
-        null
+        10303.3604
       ],
       "^GDAXI": [
-        24091.6191,
         24276.4805,
         24323.5801,
         24304.4609,
@@ -9845,10 +9813,9 @@
         25003.0391,
         25124.1699,
         24795.9395,
-        null
+        24940.4004
       ],
       "^FCHI": [
-        7763.8398,
         7804.6699,
         7790.27,
         7804.8701,
@@ -10109,10 +10076,9 @@
         8146.5898,
         8209.0898,
         8150.4199,
-        null
+        8238.5303
       ],
       "^N225": [
-        null,
         37747.4492,
         37554.4883,
         37741.6094,
@@ -10373,10 +10339,9 @@
         66934.3281,
         66734.2422,
         68402.1328,
-        67255.2812
+        67470.6875
       ],
       "^HSI": [
-        null,
         23654.0293,
         23906.9707,
         23792.5391,
@@ -10637,10 +10602,9 @@
         25398.1797,
         26038.3203,
         25633.2109,
-        25276.0195
+        25253.4004
       ],
       "000001.SS": [
-        null,
         3376.2029,
         3384.0991,
         3385.3579,
@@ -10901,10 +10865,9 @@
         4057.74,
         4075.1021,
         4083.9741,
-        4066.5554
+        4057.781
       ],
       "^IRX": [
-        4.235,
         4.24,
         4.232,
         4.232,
@@ -11168,7 +11131,6 @@
         null
       ],
       "^FVX": [
-        4.028,
         3.932,
         3.989,
         4.126,
@@ -11432,7 +11394,6 @@
         null
       ],
       "^TNX": [
-        4.46,
         4.365,
         4.394,
         4.51,
@@ -11696,7 +11657,6 @@
         null
       ],
       "^TYX": [
-        4.983,
         4.887,
         4.884,
         4.963,
@@ -11960,7 +11920,6 @@
         null
       ],
       "DX-Y.NYB": [
-        null,
         98.79,
         98.74,
         99.19,
@@ -12221,10 +12180,9 @@
         99.2,
         99.22,
         99.53,
-        99.481
+        99.238
       ],
       "EURUSD=X": [
-        null,
         1.1384,
         1.1422,
         1.1454,
@@ -12485,10 +12443,9 @@
         1.1649,
         1.1635,
         1.1622,
-        1.1609
+        1.1643
       ],
       "USDJPY=X": [
-        null,
         143.837,
         142.732,
         143.542,
@@ -12749,10 +12706,9 @@
         159.353,
         159.636,
         159.968,
-        159.981
+        159.837
       ],
       "GBPUSD=X": [
-        null,
         1.3531,
         1.3552,
         1.358,
@@ -13013,10 +12969,9 @@
         1.3452,
         1.346,
         1.3454,
-        1.3424
+        1.3458
       ],
       "USDCNY=X": [
-        null,
         7.2037,
         7.2037,
         7.175,
@@ -13277,10 +13232,9 @@
         6.7662,
         6.765,
         6.7622,
-        6.7765
+        6.773
       ],
       "CL=F": [
-        null,
         62.85,
         63.37,
         64.58,
@@ -13541,10 +13495,9 @@
         92.16,
         93.76,
         96.02,
-        95.19
+        92.44
       ],
       "BZ=F": [
-        null,
         64.86,
         65.34,
         66.47,
@@ -13805,10 +13758,9 @@
         94.98,
         96.0,
         97.81,
-        96.94
+        94.36
       ],
       "GC=F": [
-        null,
         3373.5,
         3350.7,
         3322.7,
@@ -14069,10 +14021,9 @@
         4475.2002,
         4489.1001,
         4436.7002,
-        4492.7998
+        4519.7002
       ],
       "SI=F": [
-        null,
         34.519,
         35.689,
         36.025,
@@ -14333,10 +14284,9 @@
         75.007,
         75.311,
         73.476,
-        73.825
+        74.32
       ],
       "HG=F": [
-        null,
         4.8645,
         4.9135,
         4.83,
@@ -14597,10 +14547,9 @@
         6.524,
         6.6495,
         6.481,
-        6.4735
+        6.519
       ],
       "NG=F": [
-        null,
         3.716,
         3.677,
         3.784,
@@ -14861,10 +14810,9 @@
         3.179,
         3.167,
         3.214,
-        3.232
+        3.289
       ],
       "HYG": [
-        null,
         74.9525,
         74.7922,
         74.7828,
@@ -14872,16 +14820,16 @@
         74.9997,
         74.9808,
         75.0657,
-        74.8393,
+        74.8394,
         74.9902,
-        74.9053,
+        74.9054,
         75.0185,
         null,
         75.2543,
         75.3957,
         75.6032,
         75.5843,
-        75.8013,
+        75.8012,
         75.7635,
         76.0559,
         75.9602,
@@ -14907,10 +14855,10 @@
         76.2728,
         76.1118,
         76.1591,
-        76.1629,
+        76.163,
         76.4201,
         76.382,
-        76.4582,
+        76.4581,
         76.382,
         76.3915,
         76.3915,
@@ -14952,7 +14900,7 @@
         77.6832,
         77.8283,
         77.7995,
-        77.713,
+        77.7129,
         77.7322,
         77.6457,
         77.5303,
@@ -14964,7 +14912,7 @@
         77.3957,
         77.5976,
         77.7514,
-        77.6361,
+        77.636,
         77.5591,
         77.7322,
         77.9437,
@@ -15005,12 +14953,12 @@
         78.2105,
         78.2494,
         78.2979,
-        78.2008,
+        78.2009,
         78.4144,
         78.3764,
         78.4446,
         78.5032,
-        78.6495,
+        78.6494,
         null,
         78.6104,
         78.6397,
@@ -15042,7 +14990,7 @@
         79.0186,
         78.9304,
         79.2048,
-        79.3127,
+        79.3126,
         79.2342,
         79.2244,
         79.1852,
@@ -15054,7 +15002,7 @@
         79.3911,
         79.2636,
         79.2048,
-        79.3127,
+        79.3126,
         79.244,
         79.1166,
         79.0713,
@@ -15128,7 +15076,6 @@
         null
       ],
       "LQD": [
-        null,
         103.1425,
         102.8271,
         102.2057,
@@ -15138,14 +15085,14 @@
         103.6587,
         103.0374,
         102.8558,
-        103.2095,
+        103.2094,
         103.2859,
         null,
         103.3719,
-        103.63,
+        103.6301,
         104.1176,
         103.9933,
-        104.3756,
+        104.3757,
         104.2036,
         104.7771,
         104.9038,
@@ -15159,7 +15106,7 @@
         103.6949,
         103.6661,
         103.2919,
-        103.4551,
+        103.455,
         103.7045,
         103.8964,
         104.2993,
@@ -15183,7 +15130,7 @@
         105.8526,
         105.7177,
         105.5251,
-        105.6889,
+        105.6888,
         105.737,
         105.3324,
         106.1609,
@@ -15211,7 +15158,7 @@
         107.9932,
         107.5582,
         107.3648,
-        107.5098,
+        107.5099,
         107.8675,
         107.7612,
         108.1939,
@@ -15243,15 +15190,15 @@
         108.0216,
         107.8074,
         107.8658,
-        108.2942,
+        108.2943,
         108.1871,
-        107.6515,
+        107.6516,
         107.3594,
         107.4276,
         107.4763,
         107.486,
         107.6321,
-        108.0118,
+        108.0119,
         108.4403,
         108.7422,
         109.1122,
@@ -15267,7 +15214,7 @@
         108.4903,
         108.3339,
         107.6791,
-        107.8062,
+        107.8061,
         108.0505,
         107.9332,
         108.3437,
@@ -15283,7 +15230,7 @@
         108.0945,
         108.3987,
         108.3987,
-        108.4771,
+        108.4772,
         108.173,
         108.5655,
         108.4379,
@@ -15341,7 +15288,7 @@
         107.4549,
         106.6149,
         106.3579,
-        107.0398,
+        107.0399,
         107.7119,
         107.827,
         108.2835,
@@ -15392,16 +15339,15 @@
         null
       ],
       "TLT": [
-        null,
         82.6217,
-        82.679,
+        82.6791,
         81.627,
         81.7131,
         82.1339,
         82.3826,
-        83.3677,
+        83.3676,
         82.5643,
-        81.7322,
+        81.7323,
         82.7269,
         82.8703,
         null,
@@ -15418,7 +15364,7 @@
         null,
         82.6899,
         82.5843,
-        83.4483,
+        83.4482,
         83.5059,
         82.3539,
         82.1811,
@@ -15432,11 +15378,11 @@
         82.4499,
         82.9683,
         82.4307,
-        83.8226,
+        83.8227,
         83.3907,
         83.4387,
         84.6249,
-        84.8561,
+        84.8562,
         85.1163,
         84.6249,
         84.4803,
@@ -15445,7 +15391,7 @@
         83.7865,
         84.4803,
         83.854,
-        83.2565,
+        83.2566,
         83.0156,
         83.4975,
         83.6805,
@@ -15493,8 +15439,8 @@
         88.5231,
         88.8628,
         89.2996,
-        89.3578,
-        88.7464,
+        89.3579,
+        88.7463,
         88.7852,
         89.0861,
         89.319,
@@ -15502,7 +15448,7 @@
         87.9019,
         87.6398,
         87.4206,
-        87.6154,
+        87.6155,
         86.6608,
         87.4401,
         87.255,
@@ -15554,14 +15500,14 @@
         86.1899,
         86.6904,
         86.6708,
-        86.1703,
+        86.1702,
         null,
         85.0416,
         85.6893,
         86.0623,
         86.2978,
         86.71,
-        86.1703,
+        86.1702,
         85.974,
         85.9936,
         85.5127,
@@ -15581,7 +15527,7 @@
         88.2929,
         88.086,
         88.4111,
-        88.5688,
+        88.5687,
         88.5786,
         88.9333,
         89.4751,
@@ -15605,7 +15551,7 @@
         85.8386,
         85.117,
         84.6524,
-        85.7793,
+        85.7792,
         85.6903,
         85.6059,
         86.1319,
@@ -15656,7 +15602,6 @@
         null
       ],
       "AGG": [
-        null,
         94.2427,
         94.0024,
         93.5217,
@@ -15705,8 +15650,8 @@
         96.0061,
         95.9287,
         95.7448,
-        95.8126,
-        95.8126,
+        95.8125,
+        95.8125,
         96.1609,
         95.89,
         95.7448,
@@ -15733,13 +15678,13 @@
         97.7791,
         97.818,
         97.6432,
-        97.3714,
-        97.3714,
-        97.2548,
+        97.3713,
+        97.3713,
+        97.2549,
         97.4102,
         97.2257,
         97.0898,
-        97.1577,
+        97.1578,
         97.3422,
         97.3325,
         97.5809,
@@ -15748,7 +15693,7 @@
         97.3666,
         97.5322,
         97.5419,
-        97.4251,
+        97.425,
         97.8244,
         98.0095,
         98.1653,
@@ -15768,14 +15713,14 @@
         97.8114,
         97.8602,
         97.5964,
-        97.9579,
+        97.958,
         97.9189,
         97.8798,
         98.1729,
         98.1338,
         97.8407,
         97.7234,
-        97.7429,
+        97.743,
         97.8016,
         97.8016,
         97.9189,
@@ -15798,7 +15743,7 @@
         97.9522,
         98.1385,
         98.109,
-        98.3541,
+        98.3542,
         98.2105,
         98.1712,
         98.1712,
@@ -15834,10 +15779,10 @@
         98.333,
         98.7573,
         98.8165,
-        98.8461,
+        98.8462,
         99.1323,
         98.9054,
-        99.3495,
+        99.3494,
         99.6653,
         null,
         99.6751,
@@ -15925,9 +15870,9 @@
     {
       "symbol": "HG=F",
       "name": "Copper",
-      "last": 6.473499774932861,
-      "pct": 97.2,
-      "z": 1.88,
+      "last": 6.519000053405762,
+      "pct": 98.0,
+      "z": 1.96,
       "n": 252
     },
     {
@@ -15935,15 +15880,15 @@
       "name": "10Y yield",
       "last": 4.491000175476074,
       "pct": 96.4,
-      "z": 1.73,
-      "n": 252
+      "z": 1.75,
+      "n": 251
     },
     {
       "symbol": "CL=F",
       "name": "WTI crude",
-      "last": 95.19000244140625,
-      "pct": 85.3,
-      "z": 1.53,
+      "last": 92.44000244140625,
+      "pct": 81.0,
+      "z": 1.36,
       "n": 252
     },
     {
@@ -15957,25 +15902,25 @@
     {
       "symbol": "DX-Y.NYB",
       "name": "Dollar (DXY)",
-      "last": 99.48100280761719,
-      "pct": 85.7,
-      "z": 1.12,
-      "n": 252
-    },
-    {
-      "symbol": "^VIX",
-      "name": "VIX",
-      "last": 16.059999465942383,
-      "pct": 25.0,
-      "z": -0.62,
+      "last": 99.23799896240234,
+      "pct": 80.2,
+      "z": 0.84,
       "n": 252
     },
     {
       "symbol": "GC=F",
       "name": "Gold",
-      "last": 4492.7998046875,
-      "pct": 63.1,
-      "z": 0.52,
+      "last": 4519.7001953125,
+      "pct": 64.7,
+      "z": 0.56,
+      "n": 252
+    },
+    {
+      "symbol": "^VIX",
+      "name": "VIX",
+      "last": 16.510000228881836,
+      "pct": 36.5,
+      "z": -0.48,
       "n": 252
     },
     {
@@ -15988,9 +15933,9 @@
     }
   ],
   "vol": {
-    "vix": 16.1,
+    "vix": 16.5,
     "realized_20d": 9.9,
-    "premium": 6.2
+    "premium": 6.6
   },
   "stock_bond": {
     "corr": 0.76,
