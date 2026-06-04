@@ -10,10 +10,24 @@ true multi-year percentiles and a real track record of the daily calls, no fabri
 from __future__ import annotations
 
 import json
+import os
 
 from . import config, signals
 
 TIMELINE_PATH = config.DATA_DIR / "timeline.jsonl"
+
+
+def atomic_write(rows: list[dict]) -> None:
+    """Write the whole timeline atomically (temp file + os.replace) so a torn write
+    can never destroy the committed history."""
+    config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    payload = "".join(json.dumps(r) + "\n" for r in rows)
+    tmp = TIMELINE_PATH.with_suffix(".jsonl.tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(payload)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, TIMELINE_PATH)
 
 
 def _row_for(brief: dict) -> dict:
@@ -60,22 +74,26 @@ def load_timeline() -> list[dict]:
                     continue   # skip the bad line, keep the rest of the record
     except Exception:
         return []
-    return rows
+    return sorted(rows, key=lambda r: r.get("date", ""))   # oldest-first regardless of append order
 
 
 def append_today(brief: dict) -> None:
-    """Append (or replace) today's row, keyed by date. Idempotent, best-effort."""
+    """Append today's row (idempotent by date). The common new-day case is a single-line
+    append so a multi-thousand-row timeline isn't rewritten daily; a same-day re-run does
+    an atomic full rewrite to replace the existing row. Best-effort."""
     try:
         row = _row_for(brief)
         if not row.get("date"):
             return
-        rows = [r for r in load_timeline() if r.get("date") != row["date"]]
-        rows.append(row)
-        rows.sort(key=lambda r: r.get("date", ""))
-        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
-        with open(TIMELINE_PATH, "w", encoding="utf-8") as f:
-            for r in rows:
-                f.write(json.dumps(r) + "\n")
+        existing = load_timeline()
+        if any(r.get("date") == row["date"] for r in existing):
+            kept = [r for r in existing if r.get("date") != row["date"]] + [row]
+            kept.sort(key=lambda r: r.get("date", ""))
+            atomic_write(kept)
+        else:
+            config.DATA_DIR.mkdir(parents=True, exist_ok=True)
+            with open(TIMELINE_PATH, "a", encoding="utf-8") as f:   # new day -> 1-line append
+                f.write(json.dumps(row) + "\n")
     except Exception:
         pass
 

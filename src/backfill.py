@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import json
 import math
-import os
 
 import pandas as pd
 
@@ -146,15 +145,18 @@ def _fetch_spec_net(limit: int = 320) -> pd.Series:
     return pd.Series(vals, index=pd.DatetimeIndex(dates)).sort_index()
 
 
-def backfill(years: int = 3) -> int:
-    """Fetch real history, assemble rows, and MERGE into the timeline without
-    overwriting any existing (real, in-the-moment) row. Returns rows added."""
-    prices = _fetch_prices(f"{max(years, 1)}y" if years <= 5 else "5y")
+def backfill(start: str = "1998-01-01") -> int:
+    """Fetch all available real history back to `start`, assemble rows, and MERGE into the
+    timeline without overwriting any existing (real, in-the-moment) row. Each series goes
+    back only as far as it genuinely exists (S&P/yields decades, spreads/positioning less).
+    Returns rows added. Atomic write — never leaves the committed history torn."""
+    prices = _fetch_prices("max")
     if prices.empty:
         return 0
-    cutoff = prices.index.max() - pd.Timedelta(days=365 * years + 5)
-    prices = prices[prices.index >= cutoff]
-    rows = assemble_rows(prices, _fetch_fred(), _fetch_spec_net())
+    prices = prices[prices.index >= pd.Timestamp(start)]
+    if prices.empty:
+        return 0
+    rows = assemble_rows(prices, _fetch_fred(start="1990-01-01"), _fetch_spec_net(limit=1300))
     existing = timeline.load_timeline()
     have = {r.get("date") for r in existing}
     added = [r for r in rows if r.get("date") not in have]
@@ -162,20 +164,15 @@ def backfill(years: int = 3) -> int:
         return 0                                  # nothing new -> never rewrite the committed file
     merged = sorted(existing + added, key=lambda r: r.get("date", ""))
     try:
-        config.DATA_DIR.mkdir(parents=True, exist_ok=True)
-        payload = "".join(json.dumps(r) + "\n" for r in merged)   # serialize fully BEFORE truncating
-        tmp = timeline.TIMELINE_PATH.with_suffix(".jsonl.tmp")
-        with open(tmp, "w", encoding="utf-8") as f:
-            f.write(payload)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp, timeline.TIMELINE_PATH)   # atomic swap — never leaves a torn file
+        timeline.atomic_write(merged)             # temp file + os.replace
     except Exception:
         return 0                                  # leave the existing committed history untouched
     return len(added)
 
 
 if __name__ == "__main__":
-    n = backfill(years=3)
-    print(f"backfilled {n} historical rows into {timeline.TIMELINE_PATH}")
+    import sys
+    start = sys.argv[1] if len(sys.argv) > 1 else "1998-01-01"
+    n = backfill(start=start)
+    print(f"backfilled {n} historical rows (from {start}) into {timeline.TIMELINE_PATH}")
     print(f"timeline now has {len(timeline.load_timeline())} rows")
