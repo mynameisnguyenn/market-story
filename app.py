@@ -774,10 +774,9 @@ def daily_brief_page() -> None:
     brief, closes = get_data(st.session_state.nonce)
     persist(brief)
 
-    header_left, header_right = st.columns([6, 2])
+    header_left, header_right = st.columns([6, 2], vertical_alignment="center")
     header_left.title("Global Markets Brief")
-    header_right.caption(brief["session_label"])
-    header_right.caption(f"Generated {brief['generated_at_utc'][11:19]} UTC")
+    header_right.caption(f"{brief['session_label']}  ·  generated {brief['generated_at_utc'][11:19]} UTC")
 
     stats = brief["stats"]
     cols = st.columns(6)
