@@ -268,7 +268,9 @@ def sector_treemap_fig(rows: list[dict]):
     span = max(abs(frame["Change"]).max(), 0.5)
     fig = px.treemap(
         frame, path=["Sector"], values="Size", color="Change",
-        color_continuous_scale="RdYlGn", color_continuous_midpoint=0, range_color=[-span, span],
+        # on-palette diverging scale: loss-red -> warm-dark -> gain-green (no off-brand RdYlGn yellow)
+        color_continuous_scale=[[0.0, formatting.RED], [0.5, "#1b1611"], [1.0, formatting.GREEN]],
+        color_continuous_midpoint=0, range_color=[-span, span],
     )
     fig.update_traces(texttemplate="%{label}", hovertemplate="%{label}<extra></extra>")
     fig.update_layout(height=360, margin=dict(t=10, l=10, r=10, b=10))
@@ -299,7 +301,7 @@ def sparkline_fig(series):
         return None
     s = series.tail(45)
     up = float(s.iloc[-1]) >= float(s.iloc[0])
-    color = "#26A69A" if up else "#EF5350"
+    color = formatting.GREEN if up else formatting.RED
     fig = go.Figure(go.Scatter(x=list(range(len(s))), y=list(s.values), mode="lines",
                                line=dict(color=color, width=1.4)))
     pad = (float(s.max()) - float(s.min())) * 0.12 or 1.0
@@ -366,7 +368,9 @@ def correlation_fig(closes: dict, instruments: list[tuple], window: int = 60):
     names = {s: n for s, n in instruments}
     labels = [names.get(s, s) for s in corr.columns]
     fig = px.imshow(corr.values, x=labels, y=labels, zmin=-1, zmax=1,
-                    color_continuous_scale="RdBu_r", aspect="auto", text_auto=".2f")
+                    # cyan-anchored: +1 corr glows accent-cyan (on-brand), -1 loss-red, 0 warm-dark
+                    color_continuous_scale=[[0.0, formatting.RED], [0.5, "#16120f"], [1.0, "#7beafb"]],
+                    aspect="auto", text_auto=".2f")
     fig.update_layout(height=440, margin=dict(t=36, l=10, r=10, b=10),
                       title=f"Cross-asset return correlation (last {window}d)")
     return fig
@@ -414,7 +418,15 @@ def render_line(closes: dict, symbol: str, name: str, key: str | None = None) ->
 
 # --- Tabs --------------------------------------------------------------------
 
-_TONE_HEX = {"up": "#36C26F", "down": "#FF5C6C", "warn": "#F5A623", "neutral": "#8A94A6"}
+# One semantic palette for every up/down/warn/neutral cue (charts, dots, badges) — sourced
+# from formatting so tables and signals share the exact same green/red. Mirrors styles.css.
+_TONE_HEX = {"up": formatting.GREEN, "down": formatting.RED, "warn": "#F5A623", "neutral": formatting.NEUTRAL}
+
+
+def _tone_span(text: str, tone: str) -> str:
+    """Inline HTML span colored by the shared semantic token (replaces Streamlit's :green[]/:red[],
+    which use a different theme green/red and broke palette consistency)."""
+    return f"<span style=\"color:{_TONE_HEX.get(tone, 'inherit')}\">{text}</span>"
 
 
 def signals_strip(brief: dict) -> None:
@@ -436,11 +448,11 @@ def signals_strip(brief: dict) -> None:
             unsafe_allow_html=True,
         )
     if sigs:
-        dot = {"up": "green", "down": "red", "warn": "orange", "neutral": "gray"}
-        st.markdown("**⚡ Today's signal**")
+        st.subheader("⚡ Today's signal")
         cols = st.columns(2)
         for i, s in enumerate(sigs):
-            cols[i % 2].markdown(f":{dot[s['tone']]}[●]  {s['text']}")
+            cols[i % 2].markdown(_tone_span("●", s["tone"]) + "  " + html.escape(s["text"]),
+                                 unsafe_allow_html=True)
     era = eras.era_for(brief.get("date", ""))
     if era:
         st.caption(f"📅 We're in the **{era['name']}** era ({era['regime']}). "
@@ -459,7 +471,7 @@ def deltas_panel(brief: dict) -> None:
     prior_date, rows = result
     if not rows:
         return
-    st.markdown(f"**Since last session ({prior_date})**")
+    st.subheader(f"Since last session ({prior_date})")
     cols = st.columns(len(rows))
     for col, r in zip(cols, rows):
         if r["symbol"] == "^TNX":
@@ -472,7 +484,50 @@ def deltas_panel(brief: dict) -> None:
     st.divider()
 
 
+def _narrative_thesis(path) -> str | None:
+    """The written read's one-line thesis: first content line under '## Today in one line'
+    (or a 'thesis' header). None if not found — so the hero degrades to the derived lead."""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except Exception:
+        return None
+    for i, ln in enumerate(lines):
+        low = ln.strip().lower()
+        if low.startswith("##") and ("one line" in low or "thesis" in low):
+            for body in lines[i + 1:]:
+                t = body.strip()
+                if t and not t.startswith("#"):
+                    return t.lstrip("*->•_ ").strip()
+            break
+    return None
+
+
+def _thesis_hero(brief: dict) -> None:
+    """Lead the Overview with the written narrative's thesis (the product is the read, not the
+    data). Silent if there's no narrative — signals_strip's derived lead then carries the top."""
+    path = brief_mod.latest_narrative_path()
+    if not path or not path.exists():
+        return
+    thesis = _narrative_thesis(path)
+    if not thesis:
+        return
+    ndate = path.stem.replace("narrative_", "")
+    stale = f" · from {ndate}, older than today's brief" if ndate < str(brief.get("date", "")) else ""
+    st.markdown(
+        f"""<div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+        border-radius:10px;padding:16px 20px;margin:2px 0 12px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:.66rem;text-transform:uppercase;
+        letter-spacing:.13em;color:var(--accent);margin-bottom:6px;">● Today's thesis{stale}</div>
+        <div style="font-family:'Instrument Serif',Georgia,serif;font-size:1.6rem;line-height:1.3;
+        color:var(--text);">{html.escape(thesis)}</div>
+        <div style="font-size:.78rem;color:var(--text-dim);margin-top:9px;">Full read in the <b>Story</b> tab →</div>
+        </div>""",
+        unsafe_allow_html=True,
+    )
+
+
 def overview_tab(brief: dict, closes: dict) -> None:
+    _thesis_hero(brief)
     signals_strip(brief)
     deltas_panel(brief)
     movers = brief["movers"]
@@ -480,11 +535,13 @@ def overview_tab(brief: dict, closes: dict) -> None:
     with left:
         st.subheader("Leaders")
         for m in movers["leaders"]:
-            st.markdown(f"**{m['name']}**  :green[{formatting.fmt_pct(m['change_pct'])}]")
+            st.markdown(f"**{m['name']}**  " + _tone_span(formatting.fmt_pct(m["change_pct"]),
+                        "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     with right:
         st.subheader("Laggards")
         for m in movers["laggards"]:
-            st.markdown(f"**{m['name']}**  :red[{formatting.fmt_pct(m['change_pct'])}]")
+            st.markdown(f"**{m['name']}**  " + _tone_span(formatting.fmt_pct(m["change_pct"]),
+                        "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     st.divider()
     st.subheader("S&P 500")
     render_line(closes, "^GSPC", "S&P 500", key="ov_sp500")
@@ -530,12 +587,12 @@ def equities_tab(brief: dict, closes: dict) -> None:
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("**US Equities**")
+        st.subheader("US Equities")
         render_table(brief["markets"].get("us_equities", []), "equity", "% changes")
     with col2:
-        st.markdown("**US Sectors**")
+        st.subheader("US Sectors")
         render_table(brief["markets"].get("sectors", []), "equity", "% changes")
-    st.markdown("**Watchlist (growth)**")
+    st.subheader("Watchlist (growth)")
     render_table(brief["markets"].get("watchlist", []), "equity", "% changes")
     watchlist_editor()
 
@@ -545,12 +602,12 @@ def regime_panel(brief: dict) -> None:
     signals = regime.assess(brief.get("macro", []), vix=brief.get("stats", {}).get("vix"))
     if not signals:
         return
-    st.markdown(f"**Risk regime — {regime.overall(signals)}**")
-    tone_color = {"on": "green", "off": "red", "neutral": "gray"}
+    st.subheader(f"Risk regime — {regime.overall(signals)}")
+    tone_map = {"on": "up", "off": "down", "neutral": "neutral"}
     cols = st.columns(len(signals))
     for col, s in zip(cols, signals):
         col.caption(s["label"])
-        col.markdown(f":{tone_color[s['tone']]}[{s['reading']}]")
+        col.markdown(_tone_span(s["reading"], tone_map.get(s["tone"], "neutral")), unsafe_allow_html=True)
     st.divider()
 
 
@@ -558,38 +615,42 @@ def macro_tab(brief: dict, closes: dict) -> None:
     regime_panel(brief)
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("**Global Indices**")
+        st.subheader("Global Indices")
         render_table(brief["markets"].get("global_indices", []), "equity", "% changes")
-        st.markdown("**Rates (Treasury yields)**")
+        st.subheader("Rates (Treasury yields)")
         render_table(brief["markets"].get("rates", []), "yield", "Last in %, 1D in bps")
-        st.markdown("**FX**")
+        st.subheader("FX")
         render_table(brief["markets"].get("fx", []), "fx", "% changes")
     with col2:
-        st.markdown("**Commodities**")
+        st.subheader("Commodities")
         render_table(brief["markets"].get("commodities", []), "commodity", "% changes")
-        st.markdown("**Credit & Bonds**")
+        st.subheader("Credit & Bonds")
         render_table(brief["markets"].get("credit", []), "credit", "% changes")
     st.divider()
-    st.markdown("**Macro (FRED)**")
+    st.subheader("Macro (FRED)")
     if brief.get("macro"):
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)
     if brief.get("bls"):
-        st.markdown("**Labor & Inflation (BLS)** — release-day prints, YoY %")
+        st.subheader("Labor & Inflation (BLS)")
+        st.caption("Release-day prints, YoY %")
         st.dataframe(bls_styler(brief["bls"]), use_container_width=True, hide_index=True)
     _macro_history_section()
     if brief.get("energy"):
-        st.markdown("**Energy inventories (EIA, weekly)** — Δ is the week-over-week draw/build")
+        st.subheader("Energy inventories (EIA, weekly)")
+        st.caption("Δ is the week-over-week draw/build")
         st.dataframe(energy_styler(brief["energy"]), use_container_width=True, hide_index=True)
         st.caption("A crude **draw** (negative Δ) is typically bullish for oil, a build bearish; "
                    "natural gas swings between summer injections and winter withdrawals. Source: EIA.")
         _energy_history_section()
     if brief.get("positioning"):
-        st.markdown("**Speculative positioning (CFTC, weekly)** — leveraged-fund net & weekly change")
+        st.subheader("Speculative positioning (CFTC, weekly)")
+        st.caption("Leveraged-fund net & weekly change")
         st.dataframe(positioning_styler(brief["positioning"]), use_container_width=True, hide_index=True)
         st.caption("Leveraged funds = hedge-fund/spec money; asset managers = real money. A large "
                    "spec net-short with real money long is a classic squeeze setup. Source: CFTC TFF.")
     if brief.get("extremes"):
-        st.markdown("**Cross-asset extremes** — where key markets sit in their ~1y range")
+        st.subheader("Cross-asset extremes")
+        st.caption("Where key markets sit in their ~1y range")
         st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
     vol = brief.get("vol")
     if vol:
@@ -690,7 +751,8 @@ def _econ_section() -> None:
     rows = get_econ()
     if not rows:
         return
-    st.markdown("**Economic releases** — the data the market trades around")
+    st.subheader("Economic releases")
+    st.caption("The data the market trades around")
     frame = pd.DataFrame([
         {"Release": r["name"], "Date": r["date"],
          "In": ("tomorrow ⚠️" if r["days"] == 1 else "today ⚠️" if r["days"] == 0 else f"{r['days']} days")}
@@ -700,7 +762,8 @@ def _econ_section() -> None:
 
 
 def _13f_section() -> None:
-    st.markdown("**Smart money (13F)** — what prominent managers hold, and last quarter's flow")
+    st.subheader("Smart money (13F)")
+    st.caption("What prominent managers hold, and last quarter's flow")
     st.caption("Quarterly SEC 13F-HR filings: **long US equities only**, ~45-day lag — positioning, not real-time.")
     names = [n for n, _ in thirteenf.FUNDS]
     choice = st.selectbox("Manager", names, key="f13_fund", label_visibility="collapsed")
@@ -897,7 +960,8 @@ def _time_machine(df) -> None:
     """Pick a historical date -> the era it falls in + each metric's level and percentile
     AS OF that date (vs its own history up to then)."""
     st.divider()
-    st.markdown("**🕰 Time machine** — pick a date to see where markets stood, and which era it was")
+    st.subheader("🕰 Time machine")
+    st.caption("Pick a date to see where markets stood, and which era it was")
     dmin, dmax = df.index[0].date(), df.index[-1].date()
     picked = st.date_input("As of", value=dmax, min_value=dmin, max_value=dmax, key="timemachine")
     upto = df[df.index <= pd.Timestamp(picked)]
@@ -977,11 +1041,14 @@ def daily_brief_page() -> None:
     )
     st.divider()
 
-    overview, equities, macro, trends, headlines, calendar, story = st.tabs(
-        ["Overview", "Equities & Sectors", "Global & Macro", "Trends", "Headlines", "Calendar", "Story"]
+    # Story sits 2nd — the written read is the product, so it leads the data tabs.
+    overview, story, equities, macro, trends, headlines, calendar = st.tabs(
+        ["Overview", "Story", "Equities & Sectors", "Global & Macro", "Trends", "Headlines", "Calendar"]
     )
     with overview:
         overview_tab(brief, closes)
+    with story:
+        narrative_tab(brief)
     with equities:
         equities_tab(brief, closes)
     with macro:
@@ -992,8 +1059,6 @@ def daily_brief_page() -> None:
         headlines_tab(brief)
     with calendar:
         calendar_tab()
-    with story:
-        narrative_tab(brief)
 
 
 def learn_page() -> None:
@@ -1025,7 +1090,7 @@ def _load_css() -> str:
 
 def main() -> None:
     st.set_page_config(page_title="Market Story", page_icon="📈", layout="wide",
-                       initial_sidebar_state="expanded")
+                       initial_sidebar_state="auto")   # auto-collapses on mobile so content leads
     _load_cloud_secrets()
     st.markdown(f"<style>{_load_css()}</style>", unsafe_allow_html=True)
     st.sidebar.title("Market Story")

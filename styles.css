@@ -22,6 +22,9 @@
     --text-dim:     #b3aaa0;   /* captions, labels, h3 */
     --accent:       #7beafb;   /* electric cyan (also primaryColor in config.toml) */
     --accent-bright:#a6f1ff;   /* hover */
+    --up:           #36C26F;   /* gains  — keep in sync with src/formatting.py GREEN / _TONE_HEX */
+    --down:         #FF5C6C;   /* losses — keep in sync with src/formatting.py RED   / _TONE_HEX */
+    --warn:         #f5a623;   /* caution */
     --grid:         #241f1a;   /* chart gridlines / dividers */
     --radius:       10px;
 }
@@ -55,7 +58,7 @@ h3 { font-family: 'Space Grotesk', sans-serif !important; font-size: 1.08rem; fo
 [data-testid="stMetricValue"] { font-size: 1.5rem; font-weight: 600; color: var(--text); }
 [data-testid="stMetricLabel"] {
     font-family: 'Space Grotesk', sans-serif !important;
-    opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: .09em;
+    opacity: .72; font-size: .7rem; text-transform: uppercase; letter-spacing: .09em;  /* .72 = readable on dark */
 }
 
 /* Tabs: heavier; cyan active (the underline follows primaryColor automatically) */
@@ -66,3 +69,18 @@ h3 { font-family: 'Space Grotesk', sans-serif !important; font-size: 1.08rem; fo
 a, a:visited { color: var(--accent); }
 
 hr { margin: .85rem 0; border-color: var(--grid); }
+
+/* Mobile (iPhone): Streamlit auto-stacks columns below ~640px; shrink type/padding/tables
+   so the stacked layout stays readable instead of cramped. */
+@media (max-width: 640px) {
+    .block-container { padding: 1rem .55rem 1.4rem; max-width: 100%; }
+    h1 { font-size: 2rem; line-height: 1.1; }
+    section[data-testid="stSidebar"] h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1rem; }
+    [data-testid="stMetric"] { padding: 9px 11px 8px; }
+    [data-testid="stMetricValue"] { font-size: 1.15rem; }
+    [data-testid="stMetricLabel"] { font-size: .62rem; letter-spacing: .06em; }
+    [data-testid="stDataFrame"], [data-testid="stTable"] { font-size: .72rem; }
+    [data-testid="stTabs"] button[role="tab"] { font-size: .85rem; padding: 0 .4rem; }
+}

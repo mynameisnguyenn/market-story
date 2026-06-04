@@ -153,4 +153,27 @@ def derive_lead(brief: dict) -> dict | None:
         return {"tone": "warn", "thesis": "geopolitical-premium",
                 "text": f"Oil's bid is a risk premium, not reflation — WTI {oil:+.1f}% while copper {copper:+.1f}%. "
                         "Geopolitical supply scare, not synchronized growth."}
-    return None
+    # 4) Default — no dramatic theme cleared. Read the resting regime from the analytics already
+    #    in the brief so the headline ALWAYS has a stance (never blanks on a quiet/mixed day).
+    bits = []
+    prem = (brief.get("vol") or {}).get("premium")
+    if prem is not None:
+        bits.append(f"vol premium {prem:+.1f}"
+                    + (" (hedges look cheap)" if prem > 3 else " (vol bid)" if prem < 0 else ""))
+    if (brief.get("stock_bond") or {}).get("flipped"):
+        bits.append("stock-bond corr flipped — bond hedge unreliable")
+    if hy_pct is not None and hy_pct <= 10:
+        bits.append(f"credit {_ord(hy_pct)} %ile — priced for perfection")
+    elif hy_pct is not None and hy_pct >= 90:
+        bits.append(f"credit {_ord(hy_pct)} %ile — stress priced in")
+    ext = brief.get("extremes") or []
+    if ext and ext[0].get("pct") is not None:
+        e = ext[0]
+        bits.append(f"{e.get('name', e.get('symbol', 'an anchor'))} at {_ord(e['pct'])} %ile")
+    spx_txt = f"S&P {spx:+.1f}%" if spx is not None else "Mixed tape"
+    if bits:
+        return {"tone": "neutral", "thesis": "resting-regime",
+                "text": f"Quiet tape, but watch the setup — {spx_txt}; " + "; ".join(bits[:3]) + "."}
+    return {"tone": "neutral", "thesis": "quiet",
+            "text": f"Balanced, low-conviction tape — {spx_txt}, no cross-asset extreme firing. "
+                    "A day to watch, not chase."}

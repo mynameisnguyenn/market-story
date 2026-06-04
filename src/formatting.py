@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import math
 
-GREEN = "#26A69A"
-RED = "#EF5350"
-NEUTRAL = "#9AA0A6"
+# Single source of truth for up/down/neutral semantics — mirrored by styles.css
+# (--up / --down) and app._TONE_HEX. One warm green, one warm red, everywhere.
+GREEN = "#36C26F"
+RED = "#FF5C6C"
+NEUTRAL = "#b3aaa0"
 
 
 def is_missing(value) -> bool:

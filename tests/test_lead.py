@@ -41,5 +41,18 @@ def test_lead_broad_risk_on():
     assert lead and lead["thesis"] == "risk-on"
 
 
-def test_lead_none_on_mixed_day():
-    assert signals.derive_lead(_brief(spx=-0.2, hy_chg=0.0, oil=0.5, copper=0.2)) is None
+def test_lead_default_on_quiet_day():
+    """No dramatic theme -> a default 'resting regime' read, never None (the hero never blanks)."""
+    lead = signals.derive_lead(_brief(spx=-0.2, hy_chg=0.0, oil=0.5, copper=0.2))
+    assert lead is not None
+    assert lead["tone"] == "neutral"
+    assert lead["thesis"] in ("quiet", "resting-regime")
+    assert lead["text"]
+
+
+def test_lead_resting_regime_uses_analytics():
+    """On a quiet day the default branch surfaces the brief's analytics (vol premium, extremes)."""
+    brief = {"markets": {"us_equities": [{"symbol": "^GSPC", "name": "S&P", "change_pct": -0.2}]},
+             "macro": [], "stats": {}, "vol": {"premium": 6.6}}
+    lead = signals.derive_lead(brief)
+    assert lead["thesis"] == "resting-regime" and "vol premium" in lead["text"]

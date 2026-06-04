@@ -42,6 +42,8 @@ version — currently Streamlit 1.58):
 Borrowed from [ellis.com](https://www.ellis.com/) (a Next.js/Tailwind/Vercel site), adapted to dark:
 
 - **Accent** electric cyan `#7beafb` (was `#4C9AFF`)
+- **Semantics** ONE green `#36C26F` (`--up`) / ONE red `#FF5C6C` (`--down`) for every gain/loss cue —
+  tables, sparklines, the hero, signal dots, treemap, correlation — sourced from `src/formatting.py`
 - **Palette** warm near-black `#0d0c0c` bg, warm cards `#16120f`, warm off-white `#f5f2ef` text
 - **Type** serif display headline (Instrument Serif ~ Ellis's *Atacama*) over mono data (IBM Plex Mono),
   grotesk subheads (Space Grotesk) with tight negative tracking
