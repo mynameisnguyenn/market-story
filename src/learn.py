@@ -16,11 +16,11 @@ import streamlit as st
 from . import config, eras
 
 LEARN_DIR = config.PROJECT_ROOT / "learn"
-NODE_COLOR = "#4C9AFF"
-LINK_COLOR = "rgba(76,154,255,0.35)"
+NODE_COLOR = "#7beafb"
+LINK_COLOR = "rgba(123,234,251,0.35)"
 
 CATEGORY_COLORS = {
-    "Founding": "#4C9AFF",
+    "Founding": "#7beafb",
     "Crash": "#EF5350",
     "Reform": "#26A69A",
     "Innovation": "#AB47BC",

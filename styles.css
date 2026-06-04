@@ -1,0 +1,68 @@
+/* ============================================================================
+   market-story — Ellis-dark design system
+   ----------------------------------------------------------------------------
+   ITERATE: edit a value below and save -> the app reloads (runOnSave=true).
+   Or live-edit in the browser (F12 -> Elements -> Styles), then bank the winner
+   here. `style_lab.py` renders every component on one screen for fast tuning.
+
+   Borrowed from ellis.com (Next.js/Tailwind/Vercel): warm near-black #0d0c0c,
+   electric-cyan accent #7beafb, tight display tracking, and a serif headline
+   (Instrument Serif here ~ Ellis's Atacama) against mono data.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+    --bg:           #0d0c0c;   /* warm near-black app background (also set in config.toml) */
+    --surface:      #16120f;   /* cards / metrics / the "Today's read" hero */
+    --surface-2:    #1b1611;   /* secondary surfaces (also config.toml) */
+    --border:       #2b2620;   /* warm hairline */
+    --border-strong:#3a332b;   /* hover / emphasis border */
+    --text:         #f5f2ef;   /* warm off-white */
+    --text-dim:     #b3aaa0;   /* captions, labels, h3 */
+    --accent:       #7beafb;   /* electric cyan (also primaryColor in config.toml) */
+    --accent-bright:#a6f1ff;   /* hover */
+    --grid:         #241f1a;   /* chart gridlines / dividers */
+    --radius:       10px;
+}
+
+.block-container { padding-top: 2rem; padding-bottom: 2.6rem; max-width: 1400px; }
+
+/* Typography: serif display headline + grotesk subheads, Ellis-tight tracking */
+h1 {
+    font-family: 'Instrument Serif', Georgia, serif !important;
+    font-size: 2.8rem; font-weight: 400; letter-spacing: -.01em; line-height: 1.08;
+    color: var(--text);
+}
+/* keep the sidebar title tidy in the narrow column */
+section[data-testid="stSidebar"] h1 { font-size: 1.9rem; }
+h2 { font-family: 'Space Grotesk', sans-serif !important; font-size: 1.6rem; font-weight: 600; letter-spacing: -.03em; }
+h3 { font-family: 'Space Grotesk', sans-serif !important; font-size: 1.08rem; font-weight: 600;
+     letter-spacing: -.01em; color: var(--text-dim); }
+
+/* Data in mono with aligned tabular figures */
+[data-testid="stMetricValue"], [data-testid="stMetricDelta"] {
+    font-family: 'IBM Plex Mono', monospace !important; font-variant-numeric: tabular-nums;
+}
+[data-testid="stDataFrame"], [data-testid="stTable"] { font-size: .84rem; font-variant-numeric: tabular-nums; }
+
+/* KPI cards: warm surface, cyan accent bar, hover lift */
+[data-testid="stMetric"] {
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: var(--radius); padding: 13px 16px 11px; transition: border-color .15s ease;
+}
+[data-testid="stMetric"]:hover { border-left-color: var(--accent-bright); border-color: var(--border-strong); }
+[data-testid="stMetricValue"] { font-size: 1.5rem; font-weight: 600; color: var(--text); }
+[data-testid="stMetricLabel"] {
+    font-family: 'Space Grotesk', sans-serif !important;
+    opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: .09em;
+}
+
+/* Tabs: heavier; cyan active (the underline follows primaryColor automatically) */
+[data-testid="stTabs"] button[role="tab"] { font-size: .95rem; font-weight: 600; }
+[data-testid="stTabs"] button[aria-selected="true"] { color: var(--accent); }
+
+/* Links pick up the accent */
+a, a:visited { color: var(--accent); }
+
+hr { margin: .85rem 0; border-color: var(--grid); }

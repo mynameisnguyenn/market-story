@@ -1,10 +1,10 @@
-# Dark theme tuned for a financial dashboard
+# Ellis-dark theme: warm near-black + electric-cyan accent (keep in sync with styles.css :root)
 [theme]
 base = "dark"
-primaryColor = "#4C9AFF"
-backgroundColor = "#0E1117"
-secondaryBackgroundColor = "#161B26"
-textColor = "#E6E6E6"
+primaryColor = "#7beafb"               # electric cyan — drives tab underline, widgets, focus
+backgroundColor = "#0d0c0c"            # warm near-black (Ellis)
+secondaryBackgroundColor = "#1b1611"   # warm dark surfaces (sidebar, table headers)
+textColor = "#f5f2ef"                  # warm off-white
 font = "sans serif"
 
 # headless=true is required for hosting (Streamlit Cloud); the local launcher

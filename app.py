@@ -26,7 +26,7 @@ from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_dat
                  formatting, history, macro_data, market_data, news, regime, scorecard,
                  signals, thirteenf, timeline)
 
-LINE_COLOR = "#4C9AFF"
+LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
 
 
@@ -424,13 +424,14 @@ def signals_strip(brief: dict) -> None:
     if not lead and not sigs:
         return
     if lead:
-        color = _TONE_HEX.get(lead["tone"], "#4C9AFF")
+        color = _TONE_HEX.get(lead["tone"], "#7beafb")
         st.markdown(
-            f"""<div style="background:#141923;border:1px solid #232B3A;border-left:4px solid {color};
-            border-radius:10px;padding:14px 18px;margin:2px 0 12px;">
+            f"""<div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {color};
+            border-radius:10px;padding:16px 20px;margin:2px 0 12px;">
             <div style="font-family:'Space Grotesk',sans-serif;font-size:.66rem;text-transform:uppercase;
-            letter-spacing:.13em;color:{color};margin-bottom:5px;">● Today's read</div>
-            <div style="font-size:1.12rem;line-height:1.5;color:#E6ECF3;font-weight:500;">{html.escape(lead['text'])}</div>
+            letter-spacing:.13em;color:{color};margin-bottom:6px;">● Today's read</div>
+            <div style="font-family:'Instrument Serif',Georgia,serif;font-size:1.5rem;line-height:1.3;
+            color:var(--text);">{html.escape(lead['text'])}</div>
             </div>""",
             unsafe_allow_html=True,
         )
@@ -766,7 +767,7 @@ def _trend_fig(series):
     last = float(series.iloc[-1])
     fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
                                line=dict(color=LINE_COLOR, width=1.4),
-                               fill="tozeroy", fillcolor="rgba(76,154,255,0.07)"))
+                               fill="tozeroy", fillcolor="rgba(123,234,251,0.07)"))
     x0, x1 = series.index[0], series.index[-1]
     if getattr(x0, "tzinfo", None) is not None:        # band math compares against tz-naive era dates
         x0, x1 = x0.tz_localize(None), x1.tz_localize(None)
@@ -781,7 +782,7 @@ def _trend_fig(series):
                              marker=dict(color="#FF5C6C", size=7), showlegend=False))
     fig.update_layout(height=230, margin=dict(l=8, r=8, t=8, b=8), showlegend=False,
                       xaxis=dict(showgrid=False),
-                      yaxis=dict(showgrid=True, gridcolor="#1c2330", zeroline=False))
+                      yaxis=dict(showgrid=True, gridcolor="#241f1a", zeroline=False))
     return fig
 
 
@@ -803,7 +804,7 @@ def _level_fig(series, height: int = 260):
                              marker=dict(color="#FF5C6C", size=7), showlegend=False))
     fig.update_layout(height=height, margin=dict(l=8, r=8, t=8, b=8), showlegend=False,
                       xaxis=dict(showgrid=False),
-                      yaxis=dict(showgrid=True, gridcolor="#1c2330", zeroline=False))
+                      yaxis=dict(showgrid=True, gridcolor="#241f1a", zeroline=False))
     return fig
 
 
@@ -1012,50 +1013,21 @@ def _load_cloud_secrets() -> None:
         pass
 
 
-_POLISH_CSS = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
-
-.block-container { padding-top: 2rem; padding-bottom: 2.6rem; max-width: 1400px; }
-
-/* Display font for headings — a designed, modern identity (legible, no gimmicks) */
-h1, h2, h3 { font-family: 'Space Grotesk', sans-serif !important; }
-h1 { font-size: 2.6rem; font-weight: 700; letter-spacing: -.025em; }
-h2 { font-size: 1.45rem; font-weight: 600; letter-spacing: -.01em; }
-h3 { font-size: 1.05rem; font-weight: 600; color: #C7D2E0; }
-
-/* Hero KPI numbers in mono for a terminal feel; tables keep aligned tabular figures */
-[data-testid="stMetricValue"], [data-testid="stMetricDelta"] {
-    font-family: 'IBM Plex Mono', monospace !important; font-variant-numeric: tabular-nums;
-}
-[data-testid="stDataFrame"], [data-testid="stTable"] { font-size: .84rem; font-variant-numeric: tabular-nums; }
-
-/* KPI cards: accent bar + hover */
-[data-testid="stMetric"] {
-    background: #141923; border: 1px solid #232B3A; border-left: 3px solid #4C9AFF;
-    border-radius: 10px; padding: 13px 16px 11px; transition: border-color .15s ease;
-}
-[data-testid="stMetric"]:hover { border-left-color: #6FB0FF; border-color: #2E3A4D; }
-[data-testid="stMetricValue"] { font-size: 1.5rem; font-weight: 600; }
-[data-testid="stMetricLabel"] {
-    font-family: 'Space Grotesk', sans-serif !important;
-    opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: .09em;
-}
-
-/* Tabs: heavier, accent active */
-[data-testid="stTabs"] button[role="tab"] { font-size: .95rem; font-weight: 600; }
-[data-testid="stTabs"] button[aria-selected="true"] { color: #4C9AFF; }
-
-hr { margin: .85rem 0; border-color: #1c2330; }
-</style>
-"""
+def _load_css() -> str:
+    """The dashboard's stylesheet, read fresh from styles.css so design iteration is a
+    plain CSS-file edit (not a Python-string edit). Edit styles.css + save -> runOnSave
+    reloads; or live-edit in DevTools and bank the winners. See style_lab.py / DESIGN.md."""
+    try:
+        return (config.PROJECT_ROOT / "styles.css").read_text(encoding="utf-8")
+    except Exception:
+        return ""
 
 
 def main() -> None:
     st.set_page_config(page_title="Market Story", page_icon="📈", layout="wide",
                        initial_sidebar_state="expanded")
     _load_cloud_secrets()
-    st.markdown(_POLISH_CSS, unsafe_allow_html=True)
+    st.markdown(f"<style>{_load_css()}</style>", unsafe_allow_html=True)
     st.sidebar.title("Market Story")
     pages = st.navigation([
         st.Page(daily_brief_page, title="Daily Brief", icon=":material/show_chart:", default=True),
