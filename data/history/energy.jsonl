@@ -854,6 +854,7 @@
 {"date": "2026-05-08", "series": "NW2_EPG0_SWO_R48_BCF", "value": 2290.0, "units": "BCF"}
 {"date": "2026-05-15", "series": "NW2_EPG0_SWO_R48_BCF", "value": 2391.0, "units": "BCF"}
 {"date": "2026-05-22", "series": "NW2_EPG0_SWO_R48_BCF", "value": 2483.0, "units": "BCF"}
+{"date": "2026-05-29", "series": "NW2_EPG0_SWO_R48_BCF", "value": 2578.0, "units": "BCF"}
 {"date": "1982-08-20", "series": "WCESTUS1", "value": 338764.0, "units": "MBBL"}
 {"date": "1982-08-27", "series": "WCESTUS1", "value": 336138.0, "units": "MBBL"}
 {"date": "1982-09-24", "series": "WCESTUS1", "value": 335586.0, "units": "MBBL"}
