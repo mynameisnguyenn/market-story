@@ -59,15 +59,12 @@ _TREND_SERIES = {"CPIAUCSL", "PCEPILFE", "PAYEMS", "INDPRO"}
 
 def _stat_context(observations: pd.Series, window: int = 252):
     """Percentile rank (0-100) and z-score of the latest value within a trailing
-    window — turns a level into 'is this extreme vs its own recent history'."""
-    if observations is None or len(observations) < 30:
+    window — turns a level into 'is this extreme vs its own recent history'.
+    Delegates to analytics.pct_z so macro + cross-asset share one definition (ddof=0)."""
+    if observations is None:
         return None, None
-    tail = observations.iloc[-window:].astype(float)
-    latest = float(tail.iloc[-1])
-    pct = round(float((tail < latest).mean()) * 100.0, 1)
-    std = float(tail.std())
-    z = round((latest - float(tail.mean())) / std, 2) if std > 0 else None
-    return pct, z
+    from . import analytics
+    return analytics.pct_z(list(observations), window=window)
 
 
 def _snapshot(series_id: str, name: str, observations: pd.Series | None) -> dict:

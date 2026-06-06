@@ -1,9 +1,10 @@
 """Cross-asset statistical context from the embedded price history.
 
 Extends the macro 1-year-percentile idea to the market instruments that get no FRED
-stat-context: VIX, the 10Y, credit ETFs, the dollar, gold/oil/copper. Same math as
-macro_data._stat_context — percentile of the latest level within a trailing window plus
-a z-score — run over the ~250 trading days of closes already embedded in each brief.
+stat-context: VIX, the 10Y, credit ETFs, the dollar, gold/oil/copper. `pct_z` here is the single
+canonical percentile + z helper (macro_data._stat_context delegates to it) — percentile
+of the latest level within a trailing window plus a z-score — run over the ~250 trading
+days of closes already embedded in each brief.
 Pure; degrades to [] / None rather than raising. Window is ~1y (label n).
 """
 from __future__ import annotations
@@ -35,10 +36,16 @@ def _clean(values) -> list:
     return out
 
 
-def _pct_z(values, window: int = 252):
-    """Percentile (0-100) and z-score of the last value within a trailing window."""
+def pct_z(values, window: int = 252, min_obs: int = 30):
+    """Percentile (0-100) and z-score of the last value within a trailing window.
+
+    The single source of truth for the "where does this level sit vs its own ~1y range"
+    stat used across both the macro table (macro_data._stat_context) and the cross-asset
+    extremes (compute_extremes). z uses the population std (ddof=0). Returns (None, None)
+    when fewer than `min_obs` clean observations exist.
+    """
     vals = _clean(values)
-    if len(vals) < 30:
+    if len(vals) < min_obs:
         return None, None
     tail = vals[-window:]
     latest = tail[-1]
@@ -79,7 +86,7 @@ def compute_extremes(closes, window: int = 252) -> list[dict]:
         values = _clean(list(series))
         if len(values) < 30:
             continue
-        pct, z = _pct_z(values, window)
+        pct, z = pct_z(values, window)
         if pct is None:
             continue
         out.append({"symbol": sym, "name": name, "last": values[-1],

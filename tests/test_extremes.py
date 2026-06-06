@@ -6,9 +6,9 @@ from src import analytics
 
 
 def test_pct_z_high_and_low():
-    pct, z = analytics._pct_z(list(range(300)))
+    pct, z = analytics.pct_z(list(range(300)))
     assert pct >= 99 and z > 1.5
-    pct_lo, z_lo = analytics._pct_z(list(range(299, -1, -1)))   # latest is the min
+    pct_lo, z_lo = analytics.pct_z(list(range(299, -1, -1)))   # latest is the min
     assert pct_lo == 0.0 and z_lo < -1.5
 
 

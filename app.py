@@ -658,13 +658,8 @@ def equities_tab(brief: dict, closes: dict) -> None:
     choice = st.selectbox("Chart an index, sector, or watchlist name", list(names), format_func=lambda s: names.get(s, s))
     render_line(closes, choice, names.get(choice, str(choice)), key="eq_pick")
     st.divider()
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("US Equities")
-        render_table(brief["markets"].get("us_equities", []), "equity", "% changes")
-    with col2:
-        st.subheader("US Sectors")
-        render_table(brief["markets"].get("sectors", []), "equity", "% changes")
+    st.subheader("US Equities")               # sectors already shown above as the treemap + RRG + breadth
+    render_table(brief["markets"].get("us_equities", []), "equity", "% changes")
     st.subheader("Watchlist (growth)")
     render_table(brief["markets"].get("watchlist", []), "equity", "% changes")
     watchlist_editor()
@@ -744,8 +739,27 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
 
 
 def macro_tab(brief: dict, closes: dict) -> None:
+    # --- Risk view first: the read (regime, stress, drawdown, vol, extremes, correlations) ---
     regime_panel(brief)
     _stress_danger_panel(brief, closes)
+    _risk_drawdown_panel(closes)
+    vol = brief.get("vol")
+    if vol:
+        tag = "rich — protection expensive vs realized" if vol["premium"] > 3 \
+            else "compressed — realized catching up to implied" if vol["premium"] < 0 else "normal"
+        st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
+                   f"= {vol['premium']:+.1f} pts ({tag}).")
+    if brief.get("extremes"):
+        st.subheader("Cross-asset extremes")
+        st.caption("Where key markets sit in their ~1y range")
+        st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
+    corr = correlation_fig(closes, CORR_INSTRUMENTS)
+    if corr is not None:
+        st.plotly_chart(corr, use_container_width=True, theme="streamlit", key="corr_matrix")
+        st.caption("Daily-return correlation, last 60 sessions. Watch for regime shifts "
+                   "(e.g. stock–bond decoupling, or everything → +1 in a selloff).")
+    st.divider()
+    # --- Markets: the tables + the rates/FX charts ---
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Global Indices")
@@ -759,7 +773,16 @@ def macro_tab(brief: dict, closes: dict) -> None:
         render_table(brief["markets"].get("commodities", []), "commodity", "% changes")
         st.subheader("Credit & Bonds")
         render_table(brief["markets"].get("credit", []), "credit", "% changes")
+    curve = yield_curve_fig(brief["markets"].get("rates", []))
+    if curve is not None:
+        st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
+    col3, col4 = st.columns(2)
+    with col3:
+        render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")
+    with col4:
+        render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
     st.divider()
+    # --- Macro & data: FRED, BLS, energy, positioning (with their deep-history expanders) ---
     st.subheader("Macro (FRED)")
     if brief.get("macro"):
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)
@@ -781,30 +804,6 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(positioning_styler(brief["positioning"]), use_container_width=True, hide_index=True)
         st.caption("Leveraged funds = hedge-fund/spec money; asset managers = real money. A large "
                    "spec net-short with real money long is a classic squeeze setup. Source: CFTC TFF.")
-    if brief.get("extremes"):
-        st.subheader("Cross-asset extremes")
-        st.caption("Where key markets sit in their ~1y range")
-        st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
-    vol = brief.get("vol")
-    if vol:
-        tag = "rich — protection expensive vs realized" if vol["premium"] > 3 \
-            else "compressed — realized catching up to implied" if vol["premium"] < 0 else "normal"
-        st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
-                   f"= {vol['premium']:+.1f} pts ({tag}).")
-    _risk_drawdown_panel(closes)
-    curve = yield_curve_fig(brief["markets"].get("rates", []))
-    if curve is not None:
-        st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
-    col3, col4 = st.columns(2)
-    with col3:
-        render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")
-    with col4:
-        render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
-    corr = correlation_fig(closes, CORR_INSTRUMENTS)
-    if corr is not None:
-        st.plotly_chart(corr, use_container_width=True, theme="streamlit", key="corr_matrix")
-        st.caption("Daily-return correlation, last 60 sessions. Watch for regime shifts "
-                   "(e.g. stock–bond decoupling, or everything → +1 in a selloff).")
 
 
 def filter_headlines(items: list[dict], query: str) -> list[dict]:
