@@ -33,6 +33,11 @@ labor,macro}.jsonl` (deep history), `data/running_thesis.md` (standing view), `d
 
 **Tests:** ~434 pytest, ~2 min. `tests/test_render_smoke.py` renders every tab hermetically.
 
+**Dev/iteration loop (how Claude "sees" the product):** run `app.py` **locally** (`localhost:8501`) and
+screenshot it with a headless browser (Playwright) — no Streamlit login involved. This is independent of the
+hosted app, whose privacy only blocks *anonymous verification of the deployed instance*. Make the hosted app
+**public** to let Claude also screenshot/verify the live deployed version after a push.
+
 ---
 
 ## In progress / pending
