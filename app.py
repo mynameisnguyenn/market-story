@@ -23,8 +23,8 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
-                 formatting, history, ledger, macro_data, market_data, news, regime, scorecard,
-                 signals, thesis, thirteenf, timeline)
+                 formatting, history, ledger, macro_data, market_data, news, regime, riskmetrics,
+                 scorecard, signals, thesis, thirteenf, timeline)
 
 LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -623,6 +623,44 @@ def regime_panel(brief: dict) -> None:
     st.divider()
 
 
+_RISK_ASSETS = [("^GSPC", "S&P 500"), ("^IXIC", "Nasdaq"), ("GC=F", "Gold"),
+                ("CL=F", "WTI"), ("HG=F", "Copper"), ("DX-Y.NYB", "Dollar")]
+
+
+def _risk_drawdown_panel(closes: dict) -> None:
+    """Per-asset risk over the embedded ~1y history (riskmetrics): drawdown, ulcer, sortino, tail."""
+    rows = []
+    for sym, name in _RISK_ASSETS:
+        p = closes.get(sym)
+        if p is None or len(pd.Series(p).dropna()) < 30:
+            continue
+        rets = riskmetrics.returns(p)
+        lb = riskmetrics.lookback_returns(p) or {}
+        md = riskmetrics.max_drawdown(p)
+        cd = riskmetrics.current_drawdown(p)
+        rows.append({
+            "Asset": name,
+            "1Y %": (lb.get("1Y") * 100) if lb.get("1Y") is not None else None,
+            "Max DD %": (md * 100) if md is not None else None,
+            "Cur DD %": (cd[0] * 100) if cd else None,
+            "DD days": cd[1] if cd else None,
+            "Ulcer": riskmetrics.ulcer_index(p),
+            "Sortino": riskmetrics.sortino(rets),
+            "Tail": riskmetrics.tail_ratio(rets),
+        })
+    if not rows:
+        return
+    st.subheader("Risk & drawdown")
+    st.caption("Per-asset over the embedded ~1y history — drawdown depth/duration, ulcer index, "
+               "sortino, tail ratio. Source: riskmetrics (ffn/empyrical-style).")
+    frame = pd.DataFrame(rows)
+    st.dataframe(
+        frame.style.format({"1Y %": "{:+.1f}", "Max DD %": "{:.1f}", "Cur DD %": "{:.1f}",
+                            "Ulcer": "{:.1f}", "Sortino": "{:+.2f}", "Tail": "{:.2f}"}, na_rep="—")
+        .map(_color_changes, subset=["1Y %"]),
+        use_container_width=True, hide_index=True)
+
+
 def macro_tab(brief: dict, closes: dict) -> None:
     regime_panel(brief)
     col1, col2 = st.columns(2)
@@ -670,6 +708,7 @@ def macro_tab(brief: dict, closes: dict) -> None:
             else "compressed — realized catching up" if vol["premium"] < 0 else "normal"
         st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
                    f"= {vol['premium']:+.1f} pts ({tag}).")
+    _risk_drawdown_panel(closes)
     curve = yield_curve_fig(brief["markets"].get("rates", []))
     if curve is not None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
