@@ -5,6 +5,10 @@ free market data + macro + news every day, assembles a structured **brief**, and
 it into a written **market story** with a risk lens. Built to sharpen market acumen and
 to be re-run and questioned daily.
 
+> **Start here for state:** `BUILD_LOG.md` is the running record of *what's been built, why, and
+> where* (survives context compaction). Read it before assuming a feature does or doesn't exist,
+> and append a dated entry when you build something substantial.
+
 ## Architecture (read this before editing)
 
 Two layers, deliberately split:
