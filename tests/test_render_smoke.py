@@ -97,5 +97,7 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
     (ndir / "narrative_2026-06-02.md").write_text("# Latest\nbody\n", encoding="utf-8")
     monkeypatch.setattr(config, "NARRATIVES_DIR", ndir)
     from streamlit.testing.v1 import AppTest
-    at = AppTest.from_function(_render_all_tabs).run()
+    # Generous timeout: rendering every tab loads the real committed history archives
+    # (macro.jsonl is multi-MB and grows daily) — this is a correctness smoke test, not a perf one.
+    at = AppTest.from_function(_render_all_tabs).run(timeout=30)
     assert not at.exception, at.exception

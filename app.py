@@ -24,7 +24,7 @@ import streamlit as st
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
                  formatting, history, macro_data, market_data, news, regime, scorecard,
-                 signals, thirteenf, timeline)
+                 signals, thesis, thirteenf, timeline)
 
 LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -98,6 +98,12 @@ def get_fred_history() -> list[dict]:
 def get_bls_history() -> list[dict]:
     """Full committed BLS history (data/history/labor.jsonl), cached per render."""
     return bls_data.load_bls_history()
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def get_running_thesis() -> str | None:
+    """The standing cross-session running thesis (data/running_thesis.md), cached per render."""
+    return thesis.load_running_thesis()
 
 
 def persist(brief: dict) -> None:
@@ -989,6 +995,11 @@ def _time_machine(df) -> None:
 
 
 def narrative_tab(brief: dict) -> None:
+    rt = get_running_thesis()
+    if rt:
+        with st.expander("📌 Running thesis — the standing cross-session view", expanded=False):
+            st.markdown(rt)
+        st.caption("The through-line, revised each session by `/narrate`. Today's dated read is below.")
     path = brief_mod.latest_narrative_path()
     if path and path.exists():
         st.caption(f"Source: {path.name}")

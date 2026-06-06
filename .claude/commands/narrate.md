@@ -10,6 +10,7 @@ You are the synthesis brain for the **market-story** project. Tell the story of 
    - Each macro row carries `pct_1y` (1-year percentile of the level). Call out what's **stretched** (e.g. HY OAS at the 3rd %ile = historically tight; 2s10s at the 0th = flattest of the year), not just the day's move.
    - Read the most recent prior narrative in `data/narratives/narrative_*.md` (if any). Find its `watch` block (the fenced ```watch block) and **explicitly grade each item against today's brief** in "Since last time": did it hit, miss, or is it still pending?
    - `data/timeline.jsonl` is an append-only record of daily key metrics + the derived thesis (now ~28 years, 1998→now). Read it (or `src/timeline.load_df()`) for long-horizon context and true multi-year percentiles.
+   - Read `data/running_thesis.md` (`src.thesis.load_running_thesis()`) — the **standing cross-session view** (current thesis + flip condition, regime, multi-session watch items, lessons). This is your continuity anchor: today's read should *build on or challenge* it, not restart. Note what it said you were watching and whether it resolved.
    - `src.eras.era_for(<today>)` gives the current market **era** (e.g. "higher-for-longer"); frame the read within it, and lean on the `knowledge/` library (eras + topics like the yield curve, credit spreads) for historical parallels — e.g. "credit this tight last looked like X" — but only when it sharpens the read.
 3. Write `data/narratives/narrative_<today's date>.md` using exactly this structure:
    - `# Market Story — {date}`
@@ -30,7 +31,8 @@ You are the synthesis brain for the **market-story** project. Tell the story of 
      ````
      `metric` is `macro:<FRED_id>` or `market:<SYMBOL>:<field>` (field = `last`/`change_pct`/`ytd_pct`); `trigger` is a comparison like `>2.85`, `<4.3`, `>=100`. Only include items that resolve to a brief number (so they can be graded); keep qualitative watch-items in prose only.
    - `## Sources` — the headlines/feeds the read leans on.
-4. Ground every number in the briefs. Do NOT invent prices or prints. Prefer day-over-day deltas over levels. Label any outside/live context. Keep the risk lens sharp and specific — and **lead with a view**, then defend it.
-5. After writing, give the user a 2–3 sentence verbal summary (lead with the one-line thesis) and remind them the "Story" tab now shows it.
+4. **Update the running thesis** (`data/running_thesis.md`) — the standing cross-session view. After writing the dated narrative, revise it so context *compounds* across sessions: update *Current thesis* (and its flip condition) and *Regime* if they shifted; refresh *What I'm watching (multi-session)*; append ONE dated line to *How the thesis has evolved* (what changed and why — keep prior lines); add a durable *Lesson / WHY* only if today genuinely taught one. Bump *Last updated*. Keep it tight — a **view that compounds, not a log that sprawls**. Commit this file alongside the narrative.
+5. Ground every number in the briefs. Do NOT invent prices or prints. Prefer day-over-day deltas over levels. Label any outside/live context. Keep the risk lens sharp and specific — and **lead with a view**, then defend it.
+6. After writing, give the user a 2–3 sentence verbal summary (lead with the one-line thesis) and remind them the "Story" tab now shows it (with the running thesis above it).
 
 $ARGUMENTS may contain a specific angle to emphasize (e.g. "focus on rates" or a date).

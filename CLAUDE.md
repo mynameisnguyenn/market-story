@@ -112,6 +112,7 @@ src/formatting.py   pct/color helpers
 data/briefs/        brief_*.json / .md   (gitignored)
 data/narratives/    narrative_*.md       (gitignored; written by Claude)
 data/timeline.jsonl committed cross-asset metrics timeline (1998→, Trends tab)
+data/running_thesis.md  committed standing cross-session view (read + revised by /narrate)
 data/history/       committed full-history archives, long-format JSONL (see below)
 tests/              pytest, synthetic data
 ```
