@@ -22,10 +22,10 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, breadth, calendar_data, cftc_data, composite, config, edgar_data,
-                 eia_data, eras, formatting, history, ledger, macro_data, market_data, news,
-                 regime, regime_turbulence, riskmetrics, rotation, scorecard, signals, thesis,
-                 thirteenf, timeline)
+from src import (bls_data, breadth, calendar_data, cftc_data, composite, config, crisis,
+                 edgar_data, eia_data, eras, formatting, history, ledger, macro_data,
+                 market_data, news, regime, regime_turbulence, riskmetrics, rotation,
+                 scorecard, signal_ic, signals, statistical, thesis, thirteenf, timeline)
 
 LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -701,6 +701,7 @@ def _risk_drawdown_panel(closes: dict) -> None:
             "Ulcer": riskmetrics.ulcer_index(p),
             "Sortino": riskmetrics.sortino(rets),
             "Tail": riskmetrics.tail_ratio(rets),
+            "Trend": (statistical.summary(rets) or {}).get("regime", "—"),
         })
     if not rows:
         return
@@ -1053,6 +1054,45 @@ def _macro_history_section() -> None:
                    "Source: committed archives `data/history/macro.jsonl` + `labor.jsonl`.")
 
 
+def _crisis_signal_panel(df) -> None:
+    """Crisis-window replay + signal Information Coefficient over the committed timeline."""
+    if df is None or df.empty or "spx" not in df.columns:
+        return
+    spx = pd.to_numeric(df["spx"], errors="coerce").dropna()
+    if len(spx) < 60:
+        return
+    spx_rets = spx.pct_change().dropna()
+    st.divider()
+    rep = [r for r in crisis.crisis_replay(spx_rets) if r.get("n_days")]
+    if rep:
+        st.subheader("Crisis replay — S&P through past stress windows")
+        st.caption("How the S&P behaved in each episode, from the committed timeline. Source: crisis.")
+        cr = pd.DataFrame([{
+            "Episode": r["name"],
+            "Return %": (r["return"] * 100) if r["return"] is not None else None,
+            "Max DD %": (r["max_drawdown"] * 100) if r["max_drawdown"] is not None else None,
+            "VaR95 %": (r["var95"] * 100) if r["var95"] is not None else None,
+            "ES95 %": (r["es95"] * 100) if r["es95"] is not None else None,
+        } for r in rep])
+        st.dataframe(cr.style.format({"Return %": "{:+.1f}", "Max DD %": "{:.1f}",
+                     "VaR95 %": "{:.2f}", "ES95 %": "{:.2f}"}, na_rep="—"),
+                     use_container_width=True, hide_index=True)
+    ic_rows = []
+    for label, col in [("2s10s curve", "curve_2s10s"), ("HY OAS", "hy_oas"), ("Vol premium", "vol_premium")]:
+        if col not in df.columns:
+            continue
+        ic = signal_ic.ic_by_horizon(pd.to_numeric(df[col], errors="coerce"), spx)
+        if any(v is not None for v in ic.values()):
+            ic_rows.append({"Signal": label, "IC 1d": ic.get(1), "IC 5d": ic.get(5), "IC 21d": ic.get(21)})
+    if ic_rows:
+        st.subheader("Signal edge — Information Coefficient")
+        st.caption("Rank correlation of each signal with forward S&P returns over the timeline — does it "
+                   "actually predict direction? Source: signal_ic.")
+        st.dataframe(pd.DataFrame(ic_rows).style.format(
+            {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}"}, na_rep="—"),
+            use_container_width=True, hide_index=True)
+
+
 def trends_tab() -> None:
     """Where the cross-asset anchors have been — the committed metrics timeline as charts."""
     df = timeline.load_df()
@@ -1077,6 +1117,7 @@ def trends_tab() -> None:
             st.plotly_chart(_trend_fig(series), use_container_width=True,
                             theme="streamlit", key=f"trend_{col}")
     _time_machine(df)
+    _crisis_signal_panel(df)
 
 
 def _time_machine(df) -> None:

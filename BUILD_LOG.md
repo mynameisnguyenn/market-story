@@ -41,9 +41,10 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## In progress / pending
-- **Surface the analytics library** (built + tested in `src/`): `riskmetrics` ✅ (Macro: Risk & drawdown),
-  `regime_turbulence` + `composite` ✅ (Macro: Stress & danger panel), `rotation` ✅ (Equities: RRG chart),
-  `breadth` ✅ (Equities: internals) — **still to surface:** `signal_ic`, `crisis`, `pmi_proxy`, `statistical`.
+- **Analytics library surfaced (8/9):** `riskmetrics` ✅ (Macro: Risk & drawdown + a Trend col from
+  `statistical`), `regime_turbulence` + `composite` ✅ (Macro: Stress & danger), `rotation` ✅ (Equities: RRG),
+  `breadth` ✅ (Equities: internals), `crisis` + `signal_ic` ✅ (Trends: crisis replay + Signal IC).
+  **Still to surface:** `pmi_proxy` — needs proper ISM-proxy FRED series we don't fetch yet → Tier-3 / research.
 - **Tier-3 external data** (need new sources + reliability caveats, not pure): options/GEX, CME FedWatch +
   FOMC countdown, econ-calendar consensus/surprise.
 - **Tier-4 UX:** quantstats-style tearsheet polish.
@@ -52,6 +53,12 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## Log (newest first)
+
+### 2026-06-06 — Analytics surfacing batch 3 (library 8/9 surfaced)
+`statistical` → a "Trend" column (trending / mean-reverting / random) on the Macro Risk & drawdown table.
+`crisis` + `signal_ic` → Trends tab: a "Crisis replay" table (S&P through GFC/COVID/2022 from the 28y
+timeline: return, max DD, VaR95, ES95) and a "Signal edge — Information Coefficient" table (2s10s / HY OAS /
+vol-premium vs forward S&P returns). `pmi_proxy` deferred — needs ISM-proxy FRED series we don't fetch yet.
 
 ### 2026-06-06 — Analytics surfacing batch 2
 Wired 4 of the library modules into the dashboard: **regime_turbulence + composite** → a "Stress & danger"
