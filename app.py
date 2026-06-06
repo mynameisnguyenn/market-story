@@ -23,7 +23,7 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
-                 formatting, history, macro_data, market_data, news, regime, scorecard,
+                 formatting, history, ledger, macro_data, market_data, news, regime, scorecard,
                  signals, thesis, thirteenf, timeline)
 
 LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
@@ -104,6 +104,12 @@ def get_bls_history() -> list[dict]:
 def get_running_thesis() -> str | None:
     """The standing cross-session running thesis (data/running_thesis.md), cached per render."""
     return thesis.load_running_thesis()
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def get_ledger():
+    """The prediction ledger records + running track-record stats, cached per render."""
+    return ledger.load(), ledger.stats()
 
 
 def persist(brief: dict) -> None:
@@ -1000,6 +1006,22 @@ def narrative_tab(brief: dict) -> None:
         with st.expander("📌 Running thesis — the standing cross-session view", expanded=False):
             st.markdown(rt)
         st.caption("The through-line, revised each session by `/narrate`. Today's dated read is below.")
+    records, lstats = get_ledger()
+    if records:
+        hr = lstats["hit_rate"]
+        st.subheader("Track record")
+        cols = st.columns(3)
+        cols[0].metric("Hit rate", f"{hr * 100:.0f}%" if hr is not None else "—")
+        cols[1].metric("Resolved", lstats["graded"])
+        cols[2].metric("Pending", lstats["pending"])
+        with st.expander(f"Every watch call graded ({lstats['total']})"):
+            st.dataframe(pd.DataFrame([
+                {"Logged": r["logged"], "Status": r["status"], "Metric": r["metric"],
+                 "Trigger": r["trigger"], "Resolved@": r.get("graded_value"), "Claim": r["claim"]}
+                for r in records]), use_container_width=True, hide_index=True)
+        st.caption("Every watch-block prediction, graded at its horizon against committed data — "
+                   "the accountability the running thesis is built on.")
+        st.divider()
     path = brief_mod.latest_narrative_path()
     if path and path.exists():
         st.caption(f"Source: {path.name}")

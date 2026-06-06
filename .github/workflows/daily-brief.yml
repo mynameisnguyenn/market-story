@@ -38,6 +38,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f data/briefs/brief_*.json data/briefs/brief_*.md data/timeline.jsonl
           git add data/history/energy.jsonl data/history/labor.jsonl data/history/macro.jsonl
+          git add data/running_thesis.md data/scorecard_log.jsonl   # standing view + prediction ledger
           if git diff --cached --quiet; then
             echo "No brief changes to commit."
           else

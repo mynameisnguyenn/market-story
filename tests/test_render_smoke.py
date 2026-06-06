@@ -96,6 +96,40 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
         encoding="utf-8")
     (ndir / "narrative_2026-06-02.md").write_text("# Latest\nbody\n", encoding="utf-8")
     monkeypatch.setattr(config, "NARRATIVES_DIR", ndir)
+
+    # Hermetic + fast: point the heavy committed history archives (multi-MB, grow daily) and the
+    # thesis/ledger files at tiny synthetic ones, then clear the cached loaders so they re-read.
+    import app
+    from src import macro_data, bls_data, eia_data, thesis, ledger
+
+    def _mini(path, sid, base, units=None):
+        recs = []
+        for d in range(1, 6):
+            r = {"date": f"2026-05-0{d}", "series": sid, "value": base + d}
+            if units:
+                r["units"] = units
+            recs.append(json.dumps(r))
+        path.write_text("\n".join(recs), encoding="utf-8")
+        return path
+
+    monkeypatch.setattr(macro_data, "ARCHIVE_PATH", _mini(tmp_path / "macro.jsonl", "DGS10", 4.4))
+    monkeypatch.setattr(bls_data, "ARCHIVE_PATH", _mini(tmp_path / "labor.jsonl", "CUUR0000SA0", 330.0))
+    monkeypatch.setattr(eia_data, "ARCHIVE_PATH", _mini(tmp_path / "energy.jsonl", "WCESTUS1", 4.3e5, "MBBL"))
+    rt = tmp_path / "rt.md"
+    rt.write_text("# Running Thesis\n## Current thesis\nTest standing view.\n", encoding="utf-8")
+    monkeypatch.setattr(thesis, "RUNNING_THESIS_PATH", rt)
+    lg = tmp_path / "ledger.jsonl"
+    lg.write_text(json.dumps({"logged": "2026-06-02", "claim": "x", "metric": "macro:DGS10",
+                              "trigger": ">4.5", "horizon": "next session", "status": "missed",
+                              "graded_value": 4.4}) + "\n", encoding="utf-8")
+    monkeypatch.setattr(ledger, "LEDGER_PATH", lg)
+    for _fn in (app.get_fred_history, app.get_bls_history, app.get_energy_history,
+                app.get_running_thesis, app.get_ledger):
+        try:
+            _fn.clear()
+        except Exception:
+            pass
+
     from streamlit.testing.v1 import AppTest
     # Generous timeout: rendering every tab loads the real committed history archives
     # (macro.jsonl is multi-MB and grows daily) — this is a correctness smoke test, not a perf one.

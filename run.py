@@ -9,12 +9,20 @@ dashboard (`python -m streamlit run app.py`) and ask Claude to narrate.
 from __future__ import annotations
 
 from src import brief as brief_mod
+from src import ledger
 
 
 def main() -> int:
     print("Fetching market data, macro series, and news (this takes ~20-40s)...")
     brief = brief_mod.build_brief(fetch=True)
     json_path, md_path = brief_mod.save_brief(brief)
+
+    try:                                              # grade matured watch calls as archives refresh
+        s = ledger.backfill_from_narratives()
+        rate = "n/a" if s["hit_rate"] is None else f"{s['hit_rate'] * 100:.0f}%"
+        print(f"Ledger: {s['triggered']} hit / {s['missed']} miss / {s['pending']} pending | hit-rate {rate}")
+    except Exception as exc:
+        print(f"Ledger update skipped: {exc}")
 
     stats = brief["stats"]
     print(f"\nBrief written:\n  {json_path}\n  {md_path}")
