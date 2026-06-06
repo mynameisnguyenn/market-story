@@ -20,7 +20,8 @@ data/*.db
 *.png
 !results/*.png
 !docs/*.png
-!.claude/skills/**/*.png   # commit the market-story-design skill's brand assets
+# commit the market-story-design skill's brand assets despite the *.png ignore above
+!.claude/skills/**/*.png
 
 # --- Tools / binaries ---
 bin/
