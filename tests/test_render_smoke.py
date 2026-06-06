@@ -124,7 +124,7 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
                               "graded_value": 4.4}) + "\n", encoding="utf-8")
     monkeypatch.setattr(ledger, "LEDGER_PATH", lg)
     for _fn in (app.get_fred_history, app.get_bls_history, app.get_energy_history,
-                app.get_running_thesis, app.get_ledger):
+                app.get_running_thesis, app.get_ledger, app.get_timeline_df):
         try:
             _fn.clear()
         except Exception:

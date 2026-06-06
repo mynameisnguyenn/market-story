@@ -113,6 +113,13 @@ def get_ledger():
     return ledger.load(), ledger.stats()
 
 
+@st.cache_data(ttl=900, show_spinner=False)
+def get_timeline_df():
+    """The committed cross-asset metrics timeline as a DataFrame, cached per render — the
+    Trends tab reads ~7k rows; don't re-parse the whole file on every Streamlit rerun."""
+    return timeline.load_df()
+
+
 def persist(brief: dict) -> None:
     """Save the brief to disk once per refresh so Claude can read it."""
     stamp = brief.get("generated_at_utc")
@@ -712,7 +719,7 @@ def _risk_drawdown_panel(closes: dict) -> None:
     st.dataframe(
         frame.style.format({"1Y %": "{:+.1f}", "Max DD %": "{:.1f}", "Cur DD %": "{:.1f}",
                             "Ulcer": "{:.1f}", "Sortino": "{:+.2f}", "Tail": "{:.2f}"}, na_rep="—")
-        .map(_color_changes, subset=["1Y %"]),
+        .map(_color_changes, subset=["1Y %", "Sortino"]),
         use_container_width=True, hide_index=True)
 
 
@@ -726,7 +733,10 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
     if ts and ts.get("stress_pct") is not None:
         cols[1].metric("Market stress", f"{ts['stress_pct'] * 100:.0f}th %ile",
                        f"turbulence {ts['turbulence']:.1f}", delta_color="off")
-    cols[2].metric("Danger flag", "⚠ DANGER" if dg.get("danger") else "clear")
+    if dg.get("danger"):                                   # red delta = unmissable on a risk desk
+        cols[2].metric("Danger flag", "⚠ DANGER", delta="risk-off", delta_color="inverse")
+    else:
+        cols[2].metric("Danger flag", "clear", delta="calm", delta_color="off")
     firing = [c["detail"] for c in dg.get("conditions", []) if c.get("on")]
     if firing:
         st.caption("Risk-off conditions firing: " + " · ".join(firing))
@@ -1075,27 +1085,38 @@ def _crisis_signal_panel(df) -> None:
             "ES95 %": (r["es95"] * 100) if r["es95"] is not None else None,
         } for r in rep])
         st.dataframe(cr.style.format({"Return %": "{:+.1f}", "Max DD %": "{:.1f}",
-                     "VaR95 %": "{:.2f}", "ES95 %": "{:.2f}"}, na_rep="—"),
+                     "VaR95 %": "{:.2f}", "ES95 %": "{:.2f}"}, na_rep="—")
+                     .map(_color_changes, subset=["Return %"]),
                      use_container_width=True, hide_index=True)
     ic_rows = []
+    hy_oas_short = False
     for label, col in [("2s10s curve", "curve_2s10s"), ("HY OAS", "hy_oas"), ("Vol premium", "vol_premium")]:
         if col not in df.columns:
             continue
-        ic = signal_ic.ic_by_horizon(pd.to_numeric(df[col], errors="coerce"), spx)
+        sig = pd.to_numeric(df[col], errors="coerce")
+        ic = signal_ic.ic_by_horizon(sig, spx)
         if any(v is not None for v in ic.values()):
-            ic_rows.append({"Signal": label, "IC 1d": ic.get(1), "IC 5d": ic.get(5), "IC 21d": ic.get(21)})
+            n = int(sig.notna().sum())
+            if col == "hy_oas" and n < 252:                  # under ~1y of overlap — IC is noisy
+                hy_oas_short = True
+            ic_rows.append({"Signal": label, "IC 1d": ic.get(1), "IC 5d": ic.get(5),
+                            "IC 21d": ic.get(21), "n": n})
     if ic_rows:
         st.subheader("Signal edge — Information Coefficient")
         st.caption("Rank correlation of each signal with forward S&P returns over the timeline — does it "
-                   "actually predict direction? Source: signal_ic.")
+                   "actually predict direction? `n` = overlapping observations. Source: signal_ic.")
         st.dataframe(pd.DataFrame(ic_rows).style.format(
-            {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}"}, na_rep="—"),
+            {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}", "n": "{:,d}"}, na_rep="—")
+            .map(_color_changes, subset=["IC 1d", "IC 5d", "IC 21d"]),
             use_container_width=True, hide_index=True)
+        if hy_oas_short:
+            st.caption("⚠ HY OAS history is FRED-license-limited to a ~3y trailing window, so its IC "
+                       "rests on a smaller sample than the others — read it as indicative, not settled.")
 
 
 def trends_tab() -> None:
     """Where the cross-asset anchors have been — the committed metrics timeline as charts."""
-    df = timeline.load_df()
+    df = get_timeline_df()
     if df.empty or len(df) < 5 or not isinstance(df.index, pd.DatetimeIndex):
         st.info("The metrics timeline is still accumulating — trend charts appear once a few "
                 "sessions exist. Seed ~3 years of real history with `python -m src.backfill`.")
