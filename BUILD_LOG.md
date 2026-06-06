@@ -31,7 +31,7 @@ at `.claude/skills/market-story-design/` (canonical). Tokens match `styles.css`.
 labor,macro}.jsonl` (deep history), `data/running_thesis.md` (standing view), `data/scorecard_log.jsonl`
 (prediction ledger), `data/narratives/*.md`. Briefs are gitignored but force-committed by the Action.
 
-**Tests:** ~434 pytest, ~2 min. `tests/test_render_smoke.py` renders every tab hermetically.
+**Tests:** 436 pytest, ~9s. `tests/test_render_smoke.py` renders every tab hermetically.
 
 **Dev/iteration loop (how Claude "sees" the product):** run `app.py` **locally** (`localhost:8501`) and
 screenshot it with a headless browser (Playwright) — no Streamlit login involved. This is independent of the
@@ -53,6 +53,46 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## Log (newest first)
+
+### 2026-06-06 — Deep-review bug fixes + Wave 1 (polish) + Wave 2 (structure)
+Acted on the deep review (code/usability/UI). **3 accountability-integrity bug fixes** (`8864e21`)
+— they each made the dashboard *look* more trustworthy than it was:
+- **Sortino** (`src/riskmetrics.py`): downside deviation divided squared shortfalls by the count
+  of down-days only; per Estrada/empyrical it's `sqrt(mean(min(r,0)^2))` over ALL returns — the
+  old form understated Sortino ~40%.
+- **Ledger horizon grading** (`src/ledger.py`): level metrics (yields/prices) were "triggered" if
+  the trigger was hit at ANY point in the window, inflating the hit-rate. Level metrics now grade at
+  the END of the horizon; only event metrics (`:change_pct`/`:pct`) keep any-point semantics. +2
+  regression tests pin the distinction.
+- **Vol-premium label** (`app.py`, `composite.py`, `analytics.py`): a high VIX-minus-realized premium
+  was captioned "complacency / cheap-looking hedges" — self-contradictory and inverted. Elevated
+  implied-vs-realized = protection priced RICH (paying up for hedges), the opposite of complacency.
+
+**Wave 1 polish** (`5169195`): composite DANGER flag now renders a red "risk-off" delta (was the same
+neutral grey as every metric — unacceptable on a risk desk); colored the signed columns that were
+monochrome (Sortino on Risk & drawdown, Return % on Crisis replay, IC 1d/5d/21d on Signal edge); the
+Signal IC table shows `n` per signal + a caveat when HY OAS is short-sampled (FRED license-limited to
+~3y); cached `timeline.load_df()` behind `get_timeline_df()` (the Trends tab was re-parsing ~7k rows
+every rerun) and render-smoke clears it.
+
+**Wave 2 structure** (`02e6979`): **unified the percentile/z math** — `analytics._pct_z` (population
+std, ddof=0) and `macro_data._stat_context` (sample std, ddof=1) silently disagreed; `analytics.pct_z`
+is now the single source of truth and `_stat_context` delegates (percentile unchanged, z now
+consistent). **Regrouped the Global & Macro tab read-first**: risk view (regime → stress & danger →
+risk & drawdown → vol premium → extremes → correlations) leads, then market tables + rates/FX charts,
+then macro data — the risk-lens panels used to be split top-and-bottom. **Trimmed the duplicate "US
+Sectors" flat table** on Equities (already shown as treemap + RRG + breadth). Verified via the local
+Playwright screenshot loop.
+
+**Deferred (with reasons), NOT done:**
+- **`_macro_row` dedup** — a trivial 4-line accessor duplicated across two *pure* modules
+  (`composite`, `signals`) with no behavioral divergence. Centralizing would couple independent
+  modules for ~zero gain. (Contrast the pct/z merge, which fixed a real ddof disagreement — worth it.)
+- **Split `app.py` (~1130 lines) into `src/panels/`** — a large mechanical refactor with real
+  import-cycle risk for a working, well-organized file. Staged plan when it's worth it: (1) extract
+  shared stylers/loaders/render helpers into `src/ui_common.py`; (2) move each `*_tab` into
+  `src/panels/<tab>.py` importing only from `ui_common` + `src/*`; (3) `app.py` becomes wiring only.
+  Do it as its own PR with render-smoke after each step — not bundled with feature work.
 
 ### 2026-06-06 — Analytics surfacing batch 3 (library 8/9 surfaced)
 `statistical` → a "Trend" column (trending / mean-reverting / random) on the Macro Risk & drawdown table.
