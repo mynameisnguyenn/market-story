@@ -5,6 +5,7 @@
 yfinance>=1.2.0
 pandas>=2.2.0
 numpy>=2.0.0
+scipy>=1.11.0         # normality (Jarque-Bera) + Spearman IC in the analytics modules
 requests>=2.32.0
 fredapi>=0.5.2        # optional; FRED also works keyless via CSV
 
