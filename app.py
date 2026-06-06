@@ -22,9 +22,10 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from src import brief as brief_mod
-from src import (bls_data, calendar_data, cftc_data, config, edgar_data, eia_data, eras,
-                 formatting, history, ledger, macro_data, market_data, news, regime, riskmetrics,
-                 scorecard, signals, thesis, thirteenf, timeline)
+from src import (bls_data, breadth, calendar_data, cftc_data, composite, config, edgar_data,
+                 eia_data, eras, formatting, history, ledger, macro_data, market_data, news,
+                 regime, regime_turbulence, riskmetrics, rotation, scorecard, signals, thesis,
+                 thirteenf, timeline)
 
 LINE_COLOR = "#7beafb"   # electric cyan (Ellis accent); keep in sync with styles.css --accent
 CHANGE_COLS = ["1D", "1W %", "YTD %"]
@@ -589,10 +590,63 @@ def watchlist_editor() -> None:
                 st.warning("Add at least one ticker before saving.")
 
 
+def _rrg_chart(closes: dict) -> None:
+    """Sector Relative Rotation Graph vs the S&P 500 (rotation module)."""
+    bench = closes.get("^GSPC")
+    if bench is None:
+        return
+    names = dict(config.SECTORS)
+    prices = {sym: closes[sym] for sym, _ in config.SECTORS if sym in closes}
+    df = rotation.rrg(prices, bench, long=120, short=20, window=120)
+    if df.empty:
+        return
+    df = df.assign(name=df["symbol"].map(lambda s: names.get(s, s)))
+    fig = px.scatter(df, x="rs_ratio", y="rs_momentum", color="quadrant", text="name",
+                     color_discrete_map={"Leading": "#36C26F", "Weakening": "#f5a623",
+                                         "Lagging": "#FF5C6C", "Improving": "#7beafb"})
+    fig.add_hline(y=0, line=dict(color="#241f1a", width=1))
+    fig.add_vline(x=0, line=dict(color="#241f1a", width=1))
+    fig.update_traces(textposition="top center", marker=dict(size=11))
+    fig.update_layout(height=440, margin=dict(t=10, l=10, r=10, b=10),
+                      xaxis_title="RS-Ratio (relative strength)", yaxis_title="RS-Momentum")
+    st.subheader("Sector rotation (RRG)")
+    st.caption("Relative strength vs momentum against the S&P 500 — Leading (green) / Weakening (amber) / "
+               "Lagging (red) / Improving (cyan). Source: rotation.")
+    st.plotly_chart(fig, use_container_width=True, theme="streamlit", key="rrg")
+    st.divider()
+
+
+def _breadth_panel(closes: dict) -> None:
+    """Breadth & internals across the GICS sectors (breadth module)."""
+    prices = {sym: closes[sym] for sym, _ in config.SECTORS if sym in closes}
+    if len(prices) < 3:
+        return
+    ad = breadth.advance_decline(prices)
+    pa = breadth.pct_above_ma(prices, window=50)
+    hl = breadth.new_highs_lows(prices, window=252)
+    mc = breadth.mcclellan(prices)
+    if not (ad or pa is not None or hl or mc is not None):
+        return
+    st.subheader("Sector breadth & internals")
+    cols = st.columns(4)
+    if ad:
+        cols[0].metric("Advance / decline", f"{ad['advancers']} / {ad['decliners']}", f"net {ad['net']:+d}")
+    if pa is not None:
+        cols[1].metric("% above 50d MA", f"{pa:.0f}%")
+    if hl:
+        cols[2].metric("New highs / lows (1y)", f"{hl['new_highs']} / {hl['new_lows']}")
+    if mc is not None:
+        cols[3].metric("McClellan", f"{mc:+.1f}")
+    st.caption("Internals across the 11 GICS sectors. Source: breadth.")
+    st.divider()
+
+
 def equities_tab(brief: dict, closes: dict) -> None:
     st.subheader("Sector map (1-day % change)")
     render_treemap(brief["markets"].get("sectors", []))
     st.divider()
+    _rrg_chart(closes)
+    _breadth_panel(closes)
     names = {sym: name for sym, name in config.US_EQUITIES + config.SECTORS + config.get_watchlist()}
     choice = st.selectbox("Chart an index, sector, or watchlist name", list(names), format_func=lambda s: names.get(s, s))
     render_line(closes, choice, names.get(choice, str(choice)), key="eq_pick")
@@ -661,8 +715,26 @@ def _risk_drawdown_panel(closes: dict) -> None:
         use_container_width=True, hide_index=True)
 
 
+def _stress_danger_panel(brief: dict, closes: dict) -> None:
+    """Composite risk regime + Kritzman turbulence stress gauge (composite + regime_turbulence)."""
+    dg = composite.evaluate(brief)
+    ts = regime_turbulence.from_closes(closes)
+    cols = st.columns(3)
+    # Count of firing risk-off conditions (NOT a competing 'regime' label — that's regime_panel above).
+    cols[0].metric("Risk-off signals", f"{dg['score']} firing", delta_color="off")
+    if ts and ts.get("stress_pct") is not None:
+        cols[1].metric("Market stress", f"{ts['stress_pct'] * 100:.0f}th %ile",
+                       f"turbulence {ts['turbulence']:.1f}", delta_color="off")
+    cols[2].metric("Danger flag", "⚠ DANGER" if dg.get("danger") else "clear")
+    firing = [c["detail"] for c in dg.get("conditions", []) if c.get("on")]
+    if firing:
+        st.caption("Risk-off conditions firing: " + " · ".join(firing))
+    st.divider()
+
+
 def macro_tab(brief: dict, closes: dict) -> None:
     regime_panel(brief)
+    _stress_danger_panel(brief, closes)
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Global Indices")

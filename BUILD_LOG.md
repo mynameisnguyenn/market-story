@@ -41,9 +41,9 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## In progress / pending
-- **Surface the analytics library** (built + tested in `src/`, not yet all wired into the UI): `riskmetrics`
-  ✅ (Macro tab) — still to surface: `regime_turbulence` (stress gauge), `rotation` (RRG chart), `composite`
-  (danger flag), `breadth`, `signal_ic`, `crisis`, `pmi_proxy`, `statistical`.
+- **Surface the analytics library** (built + tested in `src/`): `riskmetrics` ✅ (Macro: Risk & drawdown),
+  `regime_turbulence` + `composite` ✅ (Macro: Stress & danger panel), `rotation` ✅ (Equities: RRG chart),
+  `breadth` ✅ (Equities: internals) — **still to surface:** `signal_ic`, `crisis`, `pmi_proxy`, `statistical`.
 - **Tier-3 external data** (need new sources + reliability caveats, not pure): options/GEX, CME FedWatch +
   FOMC countdown, econ-calendar consensus/surprise.
 - **Tier-4 UX:** quantstats-style tearsheet polish.
@@ -52,6 +52,14 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## Log (newest first)
+
+### 2026-06-06 — Analytics surfacing batch 2
+Wired 4 of the library modules into the dashboard: **regime_turbulence + composite** → a "Stress & danger"
+panel on the Macro tab (Risk-off signals count + Kritzman turbulence stress %ile + danger flag + firing
+conditions; the composite was reframed to NOT print a competing regime label next to `regime_panel`).
+**rotation** → a "Sector rotation (RRG)" quadrant scatter on the Equities tab (long=120/short=20 to fit the
+~1y embedded history). **breadth** → a "Sector breadth & internals" panel (advance/decline, % above 50d MA,
+new highs/lows, McClellan). All degrade to nothing when history is short (render-smoke stays green).
 
 ### 2026-06-06 — Analytics module library + first surfacing
 - **9 pure analytics modules + tests** drafted in parallel **on Sonnet**, integrated with formula review
