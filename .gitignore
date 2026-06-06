@@ -12,6 +12,7 @@ __pycache__/
 # --- Generated data: briefs + history.db regenerate each run and stay out of git.
 #     narratives/ are KEPT as a dated logbook (and so the hosted Story tab works). ---
 data/briefs/
+data/emails/
 data/*.db
 *.parquet
 *.cache
