@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Landing" name="Cover (standalone)" subtitle="The cover as its own page — warm/cyan, cursor-reactive field" viewport="1280x720" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Market Story — Landing UI Kit</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0b0f'/><path d='M6 21 L13 13 L18 17 L26 8' stroke='%235aa0ff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+<link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+  <canvas id="field"></canvas>
+  <div class="scrim"></div><div class="grain"></div>
+
+  <div class="wrap">
+    <div class="top">
+      <span class="brand">MARKET STORY<sup style="font-size:.7em">®</sup></span>
+      <span class="mid">Daily global-markets intelligence</span>
+      <span id="clock">— UTC</span>
+    </div>
+    <header class="hero">
+      <div class="kick" id="kick">№ 20260604 — Markets, narrated.</div>
+      <h1>Market<br>Story<sup>®</sup></h1>
+      <div class="sub">
+        <p class="tag">A daily global brief with a risk lens — gathered, synthesized by Claude, and built to be questioned and re-run.</p>
+        <a class="enter" href="#inside">Enter the brief <span class="ar">→</span></a>
+      </div>
+    </header>
+  </div>
+
+  <div class="tape" id="tape">
+    <div class="tk"><span class="k">S&amp;P 500</span><span class="v" id="sp">—</span><span class="d" id="spd">live</span></div>
+    <div class="tk"><span class="k">VIX</span><span class="v" id="vix">—</span><span class="d" id="vixd"></span></div>
+    <div class="tk"><span class="k">US 10Y</span><span class="v" id="ty">—</span><span class="d">yield</span></div>
+    <div class="tk"><span class="k">Sector breadth</span><span class="v" id="br">—</span><span class="d">up / down</span></div>
+  </div>
+
+  <section class="sec" id="inside">
+    <h2>A terminal that<br>tells the story.</h2>
+    <div class="row"><div class="idx">01</div><div class="body"><div><h3>The live brief</h3><div class="lab">Gather</div></div>
+      <p>US equities &amp; sectors, global macro, rates, FX, commodities and credit — plus FRED &amp; BLS prints and a 70-headline feed. Charts, a sector map, a cross-asset correlation matrix.</p></div></div>
+    <div class="row"><div class="idx">02</div><div class="body"><div><h3>The read</h3><div class="lab">Synthesize</div></div>
+      <p>Claude narrates the day with a risk lens — what moved &amp; why, regime, tail risks, what to watch — grounded in the numbers, and remembering yesterday.</p></div></div>
+    <div class="row"><div class="idx">03</div><div class="body"><div><h3>The logbook</h3><div class="lab">Compound</div></div>
+      <p>Every day's read is versioned — a dated record of your own market thinking that compounds. The part no dashboard gives you.</p></div></div>
+  </section>
+
+  <footer>
+    <span>Market Story — Python · Streamlit · Claude</span>
+    <a href="https://github.com/mynameisnguyenn/market-story" target="_blank" rel="noopener">GitHub ↗</a>
+    <span id="clock2">— UTC</span>
+  </footer>
+
+<script src="field.js"></script>
+</body>
+</html>

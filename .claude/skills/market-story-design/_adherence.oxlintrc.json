@@ -1,0 +1,184 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "slides/**",
+              "ui_kits/dashboard/**",
+              "ui_kits/landing/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Instrument Serif|Space Grotesk|IBM Plex Mono))/i]",
+        "message": "Font not provided by the design system. Available: Instrument Serif, Space Grotesk, IBM Plex Mono."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--accent",
+      "--accent-bar",
+      "--accent-bar-hero",
+      "--accent-bright",
+      "--bg",
+      "--body-leading",
+      "--body-size",
+      "--border",
+      "--border-strong",
+      "--caption-size",
+      "--cat-boom",
+      "--cat-crash",
+      "--cat-founding",
+      "--cat-innovation",
+      "--cat-reform",
+      "--down",
+      "--font-body",
+      "--font-display",
+      "--font-m-body",
+      "--font-m-display",
+      "--font-mono",
+      "--font-subhead",
+      "--grid",
+      "--h1-leading",
+      "--h1-size",
+      "--h1-tracking",
+      "--h1-weight",
+      "--h2-leading",
+      "--h2-size",
+      "--h2-tracking",
+      "--h2-weight",
+      "--h3-size",
+      "--h3-tracking",
+      "--h3-weight",
+      "--kicker-size",
+      "--kicker-tracking",
+      "--kpi-size",
+      "--kpi-weight",
+      "--label-size",
+      "--label-tracking",
+      "--m-accent",
+      "--m-bg",
+      "--m-down",
+      "--m-faint",
+      "--m-ink",
+      "--m-muted",
+      "--m-rule",
+      "--m-up",
+      "--neutral",
+      "--radius",
+      "--radius-sm",
+      "--read-leading",
+      "--read-size",
+      "--surface",
+      "--surface-2",
+      "--text",
+      "--text-dim",
+      "--up",
+      "--warn"
+    ],
+    "tokenKinds": {
+      "--bg": "color",
+      "--surface": "color",
+      "--surface-2": "color",
+      "--border": "color",
+      "--border-strong": "color",
+      "--text": "font",
+      "--text-dim": "font",
+      "--accent": "color",
+      "--accent-bright": "color",
+      "--up": "color",
+      "--down": "color",
+      "--warn": "color",
+      "--grid": "color",
+      "--neutral": "color",
+      "--cat-founding": "color",
+      "--cat-crash": "color",
+      "--cat-reform": "color",
+      "--cat-innovation": "color",
+      "--cat-boom": "color",
+      "--m-bg": "color",
+      "--m-ink": "color",
+      "--m-muted": "color",
+      "--m-faint": "color",
+      "--m-rule": "color",
+      "--m-accent": "color",
+      "--m-up": "color",
+      "--m-down": "color",
+      "--font-display": "font",
+      "--font-subhead": "font",
+      "--font-mono": "font",
+      "--font-body": "font",
+      "--font-m-display": "font",
+      "--font-m-body": "font",
+      "--h1-size": "spacing",
+      "--h1-weight": "font",
+      "--h1-tracking": "font",
+      "--h1-leading": "font",
+      "--h2-size": "spacing",
+      "--h2-weight": "font",
+      "--h2-tracking": "font",
+      "--h2-leading": "font",
+      "--h3-size": "spacing",
+      "--h3-weight": "font",
+      "--h3-tracking": "font",
+      "--read-size": "spacing",
+      "--read-leading": "font",
+      "--body-size": "spacing",
+      "--body-leading": "font",
+      "--kpi-size": "spacing",
+      "--kpi-weight": "font",
+      "--label-size": "spacing",
+      "--label-tracking": "font",
+      "--kicker-size": "spacing",
+      "--kicker-tracking": "font",
+      "--caption-size": "spacing",
+      "--radius": "radius",
+      "--radius-sm": "radius",
+      "--accent-bar": "spacing",
+      "--accent-bar-hero": "spacing"
+    },
+    "fontFamilies": [
+      "IBM Plex Mono",
+      "Instrument Serif",
+      "Space Grotesk"
+    ]
+  }
+}

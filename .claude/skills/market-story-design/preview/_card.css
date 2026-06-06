@@ -1,0 +1,26 @@
+/* Shared styling for Design System preview cards. ~700px wide. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=cabinet-grotesk@400,500&display=swap');
+
+:root {
+  --bg:#0d0c0c; --surface:#16120f; --surface-2:#1b1611; --border:#2b2620;
+  --border-strong:#3a332b; --text:#f5f2ef; --text-dim:#b3aaa0; --accent:#7beafb;
+  --accent-bright:#a6f1ff; --up:#36c26f; --down:#ff5c6c; --warn:#f5a623;
+  --grid:#241f1a; --neutral:#b3aaa0;
+  --m-bg:#0a0b0f; --m-ink:#eceef2; --m-muted:#727884; --m-accent:#5aa0ff;
+  --serif:'Instrument Serif',Georgia,serif; --grot:'Space Grotesk',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace; --clash:'Clash Display',sans-serif; --cab:'Cabinet Grotesk',sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--text); font-family:var(--grot);
+  -webkit-font-smoothing:antialiased; padding:22px 26px;
+}
+.row { display:flex; gap:14px; align-items:stretch; }
+.col { display:flex; flex-direction:column; gap:6px; }
+.eyebrow { font-family:var(--grot); font-size:.6rem; text-transform:uppercase; letter-spacing:.14em; color:var(--text-dim); }
+.mono { font-family:var(--mono); font-variant-numeric:tabular-nums; }
+.swatch { border-radius:8px; border:1px solid var(--border); height:64px; display:flex; align-items:flex-end; padding:8px 10px; }
+.sw-name { font-family:var(--grot); font-size:.66rem; font-weight:600; }
+.sw-hex { font-family:var(--mono); font-size:.62rem; opacity:.75; }
+.chiplabel { display:flex; flex-direction:column; gap:2px; margin-top:6px; }

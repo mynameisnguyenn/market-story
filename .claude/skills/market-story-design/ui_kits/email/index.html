@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Email" name="Email digest" subtitle="Sendable daily-brief email — the read, KPI tape, signals, watch" viewport="600x760" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Market Story — Daily Brief (email)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+<!-- A real, sendable-style HTML email digest of the daily brief.
+     Table-based layout + inline styles (email-safe). Brand: warm near-black,
+     cyan accent, Newsreader serif read over JetBrains Mono data. -->
+<style>
+  body { margin:0; padding:0; background:#0a0908; }
+  a { color:#7beafb; text-decoration:none; }
+  @media (max-width:620px){
+    .container { width:100% !important; }
+    .px { padding-left:22px !important; padding-right:22px !important; }
+    .kpi { display:block !important; width:100% !important; }
+    .col { display:block !important; width:100% !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background:#0a0908; font-family:'Hanken Grotesk',Arial,sans-serif;">
+  <!-- preheader -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:#0a0908;">Oil floor broke while gold bid — a demand-concern repricing, not relief. The XLE hedge is gone.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0908;">
+    <tr><td align="center" style="padding:30px 14px;">
+      <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#16120f; border:1px solid #2b2620; border-radius:14px; overflow:hidden;">
+
+        <!-- masthead -->
+        <tr><td class="px" style="padding:26px 34px 18px; border-bottom:1px solid #2b2620;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td style="font-family:'Hanken Grotesk',Arial,sans-serif; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#f5f2ef;">Market Story<span style="color:#7beafb;">®</span></td>
+            <td align="right" style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.06em; color:#b3aaa0;">2026-06-04 · PRE-US OPEN</td>
+          </tr></table>
+        </td></tr>
+
+        <!-- the read -->
+        <tr><td class="px" style="padding:28px 34px 8px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#7beafb; margin-bottom:12px;">● Today's thesis</div>
+          <div style="font-family:'Newsreader',Georgia,serif; font-size:25px; line-height:1.32; color:#f5f2ef;">
+            The oil floor broke while gold caught a simultaneous +$55 bid — a demand-concern repricing, not an Iran-risk relief trade. It flips to “resolved” only if WTI reclaims $95 by the close <em>and</em> gold gives back gains.
+          </div>
+        </td></tr>
+
+        <!-- KPI tape -->
+        <tr><td class="px" style="padding:22px 30px 10px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td class="kpi" width="33.3%" style="padding:8px;">
+              <div style="border:1px solid #2b2620; border-left:3px solid #7beafb; border-radius:8px; padding:10px 12px;">
+                <div style="font-family:'Hanken Grotesk',Arial,sans-serif; font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:#b3aaa0;">S&amp;P 500</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:17px; color:#f5f2ef; padding-top:3px;">7,553.68</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#36c26f; padding-top:2px;">+0.18%</div>
+              </div>
+            </td>
+            <td class="kpi" width="33.3%" style="padding:8px;">
+              <div style="border:1px solid #2b2620; border-left:3px solid #7beafb; border-radius:8px; padding:10px 12px;">
+                <div style="font-family:'Hanken Grotesk',Arial,sans-serif; font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:#b3aaa0;">WTI crude</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:17px; color:#f5f2ef; padding-top:3px;">92.44</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#ff5c6c; padding-top:2px;">−3.2%</div>
+              </div>
+            </td>
+            <td class="kpi" width="33.3%" style="padding:8px;">
+              <div style="border:1px solid #2b2620; border-left:3px solid #7beafb; border-radius:8px; padding:10px 12px;">
+                <div style="font-family:'Hanken Grotesk',Arial,sans-serif; font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:#b3aaa0;">Gold</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:17px; color:#f5f2ef; padding-top:3px;">4,519.70</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#36c26f; padding-top:2px;">+1.24%</div>
+              </div>
+            </td>
+          </tr></table>
+        </td></tr>
+
+        <!-- signals -->
+        <tr><td class="px" style="padding:14px 34px 6px;">
+          <div style="font-family:'Hanken Grotesk',Arial,sans-serif; font-weight:600; font-size:13px; color:#f5f2ef; padding-bottom:8px;">⚡ Today's signal</div>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:'Hanken Grotesk',Arial,sans-serif; font-size:14px; color:#f5f2ef; line-height:1.5;">
+            <tr><td style="padding:5px 0; color:#ff5c6c; width:18px; vertical-align:top;">●</td><td style="padding:5px 0;">WTI −$3.09 to $92.44 — the energy hedge that saved the tape is gone.</td></tr>
+            <tr><td style="padding:5px 0; color:#f5a623; vertical-align:top;">●</td><td style="padding:5px 0;">Blackstone gates its flagship private credit fund amid $4.5bn of Q2 redemptions.</td></tr>
+            <tr><td style="padding:5px 0; color:#ff5c6c; vertical-align:top;">●</td><td style="padding:5px 0;">Broadcom faces a historic gap-down — a fifth AI-infra name joins the cluster.</td></tr>
+          </table>
+        </td></tr>
+
+        <!-- watch / accountability -->
+        <tr><td class="px" style="padding:16px 34px 8px;">
+          <div style="border:1px solid #2b2620; border-radius:10px; padding:4px 16px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">
+              <tr><td style="padding:11px 0; border-bottom:1px solid #241f1a; font-family:'Hanken Grotesk',Arial,sans-serif; color:#f5f2ef;">AVGO gaps &gt;10% → cluster is a trend<br><span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#b3aaa0;">grades next session</span></td><td align="right" style="padding:11px 0; border-bottom:1px solid #241f1a; font-family:'JetBrains Mono',monospace; font-size:11px; color:#7beafb;">AVGO &lt; −10</td></tr>
+              <tr><td style="padding:11px 0; font-family:'Hanken Grotesk',Arial,sans-serif; color:#f5f2ef;">WTI reclaims $95 = positioning unwind<br><span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#b3aaa0;">grades next session</span></td><td align="right" style="padding:11px 0; font-family:'JetBrains Mono',monospace; font-size:11px; color:#7beafb;">CL=F &gt; 95</td></tr>
+            </table>
+          </div>
+        </td></tr>
+
+        <!-- CTA -->
+        <tr><td class="px" align="center" style="padding:22px 34px 8px;">
+          <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:9px; background:#7beafb;">
+            <a href="#" style="display:inline-block; font-family:'Hanken Grotesk',Arial,sans-serif; font-weight:700; font-size:14px; color:#0d0c0c; padding:13px 26px;">Open the full brief →</a>
+          </td></tr></table>
+        </td></tr>
+
+        <!-- footer -->
+        <tr><td class="px" style="padding:22px 34px 26px; border-top:1px solid #2b2620;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; line-height:1.7; letter-spacing:.04em; color:#7a726a;">
+            Gathered from yfinance · FRED · 12 RSS feeds. Synthesized by Claude with a risk lens.<br>
+            Equity prices are prior close; commodities &amp; FX live intraday.<br>
+            <a href="#" style="color:#b3aaa0;">Manage</a> · <a href="#" style="color:#b3aaa0;">Unsubscribe</a> · Python · Streamlit · Claude
+          </div>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="OG / social card" subtitle="Cyan social card (1200×630) — wordmark over the market-field" viewport="1200x630" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Market Story — OG card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" />
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ overflow:hidden; background:#0d0c0c; }
+  .card{ position:relative; width:100vw; aspect-ratio:1200/630; max-height:100vh; background:#0d0c0c; overflow:hidden;
+    font-family:'Cabinet Grotesk',system-ui,sans-serif; }
+  #f{ position:absolute; inset:0; width:100%; height:100%; }
+  .scrim{ position:absolute; inset:0; background:linear-gradient(90deg,#0d0c0c 0%,rgba(13,12,12,.78) 38%,rgba(13,12,12,.30) 70%,rgba(13,12,12,.55) 100%); }
+  .wrap{ position:absolute; inset:0; padding:3.8vw 5vw; display:flex; flex-direction:column; z-index:2; }
+  .top{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:1.08vw; letter-spacing:.14em; text-transform:uppercase; color:#b3aaa0; }
+  .top .b{ color:#f5f2ef; }
+  .kick{ font-family:'IBM Plex Mono',monospace; font-size:1.16vw; letter-spacing:.3em; text-transform:uppercase; color:#7beafb; margin-top:6vw; }
+  .word{ font-family:'Clash Display',sans-serif; font-weight:600; font-size:12.5vw; line-height:.82; letter-spacing:-.035em; text-transform:uppercase; color:#f5f2ef; margin-top:1.6vw; text-shadow:0 .6vw 5vw rgba(0,0,0,.6); }
+  .word sup{ font-size:.16em; vertical-align:super; color:#b3aaa0; }
+  .tag{ margin-top:auto; max-width:38ch; color:#b3aaa0; font-size:1.7vw; line-height:1.4; }
+  .enter{ position:absolute; right:5vw; bottom:4.4vw; font-family:'IBM Plex Mono',monospace; font-size:1.5vw; letter-spacing:.05em; color:#f5f2ef; border-bottom:1px solid #7beafb; padding-bottom:.5vw; }
+</style>
+</head>
+<body>
+<div class="card">
+  <canvas id="f"></canvas>
+  <div class="scrim"></div>
+  <div class="wrap">
+    <div class="top"><span class="b">MARKET STORY®</span><span>DAILY GLOBAL-MARKETS INTELLIGENCE</span><span id="clk">17:36:09 UTC</span></div>
+    <div class="kick">№ 20260604 — MARKETS, NARRATED.</div>
+    <div class="word">Market<br />Story<sup>®</sup></div>
+    <div class="tag">A daily global brief with a risk lens — gathered, synthesized by Claude, and built to be questioned and re-run.</div>
+  </div>
+  <div class="enter">Enter the brief →</div>
+</div>
+<script>
+  const cv = document.getElementById("f"), ctx = cv.getContext("2d");
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const W = cv.width = cv.clientWidth * dpr, H = cv.height = cv.clientHeight * dpr;
+  const ACC = "123,234,251", FNT = "179,170,160";
+  function walk(n, drift, vol, seed){ let v=0,o=[],s=seed; const r=()=>{s=(s*9301+49297)%233280;return s/233280;}; for(let i=0;i<n;i++){v+=drift+(r()-.5)*vol;o.push(v);} return o; }
+  const SET=[{a:1,d:.9,v:2.2,s:7},{a:0,d:.7,v:3,s:13},{a:0,d:.4,v:3.4,s:21},{a:0,d:.6,v:2.8,s:34},{a:0,d:-.2,v:3.6,s:55},{a:0,d:.3,v:4,s:89},{a:0,d:.5,v:2.6,s:144}];
+  const lines=SET.map(c=>{const arr=walk(90,c.d,c.v,c.s);const mn=Math.min(...arr),mx=Math.max(...arr),rg=(mx-mn)||1;return{a:c.a,y:arr.map(x=>1-(x-mn)/rg)};}).sort((p,q)=>p.a-q.a);
+  const top=H*.46, band=H-top-H*.10;
+  for(const ln of lines){
+    const N=ln.y.length, px=i=>(i/(N-1))*W, py=i=>top+ln.y[i]*band;
+    if(ln.a){ ctx.beginPath(); ctx.moveTo(px(0),py(0)); for(let i=1;i<N;i++)ctx.lineTo(px(i),py(i)); ctx.lineTo(px(N-1),top+band); ctx.lineTo(px(0),top+band); ctx.closePath();
+      const g=ctx.createLinearGradient(0,top,0,top+band); g.addColorStop(0,`rgba(${ACC},0.17)`); g.addColorStop(1,`rgba(${ACC},0)`); ctx.fillStyle=g; ctx.fill(); }
+    ctx.beginPath(); ctx.moveTo(px(0),py(0)); for(let i=1;i<N;i++)ctx.lineTo(px(i),py(i));
+    ctx.strokeStyle=ln.a?`rgba(${ACC},0.95)`:`rgba(${FNT},0.16)`; ctx.lineWidth=(ln.a?2.4:1)*dpr; ctx.stroke();
+    if(ln.a){ const x=px(N-1),y=py(N-1); ctx.fillStyle=`rgba(${ACC},1)`; ctx.beginPath(); ctx.arc(x,y,4*dpr,0,7); ctx.fill();
+      ctx.strokeStyle=`rgba(${ACC},0.35)`; ctx.lineWidth=dpr; ctx.beginPath(); ctx.arc(x,y,9*dpr,0,7); ctx.stroke(); }
+  }
+</script>
+</body>
+</html>

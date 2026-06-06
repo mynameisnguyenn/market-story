@@ -1,0 +1,15 @@
+/* ============================================================================
+   Market Story — styles.css  (design-system entrypoint)
+   ----------------------------------------------------------------------------
+   The single file a consumer links to get the Market Story foundations:
+   the full token system (product "Ellis-dark" + cover palettes), the type
+   scale, the web-font imports, and the semantic element styles.
+
+       <link rel="stylesheet" href="styles.css">
+
+   Everything lives in colors_and_type.css; this file just re-exports it as the
+   canonical root stylesheet. The per-surface stylesheets
+   (ui_kits/<kit>/*.css) are kit-scoped and loaded by each kit's own index.html
+   — they are NOT part of the global foundation and don't belong here.
+   ============================================================================ */
+@import url('./colors_and_type.css');

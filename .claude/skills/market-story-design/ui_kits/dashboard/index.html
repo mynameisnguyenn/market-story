@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!-- @dsCard group="UI Kit — Dashboard" name="Cover + Dashboard (unified)" subtitle="Cover → dashboard, cursor-reactive field, scroll-reveal" viewport="1400x860" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Market Story — Dashboard UI Kit</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+<link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230d0c0c'/><path d='M6 21 L13 13 L18 17 L26 8' stroke='%237beafb' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+<link rel="apple-touch-icon" href="../../assets/app-icon-180.png" />
+<meta name="theme-color" content="#0d0c0c" />
+<link rel="stylesheet" href="dashboard.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Space+Mono:wght@400;700&display=swap" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script src="data.js"></script>
+<script src="field.js"></script>
+<script type="text/babel" src="app.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const TABS = ["Overview", "Story", "Equities & Sectors", "Global & Macro", "Trends", "Headlines", "Calendar"];
+
+// ---- Design-direction tweak options ---------------------------------------
+const FONTS = {
+  editorial:  { label:"Editorial",  serif:"'Instrument Serif', Georgia, serif", grot:"'Space Grotesk', system-ui, sans-serif", mono:"'IBM Plex Mono', monospace" },
+  terminal:   { label:"Terminal",   serif:"'Space Grotesk', system-ui, sans-serif", grot:"'Space Grotesk', system-ui, sans-serif", mono:"'Space Mono', monospace" },
+  broadsheet: { label:"Broadsheet", serif:"'Newsreader', Georgia, serif", grot:"'Hanken Grotesk', system-ui, sans-serif", mono:"'JetBrains Mono', monospace" },
+  swiss:      { label:"Swiss",      serif:"'Archivo', system-ui, sans-serif", grot:"'Archivo', system-ui, sans-serif", mono:"'IBM Plex Mono', monospace" },
+};
+const ACCENTS = {
+  "#7beafb": { bright:"#a6f1ff", rgb:"123,234,251" },  // cyan
+  "#f5b544": { bright:"#ffd27a", rgb:"245,181,68" },   // amber
+  "#b48cff": { bright:"#d4baff", rgb:"180,140,255" },  // violet
+  "#ff8a5c": { bright:"#ffb290", rgb:"255,138,92" },   // coral
+};
+const GROUNDS = {
+  warm: { label:"Warm", bg:"#0d0c0c", surface:"#16120f", s2:"#1b1611", border:"#2b2620", bs:"#3a332b", grid:"#241f1a", text:"#f5f2ef", dim:"#b3aaa0", faint:"179,170,160" },
+  cool: { label:"Cool", bg:"#0a0b0f", surface:"#111318", s2:"#161922", border:"#242833", bs:"#333a47", grid:"#1a1d25", text:"#eceef2", dim:"#8b93a3", faint:"139,147,163" },
+  ink:  { label:"True black", bg:"#000000", surface:"#0c0c0c", s2:"#141414", border:"#242424", bs:"#333333", grid:"#1a1a1a", text:"#f4f4f4", dim:"#9a9a9a", faint:"150,150,150" },
+  paper:{ label:"Paper", bg:"#f4f1ea", surface:"#ffffff", s2:"#ece8df", border:"#ddd6c8", bs:"#c9bfab", grid:"#e4ddd0", text:"#1c1a17", dim:"#6b6458", faint:"120,112,98" },
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "fontset": "broadsheet",
+  "accent": "#7beafb",
+  "ground": "warm",
+  "density": "compact"
+}/*EDITMODE-END*/;
+
+function App() {
+  const d = window.MS_DATA;
+  const [page, setPage] = useState("brief");
+  const [tab, setTab] = useState("Overview");
+  const [refreshing, setRefreshing] = useState(false);
+  const [entered, setEntered] = useState(false);
+  const [coverGone, setCoverGone] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [noticeOpen, setNoticeOpen] = useState(true);
+  const [ambient, setAmbient] = useState(() => {
+    try { return localStorage.getItem("ms_ambient") || "low"; } catch (_) { return "low"; }
+  });
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const ambientRef = useRef(null);
+  const fieldRef = useRef(null);
+
+  // apply design-direction tweaks to CSS variables
+  useEffect(() => {
+    const root = document.documentElement.style;
+    const f = FONTS[t.fontset] || FONTS.editorial;
+    root.setProperty("--serif", f.serif); root.setProperty("--grot", f.grot); root.setProperty("--mono", f.mono);
+    const a = ACCENTS[t.accent] || ACCENTS["#7beafb"];
+    root.setProperty("--accent", t.accent); root.setProperty("--accent-bright", a.bright);
+    const g = GROUNDS[t.ground] || GROUNDS.warm;
+    root.setProperty("--bg", g.bg); root.setProperty("--surface", g.surface); root.setProperty("--surface-2", g.s2);
+    root.setProperty("--border", g.border); root.setProperty("--border-strong", g.bs); root.setProperty("--grid", g.grid);
+    root.setProperty("--text", g.text); root.setProperty("--text-dim", g.dim);
+    document.documentElement.setAttribute("data-density", t.density);
+    document.documentElement.setAttribute("data-mode", t.ground === "paper" ? "paper" : "dark");
+    if (fieldRef.current) { fieldRef.current.setAccent(a.rgb); fieldRef.current.setFaint(g.faint); }
+  }, [t.fontset, t.accent, t.ground, t.density]);
+
+  // faint ambient market-field behind the whole dashboard
+  useEffect(() => {
+    if (!ambientRef.current || !window.startMarketField) return;
+    const a = ACCENTS[t.accent] || ACCENTS["#7beafb"];
+    fieldRef.current = window.startMarketField(ambientRef.current, { intensity: ambient, accentRGB: a.rgb, topFrac: 0.18, botFrac: 0.06, parallax: 30, lineScale: 1 });
+    return () => fieldRef.current && fieldRef.current.destroy();
+  }, []);
+
+  // live ambient intensity changes (no re-mount)
+  useEffect(() => {
+    if (fieldRef.current) fieldRef.current.setIntensity(ambient);
+    try { localStorage.setItem("ms_ambient", ambient); } catch (_) {}
+  }, [ambient]);
+
+  const refresh = () => { setRefreshing(true); setTimeout(() => setRefreshing(false), 1100); };
+  const enter = () => { setEntered(true); setTimeout(() => setCoverGone(true), 760); };
+
+  const panel = (
+    <TweaksPanel>
+      <TweakSection label="Typography" />
+      <TweakRadio label="Font pairing" value={t.fontset}
+        options={Object.entries(FONTS).map(([value, f]) => ({ value, label: f.label }))}
+        onChange={(v) => setTweak("fontset", v)} />
+      <TweakSection label="Color" />
+      <TweakColor label="Accent" value={t.accent}
+        options={Object.keys(ACCENTS)} onChange={(v) => setTweak("accent", v)} />
+      <TweakRadio label="Ground" value={t.ground}
+        options={Object.entries(GROUNDS).map(([value, g]) => ({ value, label: g.label }))}
+        onChange={(v) => setTweak("ground", v)} />
+      <TweakSection label="Layout" />
+      <TweakRadio label="Density" value={t.density}
+        options={[{ value:"comfortable", label:"Comfortable" }, { value:"compact", label:"Compact" }]}
+        onChange={(v) => setTweak("density", v)} />
+    </TweaksPanel>
+  );
+
+  if (!d) {
+    return (
+      <div className="app"><main className="main"><ErrorBox onRetry={() => location.reload()} /></main>{panel}</div>
+    );
+  }
+
+  const briefBody = failed ? (
+    <ErrorBox onRetry={() => setFailed(false)} />
+  ) : (
+    <React.Fragment>
+      {refreshing && <div className="loadbar" role="progressbar" aria-label="Refreshing data"></div>}
+      <Reveal><Header d={d} /></Reveal>
+      {noticeOpen && (
+        <Notice onClose={() => setNoticeOpen(false)}>
+          <b>Pre-US open</b> — equity prices are yesterday's close; commodities &amp; FX are live intraday. The read accounts for the gap.
+        </Notice>
+      )}
+      <Reveal><KpiStrip d={d} loading={refreshing} /></Reveal>
+      <hr className="hr" />
+      <Tabs tabs={TABS} active={tab} setActive={setTab} />
+      <div className="tabpane" id="tabpane" role="tabpanel" tabIndex={-1}
+        aria-labelledby={"tab-" + tab.replace(/[^a-z]+/gi, "-").toLowerCase()}>
+        <Reveal key={tab}>
+          {tab === "Overview" && <OverviewTab d={d} onStory={() => setTab("Story")} />}
+          {tab === "Story" && <StoryTab />}
+          {tab === "Equities & Sectors" && <EquitiesTab d={d} />}
+          {tab === "Global & Macro" && <MacroTab d={d} />}
+          {tab === "Trends" && <TrendsTab d={d} />}
+          {tab === "Headlines" && <HeadlinesTab d={d} />}
+          {tab === "Calendar" && <CalendarTab d={d} />}
+        </Reveal>
+      </div>
+    </React.Fragment>
+  );
+
+  const content = (
+    <div className="app">
+      <Sidebar page={page} setPage={setPage} onRefresh={refresh} refreshing={refreshing} ambient={ambient} setAmbient={setAmbient} />
+      <main className="main" id="main">
+        {page === "learn" ? <React.Fragment /> : briefBody}
+      </main>
+      {page === "learn" && <LearnPage />}
+    </div>
+  );
+
+  return (
+    <React.Fragment>
+      <a className="skip-link" href="#main">Skip to content</a>
+      <canvas className="ambient" ref={ambientRef} aria-hidden="true"></canvas>
+      {content}
+      {!coverGone && <Cover d={d} out={entered} onEnter={enter} ambient="high" accentRGB={(ACCENTS[t.accent]||ACCENTS['#7beafb']).rgb} faintRGB={(GROUNDS[t.ground]||GROUNDS.warm).faint} />}
+      {panel}
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
