@@ -3,27 +3,19 @@ turning the raw tables into a read. Pure logic, no I/O, so it's unit-tested.
 """
 from __future__ import annotations
 
+from . import brief_access
 
-def _row(brief: dict, sym: str):
-    for rows in brief.get("markets", {}).values():
-        for r in rows:
-            if r.get("symbol") == sym:
-                return r
-    return None
+# Brief-navigation accessors live in brief_access now (one definition shared with composite
+# + the dashboard). Kept as local names so the call sites below read the same.
+_row = brief_access.market_row
+_macro_row = brief_access.macro_row
+_bls = brief_access.bls_row
 
 
 def _macro(brief: dict, sid: str):
-    for m in brief.get("macro", []):
-        if m.get("id") == sid:
-            return m.get("latest")
-    return None
-
-
-def _macro_row(brief: dict, sid: str):
-    for m in brief.get("macro", []):
-        if m.get("id") == sid:
-            return m
-    return None
+    """The 'latest' value of a macro series (None if absent)."""
+    row = brief_access.macro_row(brief, sid)
+    return row.get("latest") if row else None
 
 
 def _ord(n) -> str:
@@ -31,13 +23,6 @@ def _ord(n) -> str:
     n = int(round(n))
     suffix = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     return f"{n}{suffix}"
-
-
-def _bls(brief: dict, sid: str):
-    for m in brief.get("bls", []):
-        if m.get("id") == sid:
-            return m
-    return None
 
 
 def derive_signals(brief: dict, limit: int = 6) -> list[dict]:

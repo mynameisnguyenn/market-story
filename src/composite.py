@@ -6,6 +6,8 @@ Pure; tolerates any missing fields — conditions silently skip when data is abs
 """
 from __future__ import annotations
 
+from . import brief_access
+
 # Number of aligned conditions required to raise the danger flag.
 _DANGER_THRESHOLD = 3
 
@@ -14,12 +16,7 @@ _DANGER_THRESHOLD = 3
 # Helpers — safe field accessors
 # ---------------------------------------------------------------------------
 
-def _macro_row(brief: dict, series_id: str) -> dict | None:
-    """First macro row whose 'id' matches series_id, or None."""
-    for row in brief.get("macro") or []:
-        if row.get("id") == series_id:
-            return row
-    return None
+_macro_row = brief_access.macro_row   # shared accessor (kept as a local name for the call sites)
 
 
 def _safe_float(value) -> float | None:
