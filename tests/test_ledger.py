@@ -23,7 +23,7 @@ def test_horizon_sessions():
 def test_macro_threshold_hit_and_miss(tmp_path, monkeypatch):
     monkeypatch.setattr(ledger, "LEDGER_PATH", tmp_path / "log.jsonl")
     _seed_macro(tmp_path, monkeypatch, [
-        ("DGS10", "2026-06-04", 4.52), ("DGS10", "2026-06-05", 4.48),     # exceeded 4.5 in-window
+        ("DGS10", "2026-06-04", 4.48), ("DGS10", "2026-06-05", 4.52),     # ends the window above 4.5
         ("T10Y2Y", "2026-06-04", 0.42), ("T10Y2Y", "2026-06-05", 0.41),   # never exceeded 0.55
     ])
     ledger.log_predictions("2026-06-03", [
@@ -35,6 +35,35 @@ def test_macro_threshold_hit_and_miss(tmp_path, monkeypatch):
     assert by["macro:DGS10"] == "triggered"
     assert by["macro:T10Y2Y"] == "missed"
     assert s["hit_rate"] == 0.5
+
+
+def test_level_metric_transient_touch_reverses_is_miss(tmp_path, monkeypatch):
+    """A level metric (yield) that pierces the trigger mid-window but closes back inside is a
+    MISS — level claims grade at the end of the horizon, not any-point-in-window."""
+    monkeypatch.setattr(ledger, "LEDGER_PATH", tmp_path / "log.jsonl")
+    _seed_macro(tmp_path, monkeypatch, [
+        ("DGS10", "2026-06-04", 4.55), ("DGS10", "2026-06-05", 4.40),   # touched >4.5 then reversed
+    ])
+    ledger.log_predictions("2026-06-03", [
+        {"claim": "10Y holds above 4.5", "metric": "macro:DGS10", "trigger": ">4.5", "horizon": "next week"}])
+    ledger.grade_pending()
+    r = ledger.load()[0]
+    assert r["status"] == "missed" and r["graded_value"] == 4.40
+
+
+def test_event_metric_grades_any_point_in_window(tmp_path, monkeypatch):
+    """An event metric (a single-day % change) grades any-point-in-window — a one-day gap that
+    later reverses still counts as triggered."""
+    monkeypatch.setattr(ledger, "LEDGER_PATH", tmp_path / "log.jsonl")
+    _seed_macro(tmp_path, monkeypatch, [])
+    idx = pd.to_datetime(["2026-06-04", "2026-06-05"])
+    monkeypatch.setattr(ledger, "_market_window",
+                        lambda sym, field, start, sess: [-12.0, 1.0])   # gap day, then bounce
+    ledger.log_predictions("2026-06-03", [
+        {"claim": "AVGO gaps down", "metric": "market:AVGO:change_pct", "trigger": "<-10", "horizon": "next week"}])
+    ledger.grade_pending()
+    r = ledger.load()[0]
+    assert r["status"] == "triggered" and r["graded_value"] == -12.0
 
 
 def test_single_name_resolves_via_market_fetch(tmp_path, monkeypatch):

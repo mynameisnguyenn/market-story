@@ -128,11 +128,19 @@ def _grade(rec: dict) -> dict:
         rec["status"] = "pending"                       # horizon not elapsed yet
         return rec
     trig = rec.get("trigger", "")
-    for v in vals:
-        if scorecard._evaluate(v, trig):                # fired at some point in the window
-            rec["status"], rec["graded_value"] = "triggered", round(float(v), 4)
-            return rec
-    rec["status"], rec["graded_value"] = "missed", round(float(vals[-1]), 4)
+    metric = rec.get("metric", "")
+    # Level metrics (yields, prices) grade at the END of the horizon — a transient touch that
+    # reverses is not a hit. Event metrics (a single-day % change / gap) grade any-point-in-window.
+    if metric.endswith((":change_pct", ":pct")):
+        for v in vals:
+            if scorecard._evaluate(v, trig):
+                rec["status"], rec["graded_value"] = "triggered", round(float(v), 4)
+                return rec
+        rec["status"], rec["graded_value"] = "missed", round(float(vals[-1]), 4)
+        return rec
+    last = vals[-1]
+    rec["status"] = "triggered" if scorecard._evaluate(last, trig) else "missed"
+    rec["graded_value"] = round(float(last), 4)
     return rec
 
 

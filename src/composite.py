@@ -85,7 +85,8 @@ def _cond_sector_breadth(brief: dict) -> tuple[bool | None, str]:
 
 
 def _cond_vol_premium(brief: dict) -> tuple[bool | None, str]:
-    """Vol premium (VIX - realized 20d) > 3 -> complacency / hedges rich -> risk-off."""
+    """Vol premium (VIX - realized 20d) > 3 -> implied vol elevated vs realized,
+    protection priced rich -> risk-off (the tape is paying up for hedges)."""
     vol = brief.get("vol") or {}
     prem = _safe_float(vol.get("premium"))
     if prem is None:

@@ -777,8 +777,8 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.dataframe(extremes_styler(brief["extremes"]), use_container_width=True, hide_index=True)
     vol = brief.get("vol")
     if vol:
-        tag = "rich — complacency / cheap-looking hedges" if vol["premium"] > 3 \
-            else "compressed — realized catching up" if vol["premium"] < 0 else "normal"
+        tag = "rich — protection expensive vs realized" if vol["premium"] > 3 \
+            else "compressed — realized catching up to implied" if vol["premium"] < 0 else "normal"
         st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
                    f"= {vol['premium']:+.1f} pts ({tag}).")
     _risk_drawdown_panel(closes)

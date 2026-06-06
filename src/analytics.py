@@ -122,7 +122,8 @@ def stock_bond_corr(closes, window: int = 30) -> dict | None:
 
 def compute_vol_premium(closes) -> dict | None:
     """VIX vs 20d realized vol of the S&P — the vol risk premium (implied minus
-    realized). Positive & high = options rich / hedges expensive / complacency."""
+    realized). Positive & high = implied vol elevated vs realized, options/protection
+    priced rich (the market is paying up for hedges), not complacency."""
     closes = closes or {}
     spx = closes.get("^GSPC")
     vix = closes.get("^VIX")

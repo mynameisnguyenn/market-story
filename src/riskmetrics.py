@@ -134,16 +134,15 @@ def sharpe(rets: pd.Series, ann: int = 252) -> float | None:
 
 
 def sortino(rets: pd.Series, ann: int = 252) -> float | None:
-    """Annualised Sortino ratio using downside deviation (negative returns only)."""
+    """Annualised Sortino ratio. Downside deviation = sqrt(mean(min(r,0)^2)) over ALL returns
+    (positive days contribute 0), per the Estrada/empyrical definition — not just down-days."""
     if rets is None:
         return None
     r = rets.dropna()
     if len(r) < _MIN_OBS:
         return None
-    neg = r[r < 0]
-    if len(neg) == 0:
-        return None
-    downside_std = float(np.sqrt(np.mean(neg ** 2)))
+    downside = np.minimum(r.to_numpy(dtype=float), 0.0)   # shortfalls; up-days count as 0, not dropped
+    downside_std = float(np.sqrt(np.mean(downside ** 2)))
     if downside_std == 0:
         return None
     s = float(r.mean() / downside_std * np.sqrt(ann))
