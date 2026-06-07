@@ -56,6 +56,30 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 
 ## Log (newest first)
 
+### 2026-06-07 — Deep review (5-dimension workflow) — fixed 1 crash + a degradation/correctness cluster
+After the `line_fig` overlay bug (which the 449-test suite rendered but didn't catch), ran a 5-dimension
+deep-review workflow (render hazards · None/NaN degradation · numeric correctness · integration/contracts ·
+diff scan), each candidate adversarially verified: 30 candidates → 12 confirmed, 4 plausible, 14 refuted.
+Fixed the real ones:
+- **HIGH — Overview crash on a partial brief** (`overview.py`): `brief["movers"]` was a bare subscript; the
+  nonce=0 fast-load serves whatever JSON is on disk with no schema check, so an old/partial brief (missing
+  `movers`) `KeyError`-crashed the whole tab. Now `brief.get("movers") or {}` + `.get("leaders"/"laggards")`.
+  Same hardening applied to the page header (`app.py` `session_label`/`generated_at_utc`/`stats`) and the
+  Macro vol-premium caption (`vol["premium"]` → guarded). A new render-smoke test renders the Overview from
+  a partial brief (incl. a None-`change_pct` mover) and asserts it degrades, not crashes; +2 pure
+  `derive_signals` tests for the None-mover guard (`signals.py`).
+- **MED — "1Y" range button was `step="all"`** (`charts.py`): mislabeled — showed all data, not one year.
+  Now an actual 1-year backward step.
+- **LOW correctness/display**: PMI growth-pulse x-axis labeled month-START (`pmi_proxy.composite_index`
+  `to_timestamp(how="end")`); Risk & drawdown `DD days` was outside the Styler format (rendered `"None"` →
+  now `—`); Stress & danger used a fixed 3 columns leaving a gap when turbulence is absent (now sizes to
+  what's available); tearsheet caption flags the latest month/year as partial (MTD/YTD); FOMC panel nudges
+  to refresh the schedule once it's exhausted (post-2027); BLS YoY now allows a 0.0 year-ago for rate series
+  (was skipped by a truthiness check) while still guarding division for ratio series.
+- Deliberately NOT changed: `pmi_proxy._rolling_std` ddof=0 (kept — consistent with the percentile/z ddof=0
+  unification, documented, ~negligible effect). 14 refuted candidates needed no action.
+- 452 tests pass; Macro/Overview verified live (no stException).
+
 ### 2026-06-07 — Signal-validation backtest + close-the-loop honesty pass
 Asked the honest question after surfacing 9 analytics modules: **does any of it actually predict
 forward S&P returns?**

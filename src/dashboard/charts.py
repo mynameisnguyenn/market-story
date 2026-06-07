@@ -164,7 +164,7 @@ def line_fig(series, name: str):
             dict(count=1, label="1M", step="month", stepmode="backward"),
             dict(count=3, label="3M", step="month", stepmode="backward"),
             dict(count=6, label="6M", step="month", stepmode="backward"),
-            dict(step="all", label="1Y"),
+            dict(count=1, label="1Y", step="year", stepmode="backward"),
         ])),
     )
     return fig

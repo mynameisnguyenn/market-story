@@ -2,6 +2,20 @@
 from src import signals
 
 
+def test_derive_signals_skips_none_change_pct():
+    """A mover with a None change_pct must be skipped, not crash the f'{ch:+.2f}%' format."""
+    sigs = signals.derive_signals({
+        "movers": {"leaders": [{"name": "X", "change_pct": None}],
+                   "laggards": [{"name": "Y", "change_pct": None}]},
+        "stats": {},
+    })
+    assert all("Top mover" not in s["text"] and "Biggest drag" not in s["text"] for s in sigs)
+
+
+def test_derive_signals_missing_movers_is_safe():
+    assert isinstance(signals.derive_signals({"stats": {}}), list)   # no 'movers' key -> no crash
+
+
 def _brief(spx=None, hy_chg=None, hy_pct=None, y_chg=None, oil=None, copper=None, up=None, dn=None):
     mk = {"us_equities": [], "commodities": [], "rates": []}
     if spx is not None:

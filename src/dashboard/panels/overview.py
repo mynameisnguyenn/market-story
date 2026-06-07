@@ -112,16 +112,16 @@ def overview_tab(brief: dict, closes: dict) -> None:
     _thesis_hero(brief)
     signals_strip(brief)
     deltas_panel(brief)
-    movers = brief["movers"]
+    movers = brief.get("movers") or {}              # never crash the tab on an old/partial brief
     left, right = st.columns(2)
     with left:
         st.subheader("Leaders")
-        for m in movers["leaders"]:
+        for m in movers.get("leaders", []):
             st.markdown(f"**{m['name']}**  " + tone_span(formatting.fmt_pct(m["change_pct"]),
                         "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     with right:
         st.subheader("Laggards")
-        for m in movers["laggards"]:
+        for m in movers.get("laggards", []):
             st.markdown(f"**{m['name']}**  " + tone_span(formatting.fmt_pct(m["change_pct"]),
                         "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     st.divider()

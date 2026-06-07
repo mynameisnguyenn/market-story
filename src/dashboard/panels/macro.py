@@ -68,7 +68,8 @@ def _risk_drawdown_panel(closes: dict) -> None:
     frame = pd.DataFrame(rows)
     st.dataframe(
         frame.style.format({"1Y %": "{:+.1f}", "Max DD %": "{:.1f}", "Cur DD %": "{:.1f}",
-                            "Ulcer": "{:.1f}", "Sortino": "{:+.2f}", "Tail": "{:.2f}"}, na_rep="—")
+                            "DD days": "{:.0f}", "Ulcer": "{:.1f}", "Sortino": "{:+.2f}",
+                            "Tail": "{:.2f}"}, na_rep="—")
         .map(color_changes, subset=["1Y %", "Sortino"]),
         use_container_width=True, hide_index=True)
 
@@ -77,16 +78,19 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
     """Composite risk regime + Kritzman turbulence stress gauge (composite + regime_turbulence)."""
     dg = composite.evaluate(brief)
     ts = regime_turbulence.from_closes(closes)
-    cols = st.columns(3)
+    have_stress = bool(ts and ts.get("stress_pct") is not None)
+    cols = st.columns(3 if have_stress else 2)   # no empty gap when turbulence is unavailable
     # Count of firing risk-off conditions (NOT a competing 'regime' label — that's regime_panel above).
     cols[0].metric("Risk-off signals", f"{dg['score']} firing", delta_color="off")
-    if ts and ts.get("stress_pct") is not None:
-        cols[1].metric("Market stress", f"{ts['stress_pct'] * 100:.0f}th %ile",
-                       f"turbulence {ts['turbulence']:.1f}", delta_color="off")
+    idx = 1
+    if have_stress:
+        cols[idx].metric("Market stress", f"{ts['stress_pct'] * 100:.0f}th %ile",
+                         f"turbulence {ts['turbulence']:.1f}", delta_color="off")
+        idx += 1
     if dg.get("danger"):                                   # red delta = unmissable on a risk desk
-        cols[2].metric("Danger flag", "⚠ DANGER", delta="risk-off", delta_color="inverse")
+        cols[idx].metric("Danger flag", "⚠ DANGER", delta="risk-off", delta_color="inverse")
     else:
-        cols[2].metric("Danger flag", "clear", delta="calm", delta_color="off")
+        cols[idx].metric("Danger flag", "clear", delta="calm", delta_color="off")
     firing = [c["detail"] for c in dg.get("conditions", []) if c.get("on")]
     if firing:
         st.caption("Risk-off conditions firing: " + " · ".join(firing))
@@ -197,12 +201,13 @@ def macro_tab(brief: dict, closes: dict) -> None:
     regime_panel(brief)
     _stress_danger_panel(brief, closes)
     _risk_drawdown_panel(closes)
-    vol = brief.get("vol")
-    if vol:
-        tag = "rich — protection expensive vs realized" if vol["premium"] > 3 \
-            else "compressed — realized catching up to implied" if vol["premium"] < 0 else "normal"
-        st.caption(f"Vol risk premium: VIX {vol['vix']} vs {vol['realized_20d']} realized (20d) "
-                   f"= {vol['premium']:+.1f} pts ({tag}).")
+    vol = brief.get("vol") or {}
+    prem = vol.get("premium")
+    if prem is not None:
+        tag = "rich — protection expensive vs realized" if prem > 3 \
+            else "compressed — realized catching up to implied" if prem < 0 else "normal"
+        st.caption(f"Vol risk premium: VIX {vol.get('vix')} vs {vol.get('realized_20d')} realized (20d) "
+                   f"= {prem:+.1f} pts ({tag}).")
     if brief.get("extremes"):
         st.subheader("Cross-asset extremes")
         st.caption("Where key markets sit in their ~1y range")

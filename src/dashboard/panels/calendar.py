@@ -58,7 +58,9 @@ def _filings_section() -> None:
 def _fomc_section() -> None:
     """Countdown to the next FOMC rate decision — the single biggest scheduled macro risk event."""
     nf = calendar_data.next_fomc()
-    if not nf:
+    if not nf:                                   # schedule ran out — nudge to refresh the dates
+        st.caption("Next FOMC date unavailable — update `FOMC_DECISIONS` in `src/calendar_data.py` "
+                   "with the Fed's latest published calendar.")
         return
     d = nf["days"]
     when = "today" if d == 0 else "tomorrow" if d == 1 else f"in {d} days"

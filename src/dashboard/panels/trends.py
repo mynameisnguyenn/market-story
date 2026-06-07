@@ -136,6 +136,7 @@ def _tearsheet_panel(df) -> None:
             .map(color_changes, subset=_MONTHS + ["FY %"]),
             use_container_width=True)
         st.caption("Monthly total returns (%), green/red by sign; **FY %** compounds the year. "
+                   "The most recent month and year are partial (month-/year-to-date). "
                    "Built from the committed timeline's S&P series.")
 
 

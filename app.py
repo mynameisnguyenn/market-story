@@ -45,9 +45,10 @@ def daily_brief_page() -> None:
 
     header_left, header_right = st.columns([6, 2], vertical_alignment="center")
     header_left.title("Global Markets Brief")
-    header_right.caption(f"{brief['session_label']}  ·  generated {brief['generated_at_utc'][11:19]} UTC")
+    header_right.caption(f"{brief.get('session_label', '')}  ·  generated "
+                         f"{str(brief.get('generated_at_utc', ''))[11:19]} UTC")
 
-    stats = brief["stats"]
+    stats = brief.get("stats") or {}
     cols = st.columns(6)
     kpi_metric(cols[0], row_for(brief, "^GSPC"))
     kpi_metric(cols[1], row_for(brief, "^IXIC"))

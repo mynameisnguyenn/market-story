@@ -147,7 +147,7 @@ def composite_index(
             continue
         # Month-end resample without depending on the "M"/"ME" alias churn across pandas versions.
         m = m.groupby(m.index.to_period("M")).last()
-        m.index = m.index.to_timestamp()
+        m.index = m.index.to_timestamp(how="end")   # label each obs at month-END, not month-start
         _, d = to_diffusion_index(m, window)
         if d is None:
             continue

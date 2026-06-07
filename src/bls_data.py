@@ -91,9 +91,11 @@ def _snapshot(series_id: str, name: str, data: list) -> dict:
     yoy = None
     if len(obs) >= 13:
         year_ago = _to_float(obs[12].get("value"))
-        if latest is not None and year_ago:
-            yoy = (latest - year_ago) if series_id in RATE_SERIES \
-                else (latest / year_ago - 1.0) * 100.0
+        if latest is not None and year_ago is not None:
+            if series_id in RATE_SERIES:                 # rate diff: a 0.0 year-ago is valid
+                yoy = latest - year_ago
+            elif year_ago != 0:                          # ratio: still guard division by zero
+                yoy = (latest / year_ago - 1.0) * 100.0
     return {
         "id": series_id,
         "name": name,

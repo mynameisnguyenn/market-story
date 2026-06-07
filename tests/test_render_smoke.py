@@ -135,3 +135,27 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
     # (macro.jsonl is multi-MB and grows daily) — this is a correctness smoke test, not a perf one.
     at = AppTest.from_function(_render_all_tabs).run(timeout=30)
     assert not at.exception, at.exception
+
+
+def _render_overview_partial():
+    """Overview from a partial/old brief missing 'movers' + a mover with a None change_pct."""
+    import pandas as pd
+    import app
+    idx = pd.to_datetime(["2026-05-29", "2026-06-02"])
+    closes = {"^GSPC": pd.Series([100.0, 101.0], index=idx)}
+    brief = {"date": "2026-06-02",                       # no 'stats' / 'vol' / 'markets'
+             "movers": {"leaders": [{"name": "X", "change_pct": None}], "laggards": []}}
+    app.overview_tab(brief, closes)
+
+
+def test_overview_survives_partial_brief(monkeypatch, tmp_path):
+    """The nonce=0 fast-load serves whatever JSON is on disk with no schema check, so an old/partial
+    brief must DEGRADE, not crash (regressions for the brief['movers'] KeyError + None-mover format)."""
+    from src import config, history
+    monkeypatch.setattr(history, "DB_PATH", tmp_path / "h.db")
+    ndir = tmp_path / "narratives"
+    ndir.mkdir()
+    monkeypatch.setattr(config, "NARRATIVES_DIR", ndir)
+    from streamlit.testing.v1 import AppTest
+    at = AppTest.from_function(_render_overview_partial).run(timeout=20)
+    assert not at.exception, at.exception
