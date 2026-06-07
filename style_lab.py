@@ -14,7 +14,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-ACCENT = "#7beafb"   # keep in sync with styles.css --accent / app.LINE_COLOR
+ACCENT = "#7beafb"   # keep in sync with styles.css --accent / src/dashboard/charts.py LINE_COLOR
 
 
 def _css() -> str:
@@ -35,7 +35,7 @@ st.title("Market Story")
 st.markdown("_The headline above is the serif display face (Instrument Serif). "
             "Below: every component on one screen for fast tuning._")
 
-# "Today's read" hero card — mirrors signals_strip() in app.py
+# "Today's read" hero card — mirrors signals_strip() in src/dashboard/panels/overview.py
 st.markdown(
     f"""<div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {ACCENT};
     border-radius:10px;padding:16px 20px;margin:2px 0 14px;">

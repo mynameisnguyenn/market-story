@@ -106,7 +106,8 @@ streamlit run app.py     # open the dashboard
 
 ```
 run.py            entry point: gather -> brief
-app.py            streamlit dashboard
+app.py            streamlit entry: page config, CSS, navigation, tab wiring (thin)
+src/dashboard/    dashboard view layer: charts (pure builders) -> widgets/data -> panels/<tab>.py
 src/config.py     instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback)
 src/macro_data.py   FRED (keyless CSV or fredapi)

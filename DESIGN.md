@@ -22,8 +22,8 @@ one-line token change retunes everything.
 |---|---|---|
 | Stylesheet (type, cards, tabs, spacing) | `styles.css` | the main lever; `:root` tokens up top |
 | Theme (app bg, sidebar, text, primary) | `.streamlit/config.toml` `[theme]` | `primaryColor` drives tab underline + widgets |
-| Chart accent / gridlines | `app.py` `LINE_COLOR`, plotly `gridcolor`/`fillcolor` | keep in sync with `--accent` |
-| The "Today's read" hero card | `app.py` `signals_strip()` | inline HTML; uses `var(--surface)` etc. |
+| Chart accent / gridlines | `src/dashboard/charts.py` `LINE_COLOR`, plotly `gridcolor`/`fillcolor` | keep in sync with `--accent` |
+| The "Today's read" hero card | `src/dashboard/panels/overview.py` `signals_strip()` | inline HTML; uses `var(--surface)` etc. |
 | Knowledge-graph colors | `src/learn.py` `NODE_COLOR` / `CATEGORY_COLORS` | |
 
 ## Targeting Streamlit elements (stable selectors)

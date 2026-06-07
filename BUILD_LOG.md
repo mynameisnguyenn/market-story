@@ -54,6 +54,26 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 
 ## Log (newest first)
 
+### 2026-06-06 — The two deferred items, done (+ a bonus bug the live screenshot caught)
+After the feature work above shipped to `main`, did both previously-deferred items as isolated commits:
+- **Brief-accessor dedup** (`5912b5e`): `src/brief_access.py` (`market_row` / `macro_row` / `bls_row`) —
+  `composite`, `signals`, and the dashboard's `row_for` all reference the one definition now.
+- **Split `app.py` 1140 → 107 lines** into a `src/dashboard/` package: `charts.py` (pure builders,
+  no Streamlit, unit-tested) → `widgets.py` (st render wrappers) + `data.py` (cached loaders +
+  plumbing) → `panels/*.py` (one module per tab) → `app.py` (wiring + re-exports of the `app.X`
+  surface tests use). Every file now under the 500-line convention (largest `charts.py` = 249). The
+  two cross-tab figure builders became `charts.trend_fig` / `charts.level_fig` (public). Clean DAG,
+  no import cycles, cached loaders are shared objects so `app.get_*.clear()` still works.
+- **Bonus fix** (`04ededa`): the live screenshot caught the vol-premium inversion ALSO living in
+  `signals.derive_lead` (`signals.py:147`) — it drives the Overview's "Today's read" banner, the most
+  visible line on the landing page. "(hedges look cheap)" → "(protection rich)" for prem>3. Bug-fix
+  #3 had only covered app/composite/analytics; the hermetic tests can't see banner copy, the screenshot did.
+- **Verified**: 436 tests pass; live Playwright screenshots of all tabs render with no exception; and a
+  3-dimension adversarial-review workflow (reference-completeness · behavior-drift vs the pre-split
+  monolith in git · import/cache safety) found no high/medium issues — only stale doc pointers in
+  `DESIGN.md` / `style_lab.py` (fixed) and convention nits. **Dev/iteration loop note:** the live
+  screenshot pass remains essential — it catches UI-copy bugs (this one) that hermetic render-smoke can't.
+
 ### 2026-06-06 — Deep-review bug fixes + Wave 1 (polish) + Wave 2 (structure)
 Acted on the deep review (code/usability/UI). **3 accountability-integrity bug fixes** (`8864e21`)
 — they each made the dashboard *look* more trustworthy than it was:
@@ -84,15 +104,9 @@ then macro data — the risk-lens panels used to be split top-and-bottom. **Trim
 Sectors" flat table** on Equities (already shown as treemap + RRG + breadth). Verified via the local
 Playwright screenshot loop.
 
-**Deferred (with reasons), NOT done:**
-- **`_macro_row` dedup** — a trivial 4-line accessor duplicated across two *pure* modules
-  (`composite`, `signals`) with no behavioral divergence. Centralizing would couple independent
-  modules for ~zero gain. (Contrast the pct/z merge, which fixed a real ddof disagreement — worth it.)
-- **Split `app.py` (~1130 lines) into `src/panels/`** — a large mechanical refactor with real
-  import-cycle risk for a working, well-organized file. Staged plan when it's worth it: (1) extract
-  shared stylers/loaders/render helpers into `src/ui_common.py`; (2) move each `*_tab` into
-  `src/panels/<tab>.py` importing only from `ui_common` + `src/*`; (3) `app.py` becomes wiring only.
-  Do it as its own PR with render-smoke after each step — not bundled with feature work.
+**Deferred at the time (both DONE the same day — see the next entry):** the `_macro_row` dedup and
+the `app.py` split. Originally held back as over-engineering / refactor-risk; the user said "go ahead"
+so both were done as their own isolated, separately-verified commits after the feature work shipped.
 
 ### 2026-06-06 — Analytics surfacing batch 3 (library 8/9 surfaced)
 `statistical` → a "Trend" column (trending / mean-reverting / random) on the Macro Risk & drawdown table.
