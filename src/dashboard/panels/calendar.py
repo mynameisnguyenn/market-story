@@ -1,0 +1,103 @@
+"""Calendar tab — upcoming economic releases, smart-money 13F holdings, watchlist
+earnings dates, and recent SEC filings."""
+from __future__ import annotations
+
+import pandas as pd
+import streamlit as st
+
+from src import config, thirteenf
+from src.dashboard.data import get_13f, get_earnings, get_econ, get_filings
+
+
+def _earnings_section() -> None:
+    """Upcoming earnings for the watchlist + indices (button-triggered, cached)."""
+    st.subheader("Upcoming earnings — watchlist + US indices")
+    symbols = tuple(dict.fromkeys(s for s, _ in config.get_watchlist() + config.US_EQUITIES))
+    if st.button("Load / refresh earnings dates", key="load_earnings"):
+        st.session_state["earnings_rows"] = get_earnings(symbols)
+    rows = st.session_state.get("earnings_rows")
+    if rows is None:
+        st.caption("Click to pull next earnings dates via yfinance (cached 1h). "
+                   "Kept off the main load so the dashboard stays fast.")
+    elif not rows:
+        st.info("No upcoming earnings in the next 60 days, or the source is throttling — try again shortly.")
+    else:
+        frame = pd.DataFrame([
+            {"Date": r["date"], "In (days)": r["days"], "Ticker": r["symbol"], "Company": r["name"]}
+            for r in rows
+        ])
+        st.dataframe(frame, use_container_width=True, hide_index=True)
+        st.caption(f"{len(rows)} names · earliest first · via yfinance")
+
+
+def _filings_section() -> None:
+    """Recent SEC EDGAR filings for the watchlist (button-triggered, cached)."""
+    st.subheader("Recent SEC filings — watchlist")
+    wl = tuple(s for s, _ in config.get_watchlist())
+    if st.button("Load / refresh SEC filings", key="load_filings"):
+        st.session_state["filings_rows"] = get_filings(wl)
+    rows = st.session_state.get("filings_rows")
+    if rows is None:
+        st.caption("Click to pull recent 8-K / 10-Q / 10-K filings for your watchlist "
+                   "via SEC EDGAR (keyless, cached 6h).")
+    elif not rows:
+        st.info("No recent filings found, or SEC is rate-limiting — try again shortly.")
+    else:
+        frame = pd.DataFrame([
+            {"Date": r["date"], "Ticker": r["symbol"], "Form": r["form"],
+             "Description": r["desc"], "Filing": r["link"]}
+            for r in rows
+        ])
+        st.dataframe(
+            frame, use_container_width=True, hide_index=True,
+            column_config={"Filing": st.column_config.LinkColumn("Filing", display_text="open")},
+        )
+        st.caption(f"{len(rows)} filings · newest first · via SEC EDGAR")
+
+
+def _econ_section() -> None:
+    rows = get_econ()
+    if not rows:
+        return
+    st.subheader("Economic releases")
+    st.caption("The data the market trades around")
+    frame = pd.DataFrame([
+        {"Release": r["name"], "Date": r["date"],
+         "In": ("tomorrow ⚠️" if r["days"] == 1 else "today ⚠️" if r["days"] == 0 else f"{r['days']} days")}
+        for r in rows
+    ])
+    st.dataframe(frame, use_container_width=True, hide_index=True)
+
+
+def _13f_section() -> None:
+    st.subheader("Smart money (13F)")
+    st.caption("What prominent managers hold, and last quarter's flow")
+    st.caption("Quarterly SEC 13F-HR filings: **long US equities only**, ~45-day lag — positioning, not real-time.")
+    names = [n for n, _ in thirteenf.FUNDS]
+    choice = st.selectbox("Manager", names, key="f13_fund", label_visibility="collapsed")
+    data = get_13f(choice, dict(thirteenf.FUNDS)[choice])
+    if not data:
+        st.caption("No 13F available for that manager right now.")
+        return
+    st.caption(f"As of {data['date']} · {data['positions']} positions · ${data['total_value'] / 1e9:,.1f}B reported")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("_Top holdings_")
+        st.dataframe(pd.DataFrame([
+            {"Holding": h["issuer"], "$B": round(h["value"] / 1e9, 2), "%": round(h["pct"], 1)}
+            for h in data["top"]]), use_container_width=True, hide_index=True)
+    with c2:
+        st.markdown("_Last quarter's moves (vs prior 13F)_")
+        st.dataframe(pd.DataFrame([
+            {"Move": c["action"], "Holding": c["issuer"], "Δ $B": round(c["delta"] / 1e9, 2)}
+            for c in data["changes"]]), use_container_width=True, hide_index=True)
+
+
+def calendar_tab() -> None:
+    _econ_section()
+    st.divider()
+    _13f_section()
+    st.divider()
+    _earnings_section()
+    st.divider()
+    _filings_section()

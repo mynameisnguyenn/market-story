@@ -1,0 +1,128 @@
+"""Trends tab — the committed cross-asset metrics timeline as charts, a time machine,
+crisis-window replay, and signal Information Coefficient."""
+from __future__ import annotations
+
+import pandas as pd
+import streamlit as st
+
+from src import crisis, eras, signal_ic
+from src.dashboard.charts import _color_changes, trend_fig
+from src.dashboard.data import get_timeline_df
+
+TREND_METRICS = [
+    ("ust10", "10Y Treasury yield (%)"),
+    ("curve_2s10s", "2s10s curve (pp)"),
+    ("hy_oas", "HY credit spread (%)"),
+    ("vix", "VIX"),
+    ("spx_spec_net", "S&P lev-fund net (contracts)"),
+    ("vol_premium", "Vol risk premium (VIX − realized)"),
+]
+
+
+def _crisis_signal_panel(df) -> None:
+    """Crisis-window replay + signal Information Coefficient over the committed timeline."""
+    if df is None or df.empty or "spx" not in df.columns:
+        return
+    spx = pd.to_numeric(df["spx"], errors="coerce").dropna()
+    if len(spx) < 60:
+        return
+    spx_rets = spx.pct_change().dropna()
+    st.divider()
+    rep = [r for r in crisis.crisis_replay(spx_rets) if r.get("n_days")]
+    if rep:
+        st.subheader("Crisis replay — S&P through past stress windows")
+        st.caption("How the S&P behaved in each episode, from the committed timeline. Source: crisis.")
+        cr = pd.DataFrame([{
+            "Episode": r["name"],
+            "Return %": (r["return"] * 100) if r["return"] is not None else None,
+            "Max DD %": (r["max_drawdown"] * 100) if r["max_drawdown"] is not None else None,
+            "VaR95 %": (r["var95"] * 100) if r["var95"] is not None else None,
+            "ES95 %": (r["es95"] * 100) if r["es95"] is not None else None,
+        } for r in rep])
+        st.dataframe(cr.style.format({"Return %": "{:+.1f}", "Max DD %": "{:.1f}",
+                     "VaR95 %": "{:.2f}", "ES95 %": "{:.2f}"}, na_rep="—")
+                     .map(_color_changes, subset=["Return %"]),
+                     use_container_width=True, hide_index=True)
+    ic_rows = []
+    hy_oas_short = False
+    for label, col in [("2s10s curve", "curve_2s10s"), ("HY OAS", "hy_oas"), ("Vol premium", "vol_premium")]:
+        if col not in df.columns:
+            continue
+        sig = pd.to_numeric(df[col], errors="coerce")
+        ic = signal_ic.ic_by_horizon(sig, spx)
+        if any(v is not None for v in ic.values()):
+            n = int(sig.notna().sum())
+            if col == "hy_oas" and n < 252:                  # under ~1y of overlap — IC is noisy
+                hy_oas_short = True
+            ic_rows.append({"Signal": label, "IC 1d": ic.get(1), "IC 5d": ic.get(5),
+                            "IC 21d": ic.get(21), "n": n})
+    if ic_rows:
+        st.subheader("Signal edge — Information Coefficient")
+        st.caption("Rank correlation of each signal with forward S&P returns over the timeline — does it "
+                   "actually predict direction? `n` = overlapping observations. Source: signal_ic.")
+        st.dataframe(pd.DataFrame(ic_rows).style.format(
+            {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}", "n": "{:,d}"}, na_rep="—")
+            .map(_color_changes, subset=["IC 1d", "IC 5d", "IC 21d"]),
+            use_container_width=True, hide_index=True)
+        if hy_oas_short:
+            st.caption("⚠ HY OAS history is FRED-license-limited to a ~3y trailing window, so its IC "
+                       "rests on a smaller sample than the others — read it as indicative, not settled.")
+
+
+def _time_machine(df) -> None:
+    """Pick a historical date -> the era it falls in + each metric's level and percentile
+    AS OF that date (vs its own history up to then)."""
+    st.divider()
+    st.subheader("🕰 Time machine")
+    st.caption("Pick a date to see where markets stood, and which era it was")
+    dmin, dmax = df.index[0].date(), df.index[-1].date()
+    picked = st.date_input("As of", value=dmax, min_value=dmin, max_value=dmax, key="timemachine")
+    upto = df[df.index <= pd.Timestamp(picked)]
+    if upto.empty:
+        st.caption("No data on or before that date.")
+        return
+    as_of = upto.index[-1]
+    era = eras.era_for(as_of.date().isoformat())
+    if era:
+        st.markdown(f"**{as_of.date()} — {era['name']}**  ·  _{era['regime']}_. {era['blurb']}  \n"
+                    f"Fed: {era['fed']}")
+    snap = []
+    for col, label in TREND_METRICS:
+        if col not in upto.columns:
+            continue
+        series = upto[col].dropna()
+        if len(series) < 5:
+            continue
+        val = float(series.iloc[-1])
+        pct = round(float((series < val).mean()) * 100)
+        snap.append({"Metric": label, "As-of value": round(val, 2),
+                     "%ile (history to date)": pct})
+    if snap:
+        st.dataframe(pd.DataFrame(snap), use_container_width=True, hide_index=True)
+
+
+def trends_tab() -> None:
+    """Where the cross-asset anchors have been — the committed metrics timeline as charts."""
+    df = get_timeline_df()
+    if df.empty or len(df) < 5 or not isinstance(df.index, pd.DatetimeIndex):
+        st.info("The metrics timeline is still accumulating — trend charts appear once a few "
+                "sessions exist. Seed ~3 years of real history with `python -m src.backfill`.")
+        return
+    st.caption(f"{len(df)} sessions · {df.index[0].date()} → {df.index[-1].date()} — each anchor's "
+               "path, with today's percentile over the whole window. Faint red = crisis eras "
+               "(dotcom · GFC · Euro debt · COVID · the 2022 inflation shock).")
+    cols = st.columns(2)
+    for i, (col, title) in enumerate(TREND_METRICS):
+        if col not in df.columns:
+            continue
+        series = df[col].dropna()
+        if len(series) < 5:                        # skip a thinly-populated metric (no n=1 charts)
+            continue
+        with cols[i % 2]:
+            latest = float(series.iloc[-1])
+            pct = round(float((series < latest).mean()) * 100)
+            st.markdown(f"**{title}** — {latest:,.2f}  ·  {pct}th %ile of {len(series)} sessions")
+            st.plotly_chart(trend_fig(series), use_container_width=True,
+                            theme="streamlit", key=f"trend_{col}")
+    _time_machine(df)
+    _crisis_signal_panel(df)
