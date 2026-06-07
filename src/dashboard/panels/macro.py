@@ -90,6 +90,9 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
     firing = [c["detail"] for c in dg.get("conditions", []) if c.get("on")]
     if firing:
         st.caption("Risk-off conditions firing: " + " · ".join(firing))
+    st.caption("Market stress is **descriptive, not predictive**: it measures how unusual today's "
+               "cross-asset moves are vs their own history — a thermometer, not a forecast. The 28-year "
+               "backtest found turbulence has no edge on forward S&P returns (`research/signal-validation.md`).")
     st.divider()
 
 

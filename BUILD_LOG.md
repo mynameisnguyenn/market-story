@@ -56,6 +56,30 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 
 ## Log (newest first)
 
+### 2026-06-07 — Signal-validation backtest + close-the-loop honesty pass
+Asked the honest question after surfacing 9 analytics modules: **does any of it actually predict
+forward S&P returns?**
+- **`src/backtest.py`** (+8 tests) — the certified engine: strictly-future returns (no lookahead),
+  moving-block-bootstrap CIs (overlapping forward windows make naive t-stats lie), level-vs-change,
+  sub-period stability. Tests pin the guards (perfect predictor → significant; pure noise → not).
+- **`research/signal-validation.md`** + **`research/signal_battery.py`** — the study: every dashboard
+  signal over the 28-yr committed timeline, independently reproduced + adversarially refuted by a
+  4-agent workflow (all four confirmed). **Verdict: only VIX *level* has a robust, regime-stable,
+  economically-meaningful edge** (buy-fear; positive in all 6 regimes; survives dropping GFC+COVID).
+  The 10Y-yield relationship is real but regime-conditional (sign *flipped* +0.32 in the 2022 inflation
+  shock). Gold/HY/IG "edges" are artifacts (non-stationary trend / 3-yr backfilled single regime —
+  change-form null). The 2s10s curve, dollar, positioning, vol premium, and the **Kritzman turbulence +
+  "Market stress" gauge are non-predictive (descriptive, not alpha)**. 16/48 level tests significant vs
+  ~2.4 by chance — only VIX survives the deeper tests.
+- **Close-the-loop honesty pass** — made the dashboard tell that truth: the Signal-IC panel (Trends) now
+  carries an **"Edge (28y test)"** column (VIX ✓ robust / 2s10s ✗ / HY OAS ⚠ short-sample / vol-premium ✗)
+  and includes VIX level; the Stress & danger panel (Macro) now states the turbulence gauge is
+  **descriptive, not predictive** ("a thermometer, not a forecast"). Both link `research/signal-validation.md`.
+- Did NOT backfill historical narratives/predictions — that would be hindsight fabrication (the exact
+  lookahead the backtest eliminates) and would poison the ledger. The numerical/era context already spans
+  every day to 1998 (timeline + eras + Time Machine); the *written* record stays a genuine forward log.
+- 449 tests pass; both UI changes verified live via the screenshot loop.
+
 ### 2026-06-06 — Finished the feature slate (analytics 9/9, FOMC, tearsheet) + flagged cleanup
 Knocked out the remaining backlog:
 - **`pmi_proxy` surfaced** (`43213e3`) — the 9th and last analytics module. Added `composite_index`

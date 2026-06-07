@@ -26,6 +26,16 @@ TREND_METRICS = [
 ]
 
 
+# Verdicts from the full 28-year block-bootstrap backtest (research/signal-validation.md): which of
+# these signals actually have a robust forward-return edge, vs. which are descriptive context.
+_SIGNAL_VERDICTS = {
+    "vix": "✓ robust (buy-fear)",
+    "curve_2s10s": "✗ no edge",
+    "hy_oas": "⚠ short sample",
+    "vol_premium": "✗ no edge",
+}
+
+
 def _crisis_signal_panel(df) -> None:
     """Crisis-window replay + signal Information Coefficient over the committed timeline."""
     if df is None or df.empty or "spx" not in df.columns:
@@ -52,7 +62,8 @@ def _crisis_signal_panel(df) -> None:
                      use_container_width=True, hide_index=True)
     ic_rows = []
     hy_oas_short = False
-    for label, col in [("2s10s curve", "curve_2s10s"), ("HY OAS", "hy_oas"), ("Vol premium", "vol_premium")]:
+    for label, col in [("VIX level", "vix"), ("2s10s curve", "curve_2s10s"),
+                       ("HY OAS", "hy_oas"), ("Vol premium", "vol_premium")]:
         if col not in df.columns:
             continue
         sig = pd.to_numeric(df[col], errors="coerce")
@@ -62,11 +73,16 @@ def _crisis_signal_panel(df) -> None:
             if col == "hy_oas" and n < 252:                  # under ~1y of overlap — IC is noisy
                 hy_oas_short = True
             ic_rows.append({"Signal": label, "IC 1d": ic.get(1), "IC 5d": ic.get(5),
-                            "IC 21d": ic.get(21), "n": n})
+                            "IC 21d": ic.get(21), "n": n,
+                            "Edge (28y test)": _SIGNAL_VERDICTS.get(col, "—")})
     if ic_rows:
         st.subheader("Signal edge — Information Coefficient")
-        st.caption("Rank correlation of each signal with forward S&P returns over the timeline — does it "
-                   "actually predict direction? `n` = overlapping observations. Source: signal_ic.")
+        st.caption("Live rank correlation of each signal with forward S&P returns. The **Edge** column "
+                   "is the verdict from the full 28-year block-bootstrap backtest "
+                   "(`research/signal-validation.md`): only **VIX level** shows a robust, regime-stable "
+                   "edge (high fear → higher forward returns); the 2s10s curve and vol premium don't "
+                   "predict; HY OAS rests on a ~3y sample. Read the live IC against that verdict, not on "
+                   "its own. `n` = overlapping observations. Source: signal_ic.")
         st.dataframe(pd.DataFrame(ic_rows).style.format(
             {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}", "n": "{:,d}"}, na_rep="—")
             .map(color_changes, subset=["IC 1d", "IC 5d", "IC 21d"]),
