@@ -5,7 +5,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.pmi_proxy import to_diffusion_index, composite_pmi
+from src.pmi_proxy import composite_index, to_diffusion_index, composite_pmi
+
+
+def _monthly(n: int, trend: float, seed: int) -> pd.Series:
+    """Strictly-positive monthly level series with drift (a daily walk resampled by callers)."""
+    rng = np.random.default_rng(seed)
+    rets = rng.normal(loc=trend, scale=0.01, size=n)
+    prices = 100.0 * np.exp(np.cumsum(rets))
+    return pd.Series(prices, index=pd.date_range("2018-01-01", periods=n, freq="MS"))
 
 
 # ---------------------------------------------------------------------------
@@ -199,3 +207,39 @@ def test_contraction_composite_mean_below_50():
     _, r2 = to_diffusion_index(s2, window=12)
     assert r1 is not None and r2 is not None
     assert float(r1.mean()) < 50.0 and float(r2.mean()) < 50.0
+
+
+# ---------------------------------------------------------------------------
+# composite_index — the charted diffusion SERIES (with sign-aware inversion)
+# ---------------------------------------------------------------------------
+
+def test_composite_index_returns_bounded_series():
+    a, b = _monthly(60, 0.004, 70), _monthly(60, 0.004, 71)
+    latest, comp = composite_index({"A": a, "B": b}, window=12)
+    assert isinstance(latest, float) and isinstance(comp, pd.Series)
+    assert (comp >= 0).all() and (comp <= 100).all() and 0.0 <= latest <= 100.0
+
+
+def test_composite_index_inverts_bad_when_rising():
+    """A strongly RISING series reads as expansion normally, but as contraction when inverted
+    (the jobless-claims case) — reflected around 50."""
+    rising = _monthly(60, 0.02, 72)             # persistent uptrend
+    up, _ = composite_index({"x": rising}, window=12)
+    down, _ = composite_index({"x": rising}, invert={"x"}, window=12)
+    assert up is not None and down is not None
+    assert up > 50.0 and down < 50.0
+    assert down == pytest.approx(100.0 - up, abs=1e-9)   # exact reflection
+
+
+def test_composite_index_aligns_mixed_frequencies():
+    """A weekly series and a monthly series both resample to month-end and align."""
+    weekly = pd.Series(100.0 + np.arange(160) * 0.5,
+                       index=pd.date_range("2018-01-01", periods=160, freq="W"))
+    monthly = _monthly(40, 0.003, 73)
+    latest, comp = composite_index({"wk": weekly, "mo": monthly}, window=12)
+    assert latest is not None and comp is not None and not comp.empty
+
+
+def test_composite_index_empty_returns_none():
+    assert composite_index({}) == (None, None)
+    assert composite_index({"a": None, "b": pd.Series([1.0])}) == (None, None)

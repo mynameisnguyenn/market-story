@@ -121,3 +121,41 @@ def composite_pmi(
     ws_arr = np.array(ws, dtype=float)
     ws_arr /= ws_arr.sum()                     # renormalise to 1
     return float(np.dot(ws_arr, values))
+
+
+def composite_index(
+    series_by_name: dict[str, pd.Series],
+    invert: set[str] | None = None,
+    window: int = 12,
+) -> tuple[float | None, pd.Series | None]:
+    """A composite PMI-proxy diffusion SERIES (not just the latest scalar) from a basket of
+    level series — for charting the growth pulse over time.
+
+    Each input is resampled to month-end (last obs in month, so weekly + monthly series align),
+    converted to a diffusion index, and — for the 'bad-when-rising' members named in `invert`
+    (e.g. jobless claims) — reflected around 50 (d -> 100 - d) so rising = contraction. The
+    component diffusion series are then inner-joined on their common months and averaged.
+    Returns (latest, composite_series) or (None, None) when nothing usable remains.
+    """
+    invert = invert or set()
+    diffs: dict[str, pd.Series] = {}
+    for name, s in series_by_name.items():
+        if s is None or not isinstance(s, pd.Series) or s.empty:
+            continue
+        m = s.dropna()
+        if not isinstance(m.index, pd.DatetimeIndex):
+            continue
+        # Month-end resample without depending on the "M"/"ME" alias churn across pandas versions.
+        m = m.groupby(m.index.to_period("M")).last()
+        m.index = m.index.to_timestamp()
+        _, d = to_diffusion_index(m, window)
+        if d is None:
+            continue
+        diffs[name] = (100.0 - d) if name in invert else d
+    if not diffs:
+        return None, None
+    frame = pd.DataFrame(diffs).dropna()
+    if frame.empty:
+        return None, None
+    comp = frame.mean(axis=1)
+    return float(comp.iloc[-1]), comp
