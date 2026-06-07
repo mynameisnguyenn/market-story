@@ -144,7 +144,7 @@ def derive_lead(brief: dict) -> dict | None:
     prem = (brief.get("vol") or {}).get("premium")
     if prem is not None:
         bits.append(f"vol premium {prem:+.1f}"
-                    + (" (hedges look cheap)" if prem > 3 else " (vol bid)" if prem < 0 else ""))
+                    + (" (protection rich)" if prem > 3 else " (realized > implied)" if prem < 0 else ""))
     if (brief.get("stock_bond") or {}).get("flipped"):
         bits.append("stock-bond corr flipped — bond hedge unreliable")
     if hy_pct is not None and hy_pct <= 10:
