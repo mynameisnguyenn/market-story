@@ -41,18 +41,43 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## In progress / pending
-- **Analytics library surfaced (8/9):** `riskmetrics` ✅ (Macro: Risk & drawdown + a Trend col from
-  `statistical`), `regime_turbulence` + `composite` ✅ (Macro: Stress & danger), `rotation` ✅ (Equities: RRG),
-  `breadth` ✅ (Equities: internals), `crisis` + `signal_ic` ✅ (Trends: crisis replay + Signal IC).
-  **Still to surface:** `pmi_proxy` — needs proper ISM-proxy FRED series we don't fetch yet → Tier-3 / research.
-- **Tier-3 external data** (need new sources + reliability caveats, not pure): options/GEX, CME FedWatch +
-  FOMC countdown, econ-calendar consensus/surprise.
-- **Tier-4 UX:** quantstats-style tearsheet polish.
-- **Make the hosted app public** (user action, Streamlit Cloud Sharing).
+- **Analytics library surfaced (9/9 — COMPLETE):** `riskmetrics` ✅ (Macro: Risk & drawdown + a Trend col
+  from `statistical`), `regime_turbulence` + `composite` ✅ (Macro: Stress & danger), `rotation` ✅ (Equities:
+  RRG), `breadth` ✅ (Equities: internals), `crisis` + `signal_ic` ✅ (Trends: crisis replay + Signal IC),
+  `pmi_proxy` ✅ (Macro: Growth pulse — diffusion of INDPRO + payrolls + inverted claims, no new feed).
+- **Tier-3 external data:** `FOMC countdown` ✅ (Calendar, static Fed schedule). **Deliberately NOT built —
+  no reliable free source + against CLAUDE.md scope discipline:** CME FedWatch rate-cut probabilities (needs
+  Fed-funds-futures strip / CME data), options/GEX (needs full chains; "no options" rule), econ-calendar
+  consensus/surprise (no free consensus feed). Revisit only if a clean data source appears.
+- **Tier-4 UX:** quantstats-style S&P tearsheet ✅ (Trends). Further tearsheet polish optional.
+- **Make the hosted app public** (user action, Streamlit Cloud Sharing) — still the one open user action.
 
 ---
 
 ## Log (newest first)
+
+### 2026-06-06 — Finished the feature slate (analytics 9/9, FOMC, tearsheet) + flagged cleanup
+Knocked out the remaining backlog:
+- **`pmi_proxy` surfaced** (`43213e3`) — the 9th and last analytics module. Added `composite_index`
+  (`fa8b1bc`): a sign-aware, frequency-aligned diffusion SERIES (not just the scalar `composite_pmi`).
+  Macro tab "Growth pulse" = momentum of INDPRO + payrolls + (inverted) initial claims, each normalized
+  by its own 12-mo vol → 0-100 (>50 accelerating). Built from the committed FRED archive — **no new feed**.
+  A free-data ISM analog (ISM's own PMI is license-restricted off FRED). The analytics library is now 9/9.
+- **FOMC countdown** (`286608d`) — Calendar tab leads with the next FOMC rate-decision day. Static schedule
+  (`calendar_data.FOMC_DECISIONS`, from the Fed's published calendar, verified 2026-06; refresh annually),
+  so no fragile runtime feed. `next_fomc(today)` + test.
+- **quantstats-style S&P tearsheet** (`43213e3`) — Trends tab: CAGR / vol / Sharpe / Sortino / Calmar /
+  max-DD + a year×month return matrix (green/red, FY% compounding), from the committed timeline + riskmetrics.
+- **Cleanup** (`43213e3`) — promoted the 3 cross-module dashboard helpers the adversarial review flagged
+  (`color_changes`, `tone_span`, `TONE_HEX`) to public names.
+- **Verified the daily-narrate remote routine is healthy** — `trig_01Acbc…`, cron `45 12 * * 1-5`, enabled,
+  last fired 2026-06-05 12:45 UTC, next Mon 2026-06-08. (No code; status check via the routines API.)
+- 441 tests pass; PMI/tearsheet/FOMC all verified live via the screenshot loop (none are exercised with real
+  data by the hermetic render-smoke — their synthetic fixtures lack INDPRO/PAYEMS/ICSA and `spx`).
+
+**Deliberately NOT built (with reasons):** CME FedWatch probabilities, options/GEX, econ-calendar
+consensus/surprise — each needs a paid/scraped/proprietary source and runs against the scope-discipline rule;
+shipping fragile scrapers would erode the daily read. Documented in the pending section for if a source appears.
 
 ### 2026-06-06 — The two deferred items, done (+ a bonus bug the live screenshot caught)
 After the feature work above shipped to `main`, did both previously-deferred items as isolated commits:
