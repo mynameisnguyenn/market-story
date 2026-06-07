@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src import config, thirteenf
+from src import calendar_data, config, thirteenf
 from src.dashboard.data import get_13f, get_earnings, get_econ, get_filings
 
 
@@ -55,6 +55,20 @@ def _filings_section() -> None:
         st.caption(f"{len(rows)} filings · newest first · via SEC EDGAR")
 
 
+def _fomc_section() -> None:
+    """Countdown to the next FOMC rate decision — the single biggest scheduled macro risk event."""
+    nf = calendar_data.next_fomc()
+    if not nf:
+        return
+    d = nf["days"]
+    when = "today" if d == 0 else "tomorrow" if d == 1 else f"in {d} days"
+    st.subheader("Next FOMC decision")
+    st.metric(nf["date"], when, delta="rate decision + statement", delta_color="off")
+    st.caption("Statement ~2:00pm ET; quarterly meetings add the Summary of Economic Projections + a "
+               "press conference. Schedule from federalreserve.gov, verified 2026-06. Source: Federal Reserve.")
+    st.divider()
+
+
 def _econ_section() -> None:
     rows = get_econ()
     if not rows:
@@ -94,6 +108,7 @@ def _13f_section() -> None:
 
 
 def calendar_tab() -> None:
+    _fomc_section()
     _econ_section()
     st.divider()
     _13f_section()

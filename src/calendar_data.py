@@ -21,6 +21,27 @@ ECON_RELEASES = [(50, "Jobs report (payrolls)"), (10, "CPI"),
                  (21, "PCE / personal income"), (53, "GDP")]
 _RELEASE_DATES_URL = "https://api.stlouisfed.org/fred/release/dates"
 
+# FOMC rate-decision days (the second/last day of each meeting, when the statement is released),
+# from the Fed's published calendar (federalreserve.gov/monetarypolicy/fomccalendars.htm).
+# Static, no runtime feed — verified 2026-06; refresh annually when the Fed posts the next year.
+FOMC_DECISIONS = [
+    "2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29",
+    "2026-09-16", "2026-10-28", "2026-12-09",
+    "2027-01-27", "2027-03-17", "2027-04-28", "2027-06-09", "2027-07-28",
+    "2027-09-15", "2027-10-27", "2027-12-08",
+]
+
+
+def next_fomc(today: date | None = None) -> dict | None:
+    """The next FOMC rate-decision day on/after `today`: {date, days}. None once the schedule
+    runs out (a nudge to refresh FOMC_DECISIONS)."""
+    today = today or date.today()
+    for d in FOMC_DECISIONS:
+        dd = date.fromisoformat(d)
+        if dd >= today:
+            return {"date": d, "days": (dd - today).days}
+    return None
+
 
 def _next_earnings_date(symbol: str) -> date | None:
     """Earliest upcoming earnings date for a symbol, or None."""

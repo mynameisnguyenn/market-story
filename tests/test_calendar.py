@@ -21,6 +21,13 @@ def test_fetch_econ_releases_no_key(monkeypatch):
     assert calendar_data.fetch_econ_releases() == []
 
 
+def test_next_fomc_picks_first_on_or_after():
+    assert calendar_data.next_fomc(date(2026, 6, 1)) == {"date": "2026-06-17", "days": 16}
+    assert calendar_data.next_fomc(date(2026, 6, 17)) == {"date": "2026-06-17", "days": 0}  # on the day
+    assert calendar_data.next_fomc(date(2026, 6, 18))["date"] == "2026-07-29"               # rolls forward
+    assert calendar_data.next_fomc(date(2099, 1, 1)) is None                                # schedule exhausted
+
+
 class _FakeTicker:
     def __init__(self, cal):
         self._cal = cal
