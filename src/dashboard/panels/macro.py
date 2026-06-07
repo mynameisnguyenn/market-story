@@ -5,13 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src import (bls_data, composite, config, eia_data, regime, regime_turbulence,
+from src import (bls_data, composite, config, eia_data, pmi_proxy, regime, regime_turbulence,
                  riskmetrics, statistical)
-from src.dashboard.charts import (_color_changes, bls_styler, correlation_fig, energy_styler,
+from src.dashboard.charts import (color_changes, bls_styler, correlation_fig, energy_styler,
                                   extremes_styler, level_fig, macro_styler, positioning_styler,
                                   yield_curve_fig)
 from src.dashboard.data import get_bls_history, get_energy_history, get_fred_history
-from src.dashboard.widgets import _tone_span, render_line, render_table
+from src.dashboard.widgets import tone_span, render_line, render_table
 
 # Curated cross-asset set for the correlation matrix (all in config.all_symbols()).
 CORR_INSTRUMENTS = [
@@ -34,7 +34,7 @@ def regime_panel(brief: dict) -> None:
     cols = st.columns(len(signals))
     for col, s in zip(cols, signals):
         col.caption(s["label"])
-        col.markdown(_tone_span(s["reading"], tone_map.get(s["tone"], "neutral")), unsafe_allow_html=True)
+        col.markdown(tone_span(s["reading"], tone_map.get(s["tone"], "neutral")), unsafe_allow_html=True)
     st.divider()
 
 
@@ -69,7 +69,7 @@ def _risk_drawdown_panel(closes: dict) -> None:
     st.dataframe(
         frame.style.format({"1Y %": "{:+.1f}", "Max DD %": "{:.1f}", "Cur DD %": "{:.1f}",
                             "Ulcer": "{:.1f}", "Sortino": "{:+.2f}", "Tail": "{:.2f}"}, na_rep="—")
-        .map(_color_changes, subset=["1Y %", "Sortino"]),
+        .map(color_changes, subset=["1Y %", "Sortino"]),
         use_container_width=True, hide_index=True)
 
 
@@ -90,6 +90,43 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
     firing = [c["detail"] for c in dg.get("conditions", []) if c.get("on")]
     if firing:
         st.caption("Risk-off conditions firing: " + " · ".join(firing))
+    st.divider()
+
+
+def _archive_series(fred_rows: list[dict], sid: str):
+    """A FRED series from the committed macro archive as a date-indexed pd.Series, or None."""
+    obs = sorted((r["date"], r["value"]) for r in fred_rows if r.get("series") == sid)
+    if len(obs) < 13:
+        return None
+    return pd.Series([v for _, v in obs], index=pd.to_datetime([d for d, _ in obs]))
+
+
+def _growth_pulse_panel() -> None:
+    """PMI-like real-activity diffusion proxy (pmi_proxy) from the committed FRED archive —
+    industrial production + payrolls + (inverted) jobless claims, no new external feed."""
+    rows = get_fred_history()
+    if not rows:
+        return
+    comps = {}
+    for sid, label in [("INDPRO", "Industrial production"), ("PAYEMS", "Payrolls"),
+                       ("ICSA", "Initial claims")]:
+        s = _archive_series(rows, sid)
+        if s is not None:
+            comps[label] = s
+    latest, series = pmi_proxy.composite_index(comps, invert={"Initial claims"})
+    if latest is None or series is None or len(series) < 6:
+        return
+    st.subheader("Growth pulse — real-activity diffusion (PMI proxy)")
+    st.metric("Diffusion index", f"{latest:.1f}",
+              f"{'expansion' if latest >= 50 else 'contraction'} ({latest - 50:+.1f} vs 50)",
+              delta_color="normal" if latest >= 50 else "inverse")
+    fig = level_fig(series)
+    fig.add_hline(y=50, line=dict(color="#7beafb", width=1, dash="dot"), opacity=0.4)
+    st.plotly_chart(fig, use_container_width=True, theme="streamlit", key="pmi_pulse")
+    st.caption("Momentum of industrial production + payrolls + (inverted) initial claims, each "
+               "normalized by its own 12-month volatility and mapped to a 0–100 diffusion scale: "
+               ">50 = real activity accelerating, <50 = decelerating. A free-data ISM-PMI analog "
+               "(ISM's own index is license-restricted off FRED), not the official print. Source: pmi_proxy.")
     st.divider()
 
 
@@ -196,7 +233,8 @@ def macro_tab(brief: dict, closes: dict) -> None:
     with col4:
         render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
     st.divider()
-    # --- Macro & data: FRED, BLS, energy, positioning (with their deep-history expanders) ---
+    # --- Macro & data: growth pulse, FRED, BLS, energy, positioning (+ deep-history expanders) ---
+    _growth_pulse_panel()
     st.subheader("Macro (FRED)")
     if brief.get("macro"):
         st.dataframe(macro_styler(brief["macro"]), use_container_width=True, hide_index=True)

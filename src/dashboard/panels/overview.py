@@ -8,7 +8,7 @@ import streamlit as st
 
 from src import brief as brief_mod
 from src import eras, formatting, history, signals
-from src.dashboard.widgets import _TONE_HEX, _tone_span, render_line
+from src.dashboard.widgets import TONE_HEX, tone_span, render_line
 
 
 def signals_strip(brief: dict) -> None:
@@ -18,7 +18,7 @@ def signals_strip(brief: dict) -> None:
     if not lead and not sigs:
         return
     if lead:
-        color = _TONE_HEX.get(lead["tone"], "#7beafb")
+        color = TONE_HEX.get(lead["tone"], "#7beafb")
         st.markdown(
             f"""<div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {color};
             border-radius:10px;padding:16px 20px;margin:2px 0 12px;">
@@ -33,7 +33,7 @@ def signals_strip(brief: dict) -> None:
         st.subheader("⚡ Today's signal")
         cols = st.columns(2)
         for i, s in enumerate(sigs):
-            cols[i % 2].markdown(_tone_span("●", s["tone"]) + "  " + html.escape(s["text"]),
+            cols[i % 2].markdown(tone_span("●", s["tone"]) + "  " + html.escape(s["text"]),
                                  unsafe_allow_html=True)
     era = eras.era_for(brief.get("date", ""))
     if era:
@@ -117,12 +117,12 @@ def overview_tab(brief: dict, closes: dict) -> None:
     with left:
         st.subheader("Leaders")
         for m in movers["leaders"]:
-            st.markdown(f"**{m['name']}**  " + _tone_span(formatting.fmt_pct(m["change_pct"]),
+            st.markdown(f"**{m['name']}**  " + tone_span(formatting.fmt_pct(m["change_pct"]),
                         "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     with right:
         st.subheader("Laggards")
         for m in movers["laggards"]:
-            st.markdown(f"**{m['name']}**  " + _tone_span(formatting.fmt_pct(m["change_pct"]),
+            st.markdown(f"**{m['name']}**  " + tone_span(formatting.fmt_pct(m["change_pct"]),
                         "up" if (m.get("change_pct") or 0) >= 0 else "down"), unsafe_allow_html=True)
     st.divider()
     st.subheader("S&P 500")

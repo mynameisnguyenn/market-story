@@ -12,13 +12,13 @@ from src.dashboard.charts import line_fig, section_styler, sector_treemap_fig
 
 # One semantic palette for every up/down/warn/neutral cue (charts, dots, badges) — sourced
 # from formatting so tables and signals share the exact same green/red. Mirrors styles.css.
-_TONE_HEX = {"up": formatting.GREEN, "down": formatting.RED, "warn": "#F5A623", "neutral": formatting.NEUTRAL}
+TONE_HEX = {"up": formatting.GREEN, "down": formatting.RED, "warn": "#F5A623", "neutral": formatting.NEUTRAL}
 
 
-def _tone_span(text: str, tone: str) -> str:
+def tone_span(text: str, tone: str) -> str:
     """Inline HTML span colored by the shared semantic token (replaces Streamlit's :green[]/:red[],
     which use a different theme green/red and broke palette consistency)."""
-    return f"<span style=\"color:{_TONE_HEX.get(tone, 'inherit')}\">{text}</span>"
+    return f"<span style=\"color:{TONE_HEX.get(tone, 'inherit')}\">{text}</span>"
 
 
 def kpi_metric(col, row: dict | None, kind: str = "equity") -> None:

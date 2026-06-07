@@ -2,12 +2,19 @@
 crisis-window replay, and signal Information Coefficient."""
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
-from src import crisis, eras, signal_ic
-from src.dashboard.charts import _color_changes, trend_fig
+from src import crisis, eras, riskmetrics, signal_ic
+from src.dashboard.charts import color_changes, trend_fig
 from src.dashboard.data import get_timeline_df
+
+_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def _fmt2(x) -> str:
+    return f"{x:.2f}" if x is not None else "—"
 
 TREND_METRICS = [
     ("ust10", "10Y Treasury yield (%)"),
@@ -41,7 +48,7 @@ def _crisis_signal_panel(df) -> None:
         } for r in rep])
         st.dataframe(cr.style.format({"Return %": "{:+.1f}", "Max DD %": "{:.1f}",
                      "VaR95 %": "{:.2f}", "ES95 %": "{:.2f}"}, na_rep="—")
-                     .map(_color_changes, subset=["Return %"]),
+                     .map(color_changes, subset=["Return %"]),
                      use_container_width=True, hide_index=True)
     ic_rows = []
     hy_oas_short = False
@@ -62,11 +69,58 @@ def _crisis_signal_panel(df) -> None:
                    "actually predict direction? `n` = overlapping observations. Source: signal_ic.")
         st.dataframe(pd.DataFrame(ic_rows).style.format(
             {"IC 1d": "{:+.3f}", "IC 5d": "{:+.3f}", "IC 21d": "{:+.3f}", "n": "{:,d}"}, na_rep="—")
-            .map(_color_changes, subset=["IC 1d", "IC 5d", "IC 21d"]),
+            .map(color_changes, subset=["IC 1d", "IC 5d", "IC 21d"]),
             use_container_width=True, hide_index=True)
         if hy_oas_short:
             st.caption("⚠ HY OAS history is FRED-license-limited to a ~3y trailing window, so its IC "
                        "rests on a smaller sample than the others — read it as indicative, not settled.")
+
+
+def _tearsheet_panel(df) -> None:
+    """quantstats-style tearsheet for the S&P over the full committed timeline: risk-adjusted
+    headline metrics + a year × month return table, all from riskmetrics (no new data)."""
+    if df is None or df.empty or "spx" not in df.columns:
+        return
+    spx = pd.to_numeric(df["spx"], errors="coerce").dropna()
+    if len(spx) < 252:
+        return
+    rets = riskmetrics.returns(spx)
+    if rets is None:
+        return
+    with st.expander("📊 Tearsheet — S&P 500 (full committed timeline)"):
+        yrs = len(spx) / 252.0
+        cagr = ((spx.iloc[-1] / spx.iloc[0]) ** (1 / yrs) - 1) * 100 if yrs > 0 else None
+        vol = float(rets.std(ddof=1)) * (252 ** 0.5) * 100
+        mdd = riskmetrics.max_drawdown(spx)
+        cols = st.columns(6)
+        cols[0].metric("CAGR", f"{cagr:.1f}%" if cagr is not None else "—")
+        cols[1].metric("Vol (ann.)", f"{vol:.1f}%")
+        cols[2].metric("Sharpe", _fmt2(riskmetrics.sharpe(rets)))
+        cols[3].metric("Sortino", _fmt2(riskmetrics.sortino(rets)))
+        cols[4].metric("Calmar", _fmt2(riskmetrics.calmar(spx)))
+        cols[5].metric("Max DD", f"{mdd * 100:.1f}%" if mdd is not None else "—")
+        st.caption(f"{spx.index[0].date()} → {spx.index[-1].date()} · {len(spx):,} sessions · "
+                   "risk-free = 0. Source: riskmetrics over the committed timeline.")
+        m = spx.groupby(spx.index.to_period("M")).last()
+        mret = m.pct_change().dropna() * 100.0
+        by: dict[int, dict[int, float]] = {}
+        for p, v in mret.items():
+            by.setdefault(p.year, {})[p.month] = float(v)
+        rows = []
+        for y in sorted(by):
+            row = {"Year": y}
+            for mi, mname in enumerate(_MONTHS, 1):
+                row[mname] = by[y].get(mi)
+            vals = list(by[y].values())
+            row["FY %"] = (np.prod([1 + x / 100 for x in vals]) - 1) * 100 if vals else None
+            rows.append(row)
+        frame = pd.DataFrame(rows).set_index("Year")
+        st.dataframe(
+            frame.style.format({c: "{:+.1f}" for c in _MONTHS + ["FY %"]}, na_rep="·")
+            .map(color_changes, subset=_MONTHS + ["FY %"]),
+            use_container_width=True)
+        st.caption("Monthly total returns (%), green/red by sign; **FY %** compounds the year. "
+                   "Built from the committed timeline's S&P series.")
 
 
 def _time_machine(df) -> None:
@@ -126,3 +180,4 @@ def trends_tab() -> None:
                             theme="streamlit", key=f"trend_{col}")
     _time_machine(df)
     _crisis_signal_panel(df)
+    _tearsheet_panel(df)

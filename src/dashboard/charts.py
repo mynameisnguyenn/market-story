@@ -34,7 +34,7 @@ def section_records(rows: list[dict], kind: str) -> pd.DataFrame:
     return pd.DataFrame(records, columns=["Instrument", "Last", "1D", "1W %", "YTD %"])
 
 
-def _color_changes(value) -> str:
+def color_changes(value) -> str:
     return f"color: {formatting.color_for(value)}"
 
 
@@ -43,7 +43,7 @@ def section_styler(rows: list[dict], kind: str):
     return (
         frame.style
         .format({"Last": "{:,.2f}", "1D": "{:+.1f}", "1W %": "{:+.2f}", "YTD %": "{:+.2f}"}, na_rep="n/a")
-        .map(_color_changes, subset=CHANGE_COLS)
+        .map(color_changes, subset=CHANGE_COLS)
     )
 
 
@@ -56,7 +56,7 @@ def macro_styler(macro: list[dict]):
     return (
         frame.style
         .format({"Latest": "{:,.2f}", "Δ": "{:+.2f}", "1y %ile": "{:.0f}"}, na_rep="—")
-        .map(_color_changes, subset=["Δ"])
+        .map(color_changes, subset=["Δ"])
     )
 
 
@@ -69,7 +69,7 @@ def bls_styler(bls: list[dict]):
     return (
         frame.style
         .format({"Latest": "{:,.2f}", "MoM Δ": "{:+.2f}", "YoY %": "{:+.2f}"}, na_rep="n/a")
-        .map(_color_changes, subset=["MoM Δ", "YoY %"])
+        .map(color_changes, subset=["MoM Δ", "YoY %"])
     )
 
 
@@ -106,7 +106,7 @@ def positioning_styler(positioning: list[dict]):
     return (
         frame.style
         .format({"Lev-fund net": "{:+,.0f}", "Δ wk": "{:+,.0f}", "Asset-mgr net": "{:+,.0f}"}, na_rep="n/a")
-        .map(_color_changes, subset=["Δ wk"])
+        .map(color_changes, subset=["Δ wk"])
     )
 
 
@@ -119,7 +119,7 @@ def extremes_styler(extremes: list[dict]):
     return (
         frame.style
         .format({"Last": "{:,.2f}", "1y %ile": "{:.0f}", "z": "{:+.2f}"}, na_rep="—")
-        .map(_color_changes, subset=["z"])
+        .map(color_changes, subset=["z"])
     )
 
 
