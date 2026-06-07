@@ -151,13 +151,15 @@ def sector_treemap_fig(rows: list[dict]):
 
 
 def line_fig(series, name: str):
-    """Price line with range selector, or None if no history."""
+    """Price line with range selector, or None if no history. No chart title — callers label the
+    chart with an st.subheader (the app's convention), so the 1M/3M/6M/1Y range buttons own the top
+    strip and never overlay a title. `name` stays on the trace for the hover tooltip."""
     if series is None or len(series) == 0:
         return None
     fig = go.Figure(go.Scatter(x=series.index, y=series.values, mode="lines",
                                line=dict(color=LINE_COLOR), name=name))
     fig.update_layout(
-        height=380, margin=dict(t=30, l=10, r=10, b=10), title=name,
+        height=380, margin=dict(t=34, l=10, r=10, b=10),   # top strip is the range buttons' space
         xaxis=dict(rangeselector=dict(buttons=[
             dict(count=1, label="1M", step="month", stepmode="backward"),
             dict(count=3, label="3M", step="month", stepmode="backward"),

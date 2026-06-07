@@ -232,8 +232,10 @@ def macro_tab(brief: dict, closes: dict) -> None:
         st.plotly_chart(curve, use_container_width=True, theme="streamlit", key="yield_curve")
     col3, col4 = st.columns(2)
     with col3:
+        st.subheader("US 10Y Yield")
         render_line(closes, "^TNX", "US 10Y Yield", key="mac_tnx")
     with col4:
+        st.subheader("US Dollar Index")
         render_line(closes, "DX-Y.NYB", "US Dollar Index", key="mac_dxy")
     st.divider()
     # --- Macro & data: growth pulse, FRED, BLS, energy, positioning (+ deep-history expanders) ---
