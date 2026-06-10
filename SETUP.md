@@ -43,3 +43,16 @@ All free, all optional — the dashboard degrades gracefully without them, but t
 (EIA) and positioning panels need their fetchers to succeed. `.env.example` has a link to
 where you get each. The **hosted** app reads the same keys from Streamlit Cloud secrets
 (Settings → Secrets); **locally** they live in `.env`. See `DEPLOY.md` for hosting your own.
+
+## Phone alerts (optional, free)
+
+The daily Action can push a phone notification when the VIX alert fires (level ≥ 25 **and**
+≥ 80th percentile of its 1-year range — deliberately rare; it's the one signal the 28-year
+validation study found a real edge behind). Setup, ~2 minutes:
+
+1. Install the **ntfy** app (iOS/Android) and subscribe to a topic with a long random name
+   you invent, e.g. `ms-alerts-<20 random characters>` — treat the name like a password:
+   **the topic name is the only authentication ntfy has.**
+2. Add it as a GitHub secret: repo → Settings → Secrets and variables → Actions →
+   `NTFY_TOPIC` = your topic name.
+3. Done. No secret → the step silently no-ops. The topic name is never printed in logs.

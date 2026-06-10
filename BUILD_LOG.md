@@ -56,6 +56,56 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 
 ## Log (newest first)
 
+### 2026-06-10 — The accountability slate: 9 ambitious features design-grilled, 8 shipped descoped, 1 cut
+User asked for all nine ambitious features WITH a continuous adversarial grill on each. Ran a 28-agent
+design-grill workflow first (per-feature designer + efficacy critic + engineering critic + Opus synthesis):
+**zero features survived as designed** — 8 shipped in grill-descoped form, 1 cut. The grill caught 4 bugs
+pre-build: a `pct_change()`-on-a-yield sign error (would have shown GFC bonds −43%), a turbulence alert that
+would silently no-op forever (`stress_pct` never reaches the brief JSON), a meaningless conviction-weighted
+Sharpe, and a forward-return "distribution" with ~1–2 effective dof. What shipped:
+- **Stance ledger (paper P&L of the daily call):** mandatory ```stance block (`{"direction": -1|0|1, "notes"}`)
+  in every narrative ≥ 2026-06-10; a MISSING block logs as `omitted` (selection-bias guard). `scorecard.parse_stance`,
+  `ledger.log_stances_from_narratives/settle_stances/stance_stats` (kind="stance" rows in scorecard_log.jsonl,
+  settled with the NEXT session's `spx_chg` from the committed timeline). Story tab shows win-rate/flat/omitted;
+  equity curve deliberately deferred to 63 settled sessions. 4 grill-trap guards each pinned in `test_stance.py`
+  (backfill rewrite preserves stances; grade_pending skips them; watch stats exclude them; probability 0.0 survives).
+- **Calibration (infra only, zero UI):** optional `probability` on watch items → stored in `confidence`;
+  `src/calibration.py` (Brier, bins, MIN_N=30). Panel deliberately deferred ~90 days until real probabilities exist.
+- **VIX-episode analogues** (`src/analogues.py`, Trends expander): nearest full-history VIX-percentile days,
+  episode-deduped (≥21 sessions), era labels, where fear went next (+5/+21 sessions). NO forward S&P returns —
+  the grill's hard line. Vectorized (a per-row rank would have been O(n²) over 7k sessions).
+- **FOMC event study** (`src/event_study.py`, Calendar expander): 224 scheduled decision dates 1998–2025
+  (emergency meetings excluded), T+1/2/5 compounded drift, median + iid-bootstrap CIs (defensible: ~6-week
+  spacing → windows never overlap). If all CIs straddle zero the panel LEADS with "no detectable drift" —
+  the honest null is the deliverable. ⚠ Date provenance: 3 agreeing model-knowledge passes; NOT yet verified
+  against live federalreserve.gov (fetch was down at build time) — see TODO in the file before citing n.
+- **Growth & inflation pulse** (Macro): quadrant feature descoped to a second diffusion metric (CPI momentum)
+  beside the growth pulse, each stamped with its own data-through month. No quadrant labels (51/49 flips on
+  an INDPRO revision), no per-quadrant asset stats (stagflation n ≈ one episode).
+- **Proxy-book stress** (`src/proxy_books.py`, Macro expander): 100% SPX vs 70/30 through the crisis windows;
+  bond leg = −8 × Δy (explicit duration constant; the sign test is pinned in tests). No HY OAS leg (zero
+  coverage of all three windows). Labeled illustrative.
+- **Phone alerts** (`src/alert_rules.py` + `src/notifier.py` + `scripts/send_alerts.py` + Action step):
+  VIX-only dual gate (level ≥ 25 AND 1y-pct ≥ 80), ntfy.sh transport (NTFY_TOPIC secret; topic never logged;
+  timeout=10), always-exit-0. Turbulence rule cut (data lie). Setup in SETUP.md. No dashboard panel.
+- **Scenarios → one bolded line** in running_thesis.md (narrate.md spec); third machine-readable format killed.
+- **Brain-memory CUT** to a narrate.md nudge: near-miss triggers are threshold-calibration problems — fix the
+  level, not the view; always cite n. (Per-series hit-rate table = regime anecdote at n≤5.)
+- Shared infra: `src/timeline_returns.py` (rows_after/next_session_chg/level_after/compound_pct). Story-tab
+  latent crash fixed (watch table KeyError on stance rows). Render smoke now uses a 320-session 2020 synthetic
+  timeline so the new panels exercise instead of no-opping; + a stance row in the ledger fixture.
+- VERIFICATION (all complete): **600 tests pass** (452 → +148). All 4 changed tabs screenshot-verified live,
+  expanders opened, zero exceptions (FOMC-drift honest-null box fires; proxy-books shows both books across
+  crises; analogues leak no forward S&P returns). **FOMC dates Fed-verified 2026-06-10** against
+  federalreserve.gov (2021-25 exact; 1998-2019 swept) — found + fixed one real error: `2020-03-18` was a
+  CANCELLED meeting (now 223 dates). An 18-agent adversarial review raised 14 issues, 10 verified real, all
+  fixed: backfill was wiping watch `asof_value` every run (data loss); analogue caption claimed the buy-fear
+  edge regardless of today's VIX regime; FOMC honest-null gate misread an n=0 horizon; alert Action step
+  lacked `continue-on-error`; flat-stance P&L encoded as 0.0 vs None; + 5 lower-sev edges. 4 regression tests
+  pin the worst (asof preservation, flat-pnl, bootstrap n_boot=0 guard, the 2020 date). Built initially during
+  a `claude-fable-5` model-setting outage that blocked the classifier; verified in full once switched back to
+  Opus 4.8 (the same pytest command that failed ~12× then ran clean — the proof the name was unloadable).
+
 ### 2026-06-07 — Deep review (5-dimension workflow) — fixed 1 crash + a degradation/correctness cluster
 After the `line_fig` overlay bug (which the 449-test suite rendered but didn't catch), ran a 5-dimension
 deep-review workflow (render hazards · None/NaN degradation · numeric correctness · integration/contracts ·

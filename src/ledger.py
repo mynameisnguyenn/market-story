@@ -20,6 +20,7 @@ import re
 from . import config, macro_data, scorecard
 
 LEDGER_PATH = config.DATA_DIR / "scorecard_log.jsonl"
+STANCE_START = "2026-06-10"   # stance blocks exist only from this date — earlier narratives exempt
 
 
 def horizon_sessions(horizon: str) -> int:
@@ -158,7 +159,8 @@ def log_predictions(narrative_date: str, items: list[dict], asof: dict | None = 
             "horizon": it.get("horizon", ""),
             "horizon_sessions": horizon_sessions(it.get("horizon", "")),
             "asof_value": scorecard.resolve_metric(asof, it.get("metric", "")) if asof else None,
-            "confidence": it.get("confidence"),          # optional 0-1 for future Brier scoring
+            # 0-1 for Brier scoring; 0.0 is a VALID probability, so no falsy `or` chaining here
+            "confidence": it.get("probability") if it.get("probability") is not None else it.get("confidence"),
             "status": "pending",
         }
         existing.setdefault(_key(rec), rec)              # don't clobber an already-graded item
@@ -171,6 +173,8 @@ def grade_pending() -> dict:
     """Grade every pending/unresolved record against its window; persist; return stats()."""
     rows = load()
     for r in rows:
+        if r.get("kind") == "stance":
+            continue                               # stances settle via settle_stances(), not _grade
         if r.get("status") in (None, "pending", "unresolved"):
             _grade(r)
     _write(rows)
@@ -179,7 +183,7 @@ def grade_pending() -> dict:
 
 def stats() -> dict:
     """Running track record: counts + hit-rate, overall and per metric family."""
-    rows = load()
+    rows = [r for r in load() if r.get("kind") != "stance"]   # stance ledger has its own stats
     from collections import Counter
     c = Counter(r.get("status") for r in rows)
     graded = c["triggered"] + c["missed"]
@@ -200,6 +204,10 @@ def stats() -> dict:
 def backfill_from_narratives() -> dict:
     """Rebuild the ledger from every committed narrative's watch block, grading each. Seeds the
     track record from history (this is the persisted version of the backtest)."""
+    prior = load()                                               # rebuild rewrites the file, so first
+    stances = [r for r in prior if r.get("kind") == "stance"]    # capture what the markdown can't carry:
+    asof = {_key(r): r.get("asof_value") for r in prior          # the stance ledger + each watch item's
+            if r.get("kind") != "stance"}                        # at-log-time snapshot (None in the .md)
     records: dict[tuple, dict] = {}
     for path in sorted(config.NARRATIVES_DIR.glob("narrative_*.md")):
         m = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
@@ -211,14 +219,96 @@ def backfill_from_narratives() -> dict:
                 "logged": ndate, "claim": it.get("claim", ""), "metric": it.get("metric"),
                 "trigger": it.get("trigger"), "horizon": it.get("horizon", ""),
                 "horizon_sessions": horizon_sessions(it.get("horizon", "")),
-                "asof_value": None, "confidence": it.get("confidence"), "status": "pending",
+                "asof_value": None, "status": "pending",
+                "confidence": it.get("probability") if it.get("probability") is not None else it.get("confidence"),
             }
+            rec["asof_value"] = asof.get(_key(rec))              # preserve the original snapshot
             records[_key(rec)] = _grade(rec)
-    _write(sorted(records.values(), key=lambda r: (r.get("logged", ""), str(r.get("metric")))))
+    rows = list(records.values()) + stances
+    _write(sorted(rows, key=lambda r: (r.get("logged", ""), str(r.get("metric")))))
     return stats()
+
+
+# --- the stance ledger: paper P&L of the daily directional call ----------------
+# One record per narrative date (kind="stance"). Settlement is the NEXT session's S&P
+# print from the committed timeline — keyless, no lookahead, no backfilled predictions.
+
+def log_stances_from_narratives() -> int:
+    """Log one stance record per narrative dated >= STANCE_START (idempotent by date).
+    A narrative WITHOUT a stance block logs as 'omitted' — visible, so skipping uncertain
+    days can't quietly flatter the record (the selection-bias guard the grill demanded)."""
+    rows = load()
+    have = {r.get("logged") for r in rows if r.get("kind") == "stance"}
+    added = 0
+    for path in sorted(config.NARRATIVES_DIR.glob("narrative_*.md")):
+        m = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+        if not m or m.group(1) < STANCE_START or m.group(1) in have:
+            continue
+        st = scorecard.parse_stance(path.read_text(encoding="utf-8"))
+        rec = {"kind": "stance", "logged": m.group(1), "status": "pending"}
+        if st is None:
+            rec.update({"direction": None, "status": "omitted"})
+        else:
+            rec.update({"direction": st["direction"], "notes": st["notes"]})
+        rows.append(rec)
+        added += 1
+    if added:
+        rows.sort(key=lambda r: (r.get("logged", ""), str(r.get("metric"))))
+        _write(rows)
+    return added
+
+
+def settle_stances() -> int:
+    """Mark pending stances to market with the next session's S&P % change (committed
+    timeline). A stance logged on D settles with the first row strictly after D."""
+    from . import timeline, timeline_returns
+    rows = load()
+    df = timeline.load_df()
+    settled = 0
+    for r in rows:
+        if r.get("kind") != "stance" or r.get("status") != "pending":
+            continue
+        chg = timeline_returns.next_session_chg(df, r.get("logged", ""))
+        if chg is None:
+            continue                               # next session hasn't printed yet
+        nxt = timeline_returns.rows_after(df, r.get("logged", ""), 1)   # record WHICH row settled it
+        r["settlement_date"] = nxt.index[0].strftime("%Y-%m-%d") if len(nxt) else None
+        r["spx_chg_next"] = round(chg, 4)
+        # flat (direction 0) has no P&L: None, not 0.0 — so the ledger can't confuse a no-view
+        # day with a directional call that happened to break even.
+        r["pnl_pct"] = round(r["direction"] * chg, 4) if r.get("direction") not in (0, None) else None
+        r["status"] = "settled"
+        settled += 1
+    if settled:
+        _write(rows)
+    return settled
+
+
+def stance_stats(rows: list[dict] | None = None) -> dict:
+    """The brain's directional record: win rate on non-flat settled calls + honesty counts
+    (flat and omitted days stay visible — they are part of the record, not noise).
+    Pass already-loaded rows to avoid a second disk read (the dashboard does)."""
+    rows = [r for r in (rows if rows is not None else load()) if r.get("kind") == "stance"]
+    settled = [r for r in rows if r.get("status") == "settled"]
+    direc = [r for r in settled if r.get("direction") in (-1, 1)]
+    pnls = [r["pnl_pct"] for r in direc if r.get("pnl_pct") is not None]
+    wins = sum(1 for p in pnls if p > 0)
+    return {
+        "n_logged": len(rows), "n_settled": len(settled), "n_directional": len(direc),
+        "n_flat": sum(1 for r in settled if r.get("direction") == 0),
+        "n_omitted": sum(1 for r in rows if r.get("status") == "omitted"),
+        "wins": wins, "win_rate": (wins / len(pnls)) if pnls else None,
+        "avg_pnl_bps": (sum(pnls) / len(pnls) * 100.0) if pnls else None,
+    }
 
 
 if __name__ == "__main__":
     s = backfill_from_narratives()
     print(f"ledger: {s['total']} predictions | {s['triggered']} hit / {s['missed']} miss / "
           f"{s['pending']} pending / {s['unresolved']} unresolved | hit-rate {s['hit_rate']}")
+    log_stances_from_narratives()
+    settle_stances()
+    ss = stance_stats()
+    wr = "n/a" if ss["win_rate"] is None else f"{ss['win_rate'] * 100:.0f}%"
+    print(f"stance: {ss['n_logged']} logged | {ss['n_directional']} directional settled | "
+          f"win-rate {wr} | {ss['n_flat']} flat | {ss['n_omitted']} omitted")

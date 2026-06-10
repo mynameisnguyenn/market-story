@@ -21,6 +21,13 @@ def main() -> int:
         s = ledger.backfill_from_narratives()
         rate = "n/a" if s["hit_rate"] is None else f"{s['hit_rate'] * 100:.0f}%"
         print(f"Ledger: {s['triggered']} hit / {s['missed']} miss / {s['pending']} pending | hit-rate {rate}")
+        ledger.log_stances_from_narratives()          # paper P&L: log new stances, settle matured
+        ledger.settle_stances()
+        ss = ledger.stance_stats()
+        if ss["n_logged"]:
+            wr = "n/a" if ss["win_rate"] is None else f"{ss['win_rate'] * 100:.0f}%"
+            print(f"Stance: {ss['n_directional']} directional settled | win-rate {wr} | "
+                  f"{ss['n_flat']} flat | {ss['n_omitted']} omitted")
     except Exception as exc:
         print(f"Ledger update skipped: {exc}")
 

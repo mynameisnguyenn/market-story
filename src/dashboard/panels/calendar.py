@@ -5,8 +5,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src import calendar_data, config, thirteenf
-from src.dashboard.data import get_13f, get_earnings, get_econ, get_filings
+from src import calendar_data, config, event_study, thirteenf
+from src.dashboard.data import get_13f, get_earnings, get_econ, get_filings, get_timeline_df
 
 
 def _earnings_section() -> None:
@@ -68,6 +68,36 @@ def _fomc_section() -> None:
     st.metric(nf["date"], when, delta="rate decision + statement", delta_color="off")
     st.caption("Statement ~2:00pm ET; quarterly meetings add the Summary of Economic Projections + a "
                "press conference. Schedule from federalreserve.gov, verified 2026-06. Source: Federal Reserve.")
+
+
+def _fomc_drift_section() -> None:
+    """28 years of post-FOMC S&P drift — the honest event study. If the bootstrap CIs all
+    straddle zero (the statistically expected result), the panel says exactly that, leading:
+    'no detectable drift' delivered confidently IS the finding, not a failure to find one."""
+    try:
+        rows = event_study.fomc_drift(get_timeline_df())
+    except Exception:
+        return
+    if not rows:
+        return
+    with st.expander("📐 Post-FOMC drift — S&P after every scheduled decision since 1998"):
+        if all(r.get("includes_zero") is not False for r in rows):   # None (n=0 horizon) is neutral
+            st.info(f"Across ~{max(r.get('n', 0) for r in rows)} scheduled decisions, S&P returns "
+                    "after FOMC days are statistically indistinguishable from zero at every horizon "
+                    "tested (bootstrap CIs on the median all include zero). There is no detectable "
+                    "post-FOMC drift in this sample — that is the finding.")
+        st.dataframe(pd.DataFrame([
+            {"Horizon": f"T+{r['horizon']}", "n": r.get("n"),
+             "Median": f"{r['median']:+.2f}%" if r.get("median") is not None else "—",
+             "95% CI": (f"[{r['ci_lo']:+.2f}%, {r['ci_hi']:+.2f}%]"
+                        if r.get("ci_lo") is not None and r.get("ci_hi") is not None else "—"),
+             "% positive": f"{r['frac_pos'] * 100:.0f}%" if r.get("frac_pos") is not None else "—",
+             "Skipped": r.get("n_skipped", 0)}
+            for r in rows]), use_container_width=True, hide_index=True)
+        st.caption("Scheduled decisions only, 1998–2025 (unscheduled/emergency meetings excluded — "
+                   "their dates are themselves the news). T+1/2/5 windows never overlap across "
+                   "meetings ~6 weeks apart, so iid bootstrap CIs are valid here, unlike rolling-"
+                   "signal stats. Descriptive history, **not a forecast**. Source: event_study.")
     st.divider()
 
 
@@ -111,6 +141,7 @@ def _13f_section() -> None:
 
 def calendar_tab() -> None:
     _fomc_section()
+    _fomc_drift_section()
     _econ_section()
     st.divider()
     _13f_section()

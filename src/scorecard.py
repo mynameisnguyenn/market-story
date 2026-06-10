@@ -13,6 +13,7 @@ import re
 
 # Allow an optional language tag/label on the fence line (```watch  or  ```watch json).
 _WATCH_RE = re.compile(r"```watch[^\n]*\n(.+?)```", re.DOTALL)
+_STANCE_RE = re.compile(r"```stance[^\n]*\n(.+?)```", re.DOTALL)
 _TRIGGER_RE = re.compile(r"^\s*(>=|<=|>|<|==)\s*(-?\d+(?:\.\d+)?)\s*$")
 
 
@@ -28,6 +29,24 @@ def parse_watch(text: str) -> list[dict]:
     except Exception:
         return []
     return [it for it in items if isinstance(it, dict)] if isinstance(items, list) else []
+
+
+def parse_stance(text: str) -> dict | None:
+    """The narrative's fenced ```stance block ({"direction": -1|0|1, "notes": ...}) — the daily
+    directional S&P call the paper-P&L ledger settles. None if absent/invalid (the ledger logs
+    that as 'omitted', so skipping uncertain days can't quietly flatter the record)."""
+    if not text:
+        return None
+    m = _STANCE_RE.search(text)
+    if not m:
+        return None
+    try:
+        obj = json.loads(m.group(1).strip())
+    except Exception:
+        return None
+    if not isinstance(obj, dict) or obj.get("direction") not in (-1, 0, 1):
+        return None
+    return {"direction": obj["direction"], "notes": str(obj.get("notes", ""))}
 
 
 def resolve_metric(brief: dict, metric: str):

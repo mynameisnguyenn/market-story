@@ -32,6 +32,16 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
+      - name: Send phone alerts (VIX rule, ntfy.sh)
+        # Quiet by default: the dual gate (level >= 25 AND 1y-percentile >= 80) fires rarely.
+        # No-ops silently when the NTFY_TOPIC secret is unset. continue-on-error guarantees the
+        # "never fails the run" contract even against an import-time error (the script's own
+        # sys.exit(0) only covers runtime), so a broken alert can never block the brief commit.
+        continue-on-error: true
+        run: python scripts/send_alerts.py
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+
       - name: Commit the brief
         run: |
           git config user.name "github-actions[bot]"

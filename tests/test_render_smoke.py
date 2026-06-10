@@ -70,14 +70,25 @@ def _render_all_tabs():
 
 def test_all_tabs_render_without_error(monkeypatch, tmp_path):
     import json
+    import pandas as pd
     from src import config, history, timeline
     monkeypatch.setattr(history, "DB_PATH", tmp_path / "h.db")   # don't touch the real history DB
-    # a small synthetic timeline so the Trends tab renders (don't read the real file)
+    # A synthetic ~16-month timeline through 2020, so the panels that need real depth all
+    # exercise their render paths instead of silently no-opping: the FOMC event study (2020
+    # decision dates fall inside), VIX analogues (needs >84 sessions + a fear episode), the
+    # COVID crisis window, and the proxy-book stress table.
+    dates = pd.bdate_range("2020-01-02", periods=320)
+    spx, lines = 3200.0, []
+    for i, d in enumerate(dates):
+        chg = (0.5, -0.3, 0.2, -0.6, 1.0)[i % 5]
+        spx *= 1 + chg / 100.0
+        vix = 35.0 if 100 <= i <= 110 else 18.0 + (i % 7) * 0.3   # one engineered fear episode
+        lines.append(json.dumps({
+            "date": d.strftime("%Y-%m-%d"), "spx": round(spx, 2), "spx_chg": chg,
+            "vix": vix, "ust10": 0.7 + (i % 9) * 0.01, "curve_2s10s": 0.4,
+            "hy_oas": 2.7, "spx_spec_net": -450000 - i * 1000, "vol_premium": 6.0}))
     tl = tmp_path / "tl.jsonl"
-    tl.write_text("\n".join(json.dumps({
-        "date": f"2026-05-{d:02d}", "ust10": 4.4 + d * 0.01, "curve_2s10s": 0.4,
-        "hy_oas": 2.7, "vix": 15 + d * 0.1, "spx_spec_net": -450000 - d * 1000,
-        "vol_premium": 6.0}) for d in range(1, 12)), encoding="utf-8")
+    tl.write_text("\n".join(lines), encoding="utf-8")
     monkeypatch.setattr(timeline, "TIMELINE_PATH", tl)
     from src import calendar_data, thirteenf
     monkeypatch.setattr(calendar_data, "fetch_econ_releases",   # no network in the smoke
@@ -121,7 +132,12 @@ def test_all_tabs_render_without_error(monkeypatch, tmp_path):
     lg = tmp_path / "ledger.jsonl"
     lg.write_text(json.dumps({"logged": "2026-06-02", "claim": "x", "metric": "macro:DGS10",
                               "trigger": ">4.5", "horizon": "next session", "status": "missed",
-                              "graded_value": 4.4}) + "\n", encoding="utf-8")
+                              "graded_value": 4.4}) + "\n" +
+                  # a stance row too: the Story tab must render its paper-P&L line AND keep
+                  # stance rows out of the watch table (they have no trigger/claim keys)
+                  json.dumps({"kind": "stance", "logged": "2026-06-10", "direction": -1,
+                              "status": "settled", "spx_chg_next": -1.2, "pnl_pct": 1.2}) + "\n",
+                  encoding="utf-8")
     monkeypatch.setattr(ledger, "LEDGER_PATH", lg)
     for _fn in (app.get_fred_history, app.get_bls_history, app.get_energy_history,
                 app.get_running_thesis, app.get_ledger, app.get_timeline_df):

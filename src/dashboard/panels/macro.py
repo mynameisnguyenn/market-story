@@ -5,12 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from src import (bls_data, composite, config, eia_data, pmi_proxy, regime, regime_turbulence,
-                 riskmetrics, statistical)
+from src import (bls_data, composite, config, eia_data, pmi_proxy, proxy_books, regime,
+                 regime_turbulence, riskmetrics, statistical)
 from src.dashboard.charts import (color_changes, bls_styler, correlation_fig, energy_styler,
                                   extremes_styler, level_fig, macro_styler, positioning_styler,
                                   yield_curve_fig)
-from src.dashboard.data import get_bls_history, get_energy_history, get_fred_history
+from src.dashboard.data import (get_bls_history, get_energy_history, get_fred_history,
+                                get_timeline_df)
 from src.dashboard.widgets import tone_span, render_line, render_table
 
 # Curated cross-asset set for the correlation matrix (all in config.all_symbols()).
@@ -100,6 +101,30 @@ def _stress_danger_panel(brief: dict, closes: dict) -> None:
     st.divider()
 
 
+def _proxy_books_panel() -> None:
+    """Illustrative proxy-book stress: what diversification bought (or didn't) in each past
+    crisis vs pure equities. The bond leg is an explicit -duration x Δyield approximation —
+    labeled as such; the grill killed the pct_change-on-a-yield version that would have
+    shown GFC bonds losing 43%."""
+    try:
+        rows = [r for r in proxy_books.stress_books(get_timeline_df()) if r.get("n_days")]
+    except Exception:
+        return
+    if not rows:
+        return
+    with st.expander("🧪 Proxy-book stress — diversified vs pure equities (illustrative)"):
+        st.dataframe(pd.DataFrame([
+            {"Book": r.get("book"), "Window": r.get("window"), "Days": r.get("n_days"),
+             "Return": f"{r['return_pct']:+.1f}%" if r.get("return_pct") is not None else "—",
+             "Max DD": f"{r['max_drawdown_pct']:.1f}%" if r.get("max_drawdown_pct") is not None else "—"}
+            for r in rows]), use_container_width=True, hide_index=True)
+        st.caption("Illustrative approximation: the bond leg is −8 × Δ(10Y yield) — an explicit "
+                   "duration constant, not a bond index; no credit leg (HY OAS history starts 2023, "
+                   "zero coverage of these windows). Answers the one question the Crisis replay "
+                   "doesn't: what did a diversified book do in each episode. Not investment analysis.")
+    st.divider()
+
+
 def _archive_series(fred_rows: list[dict], sid: str):
     """A FRED series from the committed macro archive as a date-indexed pd.Series, or None."""
     obs = sorted((r["date"], r["value"]) for r in fred_rows if r.get("series") == sid)
@@ -109,8 +134,9 @@ def _archive_series(fred_rows: list[dict], sid: str):
 
 
 def _growth_pulse_panel() -> None:
-    """PMI-like real-activity diffusion proxy (pmi_proxy) from the committed FRED archive —
-    industrial production + payrolls + (inverted) jobless claims, no new external feed."""
+    """Growth + inflation momentum diffusions (pmi_proxy) from the committed FRED archive.
+    Two metrics, NOT a quadrant chart: the axes reference different data months (release
+    lags differ), so a combined quadrant label would imply a synchronization that isn't there."""
     rows = get_fred_history()
     if not rows:
         return
@@ -123,17 +149,28 @@ def _growth_pulse_panel() -> None:
     latest, series = pmi_proxy.composite_index(comps, invert={"Initial claims"})
     if latest is None or series is None or len(series) < 6:
         return
-    st.subheader("Growth pulse — real-activity diffusion (PMI proxy)")
-    st.metric("Diffusion index", f"{latest:.1f}",
-              f"{'expansion' if latest >= 50 else 'contraction'} ({latest - 50:+.1f} vs 50)",
-              delta_color="normal" if latest >= 50 else "inverse")
+    st.subheader("Growth & inflation pulse — momentum diffusions (PMI proxy)")
+    cpi = _archive_series(rows, "CPIAUCSL")
+    inf_latest, inf_series = (pmi_proxy.composite_index({"CPI": cpi})
+                              if cpi is not None else (None, None))
+    cols = st.columns(2)
+    cols[0].metric(f"Growth (through {series.index[-1]:%b %Y})", f"{latest:.1f}",
+                   f"{'expansion' if latest >= 50 else 'contraction'} ({latest - 50:+.1f} vs 50)",
+                   delta_color="normal" if latest >= 50 else "inverse")
+    if inf_latest is not None and inf_series is not None:
+        cols[1].metric(f"Inflation (through {inf_series.index[-1]:%b %Y})", f"{inf_latest:.1f}",
+                       f"{'accelerating' if inf_latest >= 50 else 'decelerating'} "
+                       f"({inf_latest - 50:+.1f} vs 50)",
+                       delta_color="inverse" if inf_latest >= 50 else "normal")
     fig = level_fig(series)
     fig.add_hline(y=50, line=dict(color="#7beafb", width=1, dash="dot"), opacity=0.4)
     st.plotly_chart(fig, use_container_width=True, theme="streamlit", key="pmi_pulse")
-    st.caption("Momentum of industrial production + payrolls + (inverted) initial claims, each "
-               "normalized by its own 12-month volatility and mapped to a 0–100 diffusion scale: "
-               ">50 = real activity accelerating, <50 = decelerating. A free-data ISM-PMI analog "
-               "(ISM's own index is license-restricted off FRED), not the official print. Source: pmi_proxy.")
+    st.caption("Growth = momentum of industrial production + payrolls + (inverted) initial claims; "
+               "inflation = CPI momentum — each normalized by its own 12-month volatility onto a "
+               "0–100 diffusion scale (>50 = accelerating). Chart shows the growth composite. "
+               "Momentum readings, **not forecasts**, and the two metrics reference different data "
+               "months (release lags differ). A free-data ISM-PMI analog, not the official print. "
+               "Source: pmi_proxy.")
     st.divider()
 
 
@@ -201,6 +238,7 @@ def macro_tab(brief: dict, closes: dict) -> None:
     regime_panel(brief)
     _stress_danger_panel(brief, closes)
     _risk_drawdown_panel(closes)
+    _proxy_books_panel()
     vol = brief.get("vol") or {}
     prem = vol.get("premium")
     if prem is not None:

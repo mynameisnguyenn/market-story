@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from src import crisis, eras, riskmetrics, signal_ic
+from src import analogues, crisis, eras, riskmetrics, signal_ic
 from src.dashboard.charts import color_changes, trend_fig
 from src.dashboard.data import get_timeline_df
 
@@ -140,6 +140,44 @@ def _tearsheet_panel(df) -> None:
                    "Built from the committed timeline's S&P series.")
 
 
+def _analogue_panel(df) -> None:
+    """VIX-episode analogues: the historical days whose VIX percentile most resembles today's,
+    and where fear went next. Anchored on the ONE validated signal (VIX level); deliberately
+    shows NO forward S&P returns — k≈10 overlapping windows dressed as a return distribution
+    would imply precision that isn't there (see research/signal-validation.md)."""
+    try:
+        eps = analogues.vix_episodes(df)
+    except Exception:
+        return
+    if not eps:
+        return
+    s = analogues.episodes_summary(eps)
+    today_pct = analogues.today_vix_pct(df)
+    with st.expander("🌀 Days like today — VIX-percentile analogues"):
+        known = s["n"] - s["unresolved"]
+        if known > 0:
+            st.markdown(f"**Fear resolved lower within 21 sessions in {s['resolved_lower']} "
+                        f"of {known} comparable episodes.**")
+        st.dataframe(pd.DataFrame([
+            {"Date": e.get("date"), "Era": (e.get("era") or {}).get("name", "—"),
+             "VIX": _fmt2(e.get("vix")), "%ile": _fmt2(e.get("vix_pct")),
+             "VIX +5d": _fmt2(e.get("vix_5d")), "VIX +21d": _fmt2(e.get("vix_21d")),
+             "Resolved lower": {True: "✓", False: "✗"}.get(e.get("resolved"), "…")}
+            for e in eps]), use_container_width=True, hide_index=True)
+        # The "buy fear" edge only applies in a HIGH-VIX regime. These analogues match today's
+        # percentile, so when today is calm the matched days are calm too — cite the edge only then.
+        if today_pct is not None and today_pct >= 70:
+            edge = (" The 28y study's one validated read applies here: with VIX elevated, fear has "
+                    "historically preceded higher forward returns (gross of costs).")
+        else:
+            edge = (" Today's VIX sits mid/low in its history, so these are calmer-regime analogues; "
+                    "the validated buy-fear edge applies only when VIX is elevated — here this is "
+                    "context, not a signal.")
+        st.caption("Matched on full-history VIX percentile, episode-deduped (≥21 sessions apart), "
+                   "most-recent quarter excluded. Descriptive memory of where fear went next — "
+                   "**not a return forecast**." + edge)
+
+
 def _time_machine(df) -> None:
     """Pick a historical date -> the era it falls in + each metric's level and percentile
     AS OF that date (vs its own history up to then)."""
@@ -197,4 +235,5 @@ def trends_tab() -> None:
                             theme="streamlit", key=f"trend_{col}")
     _time_machine(df)
     _crisis_signal_panel(df)
+    _analogue_panel(df)
     _tearsheet_panel(df)

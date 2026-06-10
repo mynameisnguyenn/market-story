@@ -45,7 +45,12 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    ## What moved & why  (importance-ranked; demote quiet asset classes to a single line)
    ## Macro & data      (FRED + pct_1y extremes, BLS, EIA draws/builds, CFTC positioning, events)
    ## Risk lens         (positioning, correlations breaking, tail risks — the sharpest section)
-   ## What to watch     (3–5 numeric triggers + a machine-readable ```watch block to grade)
+   ## What to watch     (3–5 numeric triggers + a machine-readable ```watch block to grade;
+                         watch items may carry an optional "probability" 0–1 for Brier calibration)
+   ## The call          (a mandatory ```stance block {"direction": -1|0|1, "notes"} — the daily
+                         directional S&P call; settled next session as paper P&L. ALWAYS emit it,
+                         even direction:0 — a missing block is logged "omitted" so skipping
+                         uncertain days can't flatter the record)
    ## Sources           (headlines + feeds the read leans on)
    ```
    See `.claude/commands/narrate.md` for the full spec (thesis-first, the `watch` block format).
@@ -77,6 +82,12 @@ answer from the brief first; only fetch more (WebSearch/yfinance) if the brief l
   "news": [{ "title": "...", "source": "...", "published": "...", "link": "...", "summary": "..." }],
   "stats": { "vix": 14.2, "advancers": 7, "decliners": 4 }
 }
+```
+
+The `data/scorecard_log.jsonl` ledger now holds two record kinds: watch records (graded numeric
+triggers) and `{"kind": "stance", "direction", "status", "pnl_pct", ...}` rows — the paper P&L of
+the daily directional call, settled by `src.ledger.settle_stances()` against the next session's S&P
+move from `data/timeline.jsonl`. Watch-rate stats exclude stance rows; both render on the Story tab.
 ```
 
 ## How to run
