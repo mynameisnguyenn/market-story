@@ -4,51 +4,56 @@ _The standing, cross-session view — the through-line. Today's dated read lives
 `data/narratives/`; this is what carries between them. `/narrate` reads this at the start for
 continuity and revises it after each session. Keep it tight: a **view**, not a log._
 
-_Last updated: 2026-06-09_
+_Last updated: 2026-06-10_
 
 ## Current thesis
 
-The regime is **fragility deepening, not resolving.** Monday's S&P +0.88% / Nasdaq +1.56% /
-VIX −15.7% bounce was chip-specific (Jensen Huang, ASML/Musk Terafab, Intel/Google) and
-Iran-halt relief — not a macro clearing event. The 10Y sits at 4.544% (97th %ile), the
-S&P spec short deepened to a record **−500,732 contracts** (9.5% expansion in one week),
-HY OAS continued its crawl to **2.76%** (+5bps over 5 sessions from 2.71%), and the NY Fed
-reported household financial worries at the highest since July 2022. Blackstone is actively
-selling $2bn of aged PE fund stakes in secondary markets — Day 6 of the 21-42 day private
-credit cascade clock. The Monday bounce is the largest short position in this dataset sitting
-on a 1-session underwater trade, not a regime reversal.
+**Fragility regime intact; first credible crack in the stress signals, but May CPI is the
+override.** Tuesday's session (June 9, captured mid-morning) delivered the first genuinely
+broad advance since the selloff: 9/11 sectors up, small caps (Russell 2000 +1.38%) and REITs
+(+1.96%) leading, HY OAS ticking DOWN 1bp to 2.75% — the first reversal after five consecutive
+sessions of drift from 2.71%. Oil crashed −4.07% to $87.58 as the Iran cease-fire premium
+fully unwound. Two constructive data points. But the −500,732 S&P spec short (record, June 2
+CFTC data) has not been squeezed — at +0.28% intraday Tuesday, the position is barely
+underwater. May CPI is due today (Wednesday June 10); if it re-accelerates above 3.8%, the
+hike tail becomes baseline and Tuesday's entire constructive read is invalidated. Until the
+print: the fragility regime holds, CPI is the pivot point.
 
-**Flip condition:** HY OAS closes below 2.70% by Friday AND CFTC June 12 data shows net
-spec-short covering AND gold reclaims $4,450 → genuine de-escalation, and the −500k spec
-short becomes the squeeze setup. Unless all three: this is a relief rally into a tightening
-vise. CPI this week is the next gate — a re-acceleration above 3.8% makes hike the baseline.
+**Flip condition (revised):** May CPI below 3.5% AND HY OAS sustains below 2.70% by Friday
+AND CFTC June 12 data shows net spec-short covering (−50k+ contracts) → the fragility regime
+transitions to genuine relief; the −500k spec short becomes a squeeze setup. Unless all three:
+Tuesday's breadth improvement is a constructive data point inside a still-fragile regime, not
+a regime reversal.
 
 ## Regime
 
-Hold-or-hike, late-cycle. "Bad news is good news" framework dead as of June 5 payrolls.
-Curve flat-and-stuck (2s10s 0th %ile, week 4; flattened further −4bps to 0.38% on June 5).
-30Y has crossed 5.0%. EFFR 3.62% (0th %ile — already cut), but Warsh and Ferguson both
-signaling hold-or-hike. **A Fed that will not rescue a growth scare AND may actively tighten
-into one.** The consumer is telling the NY Fed it feels the July-2022 stress all over again.
+Hold-or-hike, late-cycle. 2s10s at 0.41% (0.4th %ile) — steepened 3bps on June 8 but still
+historically flat. 30Y held above 5.0% for the second consecutive session. EFFR 3.62% (0th
+%ile). Critically: the 10Y breakeven at 2.35% (52.8th %ile) is NOT pricing a hike — the bond
+market diverges from the sell-side hike narrative. BofA flagged 70% of bear market signals at
+red (June 9). "Bad news is good news" framework remains dead; "good news (reacceleration) is
+bad news" is the working regime until CPI resolves it.
 
 ## What I'm watching (multi-session)
 
-- **May CPI (due this week)** — the regime-defining data point. April was 3.81% headline /
-  2.75% core. Above 3.8% = hike tail becomes baseline; below 3.5% = cut narrative returns and
-  −500k spec short faces worst-case squeeze. No metric, maximum importance.
-- **HY OAS above 2.80%** — cascade tell; now at 2.76%, five sessions of directional drift.
-  Blackstone secondary PE sale adds supply pressure. Watch-loop: 1 hit (10Y rate, June 5) in
-  9 clear trigger observations; 0 credit cascade triggers cleared; directionally correct on drift.
-- **CFTC data Friday June 12** — will show if Monday's bounce forced any spec-short covering.
-  If the short grew further (−40-50k+), the institutional short thesis is confirmed. If covered
-  materially (−50k+), dynamic shifts.
-- **Private credit cascade clock: Day 6** — Blackstone secondary sale (Day 6) is qualitatively
-  escalating from "gates" to "forced portfolio restructuring." Historical HY/IG OAS widening
-  arrives Day 21-42 (June 25 – July 16). Current HY OAS at 2.76%, 4bps from trigger.
-- **Gold between $4,300 and $4,450** — stuck mid-distribution (55.6th %ile). Neither breaking
-  (bearish confirmation) nor recovering (flip signal). Watching for resolution.
-- **SpaceX $1.8T IPO supply** — when it prices, demand for existing AI-tech longs must fund it.
-  Largest equity supply event in history arriving into a tech-multiple compression regime.
+- **May CPI (due today, June 10)** — the regime gate. April was 3.81% headline / 2.75% core.
+  Oil crashed post-May survey period (June story, not May); May energy likely added to headline.
+  Above 3.8% = hike tail baseline; below 3.5% = cut narrative + short squeeze risk.
+  Maximum importance. No brief metric available yet.
+- **HY OAS 2.80% cascade trigger** — first 1bp reversal to 2.75% on June 9; still watching.
+  Private credit cascade Day 7 (historical widening window: June 25 – July 16). Watch-loop:
+  1/12 graded triggers hit (8.3% rate); directionally correct on HY drift but level triggers
+  untripped. The rate of drift (not the level) is the leading signal.
+- **CFTC data Friday June 12** — reveals whether Tuesday's broad breadth prompted any covering
+  of the record −500,732 spec short. If short grew further, thesis confirmed. If covered
+  materially (−50k+), dynamic shifts to potential squeeze.
+- **WTI $85 floor** — oil broke the Iran-halt surge entirely; next structural support at $85.
+  Below $85 on sustained volume = demand-growth-scare signal, not geopolitical normalization.
+- **Oracle Q4 (Tuesday after-close)** — AI enterprise cloud revenue; bellwether for whether AI
+  capex is translating to software/cloud revenue at the application layer.
+- **SpaceX Nasdaq-100 inclusion** — two Nasdaq Markets articles June 9 on QQQ inclusion. If it
+  materializes, $6bn+ passive buying funded by selling existing tech names. Supply overhang
+  building into a period of already-compressed tech multiples.
 
 ## How the thesis has evolved
 
@@ -63,6 +68,10 @@ into one.** The consumer is telling the NY Fed it feels the July-2022 stress all
   the fragility signals. S&P spec short deepened to record −500,732. HY OAS continued to 2.76%.
   Blackstone secondary PE sale (Day 6) escalated private credit story. NY Fed consumer survey
   at July-2022 stress level. CPI this week is the next regime gate.
+- **2026-06-10** — First genuinely broad session (9/11 sectors up; small caps +1.38%; REITs
+  +1.96%). Oil crashed −4.07%; Iran cease-fire premium fully unwound. HY OAS first −1bp
+  reversal in 5 sessions to 2.75%. 2s10s steepened 3bps to 0.41%. Constructive but pre-CPI;
+  today's print is the override for all of it.
 
 ## Lessons / WHYs
 
@@ -73,3 +82,6 @@ into one.** The consumer is telling the NY Fed it feels the July-2022 stress all
 - **Confirmed safe havens can break within the same week** — gold was "structural" on June 4
   and reversed −2.07% on June 5. The geopolitical and credit-anxiety premium deflates faster
   than a credit cascade builds; don't extrapolate safe-haven bids across sessions.
+- **Oil moves are geopolitical until proven otherwise** — Monday's oil surge was labeled
+  demand-floor; it was entirely Iran-halt risk premium that unwound −4% on Tuesday. Always ask
+  whether an energy move is macro or event-driven before attributing it to demand.
