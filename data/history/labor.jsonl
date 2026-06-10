@@ -2145,6 +2145,7 @@
 {"date": "2026-02", "series": "CUUR0000SA0", "value": 326.785}
 {"date": "2026-03", "series": "CUUR0000SA0", "value": 330.213}
 {"date": "2026-04", "series": "CUUR0000SA0", "value": 333.02}
+{"date": "2026-05", "series": "CUUR0000SA0", "value": 335.123}
 {"date": "1957-01", "series": "CUUR0000SA0L1E", "value": 28.5}
 {"date": "1957-02", "series": "CUUR0000SA0L1E", "value": 28.5}
 {"date": "1957-03", "series": "CUUR0000SA0L1E", "value": 28.7}
@@ -2976,6 +2977,7 @@
 {"date": "2026-02", "series": "CUUR0000SA0L1E", "value": 333.242}
 {"date": "2026-03", "series": "CUUR0000SA0L1E", "value": 334.391}
 {"date": "2026-04", "series": "CUUR0000SA0L1E", "value": 335.803}
+{"date": "2026-05", "series": "CUUR0000SA0L1E", "value": 336.846}
 {"date": "1948-01", "series": "LNS11300000", "value": 58.6}
 {"date": "1948-02", "series": "LNS11300000", "value": 58.9}
 {"date": "1948-03", "series": "LNS11300000", "value": 58.5}
