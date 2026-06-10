@@ -2,11 +2,21 @@
 
 Two ways to use market-story on a new machine, and **they stay in sync**.
 
-## Option A — the hosted app (zero setup)
+## Option A — the static site (no Streamlit, no login) ★ recommended
 
-Open the public URL (in `README.md`) in any browser, on any computer or phone. The daily
-GitHub Action keeps it fresh. Nothing to install — this is the easiest way to read your
-brief from anywhere.
+The daily data only changes once a day, so the read surface is a **framework-free static
+site** — plain HTML, no server, no Streamlit. Three ways to open it:
+
+- **GitHub Pages (any device):** the `pages.yml` Action builds and deploys it on every push.
+  One-time setup: repo **Settings → Pages → Source = GitHub Actions**; the URL then shows there.
+  Open it on your phone and **Add to Home Screen** — it installs as an app (icon, own window,
+  works offline).
+- **Locally, no build:** open `site/index.html` in any browser.
+- **Rebuild from the latest brief:** `python build_site.py` → writes `site/`. (Runs offline from
+  committed data — no keys, no network.)
+
+The old Streamlit Cloud URL still exists for the dev/narrate loop, but the static site is what
+you actually open day to day.
 
 ## Option B — run it locally
 

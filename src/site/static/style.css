@@ -1,0 +1,117 @@
+/* market-story — static site. Ellis-dark design system (ported from styles.css tokens,
+   rebuilt for plain HTML so we no longer depend on Streamlit's DOM/selectors). */
+:root {
+  --bg:#0d0c0c; --surface:#16120f; --surface-2:#1b1611; --border:#2b2620;
+  --border-strong:#3a332b; --text:#f5f2ef; --text-dim:#b3aaa0; --accent:#7beafb;
+  --accent-bright:#a6f1ff; --up:#36C26F; --down:#FF5C6C; --warn:#f5a623;
+  --grid:#241f1a; --radius:10px;
+}
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  margin:0; background:var(--bg); color:var(--text); padding:0 max(1rem, env(safe-area-inset-left));
+  font-family:'Space Grotesk', system-ui, sans-serif; line-height:1.5;
+  max-width:1240px; margin:0 auto;
+}
+h1 { font-family:'Instrument Serif', Georgia, serif; font-weight:400; letter-spacing:-.01em;
+     font-size:2.6rem; line-height:1.08; margin:0; }
+h2 { font-family:'Space Grotesk', sans-serif; font-size:1.45rem; font-weight:600;
+     letter-spacing:-.03em; margin:0 0 .5rem; }
+h3 { font-family:'Space Grotesk', sans-serif; font-size:1rem; font-weight:600; letter-spacing:-.01em;
+     color:var(--text-dim); margin:.2rem 0 .5rem; }
+a, a:visited { color:var(--accent); text-decoration:none; }
+a:hover { color:var(--accent-bright); }
+.up { color:var(--up); } .down { color:var(--down); } .flat { color:var(--text-dim); }
+
+/* masthead */
+.masthead { padding:1.8rem 0 .6rem; }
+.masthead-row { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.stamp { font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--text-dim); }
+.cap { color:var(--text-dim); font-size:.8rem; margin:.35rem 0; }
+
+/* KPI tiles */
+.kpis { display:grid; grid-template-columns:repeat(6, 1fr); gap:.6rem; margin:1rem 0 .4rem; }
+.kpi { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+       border-radius:var(--radius); padding:11px 14px 9px; transition:border-color .15s ease; }
+.kpi:hover { border-color:var(--border-strong); border-left-color:var(--accent-bright); }
+.kpi-label { font-size:.62rem; text-transform:uppercase; letter-spacing:.09em; color:var(--text-dim);
+             opacity:.8; }
+.kpi-value { font-family:'IBM Plex Mono', monospace; font-size:1.32rem; font-weight:600;
+             font-variant-numeric:tabular-nums; margin-top:2px; }
+.kpi-delta { font-family:'IBM Plex Mono', monospace; font-size:.78rem; font-variant-numeric:tabular-nums; }
+.spark { height:42px; margin-top:4px; }
+.spark-chart { height:42px; }
+.chart { min-height:40px; }
+
+/* tab bar */
+.tabs { display:flex; gap:.2rem; overflow-x:auto; border-bottom:1px solid var(--border);
+        margin:1rem 0 1.3rem; position:sticky; top:0; background:var(--bg); z-index:5;
+        -webkit-overflow-scrolling:touch; }
+.tab { background:none; border:none; color:var(--text-dim); font-family:'Space Grotesk', sans-serif;
+       font-size:.92rem; font-weight:600; padding:.7rem .85rem; cursor:pointer; white-space:nowrap;
+       border-bottom:2px solid transparent; }
+.tab:hover { color:var(--text); }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.tabpanel { display:none; }
+.tabpanel.active { display:block; animation:fade .2s ease; }
+@keyframes fade { from { opacity:0; } to { opacity:1; } }
+
+/* panels, grids, charts */
+.panel { margin:0 0 1.8rem; }
+.grid { display:grid; gap:.7rem; }
+.grid-auto { grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-2 { grid-template-columns:repeat(2, 1fr); }
+.grid-3 { grid-template-columns:repeat(3, 1fr); }
+.grid-6 { grid-template-columns:repeat(6, 1fr); }
+.plotly-graph-div { width:100% !important; }
+
+/* hero (thesis / today's read) */
+.hero { background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--accent);
+        border-radius:var(--radius); padding:15px 19px; margin:.2rem 0 .9rem; }
+.hero-tag { font-family:'Space Grotesk', sans-serif; font-size:.64rem; text-transform:uppercase;
+            letter-spacing:.13em; margin-bottom:6px; }
+.hero-text { font-family:'Instrument Serif', Georgia, serif; font-size:1.5rem; line-height:1.3; color:var(--text); }
+.hero-foot { font-size:.76rem; color:var(--text-dim); margin-top:8px; }
+.sig { padding:2px 0; } .sig .dot { font-size:.7rem; }
+.mover { padding:3px 0; font-variant-numeric:tabular-nums; }
+
+/* tables (pandas Styler output) */
+.tbl { overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); }
+.tbl table { border-collapse:collapse; width:100%; font-family:'IBM Plex Mono', monospace;
+             font-size:.8rem; font-variant-numeric:tabular-nums; }
+.tbl th { background:var(--surface-2); color:var(--text-dim); font-weight:600; text-align:right;
+          padding:7px 11px; position:sticky; top:0; white-space:nowrap; }
+.tbl th:first-child, .tbl td:first-child { text-align:left; }
+.tbl td { padding:6px 11px; border-top:1px solid var(--grid); white-space:nowrap; }
+.tbl tr:hover td { background:var(--surface); }
+
+/* markdown (narratives, running thesis) */
+.md { color:var(--text); }
+.md h1 { font-size:1.7rem; margin:.8rem 0 .4rem; }
+.md h2 { font-size:1.25rem; color:var(--text); margin:1.1rem 0 .4rem; }
+.md h3 { color:var(--text-dim); margin:.9rem 0 .3rem; }
+.md p, .md li { font-size:.94rem; }
+.md code { background:var(--surface-2); padding:.1em .4em; border-radius:5px;
+           font-family:'IBM Plex Mono', monospace; font-size:.84em; }
+.md pre { background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+          padding:.8rem 1rem; overflow-x:auto; }
+.md table { border-collapse:collapse; } .md th, .md td { border:1px solid var(--border); padding:5px 9px; }
+.md blockquote { border-left:3px solid var(--border-strong); margin:.6rem 0; padding-left:1rem; color:var(--text-dim); }
+
+details { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+          padding:.4rem .9rem; margin:.6rem 0; }
+details summary { cursor:pointer; font-weight:600; color:var(--text); padding:.3rem 0; }
+
+.foot { display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; color:var(--text-dim);
+        font-size:.72rem; border-top:1px solid var(--border); margin-top:2rem; padding:1rem 0 2rem; }
+
+/* phone */
+@media (max-width:760px) {
+  body { padding:0 .7rem; }
+  h1 { font-size:1.9rem; }
+  .kpis { grid-template-columns:repeat(2, 1fr); }
+  .grid-6, .grid-3 { grid-template-columns:repeat(2, 1fr); }
+  .grid-2 { grid-template-columns:1fr; }
+  .hero-text { font-size:1.25rem; }
+  .masthead-row { flex-direction:column; gap:.2rem; }
+}

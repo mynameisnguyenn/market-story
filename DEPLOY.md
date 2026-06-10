@@ -1,11 +1,25 @@
 # Running market-story on your laptop AND your phone
 
-Two complementary ways to use this dashboard — use both:
+Three complementary ways to use this dashboard:
 
 | Mode | How | Good for |
 |---|---|---|
-| **Local (the workshop)** | Double-click **Market Story** on your Desktop (or `Launch Market Story.vbs`) | Refreshing data, running `/narrate` on demand, working **offline** |
-| **Hosted (the read, on every device)** | Streamlit Community Cloud → **install as an app** on laptop + iPhone (below) | The morning read, anywhere — laptop, phone, tablet |
+| **Static site (the read, no Streamlit)** ★ | `python build_site.py` → open `site/index.html`, or the **GitHub Pages** URL → install as an app | The morning read, anywhere — no login, no server, works offline |
+| **Local Streamlit (the workshop)** | Double-click **Market Story** on your Desktop (or `Launch Market Story.vbs`) | Refreshing data live, running `/narrate`, the interactive series pickers/editors |
+| **Hosted Streamlit (legacy)** | Streamlit Community Cloud → install as an app | The old read surface; superseded by the static site |
+
+## The static site (recommended) — GitHub Pages
+
+The data changes once a day, so the read surface is a framework-free static build (`src/site/`,
+emitted by `build_site.py`). `.github/workflows/pages.yml` builds and deploys it to GitHub Pages on
+every push to `main` (including the daily brief commit) — keyless, networkless, built from committed
+data only.
+
+**One-time setup:** repo **Settings → Pages → Source = GitHub Actions**. After the next push, the
+public URL appears there. Open it on any device and install it (laptop: the **Install** icon in the
+address bar; iPhone: **Share → Add to Home Screen**) — it runs as an app with its own window/icon and,
+thanks to the service worker, opens **offline** with the last build. To preview locally, just open
+`site/index.html` (or `python build_site.py` to rebuild from the newest brief).
 
 The **live data, charts, sector map, headlines, history archives, and the Learn page all
 work hosted** — fetched at runtime or read from the committed `data/history/*.jsonl`

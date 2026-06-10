@@ -117,8 +117,11 @@ streamlit run app.py     # open the dashboard
 
 ```
 run.py            entry point: gather -> brief
+build_site.py     entry point: committed brief -> static site/ (no Streamlit, no network)
 app.py            streamlit entry: page config, CSS, navigation, tab wiring (thin)
 src/dashboard/    dashboard view layer: charts (pure builders) -> widgets/data -> panels/<tab>.py
+src/site/         static-site generator: render (html primitives) -> build -> tabs/<id>.section(ctx);
+                  reuses src/dashboard/charts + the Stylers, replacing only the Streamlit glue. PWA + Pages.
 src/config.py     instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback)
 src/macro_data.py   FRED (keyless CSV or fredapi)

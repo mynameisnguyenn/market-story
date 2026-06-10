@@ -13,13 +13,17 @@ substantial build (newest first). Source of truth for "did we build X?" Pairs wi
 by Claude (Python gathers → brief JSON → Claude writes a thesis-first narrative → versioned logbook).
 
 **Where it runs**
-- **Local:** double-click `Launch Market Story.bat` (or the Desktop "Market Story" shortcut) → `localhost:8501`.
-  Interpreter `~/anaconda3/python.exe`; git at `~/anaconda3/Library/bin/git.exe` (neither is on PATH).
-- **Hosted:** `https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/` (Streamlit Community Cloud, repo
-  `github.com/mynameisnguyenn/market-story`, branch `main`, auto-redeploys on push). **Currently PRIVATE**
-  (login-gated) — set Sharing → Public for no-login phone access. Install as a PWA / Add to Home Screen.
+- **Static site (the read surface — no Streamlit, no login):** `python build_site.py` → `site/index.html`
+  (open as a file, or the GitHub Pages URL). Deployed by `.github/workflows/pages.yml` on every push to main.
+  Installs as a PWA (icon, own window, works offline) on desktop + phone. **One-time: repo Settings → Pages →
+  Source = GitHub Actions.** Built entirely from committed data — keyless, networkless.
+- **Streamlit app (dev / `/narrate` loop):** `Launch Market Story.bat` / Desktop shortcut → `localhost:8501`.
+  Interpreter `~/anaconda3/python.exe`; git at `~/anaconda3/Library/bin/git.exe` (neither is on PATH). Still
+  hosted at `https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/` (Streamlit Cloud) but the static site
+  supersedes it as the thing you actually open day to day.
 - **Daily Action** (`.github/workflows/daily-brief.yml`, 12:00 UTC weekdays): runs `run.py`, commits the
-  brief + timeline + history archives + running thesis + ledger; a weekday remote routine narrates ~12:45 UTC.
+  brief + timeline + history archives + running thesis + ledger, sends VIX phone alerts; a weekday remote
+  routine narrates ~12:45 UTC. Each push then triggers the Pages build so the static site stays fresh.
 
 **Keys:** `.env` (gitignored) has FRED, EIA, SEC_USER_AGENT (BLS empty → keyless v1). Same go in Streamlit
 **Secrets** for the hosted app; bridged via `app._load_cloud_secrets`. Keys never render in the UI.
@@ -55,6 +59,35 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
 ---
 
 ## Log (newest first)
+
+### 2026-06-10 — Framework-free static site (Streamlit → static HTML, PWA, GitHub Pages)
+User: "I don't love the cloud dependency and our reliance on the Streamlit framework… I want to use it on
+desktop or phone, click a URL or an application and it shows me the app." Chose a full static-site rewrite
+(Path B) over the cheaper PWA-the-existing-app option, and asked to optimize maximally (no optimizing-reflex
+pushback for this build — see the coaching memory). The daily data only changes once a day, so a static render
+is the honest fit: no server, no Streamlit, no login.
+- **New `src/site/` generator** (`python build_site.py` → `site/index.html`, zero network, committed-data only):
+  - `render.py` — HTML primitives: Plotly fig → **lazy** inert-JSON chart (`Plotly.newPlot` runs only when a tab
+    is first shown — initial load inits 7 charts, not 19), pandas Styler → `<table>`, markdown → HTML, KPI cards,
+    hero, panels, grid, details, dark Plotly theming.
+  - `build.py` — `SiteContext` (brief + closes via `brief_mod.load_latest_brief`/`closes_from_brief`, timeline df);
+    dispatches `src/site/tabs/<id>.section(ctx)`; one bad tab degrades, never kills the build.
+  - `tabs/` — one module per tab (overview/story/equities/macro/trends/headlines/calendar), **reusing the existing
+    pure builders** (`charts.py` figures + the `*_styler` Stylers) and the engines (analogues, event_study,
+    proxy_books, pmi_proxy, riskmetrics, ledger paper-P&L) — only the Streamlit glue is replaced. Honesty captions
+    preserved verbatim. Live-fetch panels (earnings/13F/SEC filings/econ calendar, watchlist editor) omitted as
+    offline-incompatible; the static time-machine uses fixed 4/13/26/52-week lookbacks vs the live date picker,
+    and the macro history expanders render headline series stacked vs the live `<select>` (noted in captions).
+  - Templates/assets: `index.html.j2`, `style.css` (Ellis-dark tokens rebuilt for plain HTML — no Streamlit DOM
+    deps), `app.js` (tab nav + lazy charts + SW registration).
+- **PWA:** `manifest.webmanifest` + generated `icon-192/512.png` (cyan-sparkline mark, `src/site/make_icons.py`)
+  + cache-first **offline** service worker → installs as a desktop/phone app (icon, own window, Add-to-Home-Screen).
+- **Hosting:** `.github/workflows/pages.yml` builds + deploys `site/` to **GitHub Pages** on every push to main
+  (incl. the daily brief commit). No Streamlit, no login, opens as a URL anywhere. **One-time user action: repo
+  Settings → Pages → Source = GitHub Actions.** `site/` is gitignored (rebuilt); icons committed.
+- **Verified:** 602 tests (incl. `tests/test_site_build.py` — the whole site builds with no tab erroring + every
+  tab returns HTML); all 7 tabs screenshot-clean desktop + mobile, zero JS errors; lazy charts confirmed rendering
+  on tab switch. The Streamlit app (`app.py`) stays for the `/narrate` dev loop; the static site is the read surface.
 
 ### 2026-06-10 — The accountability slate: 9 ambitious features design-grilled, 8 shipped descoped, 1 cut
 User asked for all nine ambitious features WITH a continuous adversarial grill on each. Ran a 28-agent

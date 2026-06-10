@@ -15,3 +15,8 @@ feedparser>=6.0.11
 # --- Dashboard & charts ---
 streamlit>=1.40.0
 plotly>=6.0.0
+
+# --- Static site (build_site.py -> site/, deployed to GitHub Pages) ---
+jinja2>=3.1.0
+markdown>=3.5
+# Pillow is only used by src/site/make_icons.py (one-off; the icons are committed) — not needed in CI.
