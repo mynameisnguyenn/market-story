@@ -4,56 +4,73 @@ _The standing, cross-session view — the through-line. Today's dated read lives
 `data/narratives/`; this is what carries between them. `/narrate` reads this at the start for
 continuity and revises it after each session. Keep it tight: a **view**, not a log._
 
-_Last updated: 2026-06-10_
+_Last updated: 2026-06-11_
 
 ## Current thesis
 
-**Fragility regime intact; first credible crack in the stress signals, but May CPI is the
-override.** Tuesday's session (June 9, captured mid-morning) delivered the first genuinely
-broad advance since the selloff: 9/11 sectors up, small caps (Russell 2000 +1.38%) and REITs
-(+1.96%) leading, HY OAS ticking DOWN 1bp to 2.75% — the first reversal after five consecutive
-sessions of drift from 2.71%. Oil crashed −4.07% to $87.58 as the Iran cease-fire premium
-fully unwound. Two constructive data points. But the −500,732 S&P spec short (record, June 2
-CFTC data) has not been squeezed — at +0.28% intraday Tuesday, the position is barely
-underwater. May CPI is due today (Wednesday June 10); if it re-accelerates above 3.8%, the
-hike tail becomes baseline and Tuesday's entire constructive read is invalidated. Until the
-print: the fragility regime holds, CPI is the pivot point.
+**Regime gate crossed; bond market pardoned the headline, but the gold crash and VIX spike say
+the tape knows something the OAS data doesn't yet confirm.** May CPI printed 4.2% YoY (highest
+in 3 years) — the 3.8% regime gate was crossed exactly as forecast. But 10Y yields FELL 1.4bps
+on the print: the bond market read core (2.85% YoY, +10bps from April, below 3%) as tame and
+interpreted the headline as transitory Iran/energy. "Rate hike bets pared." Simultaneously,
+Trump re-escalated against Iran ("Washington and Tehran exchange fire following downing of
+American helicopter"), partially restoring Tuesday's oil cease-fire rally to $89.71. The
+result: hot inflation + geopolitical risk on the same tape, yet gold crashed −2.72% to $4,144.
+Gold selling on a hot-CPI/war day = forced selling for liquidity or margin, the most honest
+signal in the session. HY OAS moved +3bps to 2.78% — the largest single-session drift move
+and now 2bps from the cascade trigger. The spec short at −500,732 is profitable at S&P 7,323.
+The regime has tightened, not resolved.
 
-**Flip condition (revised):** May CPI below 3.5% AND HY OAS sustains below 2.70% by Friday
-AND CFTC June 12 data shows net spec-short covering (−50k+ contracts) → the fragility regime
-transitions to genuine relief; the −500k spec short becomes a squeeze setup. Unless all three:
-Tuesday's breadth improvement is a constructive data point inside a still-fragile regime, not
-a regime reversal.
+**Flip condition:** HY OAS reverses and sustains below 2.70% for 3+ sessions AND CFTC June 12
+data shows 50k+ net covering AND Iran de-escalates with oil back below $87 → fragility lifts
+and the squeeze risk becomes live. All three must hold; right now none of them are moving in
+the required direction.
+
+**Scenarios: Base (55%)** — stagflation fragility deepens; HY OAS reaches 2.80–2.90% by late
+June; spec short covers only partially; S&P range-bound 7,100–7,500 through July CPI.
+**Bull (20%)** — Iran cease-fire holds 3+ sessions, oil drops to $85; bond market sustains
+tame-core read into June; spec-short squeeze as macro cover returns; S&P reclaims 7,500+.
+**Bear (25%)** — HY OAS cascade trigger trips; BoJ pauses hike, JPY carry unwinds; 10Y
+reclaims 4.65% on sustained Iran energy premium; S&P breaks 7,100 into forced-selling loop.
 
 ## Regime
 
-Hold-or-hike, late-cycle. 2s10s at 0.41% (0.4th %ile) — steepened 3bps on June 8 but still
-historically flat. 30Y held above 5.0% for the second consecutive session. EFFR 3.62% (0th
-%ile). Critically: the 10Y breakeven at 2.35% (52.8th %ile) is NOT pricing a hike — the bond
-market diverges from the sell-side hike narrative. BofA flagged 70% of bear market signals at
-red (June 9). "Bad news is good news" framework remains dead; "good news (reacceleration) is
-bad news" is the working regime until CPI resolves it.
+Hold-or-hike, late-cycle. Stagflation texture: energy-driven inflation (4.2% CPI) with
+slowing real growth signals (gold at 44th %ile, industrial/discretionary underperforming).
+2s10s at 0.40% (0.4th %ile) — still historically flat; the brief June 8 steepening has fully
+retraced. 30Y above 5%. EFFR 3.62% (0th %ile). 10Y breakeven 2.33% (42.9th %ile) — bond
+market NOT pricing broad inflation acceleration; reads CPI headline as transitory energy. VIX
+at 21.56 (86.5th %ile), VRP 8.4 — highest tail-insurance premium in this cycle sequence.
+Three cross-asset correlations broken simultaneously (gold/inflation, oil/equities, rates/CPI)
+= standard risk models underestimating portfolio correlation and realized risk.
 
 ## What I'm watching (multi-session)
 
-- **May CPI (due today, June 10)** — the regime gate. April was 3.81% headline / 2.75% core.
-  Oil crashed post-May survey period (June story, not May); May energy likely added to headline.
-  Above 3.8% = hike tail baseline; below 3.5% = cut narrative + short squeeze risk.
-  Maximum importance. No brief metric available yet.
-- **HY OAS 2.80% cascade trigger** — first 1bp reversal to 2.75% on June 9; still watching.
-  Private credit cascade Day 7 (historical widening window: June 25 – July 16). Watch-loop:
-  1/12 graded triggers hit (8.3% rate); directionally correct on HY drift but level triggers
-  untripped. The rate of drift (not the level) is the leading signal.
-- **CFTC data Friday June 12** — reveals whether Tuesday's broad breadth prompted any covering
-  of the record −500,732 spec short. If short grew further, thesis confirmed. If covered
-  materially (−50k+), dynamic shifts to potential squeeze.
-- **WTI $85 floor** — oil broke the Iran-halt surge entirely; next structural support at $85.
-  Below $85 on sustained volume = demand-growth-scare signal, not geopolitical normalization.
-- **Oracle Q4 (Tuesday after-close)** — AI enterprise cloud revenue; bellwether for whether AI
-  capex is translating to software/cloud revenue at the application layer.
-- **SpaceX Nasdaq-100 inclusion** — two Nasdaq Markets articles June 9 on QQQ inclusion. If it
-  materializes, $6bn+ passive buying funded by selling existing tech names. Supply overhang
-  building into a period of already-compressed tech multiples.
+- **HY OAS 2.80% cascade trigger — Day 8, 2bps away.** +7bps total drift (2.71%→2.78%).
+  Rate of drift ≈0.875bps/session; at this pace the trigger trips in 2–3 sessions. Hot CPI
+  is now the fundamental catalyst. Watch-loop on credit: 0/4 triggered at stated threshold
+  (all near-miss at 2.78%); threshold recalibrated to 2.78% for new posts. Historical private
+  credit cascade window: June 25 – July 16 (Days 21–42).
+- **CFTC Friday June 12** — the critical verdict on whether spec short covered into Tuesday's
+  breadth. With S&P at 7,323 and Wednesday down −0.86%, almost certainly did not cover. If
+  the print shows the short grew further (−550k+), squeeze risk recedes to near-zero through
+  June. If covered 50k+, the bear case thesis weakens.
+- **BoJ governor Ueda hospitalized — next week's rate decision uncertain.** USDJPY 160.48,
+  39bps from 161 intervention threshold. If BoJ pauses expected 1% hike, yen weakens,
+  carry trades unwind risk activates. New watch: USDJPY above 161. BoJ decision is the
+  single most impactful external CB event for US markets this month.
+- **Iran escalation clock.** Active military exchange (helicopter downed). Each day of
+  no cease-fire adds to June CPI energy component. If Iran escalates further (airstrikes,
+  Strait of Hormuz risk), WTI retests $95 and the tame-core narrative expires.
+- **Gold liquidity signal — watching for $4,050 breach.** No safe-haven bid, no inflation-
+  hedge bid at $4,144. If gold breaks $4,050, institutional liquidation is live and private
+  credit stress is going liquid. This is the canary for a cascade acceleration.
+- **ECB Thursday +25bps** — expected; energy inflation driving DM central bank divergence.
+  ECB hiking = EUR/USD support, DXY headwind. Watching whether ECB language frames this as
+  transitory (like the US core read) or persistent (second-round effects).
+- **SpaceX IPO supply** — FT confirms "US stock market stops shrinking for first time in 23
+  years." SpaceX/Anthropic/OpenAI IPOs = structural equity supply shock into a market with
+  the largest spec short in history. Nasdaq-100 inclusion watch continues.
 
 ## How the thesis has evolved
 
@@ -72,6 +89,12 @@ bad news" is the working regime until CPI resolves it.
   +1.96%). Oil crashed −4.07%; Iran cease-fire premium fully unwound. HY OAS first −1bp
   reversal in 5 sessions to 2.75%. 2s10s steepened 3bps to 0.41%. Constructive but pre-CPI;
   today's print is the override for all of it.
+- **2026-06-11** — May CPI 4.2% YoY crossed the 3.8% regime gate; but bond market pardoned
+  it on tame core (2.85%, only +10bps from April). 10Y fell 1.4bps on the day. Iran
+  re-escalated simultaneously (helicopter downed; Trump threatens); oil back to $89.71.
+  Gold crashed −2.72% to $4,144 on hot-CPI/war tape = forced selling signal. HY OAS +3bps
+  to 2.78%, 2bps from cascade trigger. VIX 21.56, VRP 8.4 (highest this cycle). Spec short
+  winning at S&P 7,323. Three simultaneous correlation breaks = fragility regime deepening.
 
 ## Lessons / WHYs
 
@@ -85,3 +108,7 @@ bad news" is the working regime until CPI resolves it.
 - **Oil moves are geopolitical until proven otherwise** — Monday's oil surge was labeled
   demand-floor; it was entirely Iran-halt risk premium that unwound −4% on Tuesday. Always ask
   whether an energy move is macro or event-driven before attributing it to demand.
+- **When three cross-asset correlations break simultaneously, risk models fail.** Gold/inflation,
+  oil/equities, and rates/CPI all inverted on the same day (June 10). Standard risk frameworks
+  assume these hold; when they don't, portfolio correlation is higher than any individual
+  asset's vol implies and the true portfolio risk is systematically underestimated.
