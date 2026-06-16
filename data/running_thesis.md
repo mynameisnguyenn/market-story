@@ -4,35 +4,40 @@ _The standing, cross-session view — the through-line. Today's dated read lives
 `data/narratives/`; this is what carries between them. `/narrate` reads this at the start for
 continuity and revises it after each session. Keep it tight: a **view**, not a log._
 
-_Last updated: 2026-06-15_
+_Last updated: 2026-06-16_
 
 ## Current thesis
 
-**The bear case is structurally intact but the geopolitical catalyst is in question.** Trump's Friday call-off of Iran strikes (FT, June 12 00:53 UTC) and claim of a deal "as early as this weekend" crashed WTI −$5 and vented the vol premium from VRP 8.2 to 4.0 in a single session. The STRUCTURAL bear case does NOT depend on Iran: BlackRock HPS ($13bn credit fund) just honored less than 40% of redemptions for the SECOND consecutive quarter — the private credit cycle is deteriorating independent of any oil deal. HY OAS remains at 2.80% (Day 10+, FRED June 10, unchanged by peace deal news). Stock-bond correlation 0.71 (hedge more broken, not less). NFCI at −0.506 (22.2nd %ile) has NOT yet registered the credit deterioration — it will, 6–8 weeks from now.
+**The Iran deal confirmed the bull case — now the question is whether the good news is priced.** FT (June 15, 10:16 UTC): Iran and US signed a full deal including explicit Strait of Hormuz reopening. WTI hit $80.49 (−5.17%), S&P rose 1.83% to 7,567, VIX compressed to 15.99, and HY OAS tightened 9bps to 2.71% (3.2nd %ile = historically tight). CFTC June 9 data showed 49k S&P covering (to −451,586). All three "bull case" conditions from the prior thesis were met simultaneously.
 
-**The bear case now has two triggers:** (1) Iran deal is another Friday fakeout → oil snaps back above $88 Monday, VRP reconstitutes, bear thesis re-establishes faster with less hedging available; (2) Deal is real → energy catalyst removed but credit cycle and structural risks persist, pace of deterioration slows.
+**What the bear case still owns:** (1) BlackRock HPS Gate 2 — second consecutive quarter below 40% redemptions ($13bn fund); public credit tightening does not un-gate a private credit vehicle; Gate 3 (September) is the next calendar risk. (2) NFCI at −0.506 (22.2nd %ile as of June 5) — hasn't registered any of the recent stress; will begin moving by late June / early July. (3) Structural CPI at 4.25% (May); core PCE 2.85%; AHE 3.45% — deal removes ~0.3–0.5pp from June CPI via energy, but the Fed's target is still violated. (4) 2s10s at 0.4th %ile (flattest of the year) — the curve is NOT pricing cuts; it's pricing a parallel rate shift, not a pivot.
 
-**Current stance: 0 (flat)** — weekend gap with unconfirmed peace deal. Check WTI Monday open. Below $84 = deal is pricing, cover short and reassess. Above $88 = fakeout confirmed, re-establish −1 with VRP reset.
+**The new binary:** Kevin Warsh's first FOMC (June 17–18) + BoJ (June 16–17) within 48 hours of each other. Unknown CB stance from a new Fed chair with a hawk history. This is the regime gate for the next 2–4 weeks.
 
-**Flip condition (from bear to bull):** Iran cease-fire confirmed + Strait of Hormuz explicitly reopened + WTI below $82 + HY OAS reverses to 2.70% within 5 sessions + CFTC shows 50k+ net S&P covering. All five required simultaneously; none confirmed as of June 12 brief.
+**Current stance: 0 (flat)** — bull case priced at S&P 7,567 ≈ target 7,600; CB binary too wide to size. Re-enter long on BoJ hike + Warsh neutral; re-establish −1 on Warsh hawkish surprise (2Y >4.15%) or BoJ pause (USDJPY >162).
 
-**Scenarios: Base (45%)** — Iran deal is real but partial (humanitarian corridor, not full Hormuz reopening); WTI settles $83–87; HY OAS drifts but doesn't cascade cleanly this week; BoJ hikes June 17; S&P range-trades 7,300–7,500 through June CPI.
-**Bull (25%)** — Full Iran cease-fire confirmed; WTI breaks below $82; HY OAS reverses to 2.70%; CFTC shows covering; BoJ hikes cleanly; SpaceX closes strong Day 1; S&P squeezes to 7,600+.
-**Bear (30%)** — Iran fakeout (WTI >$88 Monday); HY OAS breaks 2.85% confirmed; BoJ pauses on leadership vacuum; CFTC shows shorts deepened to −530k+; private credit Gate 3 timeline advances; S&P breaks 7,200.
+**Flip condition (bull regime continuation):** Warsh neutral or dovish + BoJ hikes + S&P holds above 7,500 → S&P to 7,700+, CFTC covering self-reinforcing squeeze. All three required.
+
+**Flip condition (bear regime return):** Warsh hawkish (2Y reprices above 4.15%) OR BoJ pause (USDJPY 162+) → VIX reconstitutes toward 20, S&P −2% to −3% from 7,567. Either alone is sufficient.
+
+**Scenarios: Base (50%)** — BoJ hikes + Warsh neutral hold; S&P range-trades 7,500–7,700 through June CPI; CFTC covering continues but no acceleration; deal holds and WTI settles $78–84.
+**Bull (30%)** — Both CBs constructive; CFTC covering accelerates (80k+ by June 20 data); June CPI prints below 4.0%; S&P squeezes to 7,800+; gold holds $4,300+ (inflation hedge intact).
+**Bear (20%)** — Warsh hawkish commentary or BoJ pause; USDJPY 162+ and/or 2Y reprices to 4.15%+; VIX snaps to 20–22; S&P corrects to 7,200–7,300; BlackRock Gate 3 foreshadowing in credit market commentary.
 
 ## Regime
 
-Higher-for-longer, late cycle, stagflation texture — Iran deal, if confirmed, removes the ENERGY component but not the STRUCTURAL component (ECB hiked, CPI 4.25%, PPI +1.1% already in pipeline, UK GDP contracting). 2s10s 0.40% (0.4th %ile) — reflattened after brief steepening. 10Y breakeven 2.29% (24.2nd %ile, down 5bps on peace deal news — bond market pricing out Iran inflation premium faster than oil confirms it). EFFR 3.62% (0th %ile). VIX 18.99, VRP 4.0 (from 8.2) — fear premium vented. Stock-bond correlation 0.71 (broken). NFCI −0.506 (22.2nd %ile, lagging). Three structural stress signals active: HY OAS at cascade trigger, BlackRock Gate 2 (private credit structural), stock-bond hedge broken.
+Post-Iran-deal transition: moving from "higher-for-longer + geopolitical stagflation" toward "higher-for-longer + energy disinflation." Core inflation (2.85% core PCE, 2.85% core CPI) and wage inflation (3.45% AHE) remain. The Fed's dual mandate: labor (4.3% unemployment, 229k claims = 71.8th %ile, labor softening) argues for eventual cuts; inflation mandate (4.25% CPI, 2.85% core) argues against. Warsh's first meeting will define which leg he watches. VIX 15.99, HY OAS 2.71% (3.2nd %ile), 2s10s 0.39% (0.4th %ile), EFFR 3.62% (0th %ile), NFCI −0.506 (22.2nd %ile, lagging). S&P at 7,567 (YTD +10.5%), Nasdaq at 26,653 (YTD +14.7%). CFTC: S&P e-mini lev net −451,586 (June 9), covering started.
 
 ## What I'm watching (multi-session)
 
-- **WTI Monday open — the Friday fakeout test.** Below $84 = deal is real; above $88 = fakeout, bear thesis reasserts with VRP already depleted to 4.0. This is the regime gate for the coming week.
-- **HY OAS (next FRED update, expected June 15–16)** — will appear in the next brief. If OAS widens despite oil falling, the credit-cycle story (BlackRock gate) is confirmed independent of Iran. Trigger recalibrated to `>2.85%` (from `>2.83%`). 0/7 on strict triggers; directionally correct all 7 sessions.
-- **BlackRock HPS Gate 2 confirmed.** Private→public credit cascade timeline: Gate 1 = anomaly; Gate 2 = structural; Gate 3 (September) = sector cascade. IG OAS at 9.9th %ile has nowhere to go but wider when HY leads. NFCI will lag 6–8 weeks.
-- **BoJ June 16–17** — Ueda hospitalized, deputy decides. Hike +25bps (consensus) → USDJPY 158–159; pause → USDJPY 162+, carry unwind tail activated. USDJPY at 160.25 (−0.25 from June 11 brief on risk-on).
-- **CFTC June 9 data** (released June 12 3pm ET, appears in next brief) — S&P spec net: above −530k = bear thesis has structural support; below −450k = covering, squeeze risk live. This data was released after the June 12 brief was captured.
-- **SpaceX (SPCX) Nasdaq debut + Nasdaq-100 inclusion timing.** History's largest IPO ($75bn, ~$1.8T valuation). S&P said NO (profitability threshold). Nasdaq-100 next. Passive rebalancing forced buying = structural bid for SPCX, liquidity strain everywhere else.
-- **June CPI (mid-July)** — the next regime gate. May PPI +1.1% MoM + confirmed structural inflation → pipeline full. If Iran deal is real, June CPI might print 3.8–4.0% (vs 4.25% May). Below 3.8% = regime change. Above 4.0% = pipeline confirmed.
+- **BoJ June 16–17 (TODAY).** USDJPY 160.23. Hike: USDJPY 158–159, risk-on extends. Pause: USDJPY 162+, carry unwind activated. Resolution imminent — update after announcement.
+- **Kevin Warsh first FOMC (June 17–18).** Most important CB event for 2026 rate path. Hawkish → 2Y reprices to 4.15%+, tech multiples compress. Neutral → market relief, S&P tests 7,650.
+- **HY OAS next FRED update (expected in June 17–18 brief).** At 3.2nd %ile (2.71%), any widening is amplified. Trigger re-calibrated: `>2.80%` to confirm credit re-stress; hold sub-2.75% confirms deal-driven tightening is durable.
+- **CFTC June 16 data (released Friday June 20).** S&P e-mini net: if covering accelerates to −380k+ range (70k+ additional), the squeeze becomes self-reinforcing. Below −440k = bears not convinced even by confirmed Hormuz reopening.
+- **BlackRock HPS Gate 3 (September quarterly).** The structural private credit cascade clock runs independent of Iran. Gate 1 = anomaly; Gate 2 = structural; Gate 3 = sector cascade. Track any new private credit redemption restrictions reported through August.
+- **June CPI (mid-July) — the next regime gate.** Deal removes ~0.3–0.5pp from energy. June estimate: 3.8–4.0% (vs May 4.25%). Below 3.8% = regime change and Warsh cut signal; above 4.0% = structural inflation confirmed.
+- **Gold behavior post-Warsh.** Gold at $4,360 rallied on confirmed peace. If gold falls with equities on Warsh hawkish → hedge property broken again (June 11 repeat). If gold holds/rises on hawkish → gold is pricing structural inflation, not geopolitics.
+- **Anthropic AI export controls resolution.** Anthropic meeting with US officials Monday (June 15). If export controls on Fable/Mythos are maintained → domestic AI chip demand stays onshore, NVDA/TSM bid structural. If resolved → tech rally loses one catalyst.
 
 ## How the thesis has evolved
 
@@ -43,6 +48,7 @@ Higher-for-longer, late cycle, stagflation texture — Iran deal, if confirmed, 
 - **2026-06-11** — May CPI 4.2% crossed regime gate; bond market pardoned on tame core (2.85%). Iran re-escalated simultaneously. Gold crashed −2.72% = forced selling signal. HY OAS +3bps to 2.78%. VRP 8.4 highest this cycle. Spec short winning at 7,323.
 - **2026-06-12** — PPI +1.1% MoM + ECB first hike since 2023 confirm DM inflation is structural. HY OAS formally at 2.80% cascade trigger (Day 9). Gold 6-month low ($4,101, "speculative investors exit" confirmed). Stock-bond correlation 0.64, hedge broken. Dollar through 100 (97.6th %ile). Bear case lifted to base case (55%); Bull cut to 15%; Bear tail up to 30%.
 - **2026-06-15** — Trump calls off Iran strikes overnight, claims deal "close" (FT 00:53 UTC June 12). WTI −$5, VIX −3, gold +$107, VRP 8.2→4.0. BUT BlackRock HPS confirms Gate 2 (second consecutive quarter <40% redemption honors, $13bn fund). UK GDP −0.1% in April. Stock-bond corr jumped to 0.71. Bear thesis structure intact; geopolitical catalyst uncertain. Stance reset to 0 (flat) pending Monday oil open. Scenarios: Base 45%/Bull 25%/Bear 30%.
+- **2026-06-16** — Full Iran deal confirmed with Strait of Hormuz explicitly reopened (FT June 15, 10:16 UTC). WTI $80.49, S&P +1.83% to 7,567, VIX 15.99, HY OAS tightened 9bps to 2.71% (3.2nd %ile = historically tight). CFTC June 9: 49k S&P contracts covered (to −451,586). Bull case validated simultaneously. Bear case retained structural elements (BlackRock HPS Gate 2, NFCI lagging, core inflation unchanged). New regime gate: Warsh first FOMC (June 17–18) + BoJ (June 16–17) within 48 hours. Stance 0 (flat) at bull target 7,567 pending CB clarity. Scenarios updated: Base 50% / Bull 30% / Bear 20%.
 
 ## Lessons / WHYs
 
@@ -54,3 +60,5 @@ Higher-for-longer, late cycle, stagflation texture — Iran deal, if confirmed, 
 - **ECB hiking into supply-side inflation is a policy mistake** (confirmed June 11). Rate hikes suppress demand but cannot reduce oil supply. EUR/USD falls on ECB hike = FX market reads it correctly: slows growth without fixing the inflation source. Don't mistake tightening for resolution.
 - **VRP compression on unconfirmed peace news is a trap for both sides.** VRP 8.2→4.0 on Trump's "close to deal" statement without confirmation. If the deal fails, VRP snaps back violently; if it succeeds, bears are over-hedged. Check the oil open before assuming either side won.
 - **Gate 1 = anomaly, Gate 2 = structural.** In private credit, a single quarterly redemption gate can be explained by liquidity management. A SECOND consecutive quarter below 40% is a cycle signal. Track BlackRock HPS + equivalent gates as a leading credit indicator with 6–8 week lag to NFCI.
+- **The bear thesis was right about HY direction, wrong about level and timing.** 0/8 on HY OAS triggers (threshold too aggressive by 2–5bps every time), then the Iran deal INVERTED the entire widening trend. Correct macro read (private credit stress), wrong near-term catalyst (Iran proved bigger than credit cycle). The lesson: when a geopolitical binary sits on top of a structural thesis, the structural thesis gets overwhelmed in the short run — price the binary first.
+- **Chasing the bear at the bull target is as bad as chasing the bull at the bear target.** The June 12 short (direction: −1) was wrong at S&P 7,388 because the bull catalyst (Iran deal) was 3 days away. Don't add to a thesis trade when the immediate binary (peace deal resolution) overwhelms the structural thesis (credit cycle). Wait for the binary to resolve; then re-establish with clean entry.
