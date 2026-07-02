@@ -18668,6 +18668,7 @@
 {"date": "2026-06-25", "series": "DGS10", "value": 4.4}
 {"date": "2026-06-26", "series": "DGS10", "value": 4.38}
 {"date": "2026-06-29", "series": "DGS10", "value": 4.38}
+{"date": "2026-06-30", "series": "DGS10", "value": 4.44}
 {"date": "1976-06-01", "series": "DGS2", "value": 7.26}
 {"date": "1976-06-02", "series": "DGS2", "value": 7.23}
 {"date": "1976-06-03", "series": "DGS2", "value": 7.22}
@@ -31183,6 +31184,7 @@
 {"date": "2026-06-25", "series": "DGS2", "value": 4.09}
 {"date": "2026-06-26", "series": "DGS2", "value": 4.07}
 {"date": "2026-06-29", "series": "DGS2", "value": 4.1}
+{"date": "2026-06-30", "series": "DGS2", "value": 4.14}
 {"date": "2006-01-02", "series": "DTWEXBGS", "value": 101.4155}
 {"date": "2006-01-03", "series": "DTWEXBGS", "value": 100.7558}
 {"date": "2006-01-04", "series": "DTWEXBGS", "value": 100.2288}
@@ -42843,6 +42845,7 @@
 {"date": "2026-06-26", "series": "EFFR", "value": 3.63}
 {"date": "2026-06-29", "series": "EFFR", "value": 3.63}
 {"date": "2026-06-30", "series": "EFFR", "value": 3.63}
+{"date": "2026-07-01", "series": "EFFR", "value": 3.63}
 {"date": "1967-01-07", "series": "ICSA", "value": 208000.0}
 {"date": "1967-01-14", "series": "ICSA", "value": 207000.0}
 {"date": "1967-01-21", "series": "ICSA", "value": 217000.0}
@@ -45945,7 +45948,8 @@
 {"date": "2026-05-30", "series": "ICSA", "value": 225000.0}
 {"date": "2026-06-06", "series": "ICSA", "value": 230000.0}
 {"date": "2026-06-13", "series": "ICSA", "value": 227000.0}
-{"date": "2026-06-20", "series": "ICSA", "value": 215000.0}
+{"date": "2026-06-20", "series": "ICSA", "value": 216000.0}
+{"date": "2026-06-27", "series": "ICSA", "value": 215000.0}
 {"date": "1919-01-01", "series": "INDPRO", "value": 4.8739}
 {"date": "1919-02-01", "series": "INDPRO", "value": 4.6585}
 {"date": "1919-03-01", "series": "INDPRO", "value": 4.5238}
@@ -51177,8 +51181,9 @@
 {"date": "2026-01-01", "series": "PAYEMS", "value": 158592.0}
 {"date": "2026-02-01", "series": "PAYEMS", "value": 158436.0}
 {"date": "2026-03-01", "series": "PAYEMS", "value": 158650.0}
-{"date": "2026-04-01", "series": "PAYEMS", "value": 158829.0}
-{"date": "2026-05-01", "series": "PAYEMS", "value": 159001.0}
+{"date": "2026-04-01", "series": "PAYEMS", "value": 158798.0}
+{"date": "2026-05-01", "series": "PAYEMS", "value": 158927.0}
+{"date": "2026-06-01", "series": "PAYEMS", "value": 158984.0}
 {"date": "1959-01-01", "series": "PCEPILFE", "value": 15.501}
 {"date": "1959-02-01", "series": "PCEPILFE", "value": 15.513}
 {"date": "1959-03-01", "series": "PCEPILFE", "value": 15.531}
@@ -54046,6 +54051,7 @@
 {"date": "2026-06-26", "series": "SOFR", "value": 3.62}
 {"date": "2026-06-29", "series": "SOFR", "value": 3.62}
 {"date": "2026-06-30", "series": "SOFR", "value": 3.68}
+{"date": "2026-07-01", "series": "SOFR", "value": 3.66}
 {"date": "1976-06-01", "series": "T10Y2Y", "value": 0.68}
 {"date": "1976-06-02", "series": "T10Y2Y", "value": 0.71}
 {"date": "1976-06-03", "series": "T10Y2Y", "value": 0.7}
@@ -66562,6 +66568,7 @@
 {"date": "2026-06-26", "series": "T10Y2Y", "value": 0.31}
 {"date": "2026-06-29", "series": "T10Y2Y", "value": 0.28}
 {"date": "2026-06-30", "series": "T10Y2Y", "value": 0.3}
+{"date": "2026-07-01", "series": "T10Y2Y", "value": 0.31}
 {"date": "1982-01-04", "series": "T10Y3M", "value": 2.32}
 {"date": "1982-01-05", "series": "T10Y3M", "value": 2.24}
 {"date": "1982-01-06", "series": "T10Y3M", "value": 2.43}
@@ -77687,6 +77694,7 @@
 {"date": "2026-06-26", "series": "T10Y3M", "value": 0.55}
 {"date": "2026-06-29", "series": "T10Y3M", "value": 0.51}
 {"date": "2026-06-30", "series": "T10Y3M", "value": 0.57}
+{"date": "2026-07-01", "series": "T10Y3M", "value": 0.63}
 {"date": "2003-01-02", "series": "T10YIE", "value": 1.64}
 {"date": "2003-01-03", "series": "T10YIE", "value": 1.62}
 {"date": "2003-01-06", "series": "T10YIE", "value": 1.63}
@@ -83564,6 +83572,7 @@
 {"date": "2026-06-26", "series": "T10YIE", "value": 2.2}
 {"date": "2026-06-29", "series": "T10YIE", "value": 2.22}
 {"date": "2026-06-30", "series": "T10YIE", "value": 2.24}
+{"date": "2026-07-01", "series": "T10YIE", "value": 2.23}
 {"date": "1948-01-01", "series": "UNRATE", "value": 3.4}
 {"date": "1948-02-01", "series": "UNRATE", "value": 3.8}
 {"date": "1948-03-01", "series": "UNRATE", "value": 4.0}
@@ -84504,6 +84513,7 @@
 {"date": "2026-03-01", "series": "UNRATE", "value": 4.3}
 {"date": "2026-04-01", "series": "UNRATE", "value": 4.3}
 {"date": "2026-05-01", "series": "UNRATE", "value": 4.3}
+{"date": "2026-06-01", "series": "UNRATE", "value": 4.2}
 {"date": "1990-01-02", "series": "VIXCLS", "value": 17.24}
 {"date": "1990-01-03", "series": "VIXCLS", "value": 18.19}
 {"date": "1990-01-04", "series": "VIXCLS", "value": 19.22}
@@ -93723,3 +93733,4 @@
 {"date": "2026-06-26", "series": "VIXCLS", "value": 18.41}
 {"date": "2026-06-29", "series": "VIXCLS", "value": 17.65}
 {"date": "2026-06-30", "series": "VIXCLS", "value": 16.45}
+{"date": "2026-07-01", "series": "VIXCLS", "value": 16.59}
