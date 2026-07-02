@@ -1,0 +1,58 @@
+name: Send digest email
+
+# Emails the daily read (thesis, call, watch grades, KPIs) to the user's inbox once the
+# newest brief + narrative carry the same date. Dual trigger because GitHub's cron queue
+# lands the daily brief 1.5-4.5h AFTER the narrative (see BUILD_LOG 2026-07-02): the
+# narrative push date-mismatches and skips; the later brief push completes the pair.
+# data/emails/.last_sent (committed below) prevents a resend on subsequent pushes.
+# Needs three repo secrets: GMAIL_USERNAME, GMAIL_APP_PASSWORD (app password, requires
+# 2-Step Verification), MAIL_TO. No-ops silently when they are unset.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/narratives/**"
+      - "data/briefs/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Render + send the digest (Gmail SMTP)
+        # continue-on-error guarantees a broken send can never fail the pipeline, even
+        # against an import-time error (the script's own sys.exit(0) covers runtime).
+        continue-on-error: true
+        run: python scripts/send_digest.py
+        env:
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+
+      - name: Commit the send marker
+        # The marker commit touches only data/emails/.last_sent, which is outside this
+        # workflow's own path filters — it cannot re-trigger itself.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -f data/emails/.last_sent ]; then
+            git add -f data/emails/.last_sent
+          fi
+          if git diff --cached --quiet; then
+            echo "No digest state change to commit."
+          else
+            git commit -m "Digest sent ($(date -u +%Y-%m-%d))"
+            git push
+          fi

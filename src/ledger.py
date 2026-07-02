@@ -226,9 +226,11 @@ def grade_pending() -> dict:
     return stats()
 
 
-def stats() -> dict:
-    """Running track record: counts + hit-rate, overall and per metric family."""
-    rows = [r for r in load() if r.get("kind") != "stance"]   # stance ledger has its own stats
+def stats(rows: list[dict] | None = None) -> dict:
+    """Running track record: counts + hit-rate, overall and per metric family.
+    Pass already-loaded rows to avoid a second disk read (the digest does)."""
+    rows = [r for r in (rows if rows is not None else load())
+            if r.get("kind") != "stance"]          # stance ledger has its own stats
     from collections import Counter
     c = Counter(r.get("status") for r in rows)
     graded = c["triggered"] + c["missed"]

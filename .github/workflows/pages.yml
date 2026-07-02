@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - "data/**"
+      - "!data/emails/**"   # the digest send-marker commit shouldn't rebuild the site
       - "src/**"
       - "styles.css"
       - "build_site.py"

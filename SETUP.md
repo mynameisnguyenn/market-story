@@ -54,6 +54,23 @@ All free, all optional — the dashboard degrades gracefully without them, but t
 where you get each. The **hosted** app reads the same keys from Streamlit Cloud secrets
 (Settings → Secrets); **locally** they live in `.env`. See `DEPLOY.md` for hosting your own.
 
+## Daily email digest (optional, free)
+
+The `send-digest.yml` Action emails the daily read (the call, watch grades, KPI tape,
+stretched readings, watch triggers) to your inbox once the day's brief + narrative pair is
+committed. It sends from your own Gmail via an app password — no third-party mail vendor.
+Setup, ~3 minutes:
+
+1. Enable **2-Step Verification** on the Gmail account (app passwords require it), then
+   create an app password at <https://myaccount.google.com/apppasswords> (choose "Mail").
+2. Add three GitHub secrets (repo → Settings → Secrets and variables → Actions):
+   `GMAIL_USERNAME` = your Gmail address, `GMAIL_APP_PASSWORD` = the 16-character app
+   password, `MAIL_TO` = where to deliver (can equal `GMAIL_USERNAME`).
+3. Done. Missing secrets → the step silently no-ops. The workflow only sends when the
+   newest brief and narrative carry the same date (the brief's cron delay means the pair
+   completes on the second push of the day), and `data/emails/.last_sent` guarantees at
+   most one email per day. First send may land in Promotions — mark it "not spam" once.
+
 ## Phone alerts (optional, free)
 
 The daily Action can push a phone notification when the VIX alert fires (level ≥ 25 **and**
