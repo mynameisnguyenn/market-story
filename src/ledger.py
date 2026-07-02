@@ -17,15 +17,22 @@ import json
 import os
 import re
 
+import numpy as np
+
 from . import config, macro_data, scorecard
 
 LEDGER_PATH = config.DATA_DIR / "scorecard_log.jsonl"
 STANCE_START = "2026-06-10"   # stance blocks exist only from this date — earlier narratives exempt
 
 
-def horizon_sessions(horizon: str) -> int:
+def horizon_sessions(horizon: str, logged: str = "") -> int:
     """Trading sessions a horizon implies (so we know when an item has matured)."""
-    h = (horizon or "").lower()
+    h = (horizon or "").strip().lower()
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", h) and re.match(r"^\d{4}-\d{2}-\d{2}$", logged or ""):
+        try:                                       # ISO-date horizon: sessions from the log date,
+            return max(int(np.busday_count(logged, h)), 1)   # never wall-clock; past dates clamp to 1
+        except ValueError:
+            pass                                   # malformed calendar date -> keyword fallback
     m = re.search(r"(\d+)\s*session", h)
     if m:
         return max(int(m.group(1)), 1)
@@ -69,12 +76,42 @@ def _key(rec: dict) -> tuple:
     return (rec.get("logged"), rec.get("metric"), rec.get("trigger"), rec.get("claim"))
 
 
-# --- value windows (committed macro archive + yfinance for market symbols) ---
+# --- value windows (committed macro archive + briefs first; yfinance fallback) ---
 
 def _macro_window(series_id: str, start: str, sessions: int) -> list[float]:
     rows = sorted((r["date"], r["value"]) for r in macro_data.load_fred_history()
                   if r.get("series") == series_id)
     return [v for d, v in rows if d > start][:sessions + 2]
+
+
+def _brief_window(symbol: str, field: str, start: str, sessions: int) -> list[float] | None:
+    """Values for a market symbol from the committed daily briefs after `start` — no network,
+    so CI grades deterministically. None if no briefs cover the range; [] if briefs exist but
+    never carry the symbol/field (caller falls back to yfinance either way)."""
+    if not config.BRIEFS_DIR.exists():
+        return None
+    paths = []
+    for p in sorted(config.BRIEFS_DIR.glob("brief_*.json")):
+        m = re.search(r"(\d{4}-\d{2}-\d{2})", p.name)
+        if m and m.group(1) > start:
+            paths.append(p)
+    if not paths:
+        return None
+    vals: list[float] = []
+    for p in paths:
+        try:
+            brief = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue                               # skip unreadable/corrupt files
+        val = scorecard.resolve_metric(brief, f"market:{symbol}:{field}")
+        try:
+            if val is not None:
+                vals.append(float(val))
+        except (TypeError, ValueError):
+            continue
+        if len(vals) >= sessions + 2:
+            break
+    return vals
 
 
 def _fetch_market(symbol: str, start: str, sessions: int):
@@ -89,11 +126,15 @@ def _fetch_market(symbol: str, start: str, sessions: int):
         if isinstance(close, pd.DataFrame):
             close = close.iloc[:, 0]
         return close.dropna()
-    except Exception:
+    except Exception as exc:
+        print(f"ledger: yfinance fetch failed for {symbol}: {exc}")
         return None
 
 
 def _market_window(symbol: str, field: str, start: str, sessions: int) -> list[float] | None:
+    vals = _brief_window(symbol, field or "last", start, sessions)
+    if vals:                                       # committed data wins; None/[] -> network fallback
+        return vals
     close = _fetch_market(symbol, start, sessions)
     if close is None or len(close) == 0:
         return None
@@ -120,7 +161,7 @@ def _window_for(metric: str, trigger: str, start: str, sessions: int):
 
 def _grade(rec: dict) -> dict:
     """Resolve a record's status from its horizon window. Mutates + returns rec."""
-    sessions = rec.get("horizon_sessions") or horizon_sessions(rec.get("horizon", ""))
+    sessions = rec.get("horizon_sessions") or horizon_sessions(rec.get("horizon", ""), rec.get("logged", ""))
     vals = _window_for(rec.get("metric", ""), rec.get("trigger", ""), rec.get("logged", ""), sessions)
     if vals is None:
         rec["status"] = "unresolved"
@@ -157,7 +198,7 @@ def log_predictions(narrative_date: str, items: list[dict], asof: dict | None = 
             "metric": it.get("metric"),
             "trigger": it.get("trigger"),
             "horizon": it.get("horizon", ""),
-            "horizon_sessions": horizon_sessions(it.get("horizon", "")),
+            "horizon_sessions": horizon_sessions(it.get("horizon", ""), narrative_date),
             "asof_value": scorecard.resolve_metric(asof, it.get("metric", "")) if asof else None,
             # 0-1 for Brier scoring; 0.0 is a VALID probability, so no falsy `or` chaining here
             "confidence": it.get("probability") if it.get("probability") is not None else it.get("confidence"),
@@ -178,6 +219,10 @@ def grade_pending() -> dict:
         if r.get("status") in (None, "pending", "unresolved"):
             _grade(r)
     _write(rows)
+    unresolved = [r.get("metric") for r in rows
+                  if r.get("kind") != "stance" and r.get("status") == "unresolved"]
+    if unresolved:                                  # visible in the Action log — no silent rot
+        print(f"ledger: {len(unresolved)} still unresolved: {unresolved}")
     return stats()
 
 
@@ -218,7 +263,7 @@ def backfill_from_narratives() -> dict:
             rec = {
                 "logged": ndate, "claim": it.get("claim", ""), "metric": it.get("metric"),
                 "trigger": it.get("trigger"), "horizon": it.get("horizon", ""),
-                "horizon_sessions": horizon_sessions(it.get("horizon", "")),
+                "horizon_sessions": horizon_sessions(it.get("horizon", ""), ndate),
                 "asof_value": None, "status": "pending",
                 "confidence": it.get("probability") if it.get("probability") is not None else it.get("confidence"),
             }
