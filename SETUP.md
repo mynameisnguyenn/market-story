@@ -2,10 +2,10 @@
 
 Two ways to use market-story on a new machine, and **they stay in sync**.
 
-## Option A — the static site (no Streamlit, no login) ★ recommended
+## Option A — the static site (no server, no login) ★ recommended
 
 The daily data only changes once a day, so the read surface is a **framework-free static
-site** — plain HTML, no server, no Streamlit. Three ways to open it:
+site** — plain HTML, no server, no framework runtime. Three ways to open it:
 
 - **GitHub Pages (any device):** the `pages.yml` Action builds and deploys it on every push.
   One-time setup: repo **Settings → Pages → Source = GitHub Actions**; the URL then shows there.
@@ -15,8 +15,8 @@ site** — plain HTML, no server, no Streamlit. Three ways to open it:
 - **Rebuild from the latest brief:** `python build_site.py` → writes `site/`. (Runs offline from
   committed data — no keys, no network.)
 
-The old Streamlit Cloud URL still exists for the dev/narrate loop, but the static site is what
-you actually open day to day.
+The static site is the only app surface — the Streamlit dashboard was decommissioned
+2026-07-02. The dev/narrate loop is Option B below.
 
 ## Option B — run it locally
 
@@ -26,7 +26,7 @@ cd market-story
 python bootstrap.py          # installs deps + creates .env from the template
 #   -> edit .env and paste your free keys (FRED, EIA — see the comments in the file)
 python run.py                # build today's brief
-python -m streamlit run app.py
+python build_site.py         # render the static site -> open site/index.html
 #   then, in `claude` in this folder:  "narrate today's brief"
 ```
 
@@ -49,10 +49,11 @@ the same accrued history (briefs, narratives, the metrics timeline) everywhere.
 
 ## Keys
 
-All free, all optional — the dashboard degrades gracefully without them, but the energy
+All free, all optional — the pipeline degrades gracefully without them, but the energy
 (EIA) and positioning panels need their fetchers to succeed. `.env.example` has a link to
-where you get each. The **hosted** app reads the same keys from Streamlit Cloud secrets
-(Settings → Secrets); **locally** they live in `.env`. See `DEPLOY.md` for hosting your own.
+where you get each. **Locally** the keys live in `.env` only (see `.env.example`);
+**GitHub Actions** reads the same keys from repo secrets (see
+`.github/workflows/daily-brief.yml`). See `DEPLOY.md` for hosting your own.
 
 ## Daily email digest (optional, free)
 

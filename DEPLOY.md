@@ -1,84 +1,72 @@
 # Running market-story on your laptop AND your phone
 
-Three complementary ways to use this dashboard:
+The read surface is a **framework-free static site**. Two ways to open it:
 
 | Mode | How | Good for |
 |---|---|---|
-| **Static site (the read, no Streamlit)** ★ | `python build_site.py` → open `site/index.html`, or the **GitHub Pages** URL → install as an app | The morning read, anywhere — no login, no server, works offline |
-| **Local Streamlit (the workshop)** | Double-click **Market Story** on your Desktop (or `Launch Market Story.vbs`) | Refreshing data live, running `/narrate`, the interactive series pickers/editors |
-| **Hosted Streamlit (legacy)** | Streamlit Community Cloud → install as an app | The old read surface; superseded by the static site |
+| **GitHub Pages** ★ | <https://mynameisnguyenn.github.io/market-story/> → install as an app | The morning read, anywhere — no login, no server, works offline |
+| **Local build** | `python build_site.py` → open `site/index.html` | The dev loop: rebuild from the newest brief, tweak `src/site/`, preview offline |
 
-## The static site (recommended) — GitHub Pages
+The **daily email digest** is the push counterpart to the site — the day's read lands in
+your inbox once the brief + narrative pair is committed. Setup lives in `SETUP.md`.
 
-The data changes once a day, so the read surface is a framework-free static build (`src/site/`,
-emitted by `build_site.py`). `.github/workflows/pages.yml` builds and deploys it to GitHub Pages on
-every push to `main` (including the daily brief commit) — keyless, networkless, built from committed
-data only.
+## The static site — GitHub Pages
+
+The data changes once a day, so the read surface is a static build (`src/site/`, emitted by
+`build_site.py`). `.github/workflows/pages.yml` runs the test suite as a deploy gate, then
+builds and deploys the site to GitHub Pages on every push to `main` (including the daily
+brief commit) — keyless, networkless, built from committed data only.
 
 **One-time setup:** repo **Settings → Pages → Source = GitHub Actions**. After the next push, the
 public URL appears there. Open it on any device and install it (laptop: the **Install** icon in the
 address bar; iPhone: **Share → Add to Home Screen**) — it runs as an app with its own window/icon and,
-thanks to the service worker, opens **offline** with the last build. To preview locally, just open
-`site/index.html` (or `python build_site.py` to rebuild from the newest brief).
+thanks to the service worker, opens **offline** with the last build.
 
-The **live data, charts, sector map, headlines, history archives, and the Learn page all
-work hosted** — fetched at runtime or read from the committed `data/history/*.jsonl`
-archives. The narrative is written by Claude (locally on demand, or by the scheduled
-weekday routine that commits it — see "Narration on a hosted site"), so a hosted device
-always shows the latest committed story.
+The live data, charts, sector map, headlines, and history archives all work hosted —
+rendered from the committed briefs and `data/history/*.jsonl` archives at build time.
+The narrative is written by Claude (locally on demand, or by the scheduled weekday
+routine that commits it — see "Narration on a hosted site"), so a hosted device always
+shows the latest committed story.
 
-> **One app, every device.** Once it's hosted (Option A), you don't package anything
-> per-device. You *install the web app* on each: on a laptop, Edge/Chrome shows an
-> **Install** icon in the address bar → its own window + Start-menu/Desktop icon, no
-> browser chrome. On an **iPhone**, Safari → **Share → Add to Home Screen** → a tappable
-> full-screen icon. Both run the same hosted URL. (A native `.exe`/pywebview wrapper would
-> be laptop-only and can't reach the phone — this is the better path.)
+> **One app, every device.** Once it's hosted, you don't package anything per-device.
+> You *install the web app* on each: on a laptop, Edge/Chrome shows an **Install** icon
+> in the address bar → its own window + Start-menu/Desktop icon, no browser chrome. On
+> an **iPhone**, Safari → **Share → Add to Home Screen** → a tappable full-screen icon.
+> Both run the same hosted URL. (A native `.exe`/pywebview wrapper would be laptop-only
+> and can't reach the phone — this is the better path.)
 
----
+## Local build (the dev loop)
 
-## Option A — Streamlit Community Cloud (free, easiest)
+```bash
+python build_site.py            # committed brief -> site/ (no network, no keys)
+python -m http.server -d site   # serve locally — service workers need an http origin
+```
 
-Gives you a URL like `https://market-story.streamlit.app`.
+Opening `site/index.html` directly as a file also works for a quick look (the PWA/offline
+bits just stay inert without an http origin).
 
-1. **The project is already on GitHub** at `https://github.com/mynameisnguyenn/market-story`
-   (repo: `C:\Users\Nguyen\market-story-git`), and the daily Action commits a fresh brief +
-   narrative + history archives each weekday — so a hosted app stays current with no manual
-   push. `.gitignore` excludes `.env` and live `data/briefs/`, so no secrets ship.
+## Decommissioned: the Streamlit layer (2026-07-02)
 
-2. **Deploy (once).** Go to <https://share.streamlit.io> → *New app* → pick
-   `mynameisnguyenn/market-story`, branch `main`, main file `app.py`. Under *Advanced
-   settings* set **Python 3.12**. You get a URL like `https://<name>.streamlit.app` — that
-   single URL is what you open (and install) on the laptop and the iPhone.
+The Streamlit dashboard (`app.py`), its hosted Streamlit Community Cloud deployment, and
+the Hugging Face option were removed on 2026-07-02 — the static site is the only
+interactive surface now. **One manual step remains: delete the old Streamlit Cloud
+deployment at <https://share.streamlit.io>** (the code it served is gone from `main`).
 
-3. **(Optional) Secrets for full live refresh.** In *Settings → Secrets*, add any of:
-   ```toml
-   FRED_API_KEY = "your_key"
-   EIA_API_KEY  = "your_key"
-   SEC_USER_AGENT = "you you@email.com"
-   ```
-   None are strictly required: macro falls back to the keyless FRED CSV, and **energy now
-   reads the committed `data/history/energy.jsonl` archive** (today's fix — the panel can't
-   blank without a live key). `app.py`'s `_load_cloud_secrets` bridges these into the env.
+Capability drops recorded honestly (intentional, no static replacement):
 
-## Install it as an app (do this on each device)
+- **Learn the Markets page** — deleted with `src/learn.py`; no static equivalent.
+- **Client-side headline search** (`filter_headlines`) — pure but had zero call sites in
+  the static site; deleted.
+- **Live-fetch Calendar panels** (earnings / SEC filings / 13F / econ calendar) — needed
+  runtime network calls; out of scope for the static, offline-safe build.
+- **Live refresh + interactive pickers** (the local Streamlit "workshop": refresh-data
+  button, date pickers, series selects, watchlist editor) — the static site uses fixed
+  lookbacks and stacked history sections instead.
+- **The Streamlit-Cloud secrets bridge** (`_load_cloud_secrets`) — deleted with `app.py`;
+  keys now live in `.env` locally and as GitHub repo secrets for the Actions.
 
-Once you have the `.streamlit.app` URL:
-
-- **Laptop (Edge or Chrome).** Open the URL → click the **Install** icon at the right of
-  the address bar (or ⋮ menu → *Apps → Install this site as an app*). You get a standalone
-  window with its own taskbar/Start icon and no browser chrome.
-- **iPhone (Safari).** Open the URL → tap **Share** (the square-with-arrow) → **Add to Home
-  Screen** → *Add*. A tappable Market Story icon lands on your home screen and opens
-  full-screen. (Needs internet — a hosted page has no offline mode; that's what the local
-  app is for.)
-
-Tested versions (for reproducibility if a dependency breaks): `streamlit 1.58`,
-`yfinance 1.2`, `pandas 3.0`, `plotly 6.5`, `feedparser 6.0`, `fredapi 0.5`.
-
-## Option B — Hugging Face Spaces (also free, no GitHub strictly needed)
-
-Create a **Streamlit Space**, upload the project files (or push via the Space's git),
-and it serves a public URL. Same `requirements.txt`/`app.py` entry point.
+Tested versions (for reproducibility if a dependency breaks): `yfinance 1.2`,
+`pandas 3.0`, `plotly 6.5`, `feedparser 6.0`, `fredapi 0.5`.
 
 ---
 
@@ -88,14 +76,13 @@ Because synthesis runs **through Claude Code on your machine**, a hosted site ca
 Claude. The "Story" tab handles this gracefully: with no narrative file it shows the raw
 **facts brief**. To show the *written* narrative on the hosted site, pick one:
 
-- **Commit the narrative (simplest).** After you ask Claude to narrate locally, allow that
-  one file into git and push — Streamlit Cloud auto-redeploys:
+- **Commit the narrative (simplest).** After you ask Claude to narrate locally, commit
+  that one file and push — the Pages workflow rebuilds and redeploys the site:
   ```bash
-  git add -f data/narratives/narrative_<date>.md
+  git add data/narratives/narrative_<date>.md
   git commit -m "Add narrative <date>" && git push
   ```
-  (The `-f` overrides the `data/` ignore for just that file.)
-- **Keep narration local.** Use the hosted site for live data/charts/news on the go, and
+- **Keep narration local.** Use the hosted site for data/charts/news on the go, and
   read the AI narrative on your PC. Lowest friction, no git per day.
 
 **Scheduled pre-market run (built in).** `.github/workflows/daily-brief.yml` runs `python run.py`

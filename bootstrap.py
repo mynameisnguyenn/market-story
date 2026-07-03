@@ -33,9 +33,9 @@ def main() -> int:
 
     print("\nNext:")
     print("  python run.py                    # build today's brief")
-    print("  python -m streamlit run app.py   # open the dashboard")
+    print("  python build_site.py             # render the site -> open site/index.html")
     print("  # then in `claude`:  narrate today's brief")
-    print("\nNo install wanted? Use the hosted app — the URL is in README.md.")
+    print("\nNo install wanted? Open the GitHub Pages site — the URL is in README.md.")
     return 0
 
 

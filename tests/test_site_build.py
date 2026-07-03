@@ -1,13 +1,9 @@
-"""Static-site build smoke: the whole site renders from committed data with no tab erroring.
+"""Static-site build smoke: the whole site renders with no tab erroring.
 
-Offline (no network) — same posture as test_render_smoke. Reads the committed brief; if none
-exists (a fresh clone before `python run.py`), the test skips rather than fails.
+Offline (no network). The committed-brief tests skip on a fresh clone before `python run.py`;
+the synthetic-context tests below NEVER skip, so a broken tab can't hide behind repo state.
 """
-import os
-
 import pytest
-
-os.environ.setdefault("STREAMLIT_LOGGER_LEVEL", "error")
 
 
 def _has_brief() -> bool:
@@ -55,3 +51,77 @@ def test_every_tab_section_returns_html():
         mod = importlib.import_module(f"src.site.tabs.{tab_id}")
         html = mod.section(ctx)
         assert isinstance(html, str), f"{tab_id}.section did not return a string"
+
+
+# --- synthetic-context coverage (ports test_render_smoke's never-skips posture) --------------
+
+def _synthetic_brief() -> dict:
+    return {
+        "date": "2026-06-06", "session_label": "US close", "generated_at_utc": "2026-06-06T21:00:00",
+        "markets": {
+            "us_equities": [{"symbol": "^GSPC", "name": "S&P 500", "last": 7500.0, "change_pct": 0.4,
+                             "change_1w_pct": 1.2, "ytd_pct": 8.0, "level_change": None}],
+            "rates": [{"symbol": "^TNX", "name": "10Y Yield", "last": 4.4, "change_pct": -0.3,
+                       "change_1w_pct": -0.9, "ytd_pct": 6.0, "level_change": -0.015}],
+            "sectors": [], "global_indices": [], "fx": [], "commodities": [], "credit": [],
+        },
+        "macro": [{"id": "DGS10", "name": "10Y Treasury", "latest": 4.4, "date": "2026-06-05",
+                   "prev": 4.42, "change": -0.02, "pct_1y": 55.0, "z_1y": 0.2}],
+        "bls": [], "energy": [], "positioning": [], "extremes": [],
+        "vol": {"vix": 15.0, "realized_20d": 12.0, "premium": 3.0},
+        "movers": {"leaders": [], "laggards": []},
+        "news": [{"title": "Fed holds", "source": "T", "published": "", "link": "", "summary": ""}],
+        "stats": {"vix": 15.0, "advancers": 1, "decliners": 0},
+    }
+
+
+def _synthetic_ctx(brief: dict):
+    from src import brief as brief_mod
+    from src.site.build import SiteContext
+    return SiteContext(brief=brief, closes=brief_mod.closes_from_brief(brief), tl=None)
+
+
+def test_every_tab_renders_from_synthetic_context():
+    """No committed data needed — each tab degrades (never raises) on a minimal brief."""
+    import importlib
+
+    ctx = _synthetic_ctx(_synthetic_brief())
+    for tab_id in ("overview", "story", "equities", "macro", "trends", "headlines", "calendar"):
+        mod = importlib.import_module(f"src.site.tabs.{tab_id}")
+        html = mod.section(ctx)
+        assert isinstance(html, str), f"{tab_id}.section did not return a string"
+
+
+def test_overview_degrades_on_partial_brief():
+    """The nonce=0 fast-load can serve an old/partial brief — a missing 'movers' key (and a
+    None-change mover) must degrade, not KeyError-crash the landing tab."""
+    import importlib
+
+    brief = _synthetic_brief()
+    del brief["movers"]
+    html = importlib.import_module("src.site.tabs.overview").section(_synthetic_ctx(brief))
+    assert isinstance(html, str) and html
+
+    brief = _synthetic_brief()
+    brief["movers"] = {"leaders": [{"name": "X", "change_pct": None}], "laggards": []}
+    html = importlib.import_module("src.site.tabs.overview").section(_synthetic_ctx(brief))
+    assert isinstance(html, str) and html
+
+
+def test_build_fails_loudly_on_missing_tab_module(monkeypatch):
+    """A ModuleNotFoundError is a broken dependency, not a 'coming soon' tab — the build must
+    raise so CI can never deploy a silently gutted site."""
+    import importlib
+
+    from src.site import build as build_mod
+
+    real_import = importlib.import_module
+
+    def _broken(name, *a, **k):
+        if name == "src.site.tabs.overview":
+            raise ModuleNotFoundError("No module named 'streamlit'")
+        return real_import(name, *a, **k)
+
+    monkeypatch.setattr(build_mod.importlib, "import_module", _broken)
+    with pytest.raises(ModuleNotFoundError):
+        build_mod._build_tabs(_synthetic_ctx(_synthetic_brief()))

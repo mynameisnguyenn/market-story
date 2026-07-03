@@ -4,7 +4,8 @@ A design system distilled from **Market Story**, a daily global-markets
 intelligence tool built for a hedge-fund **risk analyst**. The product scrapes
 free market data, macro series, and financial news every day, assembles a
 structured **brief**, and turns it into a written **market story with a risk
-lens** — gathered by a Python/Streamlit dashboard, *synthesized by Claude*.
+lens** — gathered by a Python pipeline, rendered as a static site, *synthesized
+by Claude*.
 
 > "Markets, narrated. A daily global brief with a risk lens — gathered,
 > synthesized, and built to be questioned and re-run."
@@ -19,22 +20,23 @@ high-fidelity UI kit recreations of the actual product.
 
 Market Story is **two deliberately-split layers**:
 
-1. **Gather + display** — a Python pipeline + **Streamlit dashboard** (KPI strip,
-   charts, sector treemap, rates/FX/commodities tables, a 70-headline feed, a
-   cross-asset correlation matrix, and a "Trends" time-machine). No LLM here.
-2. **Synthesize** — *Claude is the brain.* The dashboard writes a structured
+1. **Gather + render** — a Python pipeline + a **static, framework-free site**
+   (GitHub Pages): KPI strip, charts, sector treemap, rates/FX/commodities
+   tables, a 70-headline feed, a cross-asset correlation matrix, and a "Trends"
+   time-machine. No LLM here.
+2. **Synthesize** — *Claude is the brain.* The pipeline writes a structured
    brief; the user asks Claude to narrate it. The written **read** is the actual
-   product — the dashboard is the evidence behind it.
+   product — the site is the evidence behind it.
 
-It has two pages (sidebar nav): **Daily Brief** (live markets, 7 tabs) and
-**Learn the Markets** (researched foundations — history timeline, players, the
-Fed, money-flow Sankey diagrams). A branded **cover** fronts the brief.
+The brief renders as a single page of seven tabs (Overview / Story / Equities &
+Sectors / Global & Macro / Trends / Headlines / Calendar). A branded **cover**
+fronts the brief.
 
 ### Surfaces (one language, two expressions)
 
 | Surface | Where | Expression |
 |---|---|---|
-| **The dashboard** ("Ellis-dark") | The product | Warm near-black, electric-cyan accent, serif headline over mono data. **The canonical system.** |
+| **The site** ("Ellis-dark") | The product — the shipping static site (GitHub Pages / PWA) | Warm near-black, electric-cyan accent, serif headline over mono data. **The canonical system.** |
 | **The cover** | The branded entry that flows into the dashboard (also deployable standalone as a marketing/OG page) | Same warm palette + cyan, expressed as a full-bleed cursor-reactive market-field behind a huge uppercase **Clash Display** wordmark. |
 
 > **Unified.** Originally the cover was a separate GitHub-Pages splash in a
@@ -50,20 +52,19 @@ Fed, money-flow Sankey diagrams). A branded **cover** fronts the brief.
 
 - **GitHub repo:** <https://github.com/mynameisnguyenn/market-story> — explore it
   further to design with higher fidelity. Especially useful:
-  - `styles.css` — the Ellis-dark `:root` token system (the single design lever).
-  - `.streamlit/config.toml` — the dark theme (bg / accent / text).
+  - `src/site/static/style.css` — the Ellis-dark `:root` token system (the
+    site's single design lever; ported from the original root `styles.css`).
   - `DESIGN.md` — the design rationale ("Current direction — Ellis-dark"),
     borrowed from [ellis.com](https://www.ellis.com/) and adapted to dark.
-  - `app.py` — the dashboard render code (KPI cards, the "Today's read" hero,
-    treemap, correlation matrix, tabs).
-  - `style_lab.py` — every component on one screen (the original style sandbox).
+  - `src/site/` — the site render code (`render.py` HTML primitives: KPI cards,
+    the "Today's read" hero, tables, tabs; `tabs/` — one module per tab).
   - `src/formatting.py` — the single source of truth for the green/red semantics.
-  - `src/learn.py` — knowledge-graph + timeline category colors.
   - `docs/index.html` + `docs/og.png` — the original splash and social card (the cover's source; re-skinned to the product palette here).
   - `data/narratives/narrative_*.md` — real written "reads" (the copy voice).
   - `CLAUDE.md` — how the narrative is written (tone, structure, the risk lens).
 
-The live site: a GitHub-Pages splash linking to a Streamlit Cloud deployment.
+The live site: the GitHub Pages static site itself —
+<https://mynameisnguyenn.github.io/market-story/> (no separate splash-plus-app split).
 
 ---
 
@@ -145,7 +146,8 @@ from a generic fintech dashboard.
 - Diverging scales stay on-palette: red → warm-dark `#1b1611` → green (no
   off-brand RdYlGn yellow). The correlation matrix anchors +1 on **cyan**, not green.
 - Knowledge-timeline categories have their own set (founding cyan, crash red,
-  reform teal, innovation purple, boom orange) — Learn page only.
+  reform teal, innovation purple, boom orange) — from the retired Learn page;
+  reuse only for educational/timeline surfaces.
 
 ### Type
 - **Display = Instrument Serif** (product) — a high-contrast serif at weight 400,
@@ -170,7 +172,7 @@ from a generic fintech dashboard.
   exception.) Elevation is communicated by surface warmth + a 1px border, not blur.
 - **The signature card detail: a 3px accent-colored LEFT border** on every metric
   card (4px on the read hero). This is the most recognizable Market Story motif.
-- Generous block padding (`2rem` top), max content width ~1400px (product) /
+- Generous block padding (`2rem` top), max content width ~1240px (product) /
   1500px (marketing). Tables are dense with small (`.84rem`) tabular type.
 - Dividers are thin `1px` rules in `--grid #241f1a`.
 
@@ -202,10 +204,12 @@ from a generic fintech dashboard.
   frosted-glass / backdrop-blur panels anywhere. Solid surfaces are the norm.
 
 ### Layout rules
-- Wide layout, sidebar nav (auto-collapses on mobile). KPI strip of 6 metric
-  cards across the top with **sparklines directly beneath each**. Tabbed content
-  below. Two-column splits for table pairs.
-- Mobile: Streamlit auto-stacks columns < 640px; type/padding/tables shrink.
+- Single column, max-width ~1240px, with a **top tab bar** (horizontally
+  scrollable when it overflows). KPI strip of 6 metric cards across the top with
+  **sparklines directly beneath each**. Tabbed content below. Two-column splits
+  for table pairs (`.grid-2`).
+- Mobile: a CSS grid breakpoint at 760px — the KPI strip drops 6 → 2 columns,
+  3- and 6-column grids drop to 2, pairs stack to one; type/padding/tables shrink.
 
 ---
 
@@ -215,11 +219,11 @@ Market Story is **deliberately icon-light** — it leans on type, color, and tin
 mono labels rather than an icon set. There is **no custom icon font or SVG sprite**
 in the product.
 
-- **Material Symbols (Streamlit built-in).** The only true icon system. The
-  sidebar nav uses two: `:material/show_chart:` (Daily Brief) and
-  `:material/school:` (Learn the Markets). If you need UI glyphs, match this set —
-  **rounded/outlined Material Symbols**, thin stroke. Available from the Google
-  Fonts Material Symbols CDN.
+- **Material Symbols (Google Fonts CDN).** The designated icon system. The
+  shipping site's tab nav uses plain text labels — no icons at all. If a new
+  surface needs UI glyphs, match this set — **rounded/outlined Material
+  Symbols**, thin stroke, sourced directly from the Google Fonts Material
+  Symbols CDN.
 - **Unicode glyphs as micro-icons.** Used inline throughout: `●` (signal/section
   dots, colored by semantic tone), `→` (links, "Enter the brief"), `▲ ▼ →`
   (directional change arrows, from `formatting.arrow()`), `↗` (external link),
@@ -240,10 +244,9 @@ Assets in `assets/`:
 - `og-card.html` — the live, editable source for that card (real Clash Display
   wordmark + a static market-field draw). Re-export to refresh the PNG.
 
-> If you need icons the product doesn't ship, use **Material Symbols** (the
-> product's own set) from CDN — don't introduce a different family. This is a
-> documented match to the built-in Streamlit icons, not the product shipping its
-> own SVGs.
+> If you need icons the product doesn't ship, use **Material Symbols** from the
+> Google Fonts CDN — don't introduce a different family. The product itself
+> ships no icon font or SVG sprite.
 
 ---
 

@@ -67,7 +67,9 @@ def _build_tabs(ctx: SiteContext) -> list[dict]:
             mod = importlib.import_module(f"src.site.tabs.{tid}")
             html = mod.section(ctx)
         except ModuleNotFoundError:
-            html = f'<p class="cap">“{label}” coming in the next build.</p>'
+            # A missing module is a broken import/dependency, not a tab "not yet built" —
+            # fail the build loudly so CI can never deploy a silently gutted site.
+            raise
         except Exception as exc:                       # one bad tab must not kill the build
             html = f'<p class="cap">“{label}” failed to render: {type(exc).__name__}: {exc}.</p>'
         out.append({"id": tid, "label": label,

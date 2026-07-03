@@ -3,7 +3,8 @@
     python run.py
 
 Writes data/briefs/brief_<date>.json and .md. After running, launch the
-dashboard (`python -m streamlit run app.py`) and ask Claude to narrate.
+site (`python build_site.py` -> site/index.html, or the GitHub Pages URL)
+and ask Claude to narrate.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ def main() -> int:
         f"{len(brief['news'])} headlines"
     )
     print("\nNext:")
-    print("  python -m streamlit run app.py")
+    print("  python build_site.py             # render the site -> open site/index.html")
     print("  then in claude:  narrate today's brief   (or /narrate)")
     return 0
 

@@ -40,4 +40,3 @@ design-import/
 .DS_Store
 .vscode/
 .idea/
-.streamlit/secrets.toml

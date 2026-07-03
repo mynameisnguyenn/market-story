@@ -9,24 +9,25 @@ substantial build (newest first). Source of truth for "did we build X?" Pairs wi
 
 ## Current state (the map)
 
-**What it is:** a daily global-markets Streamlit dashboard for a hedge-fund risk analyst, narrated
+**What it is:** a daily global-markets intelligence site for a hedge-fund risk analyst, narrated
 by Claude (Python gathers → brief JSON → Claude writes a thesis-first narrative → versioned logbook).
 
 **Where it runs**
-- **Static site (the read surface — no Streamlit, no login):** `python build_site.py` → `site/index.html`
-  (open as a file, or the GitHub Pages URL). Deployed by `.github/workflows/pages.yml` on every push to main.
-  Installs as a PWA (icon, own window, works offline) on desktop + phone. **One-time: repo Settings → Pages →
-  Source = GitHub Actions.** Built entirely from committed data — keyless, networkless.
-- **Streamlit app (dev / `/narrate` loop):** `Launch Market Story.bat` / Desktop shortcut → `localhost:8501`.
-  Interpreter `~/anaconda3/python.exe`; git at `~/anaconda3/Library/bin/git.exe` (neither is on PATH). Still
-  hosted at `https://market-story-9kpggwcnhbucneaakauxjz.streamlit.app/` (Streamlit Cloud) but the static site
-  supersedes it as the thing you actually open day to day.
+- **Static site (the ONLY interactive surface — no server, no login):** `python build_site.py` →
+  `site/index.html` (open as a file, or the GitHub Pages URL:
+  `https://mynameisnguyenn.github.io/market-story/`). Deployed by `.github/workflows/pages.yml` on every
+  push to main (pytest gate before build). Installs as a PWA (icon, own window, works offline) on desktop +
+  phone. **One-time: repo Settings → Pages → Source = GitHub Actions.** Built entirely from committed data —
+  keyless, networkless. The Streamlit app was decommissioned 2026-07-02 (see the log entry).
+- **Email digest (the push surface):** `.github/workflows/send-digest.yml` → `scripts/send_digest.py` →
+  `src/email_digest.py`, Gmail SMTP (secrets `GMAIL_USERNAME`/`GMAIL_APP_PASSWORD`/`MAIL_TO`); sends once
+  the day's brief + narrative pair is committed. Setup in `SETUP.md`.
 - **Daily Action** (`.github/workflows/daily-brief.yml`, 12:00 UTC weekdays): runs `run.py`, commits the
   brief + timeline + history archives + running thesis + ledger, sends VIX phone alerts; a weekday remote
   routine narrates ~12:45 UTC. Each push then triggers the Pages build so the static site stays fresh.
 
-**Keys:** `.env` (gitignored) has FRED, EIA, SEC_USER_AGENT (BLS empty → keyless v1). Same go in Streamlit
-**Secrets** for the hosted app; bridged via `app._load_cloud_secrets`. Keys never render in the UI.
+**Keys:** `.env` (gitignored) has FRED, EIA, SEC_USER_AGENT (BLS empty → keyless v1). The same keys live
+as GitHub repo secrets for the Actions (`daily-brief.yml`). Keys never render in the UI.
 
 **Design skill:** `market-story-design` (Claude Design export) installed at `~/.claude/skills/` AND committed
 at `.claude/skills/market-story-design/` (canonical). Tokens match `styles.css`.
@@ -35,12 +36,13 @@ at `.claude/skills/market-story-design/` (canonical). Tokens match `styles.css`.
 labor,macro}.jsonl` (deep history), `data/running_thesis.md` (standing view), `data/scorecard_log.jsonl`
 (prediction ledger), `data/narratives/*.md`. Briefs are gitignored but force-committed by the Action.
 
-**Tests:** 436 pytest, ~9s. `tests/test_render_smoke.py` renders every tab hermetically.
+**Tests:** 624 pytest, all passing. The old render-smoke's never-skip synthetic coverage now lives in
+`tests/test_site_build.py` (every tab renders from a synthetic SiteContext, regardless of repo state).
 
-**Dev/iteration loop (how Claude "sees" the product):** run `app.py` **locally** (`localhost:8501`) and
-screenshot it with a headless browser (Playwright) — no Streamlit login involved. This is independent of the
-hosted app, whose privacy only blocks *anonymous verification of the deployed instance*. Make the hosted app
-**public** to let Claude also screenshot/verify the live deployed version after a push.
+**Dev/iteration loop (how Claude "sees" the product):** `python build_site.py` then
+`python -m http.server -d site` (service workers need an http origin; opening `site/index.html` as a file
+works for a quick non-PWA look) and screenshot it with a headless browser (Playwright). The deployed GitHub
+Pages site is public, so the live build can be verified directly after a push.
 
 ---
 
@@ -54,11 +56,89 @@ hosted app, whose privacy only blocks *anonymous verification of the deployed in
   Fed-funds-futures strip / CME data), options/GEX (needs full chains; "no options" rule), econ-calendar
   consensus/surprise (no free consensus feed). Revisit only if a clean data source appears.
 - **Tier-4 UX:** quantstats-style S&P tearsheet ✅ (Trends). Further tearsheet polish optional.
-- **Make the hosted app public** (user action, Streamlit Cloud Sharing) — still the one open user action.
+- **Delete the retired Streamlit Cloud deployment** at share.streamlit.io (user action — the code it
+  served left `main` on 2026-07-02).
 
 ---
 
 ## Log (newest first)
+
+### 2026-07-02 — Streamlit layer decommissioned
+The static site had superseded the Streamlit app as the read surface since 2026-06-10; today the
+Streamlit layer came out entirely. The static site is now the **only** interactive surface, the email
+digest the push surface.
+- **Moved (the two streamlit-free symbols the site borrowed):** `TONE_HEX` → `src/formatting.py`
+  (the stale `app._TONE_HEX` comment there fixed); `panels/overview._narrative_thesis` →
+  `src/thesis.py` as public `narrative_thesis`. `src/site/tabs/overview.py` imports repointed;
+  site HTML unchanged by the move.
+- **Deleted:** `app.py`; `src/dashboard/{data.py,widgets.py,panels/}` — KEPT `charts.py`, now the
+  only module in `src/dashboard` (imported by `src/site`; `__init__.py` docstring rewritten to
+  describe only it); `src/learn.py` + `learn/` + `tests/test_learn.py`; `style_lab.py`;
+  `.streamlit/`; both launchers (`Launch Market Story.bat`/`.vbs`).
+- **Tests:** `tests/test_app.py` → `tests/test_charts.py` (repointed at `src.dashboard.charts`,
+  zero logic changes); `tests/test_render_smoke.py` deleted — its never-skip synthetic coverage
+  folded into `tests/test_site_build.py` (`test_every_tab_renders_from_synthetic_context` +
+  the ported `test_overview_degrades_on_partial_brief`, both run regardless of repo state).
+  **624 passing.**
+- **Hardening:** `src/site/build.py` now RAISES on `ModuleNotFoundError` — a bad import fails the
+  deploy instead of rendering a "coming in the next build" placeholder (pinned by
+  `test_build_fails_loudly_on_missing_tab_module`); `pages.yml` gained a pytest gate before the
+  site build; `requirements.txt` dropped `streamlit` (plotly stays — load-bearing for the site);
+  `run.py`/`bootstrap.py` printed next-step pointers repointed at `build_site.py`/the Pages URL.
+- **Explicitly NOT ported:** the Learn-the-Markets page (deleted with `learn.py`, taking
+  `NODE_COLOR`/`CATEGORY_COLORS` — no static equivalent); client-side headline search
+  (`filter_headlines` — zero call sites); the live-fetch Calendar panels (earnings / SEC filings /
+  13F / econ calendar — capability gone, offline-incompatible); the `_load_cloud_secrets`
+  Streamlit-Cloud secrets bridge (keys are `.env` + repo secrets now). One manual user step
+  remains: delete the old Streamlit Cloud deployment at share.streamlit.io.
+- **Discovery:** the site's figures had been inheriting Streamlit's placeholder Plotly template as
+  an import side effect; `src/site/render.py` `_themed()` now pins `template="none"` + the branded
+  colorway, so figure styling no longer depends on what happens to be imported.
+- **Docs rewritten static-site-first:** README (quickstart, structure, test count 134 → 624),
+  DEPLOY (static-only, capability drops recorded), SETUP (streamlit paths dropped; keys = `.env` +
+  repo secrets), DESIGN (live stylesheet `src/site/static/style.css` + the site's real class names
+  replace the Streamlit `data-testid` section), CLAUDE.md (Architecture intro, Layout, the two
+  false "(gitignored)" claims — briefs are force-committed, narratives never ignored), and the
+  design-skill README (13 stale spots, full line-by-line pass; the historical cover-origin note
+  and the ui_kits mockup rows deliberately left as-is).
+
+### 2026-07-02 — Ledger regrade, email push pipeline, calibration panel live
+An 18-agent adversarial audit (24 findings confirmed by skeptic verifiers) + 4 design debates
+(proposer vs two critics, iterated to unanimous consensus) drove three builds, all shipped:
+- **Ledger grading fixed + regraded** (`src/ledger.py`): `market:` watch items had rotted
+  `unresolved` for the ledger's whole life — yfinance silently fails on Actions runners and the
+  bare `except` at the old line 92 swallowed it. `_market_window` now reads the **committed daily
+  briefs first** (`_brief_window` via `scorecard.resolve_metric` — deterministic, keyless in CI),
+  yfinance only as the single-name fallback (and it logs failures); `grade_pending()` prints
+  what stayed unresolved. `horizon_sessions()` gained an ISO-date branch (`np.busday_count`
+  anchored on the record's own `logged` date — "2026-07-05" horizons used to collapse to 1
+  session, grading level metrics far too early). Regraded `data/scorecard_log.jsonl`:
+  unresolved 57 → 7, graded 37 → 85, honest hit-rate ~21% (stance rows + every `asof_value`
+  verified byte-identical). Grading semantics untouched (level-at-END vs event-any-point).
+- **The daily read now emails** (`src/email_digest.py` + `scripts/send_digest.py` +
+  `.github/workflows/send-digest.yml`): digest content caught up to the 2026-06-10 format —
+  CALL badge (today's stance + yesterday's settled P&L), mechanical re-grade of the prior watch
+  block, MIN_N-gated hit-rate, 5-KPI tape, top-3 stretched 1y percentiles, real JSON watch
+  parsing (the pipe-format fallback + its test targeted a format no narrative ever emitted),
+  CTA → the Pages site, Gmail dark-mode/preheader/bgcolor fixes. **Trigger design is the
+  load-bearing decision:** GitHub's cron queue lands the brief 1.5–4.5h AFTER the ~12:45 UTC
+  narrative (verified across every June session — the inverse of the designed order), so the
+  workflow fires on pushes to BOTH `data/narratives/**` and `data/briefs/**` and sends only
+  when the newest brief + narrative **dates match** (else it would email today's thesis over
+  yesterday's numbers); the committed `data/emails/.last_sent` marker caps it at one send/day.
+  Gmail SMTP self-to-self (app password; secrets `GMAIL_USERNAME`/`GMAIL_APP_PASSWORD`/`MAIL_TO`;
+  SendGrid ruled out — free tier discontinued 2025-05). Send step is `continue-on-error` and the
+  script always exits 0 — a broken send can never block the pipeline. No secrets → silent no-op.
+- **Brier calibration panel live** (Story tab): the 2026-06-10 "defer ~90 days" reasoning was
+  stale — the blocker was the grading bug, not time. `calibration.climatology_brier()` (base-rate
+  reference) + `_calibration_panel` in `src/site/tabs/story.py`, gated on `MIN_N=30` gradeable
+  probabilities, self-contained try/except so a calibration bug can never blank the hit-rate/
+  stance sections, table-not-curve (sparse bins stated in the caption). At ship: n=59 gradeable,
+  Brier 0.226 vs 0.246 climatology — the stated confidences carry (modest) skill.
+- Tests 624 pass; new coverage: brief-first vs yfinance-fallback windows, ISO horizons (incl.
+  malformed + past-date clamps), digest stance/regrade/track-record states, send-digest guards
+  (date-match, already-sent, exit-0 incl. SMTP failure), climatology known-answer,
+  calibration-panel gate/isolation.
 
 ### 2026-06-10 — Framework-free static site (Streamlit → static HTML, PWA, GitHub Pages)
 User: "I don't love the cloud dependency and our reliance on the Streamlit framework… I want to use it on

@@ -7,22 +7,24 @@ market acumen and to be questioned and re-run.
 
 Two layers, deliberately split:
 
-- **Gather + display** — a Python pipeline + **Streamlit dashboard** (charts, sector
-  map, rates/FX/commodities, live headline feed).
-- **Synthesize** — *Claude Code is the brain*. The dashboard writes a structured brief;
+- **Gather + render** — a Python pipeline + a **framework-free static site**
+  (GitHub Pages / installable PWA: charts, sector map, rates/FX/commodities,
+  headline feed). No server, no login.
+- **Synthesize** — *Claude Code is the brain*. The pipeline writes a structured brief;
   you ask Claude to narrate it and answer follow-ups. No API key, no LLM bill.
 
 ```
-  Double-click "Market Story" on your Desktop   # one-click: opens the dashboard in your browser
-  # — or from a terminal —
-  python run.py                    # gather data -> data/briefs/brief_<date>.json + .md
-  python -m streamlit run app.py   # open the dashboard
+  python run.py            # gather data -> data/briefs/brief_<date>.json + .md
+  python build_site.py     # render the static site -> open site/index.html
   claude  ->  "narrate today's brief"  (or /narrate)   # writes the story; Story tab shows it
 ```
 
-Two pages (sidebar nav): **Daily Brief** (live markets) and **Learn the Markets** (researched
-foundations — history timeline, players, the Fed, and money-flow Sankey diagrams). To host it
-as a public website, see `DEPLOY.md`.
+Or skip the local build: the daily GitHub Action commits a fresh brief, GitHub Pages
+serves the site at <https://mynameisnguyenn.github.io/market-story/> (install it as an
+app on desktop or phone), and an optional **daily email digest** pushes the read to
+your inbox (see `SETUP.md`). The site is a single page of seven tabs (Overview / Story /
+Equities & Sectors / Global & Macro / Trends / Headlines / Calendar). To host your own
+copy, see `DEPLOY.md`.
 
 ## What it covers
 
@@ -43,7 +45,7 @@ as a public website, see `DEPLOY.md`.
 
 ## The read — analytics that turn data into signal
 
-The dashboard doesn't just tabulate; it interprets:
+The site doesn't just tabulate; it interprets:
 
 - **Statistical context** — every macro anchor (and cross-asset market: VIX, yields, credit,
   FX, oil/copper/gold) shows its **1-year percentile + z-score** — is HY OAS *historically*
@@ -69,7 +71,7 @@ The dashboard doesn't just tabulate; it interprets:
 4. **Brief** assembled into `data/briefs/brief_<date>.json` (the contract Claude reads)
    plus a human-readable `.md` facts sheet.
 5. **Narrative** written by Claude into `data/narratives/narrative_<date>.md`, rendered
-   in the dashboard's **Story** tab.
+   in the site's **Story** tab (and sent as the daily email digest).
 
 ### Source validation (why these feeds)
 
@@ -90,8 +92,8 @@ Two real gotchas are handled in code:
 
 ```
 run.py              entry point: gather -> brief
+build_site.py       entry point: committed brief -> static site/ (no network, no keys)
 bootstrap.py        one-command local setup (deps + .env)  [see SETUP.md]
-app.py              streamlit dashboard (pure builders + st wrappers)
 src/config.py       instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback) + snapshot math
 src/macro_data.py   FRED (keyed-first, keyless fallback) + 1y percentile/z
@@ -102,15 +104,18 @@ src/edgar_data.py   SEC EDGAR watchlist filings
 src/calendar_data.py  earnings + forward econ-release calendar (FRED schedule)
 src/analytics.py    cross-asset extremes, vol premium, stock-bond corr
 src/backfill.py     seed the timeline with ~3y of REAL history (yfinance+FRED+CFTC)
-src/timeline.py     append-only daily metrics timeline -> the Trends tab
+src/timeline.py     append-only daily metrics timeline -> the Trends tab (committed)
 src/signals.py      signal lines + the "today's read" thesis (derive_lead)
 src/regime.py       risk-on/off regime panel
 src/scorecard.py    grade a narrative's watch block vs the next brief
-src/timeline.py     append-only daily metrics timeline (committed)
 src/history.py      local SQLite day-over-day snapshots
 src/news.py         RSS aggregation, de-dupe, noise filter
 src/brief.py        assemble + persist brief (json + md)
-src/formatting.py   pct/bps/color helpers
+src/formatting.py   pct/bps/color helpers (one green, one red; TONE_HEX)
+src/dashboard/charts.py  shared pure chart/table builders (plotly figs + Stylers; used by src/site)
+src/site/           static-site generator: render.py (HTML primitives) -> build.py -> tabs/<id>.section(ctx)
+src/email_digest.py daily-read email renderer (email-safe HTML)
+scripts/send_digest.py  Gmail SMTP send, run by .github/workflows/send-digest.yml
 .claude/commands/narrate.md   the /narrate project command
 data/briefs/        brief_*.json / .md     (committed by the daily Action)
 data/narratives/    narrative_*.md         (committed logbook; written by Claude)
@@ -125,8 +130,7 @@ pip install -r requirements.txt
 cp .env.example .env       # optional: add FRED_API_KEY (not required)
 ```
 
-Built/tested on **Python 3.14** (3.13+ fine). Note: if `streamlit` isn't on PATH, use
-`python -m streamlit run app.py`.
+Built/tested on **Python 3.14** (3.13+ fine).
 
 ## Testing
 
@@ -134,23 +138,29 @@ Built/tested on **Python 3.14** (3.13+ fine). Note: if `streamlit` isn't on PATH
 python -m pytest tests/ -v
 ```
 
-134 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
+624 tests, synthetic data only (no network): snapshot math (known-answer), movers/breadth,
 FRED/BLS/EIA/CFTC snapshotting, the analytics (percentiles, vol premium, stock-bond
-correlation), the "today's read" classifier, the thesis scorecard, the metrics timeline +
-backfill assembly, the econ calendar, news cleaning/de-dupe, an offline render-smoke of every
-tab, and regression suites carried over from three rounds of adversarial bug audits.
+correlation), the "today's read" classifier, the thesis scorecard + prediction ledger, the
+metrics timeline + backfill assembly, the econ calendar, news cleaning/de-dupe, the email
+digest, an offline build-smoke of the static site (every tab renders from synthetic data —
+never skips), and regression suites carried over from three rounds of adversarial bug audits.
 
 ## Daily workflow
 
-1. `python run.py` (or just hit **Refresh data** in the dashboard).
-2. `python -m streamlit run app.py`.
+1. `python run.py` (or let the daily GitHub Action commit the brief for you).
+2. `python build_site.py` → open `site/index.html` (or just open the GitHub Pages URL).
 3. In `claude`: *"narrate today's brief"* — get the story + risk lens, then ask anything
    ("why did the curve steepen?", "what's the read on energy?"). Re-run any day.
+   Once the day's brief + narrative pair is committed, the email digest lands the read
+   in your inbox (see `SETUP.md`).
 
 ## Recently added
 
+- **Streamlit retired (2026-07-02)** — the read surface is now the framework-free
+  **static site** (GitHub Pages, installable PWA, works offline) plus the daily **email
+  digest**; the old Streamlit dashboard and its Learn page were decommissioned.
 - **More credible sources** — direct **BLS**, **EIA** energy inventories, **CFTC** positioning,
-  and **SEC EDGAR** filings (all keyless or free-key, best-effort, never crash the dashboard).
+  and **SEC EDGAR** filings (all keyless or free-key, best-effort, never crash the site build).
 - **An analytics layer** — 1-year percentiles/z-scores, cross-asset extremes, the vol risk
   premium, and a stock-bond correlation (hedge) regime.
 - **A synthesized "today's read"** thesis + a **thesis scorecard** that grades each call against
@@ -160,8 +170,8 @@ tab, and regression suites carried over from three rounds of adversarial bug aud
   path with its percentile over the whole window.
 - **A forward econ calendar** — upcoming CPI / jobs / PCE / GDP dates (the FRED schedule),
   on the Calendar tab next to earnings + filings.
-- **Reliability + portability** — keyed-first FRED with retry; a public splash page; a daily
-  GitHub Action that commits the brief + timeline; `bootstrap.py` + `SETUP.md` for one-command
+- **Reliability + portability** — keyed-first FRED with retry; a daily GitHub Action that
+  commits the brief + timeline; `bootstrap.py` + `SETUP.md` for one-command
   multi-machine setup.
 
 ## Ideas to extend

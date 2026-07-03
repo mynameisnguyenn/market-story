@@ -13,11 +13,14 @@ to be re-run and questioned daily.
 
 Two layers, deliberately split:
 
-1. **Gather + display (Python / Streamlit)** — `run.py` and `app.py`. NO LLM here.
+1. **Gather + render (Python)** — `run.py` and `build_site.py`. NO LLM here.
    - `run.py` fetches everything and writes a structured brief to
      `data/briefs/brief_YYYY-MM-DD.json` (+ a human-readable `brief_YYYY-MM-DD.md`).
-   - `app.py` is the Streamlit dashboard: charts, sector heatmap, rates/FX/commodities,
-     headline feed, and a "Today's Story" panel that renders the latest narrative file.
+   - `build_site.py` (the `src/site/` generator) renders the committed brief + narrative
+     into a framework-free static site under `site/` — charts, sector heatmap,
+     rates/FX/commodities, headline feed, and a "Today's Story" tab that renders the
+     latest narrative file. Deployed to GitHub Pages by `pages.yml`; the daily **email
+     digest** (`send-digest.yml`, see `SETUP.md`) is the push surface.
 
 2. **Synthesize (Claude Code = the brain).** There is no API key. The narrative and all
    follow-up Q&A are produced by *me, Claude*, when the user runs `claude` in this folder.
@@ -54,7 +57,8 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    ## Sources           (headlines + feeds the read leans on)
    ```
    See `.claude/commands/narrate.md` for the full spec (thesis-first, the `watch` block format).
-4. The dashboard auto-displays this file in the "Today's Story" tab — no extra step.
+4. The site renders this file in its "Story" tab on the next build — `python
+   build_site.py` locally, or the Pages deploy once the file is pushed. No other step.
 5. Ground every claim in the brief's numbers/headlines; prefer day-over-day deltas over
    levels. Don't invent prints. If you pull in outside knowledge or live web context, say
    so. Keep the **risk lens** sharp — this user is a risk analyst, not a retail trader.
@@ -94,8 +98,10 @@ move from `data/timeline.jsonl`. Watch-rate stats exclude stance rows; both rend
 
 ```bash
 python run.py            # fetch data + news, write today's brief
-streamlit run app.py     # open the dashboard
+python build_site.py     # render the static site -> open site/index.html
 # then in claude: "narrate today's brief"  (or /narrate)
+# hosted read: https://mynameisnguyenn.github.io/market-story/ (Pages, rebuilt on push)
+# push surface: the daily email digest (send-digest.yml) once brief + narrative match dates
 ```
 
 ## Conventions (inherits global rules in ~/.claude/rules/)
@@ -103,11 +109,11 @@ streamlit run app.py     # open the dashboard
 - Python 3.13+, PEP 8, snake_case; constants UPPER_CASE (`TRADING_DAYS = 252`).
 - pandas-first; functions < 60 lines, files < 500 lines; one-line docstrings.
 - **Guard every division** (zero vol, empty series). Always handle NaN / missing data —
-  feeds and tickers fail constantly; degrade gracefully, never crash the dashboard.
+  feeds and tickers fail constantly; degrade gracefully, never crash the site build.
 - No network calls in tests — synthetic data only, `np.random.seed(42)`.
 - No hardcoded paths — use `pathlib.Path` rooted at the project dir (see `src/config.py`).
 - Secrets via `.env` only; never commit keys (FRED + EIA keys live in `.env` and as GitHub
-  repo secrets; bridged to Streamlit Cloud via `_load_cloud_secrets`).
+  repo secrets).
 - **Scope discipline:** the value is the daily *read*, not data breadth. The credible-source
   stack (FRED/BLS/EIA/CFTC/SEC/yfinance/RSS) is deliberately complete — don't add more
   instruments/feeds/options/intraday/crypto/backtester without a clear reason. Sharpen the
@@ -117,19 +123,22 @@ streamlit run app.py     # open the dashboard
 
 ```
 run.py            entry point: gather -> brief
-build_site.py     entry point: committed brief -> static site/ (no Streamlit, no network)
-app.py            streamlit entry: page config, CSS, navigation, tab wiring (thin)
-src/dashboard/    dashboard view layer: charts (pure builders) -> widgets/data -> panels/<tab>.py
+build_site.py     entry point: committed brief -> static site/ (no network, no keys)
+src/dashboard/charts.py  shared pure chart/table builders (no Streamlit; used by src/site)
 src/site/         static-site generator: render (html primitives) -> build -> tabs/<id>.section(ctx);
-                  reuses src/dashboard/charts + the Stylers, replacing only the Streamlit glue. PWA + Pages.
+                  the sole rendering path — imports src/dashboard/charts.py directly. PWA + Pages.
 src/config.py     instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback)
 src/macro_data.py   FRED (keyless CSV or fredapi)
 src/news.py         RSS aggregation + dedupe
 src/brief.py        assemble + save brief (json + md)
-src/formatting.py   pct/color helpers
-data/briefs/        brief_*.json / .md   (gitignored)
-data/narratives/    narrative_*.md       (gitignored; written by Claude)
+src/formatting.py   pct/color helpers (GREEN/RED/NEUTRAL + TONE_HEX)
+src/email_digest.py daily-read email renderer (email-safe HTML)
+scripts/send_digest.py  Gmail SMTP send, run by .github/workflows/send-digest.yml
+data/briefs/        brief_*.json / .md   (committed: force-added by the daily Action via
+                    `git add -f` despite the .gitignore entry — 44 files tracked)
+data/narratives/    narrative_*.md       (committed logbook, never gitignored — 22 files
+                    tracked; written by Claude)
 data/timeline.jsonl committed cross-asset metrics timeline (1998→, Trends tab)
 data/running_thesis.md  committed standing cross-session view (read + revised by /narrate)
 data/history/       committed full-history archives, long-format JSONL (see below)
@@ -152,6 +161,6 @@ merged idempotently by (series, date). `src/series_archive.py` is the generic he
   to a ~3-yr trailing window). ~93k rows.
 
 `build_brief(fetch=True)` (i.e. `run.py` / the daily Action) refreshes all three via
-`update_*_archive()` and the Action commits them. The dashboard's "📈 …history" expanders
-(Macro tab) chart any series from these. The `/finance` tutor can read them for deep,
-data-grounded history (e.g. CPI through Volcker, unemployment through the GFC).
+`update_*_archive()` and the Action commits them. The static site's Macro tab charts the
+headline series from these (stacked history sections). The `/finance` tutor can read them
+for deep, data-grounded history (e.g. CPI through Volcker, unemployment through the GFC).

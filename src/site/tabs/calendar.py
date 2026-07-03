@@ -118,9 +118,8 @@ def _live_fetch_notice() -> str:
         "Live-fetch panels",
         caption(
             "Economic releases, upcoming earnings, 13F holdings, and SEC filings require "
-            "live network calls and are available in the interactive dev app "
-            "(streamlit run app.py). They are intentionally omitted from the static build "
-            "to keep it offline-safe."
+            "live network calls and are intentionally out of scope for the static, "
+            "offline-safe build."
         ),
     )
 

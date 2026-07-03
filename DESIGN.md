@@ -1,41 +1,43 @@
 # DESIGN.md — iterating on the look
 
-The dashboard's styling lives in **one file: `styles.css`** (loaded by `app.py`'s `_load_css()`).
-Edit it, save, and the app reloads — no Python-string escaping. The whole palette/type system is
-driven by CSS custom properties at the top of `styles.css` (`:root { --bg, --accent, ... }`), so a
-one-line token change retunes everything.
+The site's styling lives in **one file: `src/site/static/style.css`** (copied to
+`site/assets/style.css` by `build_site.py`). The whole palette/type system is driven by CSS
+custom properties at the top (`:root { --bg, --accent, ... }`), so a one-line token change
+retunes everything. The root-level `styles.css` is the original Ellis-dark token file the
+static sheet was ported from — kept as the token reference the design skill and the email
+digest mirror; the shipping stylesheet is the one under `src/site/static/`.
 
-## The iteration loop (three speeds)
+## The iteration loop (two speeds)
 
-1. **Instant — browser DevTools.** Run the app, press **F12** → **Elements → Styles**, select an
-   element, and edit CSS live (zero reload). When it looks right, paste the rule into `styles.css`.
-   Use **F12 → Network → Fonts** to see loaded fonts; **Computed** for exact colors.
-2. **Fast — edit + save.** `runOnSave = true` (`.streamlit/config.toml`), so saving `styles.css`
-   (touch `app.py` if a CSS-only save doesn't trigger a rerun) repaints the app.
-3. **Isolated — the sandbox.** `python -m streamlit run style_lab.py` renders every component
-   (headline, metrics, table, tabs, chart, the "Today's read" card, controls) on one screen, so you
-   tune the design system without clicking through tabs. It loads the same `styles.css`.
+1. **Instant — browser DevTools.** Open `site/index.html`, press **F12** → **Elements → Styles**,
+   select an element, and edit CSS live (zero rebuild). When it looks right, paste the rule into
+   `src/site/static/style.css`. Use **F12 → Network → Fonts** to see loaded fonts; **Computed**
+   for exact colors.
+2. **Fast — edit + rebuild.** Edit `src/site/static/style.css`, rerun `python build_site.py`,
+   refresh `site/index.html`. (Serve via `python -m http.server -d site` if you want the PWA/
+   service-worker bits active.)
 
 ## Where each piece of "look" lives
 
 | Layer | File | Notes |
 |---|---|---|
-| Stylesheet (type, cards, tabs, spacing) | `styles.css` | the main lever; `:root` tokens up top |
-| Theme (app bg, sidebar, text, primary) | `.streamlit/config.toml` `[theme]` | `primaryColor` drives tab underline + widgets |
+| Stylesheet (type, cards, tabs, spacing) | `src/site/static/style.css` | the main lever; `:root` tokens up top |
 | Chart accent / gridlines | `src/dashboard/charts.py` `LINE_COLOR`, plotly `gridcolor`/`fillcolor` | keep in sync with `--accent` |
-| The "Today's read" hero card | `src/dashboard/panels/overview.py` `signals_strip()` | inline HTML; uses `var(--surface)` etc. |
-| Knowledge-graph colors | `src/learn.py` `NODE_COLOR` / `CATEGORY_COLORS` | |
+| Plotly dark page theme | `src/site/render.py` `_themed()` | pins `template="none"` + the branded colorway — figures never inherit an import-side-effect template |
+| The "Today's read" hero card | `src/site/render.py` `hero()` (used by `src/site/tabs/overview.py`) | inline HTML; accent left border, serif text |
+| Page skeleton (masthead, tab bar, footer) | `src/site/templates/index.html.j2` | fonts loaded from Google Fonts here |
 
-## Targeting Streamlit elements (stable selectors)
+## Targeting the site's elements (stable class names)
 
-CSS overrides hook Streamlit's `data-testid` attributes (confirm exact names in DevTools for your
-version — currently Streamlit 1.58):
+The markup is our own (`src/site/render.py` + the Jinja template), so the selectors are
+semantic class names that only change if `render.py` changes — no third-party DOM to chase:
 
-`[data-testid="stMetric"]` · `stMetricValue` · `stMetricLabel` · `stMetricDelta` ·
-`[data-testid="stDataFrame"]` · `[data-testid="stTabs"] button[role="tab"]` (and `[aria-selected="true"]`) ·
-`section[data-testid="stSidebar"]` · `[data-testid="stExpander"]` · `.block-container` · `h1/h2/h3` · `a`.
-
-> Selectors can shift across Streamlit versions — pin the version, and re-check in DevTools after upgrades.
+`.panel` (titled section) · `.hero` / `.hero-tag` / `.hero-text` / `.hero-foot` (the read card) ·
+`.kpi` / `.kpi-label` / `.kpi-value` / `.kpi-delta` (header KPI tiles) · `.cap` (captions) ·
+`.chart` (+ `.spark-chart`; the inert figure JSON sits in `script.cdata`) · `.tbl` (Styler tables) ·
+`.md` (rendered markdown) · `.grid` / `.grid-2` / `.grid-3` / `.grid-6` / `.grid-auto` ·
+`.tabs` / `.tab` / `.tabpanel` (top tab nav) · `.masthead` / `.foot` · `details`/`summary`
+(expanders) · tone classes `.up` / `.down` / `.flat`.
 
 ## Current direction — "Ellis-dark"
 

@@ -12,8 +12,7 @@ fredapi>=0.5.2        # optional; FRED also works keyless via CSV
 # --- News ---
 feedparser>=6.0.11
 
-# --- Dashboard & charts ---
-streamlit>=1.40.0
+# --- Charts (static site) ---
 plotly>=6.0.0
 
 # --- Static site (build_site.py -> site/, deployed to GitHub Pages) ---
