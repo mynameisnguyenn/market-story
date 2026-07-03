@@ -19,7 +19,8 @@ Two layers, deliberately split:
    - `build_site.py` (the `src/site/` generator) renders the committed brief + narrative
      into a framework-free static site under `site/` — charts, sector heatmap,
      rates/FX/commodities, headline feed, and a "Today's Story" tab that renders the
-     latest narrative file. Deployed to GitHub Pages by `pages.yml`; the daily **email
+     latest narrative file. Built locally (`python build_site.py`) and checked in CI by
+     `ci.yml`; the repo is **private** (2026-07-02) so there is no public Pages deploy. The daily **email
      digest** (`send-digest.yml`, see `SETUP.md`) is the push surface.
 
 2. **Synthesize (Claude Code = the brain).** There is no API key. The narrative and all
@@ -58,7 +59,7 @@ When the user says "narrate today's brief", runs `/narrate`, or asks a market qu
    ```
    See `.claude/commands/narrate.md` for the full spec (thesis-first, the `watch` block format).
 4. The site renders this file in its "Story" tab on the next build — `python
-   build_site.py` locally, or the Pages deploy once the file is pushed. No other step.
+   build_site.py` locally. No other step.
 5. Ground every claim in the brief's numbers/headlines; prefer day-over-day deltas over
    levels. Don't invent prints. If you pull in outside knowledge or live web context, say
    so. Keep the **risk lens** sharp — this user is a risk analyst, not a retail trader.
@@ -100,7 +101,7 @@ move from `data/timeline.jsonl`. Watch-rate stats exclude stance rows; both rend
 python run.py            # fetch data + news, write today's brief
 python build_site.py     # render the static site -> open site/index.html
 # then in claude: "narrate today's brief"  (or /narrate)
-# hosted read: https://mynameisnguyenn.github.io/market-story/ (Pages, rebuilt on push)
+# read it: python -m http.server 8787 -d site  (repo is private — no public Pages URL)
 # push surface: the daily email digest (send-digest.yml) once brief + narrative match dates
 ```
 
@@ -126,7 +127,7 @@ run.py            entry point: gather -> brief
 build_site.py     entry point: committed brief -> static site/ (no network, no keys)
 src/dashboard/charts.py  shared pure chart/table builders (no Streamlit; used by src/site)
 src/site/         static-site generator: render (html primitives) -> build -> tabs/<id>.section(ctx);
-                  the sole rendering path — imports src/dashboard/charts.py directly. PWA + Pages.
+                  the sole rendering path — imports src/dashboard/charts.py directly. PWA-ready, built locally + CI-checked.
 src/config.py     instruments, feeds, FRED series, paths
 src/market_data.py  yfinance (+ stooq fallback)
 src/macro_data.py   FRED (keyless CSV or fredapi)

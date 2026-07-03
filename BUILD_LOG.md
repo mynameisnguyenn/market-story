@@ -14,17 +14,16 @@ by Claude (Python gathers → brief JSON → Claude writes a thesis-first narrat
 
 **Where it runs**
 - **Static site (the ONLY interactive surface — no server, no login):** `python build_site.py` →
-  `site/index.html` (open as a file, or the GitHub Pages URL:
-  `https://mynameisnguyenn.github.io/market-story/`). Deployed by `.github/workflows/pages.yml` on every
+  `site/index.html` (open as a file, or `python -m http.server -d site`). CI-checked by `.github/workflows/ci.yml` on every
   push to main (pytest gate before build). Installs as a PWA (icon, own window, works offline) on desktop +
-  phone. **One-time: repo Settings → Pages → Source = GitHub Actions.** Built entirely from committed data —
+  phone when served over http. **Repo is PRIVATE (2026-07-02) — the public Pages deploy is retired.** Built entirely from committed data —
   keyless, networkless. The Streamlit app was decommissioned 2026-07-02 (see the log entry).
 - **Email digest (the push surface):** `.github/workflows/send-digest.yml` → `scripts/send_digest.py` →
   `src/email_digest.py`, Resend sandbox API (secrets `RESEND_API_KEY`/`MAIL_TO` — owner-only delivery, no
   Google credential anywhere); sends once the day's brief + narrative pair is committed. Setup in `SETUP.md`.
 - **Daily Action** (`.github/workflows/daily-brief.yml`, 12:00 UTC weekdays): runs `run.py`, commits the
   brief + timeline + history archives + running thesis + ledger, sends VIX phone alerts; a weekday remote
-  routine narrates ~12:45 UTC. Each push then triggers the Pages build so the static site stays fresh.
+  routine narrates ~12:45 UTC. Each push then triggers the CI build-check (tests + site build).
 
 **Keys:** `.env` (gitignored) has FRED, EIA, SEC_USER_AGENT (BLS empty → keyless v1). The same keys live
 as GitHub repo secrets for the Actions (`daily-brief.yml`). Keys never render in the UI.
@@ -42,7 +41,7 @@ labor,macro}.jsonl` (deep history), `data/running_thesis.md` (standing view), `d
 **Dev/iteration loop (how Claude "sees" the product):** `python build_site.py` then
 `python -m http.server -d site` (service workers need an http origin; opening `site/index.html` as a file
 works for a quick non-PWA look) and screenshot it with a headless browser (Playwright). The deployed GitHub
-Pages site is public, so the live build can be verified directly after a push.
+site is verified locally (`python -m http.server -d site`); the repo is private, no public URL.
 
 ---
 
@@ -62,6 +61,22 @@ Pages site is public, so the live build can be verified directly after a push.
 ---
 
 ## Log (newest first)
+
+### 2026-07-02 — Repo goes private; Pages deploy retired to a CI gate; digest CTA → GitHub link
+User asked to "gitignore all the data so we don't push it to GitHub" — surfaced the conflict instead
+of complying: the committed data is load-bearing (the email workflow's trigger paths + fresh-checkout
+render, the ledger's brief-first CI grading shipped this morning, the site build, cross-machine sync).
+Root concern was privacy (repo was public); resolution: **make the repo private** — identical privacy,
+nothing breaks, data stays committed but world-unreadable. Prepared before the visibility flip so no
+red ❌ appears after it:
+- `pages.yml` → **`ci.yml`**: same triggers, same pytest gate + full site build; the deploy steps
+  removed (free plan doesn't serve private Pages). Want the hosted PWA back someday → GitHub Pro +
+  restore the deploy steps from git history.
+- **Digest CTA** now deep-links the day's narrative on github.com (`NARRATIVE_URL.format(date=…)`,
+  falls back to the repo URL) — valid for the owner in a private repo; the public Pages URL it
+  replaced would have 404'd.
+- Docs synced (README / SETUP / DEPLOY / CLAUDE.md / this file's current-state map). Remaining USER
+  steps: flip visibility (Settings → General → Danger Zone → Private) + the Resend secrets per SETUP.md.
 
 ### 2026-07-02 — Streamlit layer decommissioned
 The static site had superseded the Streamlit app as the read surface since 2026-06-10; today the

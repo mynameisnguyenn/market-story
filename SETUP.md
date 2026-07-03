@@ -7,10 +7,9 @@ Two ways to use market-story on a new machine, and **they stay in sync**.
 The daily data only changes once a day, so the read surface is a **framework-free static
 site** — plain HTML, no server, no framework runtime. Three ways to open it:
 
-- **GitHub Pages (any device):** the `pages.yml` Action builds and deploys it on every push.
-  One-time setup: repo **Settings → Pages → Source = GitHub Actions**; the URL then shows there.
-  Open it on your phone and **Add to Home Screen** — it installs as an app (icon, own window,
-  works offline).
+- **Daily email digest (any device):** the push surface — see the email section below. The repo
+  is **private** (2026-07-02), so there is no public Pages URL; `ci.yml` still tests + builds the
+  site on every push as a gate.
 - **Locally, no build:** open `site/index.html` in any browser.
 - **Rebuild from the latest brief:** `python build_site.py` → writes `site/`. (Runs offline from
   committed data — no keys, no network.)

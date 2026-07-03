@@ -1,0 +1,42 @@
+name: CI — tests + site build
+
+# Runs the full test suite and a complete static-site build on every push to main.
+# This WAS the GitHub Pages deploy (pages.yml) until 2026-07-02: the repo went private
+# and the free plan doesn't serve Pages from private repos, so the deploy steps were
+# retired. The gates stay — a broken tab or failing test still can't land silently.
+# The read surfaces are the daily email digest (send-digest.yml) and a local build
+# (`python build_site.py` -> site/index.html, or `python -m http.server -d site`).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "!data/emails/**"   # the digest send-marker commit shouldn't trigger a rebuild
+      - "src/**"
+      - "styles.css"
+      - "build_site.py"
+      - "tests/**"
+      - ".github/workflows/ci.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest tests/ -q
+
+      - name: Build the static site (committed data only — no network, no keys)
+        run: python build_site.py

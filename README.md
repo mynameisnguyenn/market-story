@@ -8,7 +8,7 @@ market acumen and to be questioned and re-run.
 Two layers, deliberately split:
 
 - **Gather + render** — a Python pipeline + a **framework-free static site**
-  (GitHub Pages / installable PWA: charts, sector map, rates/FX/commodities,
+  (local build / installable PWA: charts, sector map, rates/FX/commodities,
   headline feed). No server, no login.
 - **Synthesize** — *Claude Code is the brain*. The pipeline writes a structured brief;
   you ask Claude to narrate it and answer follow-ups. No API key, no LLM bill.
@@ -19,8 +19,8 @@ Two layers, deliberately split:
   claude  ->  "narrate today's brief"  (or /narrate)   # writes the story; Story tab shows it
 ```
 
-Or skip the local build: the daily GitHub Action commits a fresh brief, GitHub Pages
-serves the site at <https://mynameisnguyenn.github.io/market-story/> (install it as an
+The daily GitHub Action commits a fresh brief and the digest email delivers the read;
+the repo is private, so the site is served locally (`python -m http.server -d site`) (install it as an
 app on desktop or phone), and an optional **daily email digest** pushes the read to
 your inbox (see `SETUP.md`). The site is a single page of seven tabs (Overview / Story /
 Equities & Sectors / Global & Macro / Trends / Headlines / Calendar). To host your own
@@ -148,7 +148,7 @@ never skips), and regression suites carried over from three rounds of adversaria
 ## Daily workflow
 
 1. `python run.py` (or let the daily GitHub Action commit the brief for you).
-2. `python build_site.py` → open `site/index.html` (or just open the GitHub Pages URL).
+2. `python build_site.py` → open `site/index.html` (or serve it: `python -m http.server -d site`).
 3. In `claude`: *"narrate today's brief"* — get the story + risk lens, then ask anything
    ("why did the curve steepen?", "what's the read on energy?"). Re-run any day.
    Once the day's brief + narrative pair is committed, the email digest lands the read
@@ -157,7 +157,7 @@ never skips), and regression suites carried over from three rounds of adversaria
 ## Recently added
 
 - **Streamlit retired (2026-07-02)** — the read surface is now the framework-free
-  **static site** (GitHub Pages, installable PWA, works offline) plus the daily **email
+  **static site** (built locally; installable PWA, works offline) plus the daily **email
   digest**; the old Streamlit dashboard and its Learn page were decommissioned.
 - **More credible sources** — direct **BLS**, **EIA** energy inventories, **CFTC** positioning,
   and **SEC EDGAR** filings (all keyless or free-key, best-effort, never crash the site build).

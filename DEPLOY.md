@@ -4,20 +4,22 @@ The read surface is a **framework-free static site**. Two ways to open it:
 
 | Mode | How | Good for |
 |---|---|---|
-| **GitHub Pages** ★ | <https://mynameisnguyenn.github.io/market-story/> → install as an app | The morning read, anywhere — no login, no server, works offline |
+| **Email digest** ★ | arrives in your inbox each trading day | The morning read, pushed — see SETUP.md |
 | **Local build** | `python build_site.py` → open `site/index.html` | The dev loop: rebuild from the newest brief, tweak `src/site/`, preview offline |
 
 The **daily email digest** is the push counterpart to the site — the day's read lands in
 your inbox once the brief + narrative pair is committed. Setup lives in `SETUP.md`.
 
-## The static site — GitHub Pages
+## The static site — local build (repo is private; Pages retired 2026-07-02)
 
 The data changes once a day, so the read surface is a static build (`src/site/`, emitted by
 `build_site.py`). `.github/workflows/pages.yml` runs the test suite as a deploy gate, then
 builds and deploys the site to GitHub Pages on every push to `main` (including the daily
 brief commit) — keyless, networkless, built from committed data only.
 
-**One-time setup:** repo **Settings → Pages → Source = GitHub Actions**. After the next push, the
+**Note:** the former Pages deploy was retired when the repo went private (free plan doesn't
+serve private Pages); `ci.yml` keeps the test + build gates. If you ever want the hosted PWA
+back, GitHub Pro serves Pages from private repos — re-add the deploy steps from git history. The
 public URL appears there. Open it on any device and install it (laptop: the **Install** icon in the
 address bar; iPhone: **Share → Add to Home Screen**) — it runs as an app with its own window/icon and,
 thanks to the service worker, opens **offline** with the last build.

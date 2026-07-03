@@ -22,9 +22,10 @@ _TONE = {"up": "#36c26f", "down": "#ff5c6c", "warn": "#f5a623", "neutral": _DIM}
 _KPIS = [("^GSPC", "S&P 500"), ("macro:DGS10", "10Y yield"), ("CL=F", "WTI crude"),
          ("GC=F", "Gold"), ("DX-Y.NYB", "Dollar")]
 EMAILS_DIR = config.DATA_DIR / "emails"
-# TODO(one-time, before enabling send-digest.yml live): confirm in repo Settings > Pages
-# that a deployment has succeeded and this URL serves — inferred from owner/repo, not live-checked.
-APP_URL = "https://mynameisnguyenn.github.io/market-story/"
+# The repo is private (2026-07-02) so there is no public Pages site; the CTA deep-links the
+# day's narrative on github.com instead — only the owner receives this mail and has access.
+REPO_URL = "https://github.com/mynameisnguyenn/market-story"
+NARRATIVE_URL = REPO_URL + "/blob/main/data/narratives/narrative_{date}.md"
 
 _STANCE_LABEL = {1: "&#9650; Long (+1)", -1: "&#9660; Short (&minus;1)", 0: "&#8594; Flat (0)"}
 _STANCE_TONE = {1: _TONE["up"], -1: _TONE["down"], 0: _DIM}
@@ -257,6 +258,7 @@ def render_email(brief: dict, ledger_rows: list[dict] | None = None) -> str:
         ledger_rows = ledger.load()
     thesis = _thesis(brief)
     when = f'{brief.get("date", "")} · {brief.get("session_label", "")}'.strip(" ·")
+    cta_url = NARRATIVE_URL.format(date=brief["date"]) if brief.get("date") else REPO_URL
     kpis = "".join(_kpi_cell(brief, sym, name) for sym, name in _KPIS)
     pre = (thesis[:140] + "…") if len(thesis) > 140 else thesis
     pre_pad = "&zwnj;&nbsp;" * max(0, (100 - len(pre)) // 8)   # keep Gmail's snippet on the thesis
@@ -295,7 +297,7 @@ def render_email(brief: dict, ledger_rows: list[dict] | None = None) -> str:
 <table role="presentation" width="100%" style="font-size:13px;">{_watch_rows()}</table></div></td></tr>
 <tr><td class="px" align="center" style="padding:22px 34px 8px;">
 <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:9px;background:{_ACCENT};">
-<a href="{APP_URL}" style="display:inline-block;font-family:'Hanken Grotesk',Arial,sans-serif;font-weight:700;font-size:14px;color:#0d0c0c;padding:13px 26px;">Open the full brief &#8594;</a>
+<a href="{cta_url}" style="display:inline-block;font-family:'Hanken Grotesk',Arial,sans-serif;font-weight:700;font-size:14px;color:#0d0c0c;padding:13px 26px;">Open the full read &#8594;</a>
 </td></tr></table></td></tr>
 <tr><td class="px" style="padding:22px 34px 26px;border-top:1px solid {_BORDER};">
 <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;letter-spacing:.04em;color:#7a726a;">
