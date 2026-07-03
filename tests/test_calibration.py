@@ -321,3 +321,29 @@ def test_brier_score_and_bins_consistent():
     bins = calibration_bins(recs, bins=5)
     total_in_bins = sum(b["n"] for b in bins)
     assert bs["n"] == total_in_bins
+
+
+# ---------------------------------------------------------------------------
+# climatology_brier
+# ---------------------------------------------------------------------------
+
+def test_climatology_brier_empty():
+    from src.calibration import climatology_brier
+    assert climatology_brier([]) == {"score": None, "base_rate": None, "n": 0}
+
+
+def test_climatology_brier_known_value():
+    """3 hits + 1 miss -> base rate 0.75; Brier = (3*(0.75-1)^2 + (0.75-0)^2)/4 = 0.1875."""
+    from src.calibration import climatology_brier
+    records = [_rec("triggered", prob=0.6)] * 3 + [_rec("missed", prob=0.4)]
+    out = climatology_brier(records)
+    assert out["base_rate"] == pytest.approx(0.75)
+    assert out["score"] == pytest.approx(0.1875)
+    assert out["n"] == 4
+
+
+def test_climatology_brier_matches_gradeable_n():
+    from src.calibration import climatology_brier
+    records = [_rec("triggered", prob=0.5), _rec("missed", prob=0.5),
+               _rec("pending", prob=0.5), _rec("triggered")]     # last two not gradeable
+    assert climatology_brier(records)["n"] == len(gradeable(records))

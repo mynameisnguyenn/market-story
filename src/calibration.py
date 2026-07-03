@@ -58,6 +58,22 @@ def brier_score(records: list[dict]) -> dict:
     return {"score": total / n, "n": n}
 
 
+def climatology_brier(records: list[dict]) -> dict:
+    """Reference Brier score for always predicting the realized base rate (no skill).
+
+    Returns {'score': float | None, 'base_rate': float | None, 'n': int}; None fields
+    when n == 0. A model only shows skill when its Brier beats this.
+    """
+    graded = gradeable(records)
+    n = len(graded)
+    if n == 0:
+        return {"score": None, "base_rate": None, "n": 0}
+    triggered = sum(1 for r in graded if r["status"] == "triggered")
+    p_bar = triggered / n
+    total = sum((p_bar - (1.0 if r["status"] == "triggered" else 0.0)) ** 2 for r in graded)
+    return {"score": total / n, "base_rate": p_bar, "n": n}
+
+
 def calibration_bins(records: list[dict], bins: int = 5) -> list[dict]:
     """Equal-width probability bins over [0, 1].
 

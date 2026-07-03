@@ -8,9 +8,9 @@ from __future__ import annotations
 import pandas as pd
 
 from src import brief as brief_mod
-from src import ledger, thesis
+from src import calibration, ledger, thesis
 
-from ..render import caption, details, esc, grid, kpi_card, md_html, panel, styler_html
+from ..render import caption, details, esc, grid, kpi_card, md_html, panel, styler_html, tone_of
 
 
 # ---------------------------------------------------------------------------
@@ -82,6 +82,45 @@ def _watch_table(watch: list[dict]) -> str:
     return details(f"Every watch call graded ({len(watch)})", body)
 
 
+def _calibration_panel(watch: list[dict]) -> str:
+    """Brier calibration vs the base rate, gated on MIN_N graded probabilities. Fully
+    self-contained — a failure here can never blank the hit-rate/stance sections."""
+    try:
+        graded = calibration.gradeable(watch)
+        if len(graded) < calibration.MIN_N:
+            return ""                              # not enough sample — render nothing, honestly
+        bs = calibration.brier_score(watch)
+        clim = calibration.climatology_brier(watch)
+        bins = calibration.calibration_bins(watch, bins=5)
+        if bs["score"] is None or clim["score"] is None or not bins:
+            return ""                              # never trust a derived value to match its gate
+        beats = bs["score"] < clim["score"]
+        cards = [
+            kpi_card("Brier score", f"{bs['score']:.3f}"),
+            kpi_card("vs base rate", f"{clim['score']:.3f}",
+                     delta="beats climatology" if beats else "worse than climatology",
+                     tone=tone_of(clim["score"] - bs["score"])),
+            kpi_card("Graded (n)", str(bs["n"])),
+        ]
+        rows = "".join(
+            f"<tr><td>{b['bin_lo']:.0%}–{b['bin_hi']:.0%}</td><td>{b['n']}</td>"
+            f"<td>{b['p_mean']:.0%}</td><td>{b['realized']:.0%}</td></tr>"
+            for b in bins
+        )
+        tbl = ('<div class="tbl"><table><thead><tr><th>Bucket</th><th>n</th>'
+               f"<th>Predicted</th><th>Realized</th></tr></thead><tbody>{rows}</tbody></table></div>")
+        n_lo = min(b["n"] for b in bins)
+        n_hi = max(b["n"] for b in bins)
+        body = grid(cards, 3) + tbl + caption(
+            f"Brier {bs['score']:.3f} vs {clim['score']:.3f} for always guessing the "
+            f"{clim['base_rate']:.0%} base rate, n={bs['n']}. Sparse bins ({n_lo}–{n_hi} each) — "
+            "read the table, not a trend."
+        )
+        return details("🎯 Calibration — are the stated confidences trustworthy?", body)
+    except Exception:
+        return ""
+
+
 def _track_record() -> str:
     """Hit-rate KPIs + stance paper-P&L line + watch-call expander."""
     try:
@@ -127,6 +166,8 @@ def _track_record() -> str:
 
     if watch:
         parts.append(_watch_table(watch))
+    if watch:
+        parts.append(_calibration_panel(watch))
 
     body = "".join(parts)
     return panel("Track record", body) if body else ""
