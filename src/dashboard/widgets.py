@@ -10,9 +10,8 @@ import streamlit as st
 from src import formatting
 from src.dashboard.charts import line_fig, section_styler, sector_treemap_fig
 
-# One semantic palette for every up/down/warn/neutral cue (charts, dots, badges) — sourced
-# from formatting so tables and signals share the exact same green/red. Mirrors styles.css.
-TONE_HEX = {"up": formatting.GREEN, "down": formatting.RED, "warn": "#F5A623", "neutral": formatting.NEUTRAL}
+# One semantic palette for every up/down/warn/neutral cue — now owned by formatting.TONE_HEX.
+TONE_HEX = formatting.TONE_HEX
 
 
 def tone_span(text: str, tone: str) -> str:

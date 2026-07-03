@@ -22,6 +22,24 @@ def load_running_thesis() -> str | None:
     return text or None
 
 
+def narrative_thesis(path) -> str | None:
+    """The written read's one-line thesis: first content line under '## Today in one line'
+    (or a 'thesis' header). None if not found — callers degrade to their derived lead."""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except Exception:
+        return None
+    for i, ln in enumerate(lines):
+        low = ln.strip().lower()
+        if low.startswith("##") and ("one line" in low or "thesis" in low):
+            for body in lines[i + 1:]:
+                t = body.strip()
+                if t and not t.startswith("#"):
+                    return t.lstrip("*->•_ ").strip()
+            break
+    return None
+
+
 def section(name: str) -> str | None:
     """The body of a '## <name>' section (case-insensitive), or None if not found/empty."""
     text = load_running_thesis()

@@ -32,8 +32,9 @@ _PLOTLY_CONFIG = {"displayModeBar": False, "responsive": True, "scrollZoom": Fal
 def _themed(fig):
     """Apply the dark page theme without clobbering colours a builder set deliberately."""
     fig.update_layout(
+        template="none",   # explicit: never inherit a template an import side-effect installed
         paper_bgcolor=_DARK["paper_bgcolor"], plot_bgcolor=_DARK["plot_bgcolor"],
-        font=_DARK["font"], legend=_DARK["legend"], autosize=True,
+        font=_DARK["font"], legend=_DARK["legend"], colorway=_DARK["colorway"], autosize=True,
     )
     fig.update_xaxes(gridcolor="#241f1a", zerolinecolor="#241f1a")
     fig.update_yaxes(gridcolor="#241f1a", zerolinecolor="#241f1a")

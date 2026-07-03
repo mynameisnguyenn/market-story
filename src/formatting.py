@@ -5,10 +5,13 @@ from __future__ import annotations
 import math
 
 # Single source of truth for up/down/neutral semantics — mirrored by styles.css
-# (--up / --down) and app._TONE_HEX. One warm green, one warm red, everywhere.
+# (--up / --down) and TONE_HEX below. One warm green, one warm red, everywhere.
 GREEN = "#36C26F"
 RED = "#FF5C6C"
 NEUTRAL = "#b3aaa0"
+
+# Tone -> hex for inline-styled HTML (the static site's hero + colored spans).
+TONE_HEX = {"up": GREEN, "down": RED, "warn": "#F5A623", "neutral": NEUTRAL}
 
 
 def is_missing(value) -> bool:

@@ -9,8 +9,8 @@ from __future__ import annotations
 from src import brief as brief_mod
 from src import eras, formatting, history, signals
 from src.dashboard import charts
-from src.dashboard.panels.overview import _narrative_thesis
-from src.dashboard.widgets import TONE_HEX
+from src.formatting import TONE_HEX
+from src.thesis import narrative_thesis
 
 from ..render import caption, esc, fig_html, fmt, grid, hero, kpi_card, panel, tone_class, tone_of
 from ..sections import row_for
@@ -20,7 +20,7 @@ def _thesis_hero(brief: dict) -> str:
     path = brief_mod.latest_narrative_path()
     if not path or not path.exists():
         return ""
-    thesis = _narrative_thesis(path)
+    thesis = narrative_thesis(path)
     if not thesis:
         return ""
     ndate = path.stem.replace("narrative_", "")
