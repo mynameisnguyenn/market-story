@@ -20,8 +20,8 @@ by Claude (Python gathers → brief JSON → Claude writes a thesis-first narrat
   phone. **One-time: repo Settings → Pages → Source = GitHub Actions.** Built entirely from committed data —
   keyless, networkless. The Streamlit app was decommissioned 2026-07-02 (see the log entry).
 - **Email digest (the push surface):** `.github/workflows/send-digest.yml` → `scripts/send_digest.py` →
-  `src/email_digest.py`, Gmail SMTP (secrets `GMAIL_USERNAME`/`GMAIL_APP_PASSWORD`/`MAIL_TO`); sends once
-  the day's brief + narrative pair is committed. Setup in `SETUP.md`.
+  `src/email_digest.py`, Resend sandbox API (secrets `RESEND_API_KEY`/`MAIL_TO` — owner-only delivery, no
+  Google credential anywhere); sends once the day's brief + narrative pair is committed. Setup in `SETUP.md`.
 - **Daily Action** (`.github/workflows/daily-brief.yml`, 12:00 UTC weekdays): runs `run.py`, commits the
   brief + timeline + history archives + running thesis + ledger, sends VIX phone alerts; a weekday remote
   routine narrates ~12:45 UTC. Each push then triggers the Pages build so the static site stays fresh.
@@ -126,9 +126,12 @@ An 18-agent adversarial audit (24 findings confirmed by skeptic verifiers) + 4 d
   workflow fires on pushes to BOTH `data/narratives/**` and `data/briefs/**` and sends only
   when the newest brief + narrative **dates match** (else it would email today's thesis over
   yesterday's numbers); the committed `data/emails/.last_sent` marker caps it at one send/day.
-  Gmail SMTP self-to-self (app password; secrets `GMAIL_USERNAME`/`GMAIL_APP_PASSWORD`/`MAIL_TO`;
-  SendGrid ruled out — free tier discontinued 2025-05). Send step is `continue-on-error` and the
-  script always exits 0 — a broken send can never block the pipeline. No secrets → silent no-op.
+  Transport: **Resend sandbox** (secrets `RESEND_API_KEY`/`MAIL_TO`) — switched same-day from the
+  original Gmail-app-password design at the user's request: the sandbox sender can only deliver to
+  the account owner, so no Google credential exists anywhere and a leaked key is near-worthless
+  (SendGrid ruled out — free tier discontinued 2025-05). Send step is `continue-on-error` and the
+  script always exits 0 — a broken send can never block the pipeline. No secrets → silent no-op;
+  a rejected/failed send leaves `.last_sent` unwritten so the next push retries.
 - **Brier calibration panel live** (Story tab): the 2026-06-10 "defer ~90 days" reasoning was
   stale — the blocker was the grading bug, not time. `calibration.climatology_brier()` (base-rate
   reference) + `_calibration_panel` in `src/site/tabs/story.py`, gated on `MIN_N=30` gradeable

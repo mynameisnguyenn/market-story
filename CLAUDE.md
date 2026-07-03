@@ -134,7 +134,7 @@ src/news.py         RSS aggregation + dedupe
 src/brief.py        assemble + save brief (json + md)
 src/formatting.py   pct/color helpers (GREEN/RED/NEUTRAL + TONE_HEX)
 src/email_digest.py daily-read email renderer (email-safe HTML)
-scripts/send_digest.py  Gmail SMTP send, run by .github/workflows/send-digest.yml
+scripts/send_digest.py  Resend-API send, run by .github/workflows/send-digest.yml
 data/briefs/        brief_*.json / .md   (committed: force-added by the daily Action via
                     `git add -f` despite the .gitignore entry — 44 files tracked)
 data/narratives/    narrative_*.md       (committed logbook, never gitignored — 22 files

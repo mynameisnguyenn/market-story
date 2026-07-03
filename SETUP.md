@@ -59,18 +59,22 @@ where you get each. **Locally** the keys live in `.env` only (see `.env.example`
 
 The `send-digest.yml` Action emails the daily read (the call, watch grades, KPI tape,
 stretched readings, watch triggers) to your inbox once the day's brief + narrative pair is
-committed. It sends from your own Gmail via an app password — no third-party mail vendor.
-Setup, ~3 minutes:
+committed. Transport is the **Resend sandbox** — deliberately chosen so **no email-account
+credential exists anywhere**: the sandbox sender (`onboarding@resend.dev`) can only deliver
+to the Resend account owner's own verified address, so even a leaked API key can do nothing
+but email you (≤100/day; this sends 1). Setup, ~3 minutes:
 
-1. Enable **2-Step Verification** on the Gmail account (app passwords require it), then
-   create an app password at <https://myaccount.google.com/apppasswords> (choose "Mail").
-2. Add three GitHub secrets (repo → Settings → Secrets and variables → Actions):
-   `GMAIL_USERNAME` = your Gmail address, `GMAIL_APP_PASSWORD` = the 16-character app
-   password, `MAIL_TO` = where to deliver (can equal `GMAIL_USERNAME`).
-3. Done. Missing secrets → the step silently no-ops. The workflow only sends when the
+1. Sign up free at <https://resend.com> **using the email address you want the digest
+   delivered to** (that's the only address the sandbox can reach). No domain, no card.
+2. In the Resend dashboard: **API Keys → Create API key** (sending-only is enough).
+3. Add two GitHub secrets (repo → Settings → Secrets and variables → Actions):
+   `RESEND_API_KEY` = the key, `MAIL_TO` = the email you signed up with.
+4. Done. Missing secrets → the step silently no-ops. The workflow only sends when the
    newest brief and narrative carry the same date (the brief's cron delay means the pair
    completes on the second push of the day), and `data/emails/.last_sent` guarantees at
-   most one email per day. First send may land in Promotions — mark it "not spam" once.
+   most one email per day. First send may land in Updates/Promotions — mark it "not spam"
+   once. To revoke everything: delete the API key in Resend; to rotate: create a new key
+   and update the secret.
 
 ## Phone alerts (optional, free)
 

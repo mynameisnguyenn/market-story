@@ -1,6 +1,5 @@
-"""send_digest guards + always-exit-0 contract — SMTP mocked, no network."""
+"""send_digest guards + always-exit-0 contract — Resend API mocked, no network."""
 import json
-import smtplib
 import sys
 from pathlib import Path
 
@@ -43,26 +42,25 @@ def test_already_sent_three_states(tmp_path):
     assert send_digest._already_sent("2026-07-02", marker)              # already sent
 
 
-class _SMTPSpy:
+class _Resp:
+    def __init__(self, status_code):
+        self.status_code = status_code
+        self.text = "" if status_code == 200 else '{"message": "invalid key"}'
+
+
+class _PostSpy:
     calls = 0
-    fail = False
+    status = 200
+    raise_exc = False
+    last_payload = None
 
-    def __init__(self, *args, **kwargs):
-        type(self).calls += 1
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        return False
-
-    def login(self, *args):
-        pass
-
-    def send_message(self, msg):
-        if type(self).fail:
-            raise RuntimeError("smtp down")
-        type(self).last_subject = msg["Subject"]
+    @classmethod
+    def post(cls, url, headers=None, json=None, timeout=None):
+        cls.calls += 1
+        cls.last_payload = json
+        if cls.raise_exc:
+            raise RuntimeError("network down")
+        return _Resp(cls.status)
 
 
 def _setup(monkeypatch, tmp_path, brief_date="2026-07-02", narrative_date="2026-07-02"):
@@ -76,11 +74,10 @@ def _setup(monkeypatch, tmp_path, brief_date="2026-07-02", narrative_date="2026-
     monkeypatch.setattr(brief_mod, "prior_narrative_path", lambda: None)
     monkeypatch.setattr(ledger, "LEDGER_PATH", tmp_path / "ledger.jsonl")
     monkeypatch.setattr(send_digest, "MARKER_PATH", tmp_path / "emails" / ".last_sent")
-    monkeypatch.setenv("GMAIL_USERNAME", "u@example.com")
-    monkeypatch.setenv("GMAIL_APP_PASSWORD", "app-password")
+    monkeypatch.setenv("RESEND_API_KEY", "re_test_key")
     monkeypatch.setenv("MAIL_TO", "u@example.com")
-    _SMTPSpy.calls, _SMTPSpy.fail = 0, False
-    monkeypatch.setattr(smtplib, "SMTP_SSL", _SMTPSpy)
+    _PostSpy.calls, _PostSpy.status, _PostSpy.raise_exc = 0, 200, False
+    monkeypatch.setattr(send_digest.requests, "post", _PostSpy.post)
 
 
 def _run_main():
@@ -92,15 +89,18 @@ def _run_main():
 def test_main_sends_once_and_writes_marker(monkeypatch, tmp_path):
     _setup(monkeypatch, tmp_path)
     _run_main()
-    assert _SMTPSpy.calls == 1
-    assert "2026-07-02" in _SMTPSpy.last_subject and "▲" in _SMTPSpy.last_subject
+    assert _PostSpy.calls == 1
+    subject = _PostSpy.last_payload["subject"]
+    assert "2026-07-02" in subject and "▲" in subject
+    assert _PostSpy.last_payload["to"] == ["u@example.com"]
+    assert "<!DOCTYPE html>" in _PostSpy.last_payload["html"]
     assert send_digest.MARKER_PATH.read_text(encoding="utf-8").strip() == "2026-07-02"
 
 
 def test_main_skips_on_date_mismatch(monkeypatch, tmp_path):
     _setup(monkeypatch, tmp_path, brief_date="2026-07-01")   # brief lags the narrative
     _run_main()
-    assert _SMTPSpy.calls == 0
+    assert _PostSpy.calls == 0
 
 
 def test_main_skips_when_already_sent(monkeypatch, tmp_path):
@@ -108,18 +108,26 @@ def test_main_skips_when_already_sent(monkeypatch, tmp_path):
     send_digest.MARKER_PATH.parent.mkdir(parents=True)
     send_digest.MARKER_PATH.write_text("2026-07-02\n", encoding="utf-8")
     _run_main()
-    assert _SMTPSpy.calls == 0
+    assert _PostSpy.calls == 0
 
 
 def test_main_skips_without_secrets(monkeypatch, tmp_path):
     _setup(monkeypatch, tmp_path)
-    monkeypatch.delenv("GMAIL_APP_PASSWORD")
+    monkeypatch.delenv("RESEND_API_KEY")
     _run_main()
-    assert _SMTPSpy.calls == 0
+    assert _PostSpy.calls == 0
 
 
-def test_main_exits_zero_when_smtp_fails_and_marker_unwritten(monkeypatch, tmp_path):
+def test_main_exits_zero_on_api_error_and_marker_unwritten(monkeypatch, tmp_path):
+    """A non-2xx Resend response leaves the marker unwritten so the next push retries."""
     _setup(monkeypatch, tmp_path)
-    _SMTPSpy.fail = True
+    _PostSpy.status = 401
+    _run_main()
+    assert not send_digest.MARKER_PATH.exists()
+
+
+def test_main_exits_zero_when_network_fails_and_marker_unwritten(monkeypatch, tmp_path):
+    _setup(monkeypatch, tmp_path)
+    _PostSpy.raise_exc = True
     _run_main()                                              # exception swallowed, exit 0
     assert not send_digest.MARKER_PATH.exists()              # failed send can retry next push

@@ -1,4 +1,4 @@
-"""CI entry point: render the daily digest and email it via Gmail SMTP.
+"""CI entry point: render the daily digest and email it via the Resend API.
 
 Always exits 0 — a digest failure must never break the pipeline. Sends only when the
 newest brief and newest narrative carry the SAME date: GitHub's cron queue lands the
@@ -6,6 +6,11 @@ daily brief 1.5-4.5h AFTER the ~12:45 UTC narrative (see BUILD_LOG 2026-07-02), 
 narrative push date-mismatches and skips, and the later brief push completes the pair.
 send-digest.yml therefore triggers on pushes to BOTH data/narratives/** and
 data/briefs/**; the committed data/emails/.last_sent marker prevents a double send.
+
+Transport: Resend sandbox (onboarding@resend.dev) — deliberately chosen so no Google
+credential exists anywhere. The sandbox can only deliver to the Resend account owner's
+own verified email, so a leaked RESEND_API_KEY is near-worthless (<=100 sends/day, to
+the owner only). Secrets: RESEND_API_KEY + MAIL_TO.
 """
 import json
 import os
@@ -13,10 +18,14 @@ import re
 import sys
 from pathlib import Path
 
+import requests
+
 # Bootstrap: put repo root on sys.path (mirrors scripts/send_alerts.py).
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 MARKER_PATH = Path(__file__).resolve().parent.parent / "data" / "emails" / ".last_sent"
+RESEND_URL = "https://api.resend.com/emails"
+FROM_ADDR = "Market Story <onboarding@resend.dev>"   # sandbox sender: owner-only delivery
 _ARROW = {1: "▲", -1: "▼", 0: "→"}
 
 
@@ -62,32 +71,30 @@ def main() -> None:
     if _already_sent(digest_date):
         print(f"send_digest: {digest_date} already sent — skipping.")
         sys.exit(0)
-    user = os.environ.get("GMAIL_USERNAME")
-    password = os.environ.get("GMAIL_APP_PASSWORD")
+    api_key = os.environ.get("RESEND_API_KEY")
     mail_to = os.environ.get("MAIL_TO")
-    if not (user and password and mail_to):
-        print("send_digest: GMAIL_USERNAME/GMAIL_APP_PASSWORD/MAIL_TO not set — skipping.")
+    if not (api_key and mail_to):
+        print("send_digest: RESEND_API_KEY/MAIL_TO not set — skipping.")
         sys.exit(0)
 
     try:
-        import smtplib
-        from email.message import EmailMessage
-
         brief = json.loads(brief_path.read_text(encoding="utf-8"))
         html = email_digest.render_email(brief, ledger_rows=ledger.load())
         stance = scorecard.parse_stance(narrative_path.read_text(encoding="utf-8"))
         arrow = _ARROW.get(stance["direction"], "•") if stance else "•"
         clause = email_digest._thesis(brief)[:60]
 
-        msg = EmailMessage()
-        msg["Subject"] = f"Market Story — {digest_date} — {arrow} {clause}"
-        msg["From"] = user
-        msg["To"] = mail_to
-        msg.set_content("Open in an HTML mail client to read the daily brief.")
-        msg.add_alternative(html, subtype="html")
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as smtp:
-            smtp.login(user, password)
-            smtp.send_message(msg)
+        resp = requests.post(
+            RESEND_URL,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={"from": FROM_ADDR, "to": [mail_to],
+                  "subject": f"Market Story — {digest_date} — {arrow} {clause}",
+                  "html": html},
+            timeout=30,
+        )
+        if resp.status_code // 100 != 2:
+            print(f"send_digest: Resend rejected the send ({resp.status_code}): {resp.text[:300]}")
+            sys.exit(0)                            # marker unwritten -> the next push retries
         MARKER_PATH.parent.mkdir(parents=True, exist_ok=True)
         MARKER_PATH.write_text(digest_date + "\n", encoding="utf-8")
         print(f"send_digest: sent {digest_date} digest to {mail_to}.")

@@ -5,8 +5,9 @@ name: Send digest email
 # lands the daily brief 1.5-4.5h AFTER the narrative (see BUILD_LOG 2026-07-02): the
 # narrative push date-mismatches and skips; the later brief push completes the pair.
 # data/emails/.last_sent (committed below) prevents a resend on subsequent pushes.
-# Needs three repo secrets: GMAIL_USERNAME, GMAIL_APP_PASSWORD (app password, requires
-# 2-Step Verification), MAIL_TO. No-ops silently when they are unset.
+# Transport: Resend sandbox — no Google credential anywhere; a leaked key can only
+# email the account owner. Needs two repo secrets: RESEND_API_KEY, MAIL_TO (the email
+# the Resend account was registered with). No-ops silently when they are unset.
 on:
   push:
     branches: [main]
@@ -31,14 +32,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Render + send the digest (Gmail SMTP)
+      - name: Render + send the digest (Resend)
         # continue-on-error guarantees a broken send can never fail the pipeline, even
         # against an import-time error (the script's own sys.exit(0) covers runtime).
         continue-on-error: true
         run: python scripts/send_digest.py
         env:
-          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
 
       - name: Commit the send marker

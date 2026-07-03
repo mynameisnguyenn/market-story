@@ -115,7 +115,7 @@ src/formatting.py   pct/bps/color helpers (one green, one red; TONE_HEX)
 src/dashboard/charts.py  shared pure chart/table builders (plotly figs + Stylers; used by src/site)
 src/site/           static-site generator: render.py (HTML primitives) -> build.py -> tabs/<id>.section(ctx)
 src/email_digest.py daily-read email renderer (email-safe HTML)
-scripts/send_digest.py  Gmail SMTP send, run by .github/workflows/send-digest.yml
+scripts/send_digest.py  Resend-API send, run by .github/workflows/send-digest.yml
 .claude/commands/narrate.md   the /narrate project command
 data/briefs/        brief_*.json / .md     (committed by the daily Action)
 data/narratives/    narrative_*.md         (committed logbook; written by Claude)
