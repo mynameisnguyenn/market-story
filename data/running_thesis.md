@@ -4,27 +4,23 @@ _The standing, cross-session view — the through-line. Today's dated read lives
 `data/narratives/`; this is what carries between them. `/narrate` reads this at the start for
 continuity and revises it after each session. Keep it tight: a **view**, not a log._
 
-_Last updated: 2026-08-20_
+_Last updated: 2026-08-21_
 
 ## Current thesis
 
-**Bear (−1) — re-entered Aug 20. HY OAS GATE BROKEN: three consecutive FRED prints widening 2.67% → 2.70% → 2.75% (Aug 18 FRED, +5bps, 23.8th %ile). The formal −1 re-entry trigger (≥2.73%) is met. Private credit lag clock DAY 3 of 20–40 (propagation confirmed; window: late Aug–early Sep FRED HY OAS vintages). Entry at ~S&P 7,708.**
+**Bear (−1) — maintained Aug 21. HY OAS PAUSED: Aug 19 FRED reversed −2bps to 2.73% (19.0th %ile) — 1bp from the flip-to-0 condition (≤2.72%), but NOT through it. The Bessent buyback passed ONE FRED window of credit relief while embedding inflation: BEI +4bps to 2.34% (plateau broken), gold +$129 to $4,642 (+2.78%), copper +2.98% (all real assets rising = debasement+reflation, not stagflation). S&P Thursday close 7,641 (−0.87%, reversed from +0.21% intraday). Private credit lag clock DAY 4 of 20–40 (propagation window: late Aug–early Sep). Entry at ~S&P 7,708; paper P&L ~+0.87% on the short.**
 
-**GATE STATUS (Aug 20): NFP ✓ (−23k Jul 7), CPI ✓ (3.36% Aug 12 BLS), PPI ✓ (flat 0.0% Aug 13 BLS) | HY OAS ❌ BROKEN: 2.75% (Aug 18 FRED, +5bps from 2.70% retested; 23.8th %ile; formal re-entry trigger ≥2.73% met) | WTI ✗ ($87.48, $9.48 above $78 gate — WIDEST gap of cycle; Trump "Economic D-Day" declaration on Iran; ceasefire expired Monday, UAE suspended commercial ties).**
+**GATE STATUS (Aug 21 FRED Aug 19 vintage): NFP ✓ (−23k Jul 7), CPI ✓ (3.36% Aug 12 BLS), PPI ✓ (flat 0.0% Aug 13 BLS) | HY OAS BORDERLINE: 2.73% (Aug 19 FRED, −2bps — PAUSE, not reversal; 1bp from ≤2.72% flip-to-0 condition; private credit lag clock Day 4/20-40 ongoing) | WTI ✗ ($87.22, $9.22 above $78 gate).**
 
-**Trump declared "Economic D-Day" on Iran (Aug 20): secondary sanctions on any country supporting Iran's economy. UAE — the critical sanctions-bypass conduit — suspended commercial ties with Tehran. 60-day ceasefire expired Monday with no diplomatic off-ramp. WTI $87.48 (+$3.14 from $84.34), Brent $94.51 (+$3.23). The Iran → oil → CPI pipeline is reloading (UK CPI +2.9%, Aug 19, explicit Iran energy attribution). US August CPI (BLS Sep-Oct) will capture this wave.**
+**Bessent bond buyback is compressing rate levels (10Y FRED −6bps to 4.65%, 2s10s +4bps to 0.50% bull steepening) while simultaneously embedding inflation expectations (BEI +4bps to 2.34%, breaking the 2.30% plateau; gold +$129 to $4,642; FT: "band-aid on a bullet hole"). The fiscal dominance paradox: suppressing bond yields → dollar weakening → gold surging → BEI rising → inevitably bond yields must rise. The intervention bought one FRED window; the structural problem is unresolved.**
 
-**Bessent bond buyback (Treasury "liquidity support expansion") is compressing the long end artificially. TLT +1.67%. JPMorgan warns: "buyback blitz may end up driving bond yields higher." Gold $4,512.50 (+$87.70, +1.98%) is the real-money verdict: this is fiscal dominance, not rate stabilization. US national debt crossed $40tn. EUR/USD +0.92%, DXY 98.77 (−0.60%).**
+**Gold $4,641.90 (+$129, +2.78%) and copper $6.609 (+2.98%) — metals complex all rising simultaneously. FT: "Bitcoin and gold surge as Bessent's bond market intervention weighs on dollar." Copper recovering from yesterday's stagflation signal (gold up, copper down) to today's debasement+reflation signal (all real assets rising). The regime discriminator: flash PMI today — if services strong, copper = reflation; if weak, copper = dollar debasement only.**
 
-**Walmart comparable sales miss: +2.6% U.S. comp growth — lowest in over six years. Consumer staples bellwether cracking in the 30Y-at-5.26% environment. After Target/TJX value-retail beats last week, Walmart's miss signals the bifurcation has collapsed: even the consumer's last line of defense is softening.**
+**VIXCLS 14.89 (Aug 19 FRED, 6.3th %ile) — complacency extreme going into Nvidia Aug 26 binary. CFTC Nasdaq −89,125 (deepened −10,792 to cycle extreme — Aug 11 vintage). VIX net short −12,127 (unchanged). Maximum asymmetry in either direction for Nvidia: beat-and-hold = largest Nasdaq squeeze of cycle; miss/guide-in-line = −89k amplifies decline with zero VIX cushion.**
 
-**AI chip complex derating: ASML −2.84%, NVDA −0.99% on Day 6 before Nvidia Aug 26 binary. Dan Loeb (Third Point) publicly dumped NVDA/Broadcom/META in Q2. CFTC Nasdaq −89,125 (unchanged cycle extreme); VIX net short −12,127 (unchanged). Maximum gap risk in either direction for Nvidia print.**
+**Running hit-rate: 68/172 (39.5%), up from 38.7% (3 new HITs: WTI >$85, Gold >$4,450, 10Y <4.75%; 1 MISS: HY OAS ≥2.78% — Bessent interrupted for one window).**
 
-**Paper P&L: flat since ~S&P 7,570 (Aug 4 exit). S&P 7,708 (Aug 20 pre-market open estimate for −1 re-entry). Prior flat period: S&P 7,692 (Aug 19 close) = +1.7% opportunity cost relative to Aug 4 exit.**
-
-**Running hit-rate: ~65/168 (38.7%), up from 38.0% on 3 new hits (WTI >$82 HIT, Gold >$4,350 HIT, 10Y FRED >4.68% HIT) and 1 decisive miss (HY OAS ≤2.70% durability MISS — gate broken) and 1 near-miss (EIA +4,405 vs ≥5,000 trigger).**
-
-**Scenarios: Base (42%)** — HY OAS widens to 2.78% but stabilizes (private credit lag propagates partially, not catastrophically); Nvidia guides in-line or better (no cascade); Bessent suppresses 30Y below 5.30%; S&P holds 7,500–7,700. **Bear (40%)** — HY OAS reaches 2.85%+ (credit cascade, 50th %ile, S&P multiple compression to 26.5x = 7,400–7,500); Nvidia misses/guides down (Nasdaq −89k cascades); WTI holds above $87 on Iran D-Day (US August CPI acceleration = September hike repriced); Walmart miss signals consumer cycle turn in earnings season. **Bull (18%)** — HY OAS reverses ≤2.72% next vintage (Bessent operation arrests credit widening); Nvidia beats-and-holds (not beats-and-dips); WTI falls on demand destruction OR secondary sanctions diplomacy; S&P 8,000+.
+**Scenarios: Bear (42%)** — HY OAS ≥2.75% resumes (private credit lag Day 4–40 continues; Bessent pause temporary); Nvidia beats-and-dips (pattern #6 in semiconductor cycle); WTI holds $87+ (Iran D-Day secondary sanctions); BEI crosses 2.40% (August CPI wave); S&P 7,400–7,500. **Base (38%)** — HY OAS holds 2.73% or clears ≤2.72% on next vintage (Bessent arrests widening for 2+ windows); Nvidia guides in-line (not cascade but not squeeze); S&P stabilizes 7,600–7,750. **Bull (20%)** — HY OAS ≤2.72% next vintage (Bessent success) AND Nvidia beats-and-holds (first time in 6 semiconductor earnings cycles) → Nasdaq −89k squeeze; flip to 0 or +1; S&P 8,000+.
 
 ## Regime
 
