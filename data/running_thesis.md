@@ -4,21 +4,19 @@ _The standing, cross-session view — the through-line. Today's dated read lives
 `data/narratives/`; this is what carries between them. `/narrate` reads this at the start for
 continuity and revises it after each session. Keep it tight: a **view**, not a log._
 
-_Last updated: 2026-08-24_
+_Last updated: 2026-08-25_
 
 ## Current thesis
 
-**Bear (−1) — maintained Aug 24. HY OAS RESUMED WIDENING: Aug 20 FRED 2.75% (24.2th %ile, +2bps from Aug 19 FRED 2.73%) — the Bessent one-window pause ENDED; widening sequence confirmed (2.67% bull-gate-clear → 2.70% first reversal → 2.73% pause → 2.75% resumption). Private credit lag clock DAY 7 of 20–40 (propagation window: late Aug–early Sep). Gold $4,718 (new all-time high, first print above $4,700; +$76.50 from Aug 21's $4,641.90). S&P 7,674 (+0.43% partial recovery from −0.87%). Entry at ~S&P 7,708 (Aug 20); paper P&L ~+0.44% on the short.**
+**Flat (0) — downgraded from −1 (Aug 25). FRED Aug 21 HY OAS REVERSED to 2.70% (7.5th %ile, −5bps from 2.75%) — the formal bear flip condition (≤2.72%) was met. −1 short entered ~S&P 7,708 (Aug 20) closed at S&P 7,652.86 (Aug 25) for approx +0.72% paper gain. Simultaneously: FRED DGS10 hit 4.74% (99.2th %ile, NEW CYCLE HIGH in FRED data, +5bps from 4.69%); WTI crashed −2.94% to $82.51 (Iran sanctions sell-the-news confirmed for a second session, down $5 in 2 sessions); BEI fell to 2.32% (52.8th %ile, −2bps — demand destruction over inflation channel); Canada 50% auto/steel tariff threat (Jan 1) from Trump (NYT Aug 25). NVDA on a 7-day losing streak at $208.48 (−2.91%), earnings tonight.**
 
-**GATE STATUS (Aug 24 FRED Aug 20 vintage): NFP ✓ (−23k Jul 7), CPI ✓ (3.36% Aug 12 BLS), PPI ✓ (flat 0.0% Aug 13 BLS) | HY OAS BROKEN: 2.75% (Aug 20 FRED, +2bps, 24.2th %ile — widening RESUMED; Bessent pause was one window only; private credit lag Day 7/20-40 continues) | WTI ✗ ($85.41, $7.41 above $78 gate).**
+**GATE STATUS (Aug 25 FRED Aug 21 vintage): NFP ✓ (−23k Jul 7), CPI ✓ (3.36% Aug 12 BLS), PPI ✓ (flat 0.0% Aug 13 BLS) | HY OAS REVERSED: 2.70% (Aug 21 FRED, −5bps, 7.5th %ile — TGA scored second credit arrest; cascade formally suspended but structural driver intact) | WTI ✗ ($82.51, $4.51 above $78 gate, falling).**
 
-**Bessent TGA $950B deployment revealed today (CNBC 12:32 UTC): the Treasury has $950B in firepower for bond buybacks — the structural intervention tool the market has been pricing gold against. The fiscal dominance paradox persists: TGA → long-rate suppression → dollar debasement → gold $4,718 → BEI pressure → inevitably bond yields must rise. The $950B announcement did NOT tighten HY OAS (widened anyway +2bps). Canada-US trade talks collapsed fully (CNBC 11:42 UTC): the Sep-Oct CPI wave from tariff reload is now near-certain. Iran "greatest financial offensive ever" (BBC 10:39 UTC) + threatening 46 ships (FT 11:14 UTC).**
+**Regime transition in progress: the market has shifted from "credit cascade" narrative to "fiscal-QE expectations" narrative. MarketWatch (Aug 25): "Trump's Canada trade war could lead the US back to quantitative easing — good for gold, stocks and long bonds. Eventually." Gold at 3-month high ($4,690, +1.07% session). Bonds rallying (TLT +0.62%, market 10Y −4bps to 4.664%). This is a NEW signal — the market is buying the QE path while the FRED data shows rates at a cycle high (4.74% FRED 10Y). The two co-exist only if QE is truly imminent AND the TGA can hold credit spreads until then.**
 
-**CFTC Aug 18 (NEW): Nasdaq covered +27,354 (to −61,771 from −89,125 cycle extreme); VIX shorts added −6,966 (to −19,093); S&P −281,402 (flat). Squeeze risk for Nvidia Aug 26 has been reduced but not eliminated: −61,771 is still historically extreme Nasdaq short positioning. VRP 3.1 (VIX 15.88 vs realized 12.8%) = thin protection layer going into the binary. Stock-bond corr 0.43 (prior 0.27; state: "stock-bond decoupled — hedge broken").**
+**Running hit-rate: 71/177 (40.1%) (+1 HIT Aug 25: HY OAS ≤2.72% ✓ — TGA arrested cascade; +1 MISS: HY OAS ≥2.78% ✗ — correct-direction skepticism at P=0.32; 3 PENDING: Gold >$4,750, VIX >18, BEI ≥2.40%).**
 
-**Running hit-rate: 70/175 (40.0%) (2 new HITs Aug 24: WTI >$85 ✓, Gold >$4,700 ✓; 1 new MISS: HY OAS ≤2.72% ✗ — widening resumed; 2 items still PENDING: BEI ≥2.40%, VIX >18).**
-
-**Scenarios: Bear (45%)** — HY OAS continues ≥2.78% next vintage (Aug 27 print decisive; private credit lag Day 7–40 ongoing); Nvidia beats-and-dips (semiconductor cycle pattern #6); Canada tariff reload cements Sep CPI above 3.5%; S&P 7,400–7,550. **Base (38%)** — HY OAS stabilizes at 2.75% for 2–3 windows (Bessent TGA deployment slows widening, not reverses it); Nvidia guides in-line; Canada tariffs partially negotiated back; S&P 7,600–7,750. **Bull (17%)** — HY OAS tightens ≤2.72% next vintage (Bessent $950B TGA arrests widening) AND Nvidia beats-and-holds → Nasdaq −61k squeeze fires; flip to 0 or +1; S&P 8,000+.
+**Scenarios: Base (40%)** — Nvidia beats-and-holds tonight, Warsh dovish Fri, HY OAS holds ≤2.70% next vintage; QE narrative confirmed; S&P 7,750–7,900, flip to +1. **Bear (35%)** — Nvidia beats-and-dips (5-of-5 structural), HY OAS resumes above 2.75% (private credit lag Day 9–40 prints through), Canada tariff demand shock; re-enter −1; S&P 7,400–7,550. **Bull (25%)** — Nvidia beats-and-holds + Warsh explicitly dovish + HY OAS ≤2.68% → Nasdaq −61k squeeze fires full; S&P 8,000+.
 
 ## Regime
 
