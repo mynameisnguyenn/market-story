@@ -952,8 +952,9 @@
 {"date": "2026-04", "series": "CES0000000001", "value": 158798.0}
 {"date": "2026-05", "series": "CES0000000001", "value": 158861.0}
 {"date": "2026-06", "series": "CES0000000001", "value": 158892.0}
-{"date": "2026-07", "series": "CES0000000001", "value": 158913.0}
-{"date": "2026-08", "series": "CES0000000001", "value": 159075.0}
+{"date": "2026-07", "series": "CES0000000001", "value": 158882.0}
+{"date": "2026-08", "series": "CES0000000001", "value": 159015.0}
+{"date": "2026-09", "series": "CES0000000001", "value": 159044.0}
 {"date": "2006-03", "series": "CES0500000003", "value": 20.04}
 {"date": "2006-04", "series": "CES0500000003", "value": 20.17}
 {"date": "2006-05", "series": "CES0500000003", "value": 20.13}
@@ -1198,8 +1199,9 @@
 {"date": "2026-04", "series": "CES0500000003", "value": 37.41}
 {"date": "2026-05", "series": "CES0500000003", "value": 37.49}
 {"date": "2026-06", "series": "CES0500000003", "value": 37.59}
-{"date": "2026-07", "series": "CES0500000003", "value": 37.65}
-{"date": "2026-08", "series": "CES0500000003", "value": 37.75}
+{"date": "2026-07", "series": "CES0500000003", "value": 37.64}
+{"date": "2026-08", "series": "CES0500000003", "value": 37.76}
+{"date": "2026-09", "series": "CES0500000003", "value": 37.81}
 {"date": "1947-01", "series": "CUUR0000SA0", "value": 21.5}
 {"date": "1947-02", "series": "CUUR0000SA0", "value": 21.5}
 {"date": "1947-03", "series": "CUUR0000SA0", "value": 21.9}
@@ -3933,6 +3935,7 @@
 {"date": "2026-06", "series": "LNS11300000", "value": 61.5}
 {"date": "2026-07", "series": "LNS11300000", "value": 61.4}
 {"date": "2026-08", "series": "LNS11300000", "value": 61.6}
+{"date": "2026-09", "series": "LNS11300000", "value": 61.8}
 {"date": "1948-01", "series": "LNS14000000", "value": 3.4}
 {"date": "1948-02", "series": "LNS14000000", "value": 3.8}
 {"date": "1948-03", "series": "LNS14000000", "value": 4.0}
@@ -4876,3 +4879,4 @@
 {"date": "2026-06", "series": "LNS14000000", "value": 4.2}
 {"date": "2026-07", "series": "LNS14000000", "value": 4.1}
 {"date": "2026-08", "series": "LNS14000000", "value": 4.1}
+{"date": "2026-09", "series": "LNS14000000", "value": 4.2}
