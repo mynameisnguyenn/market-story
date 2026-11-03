@@ -891,6 +891,7 @@
 {"date": "2026-10-28", "series": "BAMLC0A0CM", "value": 0.86}
 {"date": "2026-10-29", "series": "BAMLC0A0CM", "value": 0.89}
 {"date": "2026-10-30", "series": "BAMLC0A0CM", "value": 0.94}
+{"date": "2026-11-02", "series": "BAMLC0A0CM", "value": 0.94}
 {"date": "2023-06-05", "series": "BAMLH0A0HYM2", "value": 4.39}
 {"date": "2023-06-06", "series": "BAMLH0A0HYM2", "value": 4.39}
 {"date": "2023-06-07", "series": "BAMLH0A0HYM2", "value": 4.33}
@@ -1785,6 +1786,7 @@
 {"date": "2026-10-28", "series": "BAMLH0A0HYM2", "value": 3.14}
 {"date": "2026-10-29", "series": "BAMLH0A0HYM2", "value": 3.26}
 {"date": "2026-10-30", "series": "BAMLH0A0HYM2", "value": 3.44}
+{"date": "2026-11-02", "series": "BAMLH0A0HYM2", "value": 3.43}
 {"date": "1947-01-01", "series": "CPIAUCSL", "value": 21.48}
 {"date": "1947-02-01", "series": "CPIAUCSL", "value": 21.62}
 {"date": "1947-03-01", "series": "CPIAUCSL", "value": 22.0}
@@ -36752,6 +36754,11 @@
 {"date": "2026-10-21", "series": "DTWEXBGS", "value": 121.3422}
 {"date": "2026-10-22", "series": "DTWEXBGS", "value": 121.3531}
 {"date": "2026-10-23", "series": "DTWEXBGS", "value": 121.3202}
+{"date": "2026-10-26", "series": "DTWEXBGS", "value": 121.6042}
+{"date": "2026-10-27", "series": "DTWEXBGS", "value": 121.6622}
+{"date": "2026-10-28", "series": "DTWEXBGS", "value": 121.8491}
+{"date": "2026-10-29", "series": "DTWEXBGS", "value": 121.7361}
+{"date": "2026-10-30", "series": "DTWEXBGS", "value": 121.6656}
 {"date": "2000-07-03", "series": "EFFR", "value": 7.03}
 {"date": "2000-07-05", "series": "EFFR", "value": 6.52}
 {"date": "2000-07-06", "series": "EFFR", "value": 6.51}
@@ -43363,6 +43370,7 @@
 {"date": "2026-10-28", "series": "EFFR", "value": 3.88}
 {"date": "2026-10-29", "series": "EFFR", "value": 3.88}
 {"date": "2026-10-30", "series": "EFFR", "value": 3.88}
+{"date": "2026-11-02", "series": "EFFR", "value": 3.88}
 {"date": "1967-01-07", "series": "ICSA", "value": 208000.0}
 {"date": "1967-01-14", "series": "ICSA", "value": 207000.0}
 {"date": "1967-01-21", "series": "ICSA", "value": 217000.0}
@@ -54698,6 +54706,7 @@
 {"date": "2026-10-28", "series": "SOFR", "value": 3.94}
 {"date": "2026-10-29", "series": "SOFR", "value": 3.94}
 {"date": "2026-10-30", "series": "SOFR", "value": 3.95}
+{"date": "2026-11-02", "series": "SOFR", "value": 3.95}
 {"date": "1976-06-01", "series": "T10Y2Y", "value": 0.68}
 {"date": "1976-06-02", "series": "T10Y2Y", "value": 0.71}
 {"date": "1976-06-03", "series": "T10Y2Y", "value": 0.7}
@@ -67299,6 +67308,7 @@
 {"date": "2026-10-28", "series": "T10Y2Y", "value": 0.38}
 {"date": "2026-10-29", "series": "T10Y2Y", "value": 0.37}
 {"date": "2026-10-30", "series": "T10Y2Y", "value": 0.38}
+{"date": "2026-11-02", "series": "T10Y2Y", "value": 0.32}
 {"date": "1982-01-04", "series": "T10Y3M", "value": 2.32}
 {"date": "1982-01-05", "series": "T10Y3M", "value": 2.24}
 {"date": "1982-01-06", "series": "T10Y3M", "value": 2.43}
@@ -78509,6 +78519,7 @@
 {"date": "2026-10-28", "series": "T10Y3M", "value": 0.87}
 {"date": "2026-10-29", "series": "T10Y3M", "value": 0.8}
 {"date": "2026-10-30", "series": "T10Y3M", "value": 0.78}
+{"date": "2026-11-02", "series": "T10Y3M", "value": 0.7}
 {"date": "2003-01-02", "series": "T10YIE", "value": 1.64}
 {"date": "2003-01-03", "series": "T10YIE", "value": 1.62}
 {"date": "2003-01-06", "series": "T10YIE", "value": 1.63}
@@ -84471,6 +84482,7 @@
 {"date": "2026-10-28", "series": "T10YIE", "value": 2.38}
 {"date": "2026-10-29", "series": "T10YIE", "value": 2.35}
 {"date": "2026-10-30", "series": "T10YIE", "value": 2.34}
+{"date": "2026-11-02", "series": "T10YIE", "value": 2.29}
 {"date": "1948-01-01", "series": "UNRATE", "value": 3.4}
 {"date": "1948-02-01", "series": "UNRATE", "value": 3.8}
 {"date": "1948-03-01", "series": "UNRATE", "value": 4.0}
@@ -94722,3 +94734,4 @@
 {"date": "2026-10-28", "series": "VIXCLS", "value": 16.91}
 {"date": "2026-10-29", "series": "VIXCLS", "value": 17.2}
 {"date": "2026-10-30", "series": "VIXCLS", "value": 19.42}
+{"date": "2026-11-02", "series": "VIXCLS", "value": 21.15}
