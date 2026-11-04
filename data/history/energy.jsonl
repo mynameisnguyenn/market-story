@@ -3176,6 +3176,7 @@
 {"date": "2026-10-09", "series": "WCESTUS1", "value": 415577.0, "units": "MBBL"}
 {"date": "2026-10-16", "series": "WCESTUS1", "value": 412517.0, "units": "MBBL"}
 {"date": "2026-10-23", "series": "WCESTUS1", "value": 410625.0, "units": "MBBL"}
+{"date": "2026-10-30", "series": "WCESTUS1", "value": 409760.0, "units": "MBBL"}
 {"date": "1982-08-20", "series": "WCSSTUS1", "value": 270455.0, "units": "MBBL"}
 {"date": "1982-08-27", "series": "WCSSTUS1", "value": 272603.0, "units": "MBBL"}
 {"date": "1982-09-24", "series": "WCSSTUS1", "value": 276833.0, "units": "MBBL"}
@@ -5476,6 +5477,7 @@
 {"date": "2026-10-09", "series": "WCSSTUS1", "value": 282983.0, "units": "MBBL"}
 {"date": "2026-10-16", "series": "WCSSTUS1", "value": 282683.0, "units": "MBBL"}
 {"date": "2026-10-23", "series": "WCSSTUS1", "value": 282583.0, "units": "MBBL"}
+{"date": "2026-10-30", "series": "WCSSTUS1", "value": 282184.0, "units": "MBBL"}
 {"date": "1982-08-20", "series": "WDISTUS1", "value": 149415.0, "units": "MBBL"}
 {"date": "1982-08-27", "series": "WDISTUS1", "value": 154589.0, "units": "MBBL"}
 {"date": "1982-09-24", "series": "WDISTUS1", "value": 158684.0, "units": "MBBL"}
@@ -7776,6 +7778,7 @@
 {"date": "2026-10-09", "series": "WDISTUS1", "value": 102611.0, "units": "MBBL"}
 {"date": "2026-10-16", "series": "WDISTUS1", "value": 104286.0, "units": "MBBL"}
 {"date": "2026-10-23", "series": "WDISTUS1", "value": 102824.0, "units": "MBBL"}
+{"date": "2026-10-30", "series": "WDISTUS1", "value": 99259.0, "units": "MBBL"}
 {"date": "1990-01-05", "series": "WGTSTUS1", "value": 210982.0, "units": "MBBL"}
 {"date": "1990-01-12", "series": "WGTSTUS1", "value": 215395.0, "units": "MBBL"}
 {"date": "1990-01-19", "series": "WGTSTUS1", "value": 219221.0, "units": "MBBL"}
@@ -9697,3 +9700,4 @@
 {"date": "2026-10-09", "series": "WGTSTUS1", "value": 208262.0, "units": "MBBL"}
 {"date": "2026-10-16", "series": "WGTSTUS1", "value": 205310.0, "units": "MBBL"}
 {"date": "2026-10-23", "series": "WGTSTUS1", "value": 209180.0, "units": "MBBL"}
+{"date": "2026-10-30", "series": "WGTSTUS1", "value": 208958.0, "units": "MBBL"}
