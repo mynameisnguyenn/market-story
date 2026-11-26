@@ -5487,6 +5487,7 @@
 {"date": "2026-10-30", "series": "WCSSTUS1", "value": 282184.0, "units": "MBBL"}
 {"date": "2026-11-06", "series": "WCSSTUS1", "value": 279535.0, "units": "MBBL"}
 {"date": "2026-11-13", "series": "WCSSTUS1", "value": 276361.0, "units": "MBBL"}
+{"date": "2026-11-20", "series": "WCSSTUS1", "value": 273465.0, "units": "MBBL"}
 {"date": "1982-08-20", "series": "WDISTUS1", "value": 149415.0, "units": "MBBL"}
 {"date": "1982-08-27", "series": "WDISTUS1", "value": 154589.0, "units": "MBBL"}
 {"date": "1982-09-24", "series": "WDISTUS1", "value": 158684.0, "units": "MBBL"}
@@ -9715,3 +9716,4 @@
 {"date": "2026-10-30", "series": "WGTSTUS1", "value": 208958.0, "units": "MBBL"}
 {"date": "2026-11-06", "series": "WGTSTUS1", "value": 210757.0, "units": "MBBL"}
 {"date": "2026-11-13", "series": "WGTSTUS1", "value": 215949.0, "units": "MBBL"}
+{"date": "2026-11-20", "series": "WGTSTUS1", "value": 217682.0, "units": "MBBL"}
